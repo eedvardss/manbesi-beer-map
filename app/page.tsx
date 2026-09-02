@@ -43,7 +43,7 @@ const createVenueIcon = (L: LeafletModule, venue: MapVenue, active: boolean) => 
   className: 'price-marker-shell',
   html: createMarkerNode(L, venue, active),
   iconSize: [74, 36],
-  iconAnchor: [37, 36],
+  iconAnchor: [0, 36],
 });
 
 function VenueCard({ venue, selected, onSelect }: { venue: MapVenue; selected: boolean; onSelect: () => void }) {
