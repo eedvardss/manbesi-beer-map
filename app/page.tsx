@@ -2,14 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet';
-import { ArrowUpRight, Beer, CheckCircle2, LocateFixed, MapPin, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowDownWideNarrow, ArrowUpRight, Beer, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { checkedAt, pricePerLitre, venues, type Venue } from './venues';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { pricePerLitre, venues, type Venue } from './venues';
 
 type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
 type SortMode = 'price' | 'litre' | 'name';
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
+const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
 type ModelContext = {
   registerTool: (tool: {
     name: string;
@@ -34,23 +36,19 @@ function VenueCard({ venue, selected, onSelect }: { venue: Venue; selected: bool
   return (
     <article className={`venue-card ${selected ? 'is-selected' : ''}`} data-venue-id={venue.id}>
       <button className="venue-card-main" onClick={onSelect} aria-label={`Parādīt kartē: ${venue.name}`}>
-        <span className={`price-orb ${markerTone(venue.price)}`}>
-          <strong>{venue.priceIsFrom ? 'no ' : ''}{euro(venue.price)}</strong>
-          <small>{venue.volumeMl} ml</small>
-        </span>
         <span className="venue-copy">
-          <span className="venue-kicker">{venue.kind}</span>
           <strong className="venue-name">{venue.name}</strong>
-          <span className="venue-address"><MapPin size={13} /> {venue.address}</span>
-          <span className="beer-name"><Beer size={14} /> {venue.beer}</span>
+          <span className="beer-name">{venue.beer} · {venue.volumeMl} ml</span>
+          <span className="venue-address">{venue.address}</span>
+        </span>
+        <span className="card-price">
+          <strong>{venue.priceIsFrom ? 'no ' : ''}{euro(venue.price)}</strong>
+          <small>{euro(pricePerLitre(venue))}/l</small>
         </span>
       </button>
-      <div className="source-row">
-        <span><CheckCircle2 size={13} /> {venue.sourceType}</span>
-        <a href={venue.sourceUrl} target="_blank" rel="noreferrer">
-          Avots <ArrowUpRight size={13} />
-        </a>
-      </div>
+      <a className="source-link" href={venue.sourceUrl} target="_blank" rel="noreferrer" title={venue.sourceLabel}>
+        Avots <ArrowUpRight size={12} />
+      </a>
     </article>
   );
 }
@@ -142,10 +140,10 @@ export default function Home() {
       if (cancelled || !mapNodeRef.current) return;
       const map = L.map(mapNodeRef.current, { zoomControl: false, minZoom: 10 }).setView([56.9515, 24.116], 13);
       mapInstance = map;
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 20,
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+        className: 'base-tiles',
       }).addTo(map);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
       mapRef.current = map;
@@ -192,11 +190,6 @@ export default function Home() {
     mapRef.current?.flyTo([venue.lat, venue.lng], 16, { duration: 0.65 });
   };
 
-  const resetView = () => {
-    setSelectedId(null);
-    mapRef.current?.flyTo([56.9515, 24.116], 13, { duration: 0.6 });
-  };
-
   const clearFilters = () => {
     setQuery('');
     setPriceBand('all');
@@ -204,20 +197,13 @@ export default function Home() {
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div className="brand-lockup">
-          <span className="brand-mark"><Beer size={21} strokeWidth={2.4} /></span>
-          <div><strong>Rīgas alus karte</strong><span>īstas cenas, atvērti avoti</span></div>
-        </div>
-        <div className="trust-note"><CheckCircle2 size={15} /><span>Pārbaudīts {checkedAt}</span></div>
-      </header>
-
       <section className="workspace">
         <aside className={`sidebar ${mobileListOpen ? 'mobile-open' : ''}`}>
           <div className="sidebar-head">
-            <div className="eyebrow">Pirmais datu griezums · {venues.length} vietas</div>
-            <h1>Kur Rīgā alus maksā mazāk?</h1>
-            <p>Katrā kartītes cenā ir konkrēts alus, tilpums un saite uz publicēto avotu.</p>
+            <div className="panel-title">
+              <div className="brand-lockup"><Beer size={18} strokeWidth={2.4} /><strong>Rīgas alus</strong></div>
+              <button className="mobile-close" onClick={() => setMobileListOpen(false)} aria-label="Aizvērt vietu sarakstu"><X size={18} /></button>
+            </div>
 
             <label className="search-box">
               <Search size={17} />
@@ -235,7 +221,14 @@ export default function Home() {
 
             <div className="result-tools">
               <strong>{filtered.length} {filtered.length === 1 ? 'vieta' : 'vietas'}</strong>
-              <label><SlidersHorizontal size={14} /><select value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)} aria-label="Kārtot vietas"><option value="price">Lētākā glāze</option><option value="litre">Lētākais litrs</option><option value="name">Nosaukums A–Z</option></select></label>
+              <Select value={sortMode} onValueChange={(value) => setSortMode(value as SortMode)}>
+                <SelectTrigger size="sm" aria-label="Kārtot vietas"><ArrowDownWideNarrow size={14} /><SelectValue>{sortLabels[sortMode]}</SelectValue></SelectTrigger>
+                <SelectContent align="end">
+                  <SelectItem value="price">Lētākā glāze</SelectItem>
+                  <SelectItem value="litre">Lētākais litrs</SelectItem>
+                  <SelectItem value="name">Nosaukums A–Z</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -250,18 +243,11 @@ export default function Home() {
 
         <div className="map-wrap">
           <div ref={mapNodeRef} className="map" aria-label="Rīgas alus cenu karte" />
-          <div className="map-overlay map-caption">
-            <span className="live-dot" />
-            <div><strong>Publicētas cenas</strong><small>nevis aprēķini vai minējumi</small></div>
-          </div>
-          <Button className="reset-map map-overlay" variant="secondary" onClick={resetView}><LocateFixed size={16} /> Visa Rīga</Button>
-          <div className="legend map-overlay" aria-label="Cenu leģenda"><span><i className="cheap" /> zem 4 €</span><span><i className="mid" /> 4–5 €</span><span><i className="warm" /> 5–6 €</span><span><i className="high" /> virs 6 €</span></div>
-          <Button className="mobile-results map-overlay" onClick={() => setMobileListOpen(true)}><Beer size={16} /> {filtered.length} vietas</Button>
+          <Button className="mobile-results" onClick={() => setMobileListOpen(true)}><Beer size={16} /> {filtered.length} vietas</Button>
         </div>
       </section>
 
       {mobileListOpen && <button className="mobile-scrim" onClick={() => setMobileListOpen(false)} aria-label="Aizvērt vietu sarakstu" />}
-      <footer>Vietu koordinātas un kartes dati: OpenStreetMap. Cenas var mainīties — pirms došanās atver norādīto avotu.</footer>
     </main>
   );
 }
