@@ -117,7 +117,7 @@ function createMarkerNode(L: LeafletModule, venue: MapVenue, active: boolean) {
     pending.className = 'marker-price-pending';
     pending.textContent = 'Alus cenas vēl nav pārbaudītas';
     list.appendChild(pending);
-  } else venueBeerPrices(venue).forEach((beer) => {
+  } else [...venueBeerPrices(venue)].sort((a, b) => a.price - b.price).forEach((beer) => {
     const row = document.createElement('div');
     row.className = 'marker-beer-row';
     const beerInfo = document.createElement('div');
