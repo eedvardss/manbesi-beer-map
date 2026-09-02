@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet';
+import * as maplibreModule from 'maplibre-gl';
+import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
 import { ArrowDownWideNarrow, Beer, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { darkRigaStyle } from './map-style';
 import { isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
 
 type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
@@ -36,15 +38,18 @@ const markerTone = (price: number) => {
   return 'high';
 };
 
-type LeafletModule = typeof import('leaflet');
-const venueIndex = new Map(mapVenues.map((venue) => [venue.id, venue]));
+type MapLibreRuntime = {
+  Map: typeof import('maplibre-gl').Map;
+  Marker: typeof import('maplibre-gl').Marker;
+  NavigationControl: typeof import('maplibre-gl').NavigationControl;
+};
 
-const createVenueIcon = (L: LeafletModule, venue: MapVenue, active: boolean) => L.divIcon({
-  className: 'price-marker-shell',
-  html: createMarkerNode(L, venue, active),
-  iconSize: [74, 36],
-  iconAnchor: [0, 36],
-});
+const getMapLibreRuntime = (module: unknown) => {
+  const globalRuntime = (window as Window & { maplibregl?: MapLibreRuntime }).maplibregl;
+  return globalRuntime
+    ?? (module as { default?: MapLibreRuntime }).default
+    ?? (module as MapLibreRuntime);
+};
 
 function VenueCard({ venue, selected, onSelect }: { venue: MapVenue; selected: boolean; onSelect: () => void }) {
   const priced = isPricedVenue(venue);
@@ -68,7 +73,7 @@ function VenueCard({ venue, selected, onSelect }: { venue: MapVenue; selected: b
   );
 }
 
-function createMarkerNode(L: LeafletModule, venue: MapVenue, active: boolean) {
+function createMarkerNode(venue: MapVenue, active: boolean) {
   const priced = isPricedVenue(venue);
   const root = document.createElement('div');
   root.className = `marker-node${active ? ' is-open' : ''}`;
@@ -139,18 +144,17 @@ function createMarkerNode(L: LeafletModule, venue: MapVenue, active: boolean) {
 
   detail.appendChild(header);
   detail.appendChild(list);
-  L.DomEvent.disableClickPropagation(detail);
-  L.DomEvent.disableScrollPropagation(detail);
+  ['click', 'dblclick', 'mousedown', 'pointerdown', 'touchstart', 'wheel'].forEach((eventName) => {
+    detail.addEventListener(eventName, (event) => event.stopPropagation());
+  });
   root.appendChild(detail);
   return root;
 }
 
 export default function Home() {
   const mapNodeRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<LeafletMap | null>(null);
-  const markerRefs = useRef<Map<string, LeafletMarker>>(new Map());
-  const selectedIdRef = useRef<string | null>(null);
-  const previousSelectedIdRef = useRef<string | null>(null);
+  const mapRef = useRef<MapLibreMap | null>(null);
+  const markerRefs = useRef<Map<string, MapLibreMarker>>(new Map());
   const suppressNextZoomDismissRef = useRef(false);
   const [mapReady, setMapReady] = useState(false);
   const [query, setQuery] = useState('');
@@ -158,10 +162,6 @@ export default function Home() {
   const [sortMode, setSortMode] = useState<SortMode>('price');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mobileListOpen, setMobileListOpen] = useState(false);
-
-  useEffect(() => {
-    selectedIdRef.current = selectedId;
-  }, [selectedId]);
 
   const filtered = useMemo(() => {
     const q = normalizeSearch(query.trim());
@@ -234,31 +234,42 @@ export default function Home() {
   useEffect(() => {
     if (!mapNodeRef.current || mapRef.current) return;
     let cancelled = false;
-    let mapInstance: LeafletMap | null = null;
+    let mapInstance: MapLibreMap | null = null;
     const markers = markerRefs.current;
 
-    void import('leaflet').then((L) => {
-      if (cancelled || !mapNodeRef.current) return;
-      const map = L.map(mapNodeRef.current, { zoomControl: false, minZoom: 10 }).setView([56.9515, 24.116], 13);
-      mapInstance = map;
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
-        className: 'base-tiles',
-      }).addTo(map);
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
-      map.on('click', () => setSelectedId(null));
-      map.on('zoomstart', () => {
-        if (suppressNextZoomDismissRef.current) {
-          suppressNextZoomDismissRef.current = false;
-          return;
-        }
-        setSelectedId(null);
-      });
-      mapRef.current = map;
-      setMapReady(true);
-      window.setTimeout(() => map.invalidateSize(), 100);
+    const maplibre = getMapLibreRuntime(maplibreModule);
+    const map = new maplibre.Map({
+      container: mapNodeRef.current,
+      style: darkRigaStyle,
+      center: [24.116, 56.9515],
+      zoom: 13,
+      minZoom: 10,
+      maxZoom: 19,
+      attributionControl: { compact: true },
+      fadeDuration: 120,
+      pixelRatio: Math.min(window.devicePixelRatio, 1.5),
+      renderWorldCopies: false,
+      refreshExpiredTiles: false,
+      pitchWithRotate: false,
+      dragRotate: false,
     });
+    mapInstance = map;
+    map.touchZoomRotate.disableRotation();
+    map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'bottom-right');
+    map.on('click', () => setSelectedId(null));
+    map.on('zoomstart', () => {
+      if (suppressNextZoomDismissRef.current) {
+        suppressNextZoomDismissRef.current = false;
+        return;
+      }
+      setSelectedId(null);
+    });
+    void map.once('load', () => {
+      if (!cancelled) setMapReady(true);
+    });
+    map.on('error', (event) => console.error('MapLibre:', event.error));
+    mapRef.current = map;
+    window.setTimeout(() => map.resize(), 100);
 
     return () => {
       cancelled = true;
@@ -272,67 +283,36 @@ export default function Home() {
     const map = mapRef.current;
     if (!map || !mapReady) return;
 
-    void import('leaflet').then((L) => {
-      markerRefs.current.forEach((marker) => marker.remove());
-      markerRefs.current.clear();
+    const maplibre = getMapLibreRuntime(maplibreModule);
+    markerRefs.current.forEach((marker) => marker.remove());
+    markerRefs.current.clear();
 
-      filtered.forEach((venue) => {
-        const active = venue.id === selectedIdRef.current;
-        const icon = createVenueIcon(L, venue, active);
-        const marker = L.marker([venue.lat, venue.lng], {
-          icon,
-          riseOnHover: true,
-          zIndexOffset: active ? 2000 : isPricedVenue(venue) ? 1000 : 0,
-        }).addTo(map);
-        marker.on('click', () => {
-          setSelectedId((current) => current === venue.id ? null : venue.id);
-        });
-        markerRefs.current.set(venue.id, marker);
+    filtered.forEach((venue) => {
+      const active = venue.id === selectedId;
+      const element = createMarkerNode(venue, active);
+      element.style.zIndex = active ? '2000' : isPricedVenue(venue) ? '1000' : '0';
+      element.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setSelectedId((current) => current === venue.id ? null : venue.id);
+        map.panTo([venue.lng, venue.lat], { duration: 300 });
       });
+      const marker = new maplibre.Marker({ element, anchor: 'bottom-left' })
+        .setLngLat([venue.lng, venue.lat])
+        .addTo(map);
+      markerRefs.current.set(venue.id, marker);
     });
-  }, [filtered, mapReady]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapReady) return;
-    const previousId = previousSelectedIdRef.current;
-    previousSelectedIdRef.current = selectedId;
-
-    void import('leaflet').then((L) => {
-      const updateMarker = (id: string | null, active: boolean) => {
-        if (!id) return;
-        const marker = markerRefs.current.get(id);
-        const venue = venueIndex.get(id);
-        if (!marker || !venue) return;
-        marker.setIcon(createVenueIcon(L, venue, active));
-        marker.setZIndexOffset(active ? 2000 : isPricedVenue(venue) ? 1000 : 0);
-      };
-
-      updateMarker(previousId, false);
-      updateMarker(selectedId, true);
-
-      const selectedVenue = selectedId ? venueIndex.get(selectedId) : null;
-      if (selectedVenue) {
-        const compact = window.matchMedia('(max-width: 720px)').matches;
-        window.setTimeout(() => map.panInside([selectedVenue.lat, selectedVenue.lng], {
-          paddingTopLeft: compact ? [18, 90] : [420, 100],
-          paddingBottomRight: compact ? [278, 90] : [320, 100],
-          animate: true,
-        }), 0);
-      }
-    });
-  }, [mapReady, selectedId]);
+  }, [filtered, mapReady, selectedId]);
 
   const chooseVenue = (venue: MapVenue) => {
     const map = mapRef.current;
     if (map && map.getZoom() !== 16) {
       suppressNextZoomDismissRef.current = true;
-      map.once('moveend', () => {
+      void map.once('moveend', () => {
         suppressNextZoomDismissRef.current = false;
       });
     }
     setSelectedId(venue.id);
-    map?.flyTo([venue.lat, venue.lng], 16, { duration: 0.65 });
+    map?.flyTo({ center: [venue.lng, venue.lat], zoom: 16, duration: 650, essential: true });
   };
 
   const clearFilters = () => {

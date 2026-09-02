@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import 'leaflet/dist/leaflet.css';
+@import 'maplibre-gl/dist/maplibre-gl.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -34,9 +34,8 @@ button, input { font: inherit; }
 button { cursor: pointer; }
 
 .app-shell, .workspace, .map-wrap { position: fixed; inset: 0; overflow: hidden; }
-.map-wrap { background: #dfe3df; }
+.map-wrap { background: #0b0e0d; }
 .map { position: absolute; inset: 0; z-index: 0; }
-.base-tiles { filter: grayscale(.92) saturate(.35) contrast(.88) brightness(1.04); }
 
 .sidebar {
   position: fixed;
@@ -116,8 +115,7 @@ button { cursor: pointer; }
 
 .mobile-results, .mobile-scrim { display: none; }
 
-.price-marker-shell { background: transparent !important; border: 0 !important; }
-.marker-node { position: relative; width: 74px; height: 34px; }
+.maplibregl-marker.marker-node { position: absolute; width: 74px; height: 34px; }
 .marker-node[data-tone='cheap'] { --marker-fill: #b8dfaa; }
 .marker-node[data-tone='mid'] { --marker-fill: #e4dc76; }
 .marker-node[data-tone='warm'] { --marker-fill: #f2bd64; }
@@ -173,11 +171,12 @@ button { cursor: pointer; }
   to { clip-path: circle(150% at 37px 18px); opacity: 1; }
 }
 
-.leaflet-control-attribution { padding: 2px 5px !important; background: rgba(255,255,255,.76) !important; color: #747b75 !important; font: 8px/1.25 var(--font-app) !important; }
-.leaflet-control-attribution a { color: #5d6f61 !important; }
-.leaflet-control-zoom { overflow: hidden; border: 1px solid rgba(25,32,27,.12) !important; border-radius: 10px !important; box-shadow: 0 6px 22px rgba(24,31,26,.15) !important; }
-.leaflet-control-zoom a { width: 34px !important; height: 34px !important; border-color: #e1e4e0 !important; background: rgba(255,255,255,.95) !important; color: #293029 !important; font: 20px/32px var(--font-app) !important; }
-.leaflet-control-zoom a:hover { background: #f1f3f0 !important; }
+.maplibregl-ctrl-attrib { margin: 0 6px 5px 0 !important; padding: 2px 5px !important; border-radius: 6px !important; background: rgba(12,15,13,.74) !important; color: #677069 !important; font: 8px/1.25 var(--font-app) !important; backdrop-filter: blur(10px); }
+.maplibregl-ctrl-attrib a { color: #7d8880 !important; }
+.maplibregl-ctrl-group { overflow: hidden; border: 1px solid rgba(255,255,255,.09) !important; border-radius: 11px !important; background: #151816 !important; box-shadow: 0 8px 26px rgba(0,0,0,.38) !important; }
+.maplibregl-ctrl-group button { width: 35px !important; height: 35px !important; border-color: rgba(255,255,255,.065) !important; background-color: #151816 !important; }
+.maplibregl-ctrl-group button:hover { background-color: #222723 !important; }
+.maplibregl-ctrl-icon { filter: invert(.82); opacity: .82; }
 
 @media (max-width: 720px) {
   .sidebar {
@@ -196,7 +195,7 @@ button { cursor: pointer; }
   .mobile-close { display: grid; }
   .mobile-results { position: fixed; z-index: 1100; bottom: 22px; left: 50%; display: flex; height: 43px; transform: translateX(-50%); border-radius: 999px; box-shadow: 0 8px 24px rgba(23,31,25,.25); }
   .mobile-scrim { position: fixed; z-index: 1200; inset: 0; display: block; border: 0; background: rgba(16, 22, 17, .2); backdrop-filter: blur(2px); }
-  .leaflet-bottom.leaflet-right { bottom: 58px; }
+  .maplibregl-ctrl-bottom-right { bottom: 58px; }
   .marker-detail { width: min(226px, calc(100vw - 32px)); }
 }
 
