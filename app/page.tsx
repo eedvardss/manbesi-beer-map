@@ -147,6 +147,7 @@ export default function Home() {
   const markerRefs = useRef<Map<string, LeafletMarker>>(new Map());
   const selectedIdRef = useRef<string | null>(null);
   const previousSelectedIdRef = useRef<string | null>(null);
+  const suppressNextZoomDismissRef = useRef(false);
   const [mapReady, setMapReady] = useState(false);
   const [query, setQuery] = useState('');
   const [priceBand, setPriceBand] = useState<PriceBand>('all');
@@ -242,6 +243,14 @@ export default function Home() {
         className: 'base-tiles',
       }).addTo(map);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
+      map.on('click', () => setSelectedId(null));
+      map.on('zoomstart', () => {
+        if (suppressNextZoomDismissRef.current) {
+          suppressNextZoomDismissRef.current = false;
+          return;
+        }
+        setSelectedId(null);
+      });
       mapRef.current = map;
       setMapReady(true);
       window.setTimeout(() => map.invalidateSize(), 100);
@@ -311,8 +320,15 @@ export default function Home() {
   }, [mapReady, selectedId]);
 
   const chooseVenue = (venue: MapVenue) => {
+    const map = mapRef.current;
+    if (map && map.getZoom() !== 16) {
+      suppressNextZoomDismissRef.current = true;
+      map.once('moveend', () => {
+        suppressNextZoomDismissRef.current = false;
+      });
+    }
     setSelectedId(venue.id);
-    mapRef.current?.flyTo([venue.lat, venue.lng], 16, { duration: 0.65 });
+    map?.flyTo([venue.lat, venue.lng], 16, { duration: 0.65 });
   };
 
   const clearFilters = () => {
