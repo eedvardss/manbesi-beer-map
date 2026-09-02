@@ -24,6 +24,10 @@ type ModelContext = {
 };
 
 const euro = (value: number) => value.toLocaleString('lv-LV', { style: 'currency', currency: 'EUR' });
+const normalizeSearch = (value: string) => value
+  .toLocaleLowerCase('lv')
+  .normalize('NFD')
+  .replace(/\p{M}+/gu, '');
 
 const markerTone = (price: number) => {
   if (price < 4) return 'cheap';
@@ -155,10 +159,10 @@ export default function Home() {
   }, [selectedId]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLocaleLowerCase('lv');
+    const q = normalizeSearch(query.trim());
     const result = mapVenues.filter((venue) => {
       const beerNames = isPricedVenue(venue) ? venueBeerPrices(venue).map((beer) => beer.name).join(' ') : '';
-      const matchesText = !q || [venue.name, venue.address, beerNames, venue.kind].join(' ').toLocaleLowerCase('lv').includes(q);
+      const matchesText = !q || normalizeSearch([venue.name, venue.address, beerNames, venue.kind].join(' ')).includes(q);
       const matchesPrice = priceBand === 'all'
         || (isPricedVenue(venue) && ((priceBand === 'under5' && venue.price < 5)
           || (priceBand === 'fiveToSix' && venue.price >= 5 && venue.price <= 6)
@@ -207,10 +211,10 @@ export default function Home() {
         setQuery(nextQuery);
         setPriceBand(nextBand);
         setSortMode(nextSort);
-        const normalized = nextQuery.trim().toLocaleLowerCase('lv');
+        const normalized = normalizeSearch(nextQuery.trim());
         const matches = mapVenues.filter((venue) => {
           const beerNames = isPricedVenue(venue) ? venueBeerPrices(venue).map((beer) => beer.name).join(' ') : '';
-          const text = [venue.name, venue.address, beerNames, venue.kind].join(' ').toLocaleLowerCase('lv');
+          const text = normalizeSearch([venue.name, venue.address, beerNames, venue.kind].join(' '));
           return (!normalized || text.includes(normalized))
             && (nextBand === 'all'
               || (isPricedVenue(venue) && ((nextBand === 'under5' && venue.price < 5)
