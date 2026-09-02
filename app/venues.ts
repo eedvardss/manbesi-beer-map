@@ -284,8 +284,8 @@ const categoryLabels: Record<string, string> = {
 
 const nonBarBaseVenueIds = new Set(['two-more', 'bon-vivant', 'chambao', 'fazenda', 'motormuzejs']);
 const drinkingVenueCategories = new Set(['bar', 'pub', 'biergarten', 'nightclub']);
-const drinkingVenuePointExceptions = new Set(['osm-node-10704645478']); // Tērbatas Ezītis is tagged as a cafe in OSM.
 const nonBarVenuePointIds = new Set(['osm-node-11018108905']); // La Casetta is a restaurant despite its OSM bar tag.
+const isEzitisVenue = (venue: MapVenue) => normalizeName(venue.name).includes('ezītis');
 
 const newBeerMenus = new Map(researchedNewBeerPricesA.venues
   .filter((venue) => venue.beerPrices.length > 0)
@@ -352,7 +352,7 @@ export const mapVenues: Venue[] = [
   ...venuePoints
     .filter((venue) => 'category' in venue
       && !nonBarVenuePointIds.has(venue.id)
-      && (drinkingVenueCategories.has(venue.category) || drinkingVenuePointExceptions.has(venue.id)))
+      && (drinkingVenueCategories.has(venue.category) || isEzitisVenue(venue)))
     .filter(isPricedVenue),
 ];
 export const osmSnapshotAt = rigaVenueData.osmTimestamp;
