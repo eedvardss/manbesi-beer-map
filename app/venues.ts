@@ -1,3 +1,10 @@
+export type BeerPrice = {
+  name: string;
+  volumeMl: number;
+  price: number;
+  priceIsFrom?: boolean;
+};
+
 export type Venue = {
   id: string;
   name: string;
@@ -9,6 +16,7 @@ export type Venue = {
   volumeMl: number;
   price: number;
   priceIsFrom?: boolean;
+  beerPrices?: BeerPrice[];
   sourceUrl: string;
   sourceLabel: string;
   sourceType: 'Oficiālā ēdienkarte' | 'Verificēta aktuālā alus karte';
@@ -171,3 +179,9 @@ export const venues: Venue[] = [
 
 export const pricePerLitre = (venue: Venue) => venue.price / (venue.volumeMl / 1000);
 
+export const venueBeerPrices = (venue: Venue): BeerPrice[] => venue.beerPrices ?? [{
+  name: venue.beer,
+  volumeMl: venue.volumeMl,
+  price: venue.price,
+  priceIsFrom: venue.priceIsFrom,
+}];

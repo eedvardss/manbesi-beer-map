@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet';
-import { ArrowDownWideNarrow, ArrowUpRight, Beer, Search, X } from 'lucide-react';
+import { ArrowDownWideNarrow, Beer, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { pricePerLitre, venues, type Venue } from './venues';
+import { pricePerLitre, venueBeerPrices, venues, type Venue } from './venues';
 
 type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
 type SortMode = 'price' | 'litre' | 'name';
@@ -35,9 +35,10 @@ const markerTone = (price: number) => {
 function VenueCard({ venue, selected, onSelect }: { venue: Venue; selected: boolean; onSelect: () => void }) {
   return (
     <article className={`venue-card ${selected ? 'is-selected' : ''}`} data-venue-id={venue.id}>
-      <button className="venue-card-main" onClick={onSelect} aria-label={`Parādīt kartē: ${venue.name}`}>
+      <button className="venue-card-target" onClick={onSelect} aria-label={`Parādīt kartē: ${venue.name}`} />
+      <div className="venue-card-main">
         <span className="venue-copy">
-          <strong className="venue-name">{venue.name}</strong>
+          <a className="venue-name" href={venue.sourceUrl} target="_blank" rel="noreferrer" title={venue.sourceLabel}>{venue.name}</a>
           <span className="beer-name">{venue.beer} · {venue.volumeMl} ml</span>
           <span className="venue-address">{venue.address}</span>
         </span>
@@ -45,12 +46,78 @@ function VenueCard({ venue, selected, onSelect }: { venue: Venue; selected: bool
           <strong>{venue.priceIsFrom ? 'no ' : ''}{euro(venue.price)}</strong>
           <small>{euro(pricePerLitre(venue))}/l</small>
         </span>
-      </button>
-      <a className="source-link" href={venue.sourceUrl} target="_blank" rel="noreferrer" title={venue.sourceLabel}>
-        Avots <ArrowUpRight size={12} />
-      </a>
+      </div>
     </article>
   );
+}
+
+function createMarkerNode(venue: Venue, active: boolean, onClose: () => void) {
+  const root = document.createElement('div');
+  root.className = `marker-node${active ? ' is-open' : ''}`;
+
+  const priceButton = document.createElement('button');
+  priceButton.type = 'button';
+  priceButton.className = `price-marker ${markerTone(venue.price)}${active ? ' active' : ''}`;
+  priceButton.setAttribute('aria-label', `${venue.name}, ${euro(venue.price)}`);
+  if (venue.priceIsFrom) {
+    const from = document.createElement('small');
+    from.textContent = 'no';
+    priceButton.appendChild(from);
+  }
+  priceButton.appendChild(document.createTextNode(`${venue.price.toFixed(2).replace('.', ',')} €`));
+  root.appendChild(priceButton);
+
+  if (!active) return root;
+
+  const detail = document.createElement('section');
+  detail.className = 'marker-detail';
+  detail.setAttribute('aria-label', `${venue.name} alus cenas`);
+
+  const header = document.createElement('div');
+  header.className = 'marker-detail-head';
+  const heading = document.createElement('strong');
+  heading.textContent = venue.name;
+  const address = document.createElement('span');
+  address.textContent = venue.address;
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'marker-detail-close';
+  close.setAttribute('aria-label', 'Aizvērt');
+  close.textContent = '×';
+  close.addEventListener('click', (event) => {
+    event.stopPropagation();
+    onClose();
+  });
+  const headingGroup = document.createElement('div');
+  headingGroup.appendChild(heading);
+  headingGroup.appendChild(address);
+  header.appendChild(headingGroup);
+  header.appendChild(close);
+
+  const list = document.createElement('div');
+  list.className = 'marker-beer-list';
+  venueBeerPrices(venue).forEach((beer) => {
+    const row = document.createElement('div');
+    row.className = 'marker-beer-row';
+    const beerInfo = document.createElement('div');
+    const beerName = document.createElement('strong');
+    beerName.textContent = beer.name;
+    const volume = document.createElement('span');
+    volume.textContent = `${beer.volumeMl} ml`;
+    beerInfo.appendChild(beerName);
+    beerInfo.appendChild(volume);
+    const price = document.createElement('strong');
+    price.className = 'marker-beer-price';
+    price.textContent = `${beer.priceIsFrom ? 'no ' : ''}${euro(beer.price)}`;
+    row.appendChild(beerInfo);
+    row.appendChild(price);
+    list.appendChild(row);
+  });
+
+  detail.appendChild(header);
+  detail.appendChild(list);
+  root.appendChild(detail);
+  return root;
 }
 
 export default function Home() {
@@ -146,6 +213,7 @@ export default function Home() {
         className: 'base-tiles',
       }).addTo(map);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
+      map.on('click', () => setSelectedId(null));
       mapRef.current = map;
       setMapReady(true);
       window.setTimeout(() => map.invalidateSize(), 100);
@@ -169,18 +237,27 @@ export default function Home() {
 
       filtered.forEach((venue) => {
         const active = venue.id === selectedId;
+        const markerNode = createMarkerNode(venue, active, () => setSelectedId(null));
         const icon = L.divIcon({
           className: 'price-marker-shell',
-          html: `<button aria-label="${venue.name}, ${euro(venue.price)}" class="price-marker ${markerTone(venue.price)}${active ? ' active' : ''}">${venue.priceIsFrom ? '<small>no</small>' : ''}${venue.price.toFixed(2).replace('.', ',')} €</button>`,
+          html: markerNode,
           iconSize: [74, 36],
           iconAnchor: [37, 36],
         });
-        const marker = L.marker([venue.lat, venue.lng], { icon, riseOnHover: true }).addTo(map);
+        const marker = L.marker([venue.lat, venue.lng], { icon, riseOnHover: true, zIndexOffset: active ? 1000 : 0 }).addTo(map);
         marker.on('click', () => {
-          setSelectedId(venue.id);
-          setMobileListOpen(true);
+          setSelectedId((current) => current === venue.id ? null : venue.id);
         });
         markerRefs.current.set(venue.id, marker);
+
+        if (active) {
+          const compact = window.matchMedia('(max-width: 720px)').matches;
+          window.setTimeout(() => map.panInside([venue.lat, venue.lng], {
+            paddingTopLeft: compact ? [18, 90] : [420, 100],
+            paddingBottomRight: compact ? [278, 90] : [320, 100],
+            animate: true,
+          }), 0);
+        }
       });
     });
   }, [filtered, mapReady, selectedId]);
