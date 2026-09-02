@@ -151,7 +151,11 @@ button { cursor: pointer; }
 .marker-detail-head > div { min-width: 0; display: grid; gap: 2px; }
 .marker-detail-head strong { overflow: hidden; font-size: 13px; font-weight: 750; letter-spacing: -.015em; text-overflow: ellipsis; white-space: nowrap; }
 .marker-detail-head span { overflow: hidden; color: rgba(21, 35, 25, .62); font-size: 9.5px; text-overflow: ellipsis; white-space: nowrap; }
-.marker-beer-list { max-height: 235px; overflow-y: auto; overscroll-behavior: contain; padding: 5px 7px 7px; scrollbar-width: thin; }
+.marker-beer-list { max-height: 235px; overflow-y: auto; overscroll-behavior: contain; padding: 5px 7px 7px; scrollbar-width: thin; scrollbar-color: rgba(21, 35, 25, .35) transparent; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+.marker-beer-list:focus { outline: none; }
+.marker-beer-list::-webkit-scrollbar { width: 6px; }
+.marker-beer-list::-webkit-scrollbar-track { background: transparent; }
+.marker-beer-list::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: rgba(21, 35, 25, .35); background-clip: padding-box; }
 .marker-beer-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 46px; padding: 7px 7px; border-radius: 8px; }
 .marker-beer-row + .marker-beer-row { border-top: 1px solid rgba(24, 34, 27, .13); border-radius: 0; }
 .marker-beer-row > div { min-width: 0; display: grid; gap: 2px; }

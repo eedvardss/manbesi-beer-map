@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Rīgas alus karte — reālas cenas un avoti',
-  description: '30 Rīgas bāri kartē ar publicētām alus cenām, tilpumiem un pārbaudāmiem avotiem.',
+  description: 'Rīgas bāri un restorāni kartē ar publicētām alus cenām, tilpumiem un pārbaudāmiem avotiem.',
 };
 
 export default function RootLayout({

@@ -41,7 +41,7 @@ const venueIndex = new Map(mapVenues.map((venue) => [venue.id, venue]));
 
 const createVenueIcon = (L: LeafletModule, venue: MapVenue, active: boolean) => L.divIcon({
   className: 'price-marker-shell',
-  html: createMarkerNode(venue, active),
+  html: createMarkerNode(L, venue, active),
   iconSize: [74, 36],
   iconAnchor: [37, 36],
 });
@@ -54,7 +54,7 @@ function VenueCard({ venue, selected, onSelect }: { venue: MapVenue; selected: b
       <div className="venue-card-main">
         <span className="venue-copy">
           <a className="venue-name" href={venue.sourceUrl} target="_blank" rel="noreferrer" title={venue.sourceLabel}>{venue.name}</a>
-          <span className="beer-name">{priced ? `${venue.beer}${venue.volumeMl ? ` · ${venue.volumeMl} ml` : ''}` : venue.kind}</span>
+          <span className="beer-name">{priced ? `${venue.beer}${venue.volumeMl ? ` · ${venue.packageCount ? `${venue.packageCount} × ` : ''}${venue.volumeMl} ml` : ''}` : venue.kind}</span>
           <span className="venue-address">{venue.address}</span>
         </span>
         {priced ? (
@@ -68,7 +68,7 @@ function VenueCard({ venue, selected, onSelect }: { venue: MapVenue; selected: b
   );
 }
 
-function createMarkerNode(venue: MapVenue, active: boolean) {
+function createMarkerNode(L: LeafletModule, venue: MapVenue, active: boolean) {
   const priced = isPricedVenue(venue);
   const root = document.createElement('div');
   root.className = `marker-node${active ? ' is-open' : ''}`;
@@ -110,6 +110,8 @@ function createMarkerNode(venue: MapVenue, active: boolean) {
 
   const list = document.createElement('div');
   list.className = 'marker-beer-list';
+  list.tabIndex = 0;
+  list.setAttribute('aria-label', `${venue.name} alus cenu saraksts`);
   if (!priced) {
     const pending = document.createElement('div');
     pending.className = 'marker-price-pending';
@@ -137,6 +139,8 @@ function createMarkerNode(venue: MapVenue, active: boolean) {
 
   detail.appendChild(header);
   detail.appendChild(list);
+  L.DomEvent.disableClickPropagation(detail);
+  L.DomEvent.disableScrollPropagation(detail);
   root.appendChild(detail);
   return root;
 }
