@@ -51,9 +51,10 @@ function VenueCard({ venue, selected, onSelect }: { venue: Venue; selected: bool
   );
 }
 
-function createMarkerNode(venue: Venue, active: boolean, onClose: () => void) {
+function createMarkerNode(venue: Venue, active: boolean) {
   const root = document.createElement('div');
   root.className = `marker-node${active ? ' is-open' : ''}`;
+  root.dataset.tone = markerTone(venue.price);
 
   const priceButton = document.createElement('button');
   priceButton.type = 'button';
@@ -79,20 +80,10 @@ function createMarkerNode(venue: Venue, active: boolean, onClose: () => void) {
   heading.textContent = venue.name;
   const address = document.createElement('span');
   address.textContent = venue.address;
-  const close = document.createElement('button');
-  close.type = 'button';
-  close.className = 'marker-detail-close';
-  close.setAttribute('aria-label', 'Aizvērt');
-  close.textContent = '×';
-  close.addEventListener('click', (event) => {
-    event.stopPropagation();
-    onClose();
-  });
   const headingGroup = document.createElement('div');
   headingGroup.appendChild(heading);
   headingGroup.appendChild(address);
   header.appendChild(headingGroup);
-  header.appendChild(close);
 
   const list = document.createElement('div');
   list.className = 'marker-beer-list';
@@ -213,7 +204,6 @@ export default function Home() {
         className: 'base-tiles',
       }).addTo(map);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
-      map.on('click', () => setSelectedId(null));
       mapRef.current = map;
       setMapReady(true);
       window.setTimeout(() => map.invalidateSize(), 100);
@@ -237,7 +227,7 @@ export default function Home() {
 
       filtered.forEach((venue) => {
         const active = venue.id === selectedId;
-        const markerNode = createMarkerNode(venue, active, () => setSelectedId(null));
+        const markerNode = createMarkerNode(venue, active);
         const icon = L.divIcon({
           className: 'price-marker-shell',
           html: markerNode,

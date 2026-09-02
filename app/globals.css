@@ -117,40 +117,46 @@ button { cursor: pointer; }
 
 .price-marker-shell { background: transparent !important; border: 0 !important; }
 .marker-node { position: relative; width: 74px; height: 34px; }
-.price-marker { width: 74px; height: 34px; border: 2px solid #fff; border-radius: 10px 10px 10px 3px; box-shadow: 0 3px 12px rgba(24,35,25,.24); color: #15231a; font-weight: 800; font-size: 12px; letter-spacing: -.02em; transition: transform .15s ease, box-shadow .15s ease; }
-.price-marker:hover, .price-marker.active { transform: translateY(-3px) scale(1.07); box-shadow: 0 6px 16px rgba(24,35,25,.28); outline: 2px solid #173f2c; }
+.marker-node[data-tone='cheap'] { --marker-fill: #b8dfaa; }
+.marker-node[data-tone='mid'] { --marker-fill: #e4dc76; }
+.marker-node[data-tone='warm'] { --marker-fill: #f2bd64; }
+.marker-node[data-tone='high'] { --marker-fill: #ed8c69; }
+.price-marker { width: 74px; height: 34px; border: 2px solid #fff; border-radius: 10px 10px 10px 3px; box-shadow: 0 3px 12px rgba(24,35,25,.24); color: #15231a; font-weight: 800; font-size: 12px; letter-spacing: -.02em; transition: transform .15s ease, box-shadow .15s ease, opacity .1s ease; }
+.price-marker:hover { transform: translateY(-3px) scale(1.07); box-shadow: 0 6px 16px rgba(24,35,25,.28); outline: 2px solid #173f2c; }
+.price-marker.active { position: relative; z-index: 3; opacity: 0; }
 .price-marker small { margin-right: 2px; font-size: 8px; }
 .cheap { background: #b8dfaa; }.mid { background: #e4dc76; }.warm { background: #f2bd64; }.high { background: #ed8c69; }
 
 .marker-detail {
   position: absolute;
-  left: 82px;
-  bottom: -2px;
-  width: 278px;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: 226px;
   overflow: hidden;
-  border: 1px solid rgba(24, 31, 26, .11);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, .98);
-  box-shadow: 0 16px 42px rgba(20, 28, 22, .2);
+  border: 2px solid #fff;
+  border-radius: 11px;
+  background: var(--marker-fill);
+  box-shadow: 0 15px 38px rgba(20, 28, 22, .2);
   color: #171c18;
-  transform-origin: left bottom;
-  animation: marker-expand .2s cubic-bezier(.2,.75,.25,1) both;
-  backdrop-filter: blur(14px);
+  transform-origin: 38px 18px;
+  animation: marker-morph .3s cubic-bezier(.2,.78,.25,1) both;
 }
-.marker-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 13px 13px 11px; border-bottom: 1px solid #e9ece8; }
+.marker-detail-head { display: flex; justify-content: center; padding: 12px 13px 10px; border-bottom: 1px solid rgba(24, 34, 27, .14); text-align: center; }
 .marker-detail-head > div { min-width: 0; display: grid; gap: 2px; }
 .marker-detail-head strong { overflow: hidden; font-size: 13px; font-weight: 750; letter-spacing: -.015em; text-overflow: ellipsis; white-space: nowrap; }
-.marker-detail-head span { overflow: hidden; color: #858c86; font-size: 9.5px; text-overflow: ellipsis; white-space: nowrap; }
-.marker-detail-close { flex: 0 0 auto; display: grid; place-items: center; width: 24px; height: 24px; margin: -4px -4px 0 0; border: 0; border-radius: 7px; background: transparent; color: #6f7670; font-size: 20px; font-weight: 350; line-height: 1; }
-.marker-detail-close:hover { background: #eef1ee; color: #242a25; }
+.marker-detail-head span { overflow: hidden; color: rgba(21, 35, 25, .62); font-size: 9.5px; text-overflow: ellipsis; white-space: nowrap; }
 .marker-beer-list { max-height: 235px; overflow-y: auto; overscroll-behavior: contain; padding: 5px 7px 7px; scrollbar-width: thin; }
 .marker-beer-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 46px; padding: 7px 7px; border-radius: 8px; }
-.marker-beer-row + .marker-beer-row { border-top: 1px solid #edf0ec; border-radius: 0; }
+.marker-beer-row + .marker-beer-row { border-top: 1px solid rgba(24, 34, 27, .13); border-radius: 0; }
 .marker-beer-row > div { min-width: 0; display: grid; gap: 2px; }
 .marker-beer-row > div strong { overflow: hidden; font-size: 11px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
-.marker-beer-row > div span { color: #8a918b; font-size: 9px; }
+.marker-beer-row > div span { color: rgba(21, 35, 25, .6); font-size: 9px; }
 .marker-beer-price { font-size: 12px; font-weight: 760; white-space: nowrap; }
-@keyframes marker-expand { from { opacity: 0; transform: translateX(-8px) scale(.88); } to { opacity: 1; transform: translateX(0) scale(1); } }
+@keyframes marker-morph {
+  from { clip-path: inset(0 calc(100% - 78px) calc(100% - 38px) 0 round 12px); opacity: .92; }
+  to { clip-path: inset(0 0 0 0 round 10px); opacity: 1; }
+}
 
 .leaflet-control-attribution { padding: 2px 5px !important; background: rgba(255,255,255,.76) !important; color: #747b75 !important; font: 8px/1.25 var(--font-app) !important; }
 .leaflet-control-attribution a { color: #5d6f61 !important; }
@@ -176,7 +182,7 @@ button { cursor: pointer; }
   .mobile-results { position: fixed; z-index: 1100; bottom: 22px; left: 50%; display: flex; height: 43px; transform: translateX(-50%); border-radius: 999px; box-shadow: 0 8px 24px rgba(23,31,25,.25); }
   .mobile-scrim { position: fixed; z-index: 1200; inset: 0; display: block; border: 0; background: rgba(16, 22, 17, .2); backdrop-filter: blur(2px); }
   .leaflet-bottom.leaflet-right { bottom: 58px; }
-  .marker-detail { left: 78px; width: min(258px, calc(100vw - 98px)); }
+  .marker-detail { width: min(226px, calc(100vw - 32px)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
