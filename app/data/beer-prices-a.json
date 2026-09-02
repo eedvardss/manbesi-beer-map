@@ -1,0 +1,292 @@
+{
+  "retrievedDate": "2026-09-02",
+  "scope": "First 15 venues after Latvian-locale alphabetical sorting of app/venues.ts (30 total). Prices are venue-menu prices only; delivery-menu prices were not used.",
+  "venues": [
+    {
+      "id": "ezitis-aldaru",
+      "name": "Aldaru Ezītis miglā",
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Aldari-majaslapa-01-scaled.jpg",
+      "sourceType": "official current drinks-menu image",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Lāčplēsis Ekstra","volumeMl":400,"price":2.5},
+        {"name":"Lielvārdes Ķiršu","volumeMl":400,"price":3.9},
+        {"name":"Bauskas Gaišais","volumeMl":400,"price":3.9},
+        {"name":"Anarkist New England IPA","volumeMl":400,"price":3.9},
+        {"name":"Madonas Nefiltrētais","volumeMl":400,"price":4.4},
+        {"name":"Ezītis Miglā × Labietis","volumeMl":440,"price":4.6},
+        {"name":"Heineken","volumeMl":330,"price":4.1},
+        {"name":"Sol","volumeMl":330,"price":4.4},
+        {"name":"Tērvetes Senču","volumeMl":500,"price":4.2},
+        {"name":"Bauskas Tumšais","volumeMl":500,"price":4.5},
+        {"name":"Anarkist New England IPA","volumeMl":500,"price":4.6},
+        {"name":"Užavas Light","volumeMl":500,"price":4.6},
+        {"name":"Viedi","volumeMl":500,"price":5.0},
+        {"name":"Labietis Dzeltenā Saime","volumeMl":440,"price":5.1},
+        {"name":"Labietis Sarkanā Saime","volumeMl":440,"price":5.3}
+      ],
+      "evidenceNotes": "The official 2026/03 image visibly lists the beer names, serving sizes and prices under LEJAMAIS ALUS / ON TAP BEER and NELEJAMAIS ALUS / NON-TAP BEER. Cider rows were excluded. The menu image is duplicated in the file; rows above are the legible beer rows."
+    },
+    {
+      "id": "alus-muiza",
+      "name": "Alus Muiža",
+      "sourceUrl": "https://untappd.com/v/alus-muiza/2055441",
+      "sourceType": "current public Untappd venue menu",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Tērvetes Lager","volumeMl":300,"price":3.1},{"name":"Tērvetes Lager","volumeMl":500,"price":4.4},
+        {"name":"Gaišais Alus","volumeMl":300,"price":3.4},{"name":"Gaišais Alus","volumeMl":500,"price":4.9},
+        {"name":"Cilpa Pale Ale","volumeMl":300,"price":3.5},{"name":"Cilpa Pale Ale","volumeMl":500,"price":5.0},
+        {"name":"TDH Hand-Selected Nectaron × Riwaka IPA","volumeMl":300,"price":4.2},{"name":"TDH Hand-Selected Nectaron × Riwaka IPA","volumeMl":500,"price":6.2},
+        {"name":"Brenguļu Tumšais","volumeMl":300,"price":3.0},{"name":"Brenguļu Tumšais","volumeMl":500,"price":4.3},
+        {"name":"Brenguļu Gaišais","volumeMl":300,"price":3.0},{"name":"Brenguļu Gaišais","volumeMl":500,"price":4.3},
+        {"name":"PINEFRUIT IPA","volumeMl":300,"price":3.7},{"name":"PINEFRUIT IPA","volumeMl":500,"price":5.4},
+        {"name":"OLICANA DREAMSCAPE IPA","volumeMl":300,"price":3.4},{"name":"OLICANA DREAMSCAPE IPA","volumeMl":500,"price":4.9},
+        {"name":"Užavas Gaišais","volumeMl":300,"price":3.2},{"name":"Užavas Gaišais","volumeMl":500,"price":4.5}
+      ],
+      "evidenceNotes": "Untappd page was crawled 2026-09-02 and says 'Beers on Tap' with 10 Latvian brewery beers. The page explicitly gives 300 ml and 500 ml draft prices; cider was excluded. The current menu's 10 items are used, not historical check-ins."
+    },
+    {
+      "id": "bbars",
+      "name": "B Bārs",
+      "sourceUrl": "https://bbars.lv/en/alcoholic-drinks/",
+      "sourceType": "official current alcoholic-drinks page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Lielvārdes Tumšais","volumeMl":500,"price":6.0},
+        {"name":"Corona","volumeMl":330,"price":5.0},
+        {"name":"Valmiermuiža","volumeMl":500,"price":6.0},
+        {"name":"La Trappe Isid'or Trappist","volumeMl":330,"price":8.0},
+        {"name":"Bauskas alus","volumeMl":500,"price":6.0},
+        {"name":"Heineken","volumeMl":500,"price":6.0},
+        {"name":"Liefmans Fruitesse","volumeMl":250,"price":6.0},
+        {"name":"Weihenstephaner Hefe Weissbier","volumeMl":500,"price":8.0},
+        {"name":"Stūrmanis non-alcoholic","volumeMl":330,"price":6.0},
+        {"name":"Corona non-alcoholic","volumeMl":330,"price":4.5}
+      ],
+      "evidenceNotes": "Official page's BEER section explicitly lists each beer, size, price and bottle/draft status. Source lines 6-67 contain the complete beer section; cider was excluded."
+    },
+    {
+      "id": "ezitis-baznicas",
+      "name": "Baznīcas Ezītis miglā",
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Baznica.jpg",
+      "sourceType": "official current drinks-menu image",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Lāčplēsis Ekstra","volumeMl":400,"price":2.5},
+        {"name":"Lielvārdes Ķiršu","volumeMl":400,"price":3.9},
+        {"name":"Bauskas Gaišais","volumeMl":400,"price":3.9},
+        {"name":"Anarkist New England IPA","volumeMl":400,"price":3.9},
+        {"name":"Madonas Nefiltrētais","volumeMl":400,"price":4.4},
+        {"name":"Ezītis Miglā × Labietis","volumeMl":440,"price":4.6},
+        {"name":"Heineken","volumeMl":330,"price":4.1},
+        {"name":"Sol","volumeMl":330,"price":4.4},
+        {"name":"Tērvetes Senču","volumeMl":500,"price":4.2},
+        {"name":"Bauskas Tumšais","volumeMl":500,"price":4.5},
+        {"name":"Anarkist New England IPA","volumeMl":500,"price":4.6},
+        {"name":"Užavas Light","volumeMl":500,"price":4.6},
+        {"name":"Viedi","volumeMl":500,"price":5.0}
+      ],
+      "evidenceNotes": "Official 2026/03 menu image. Rows are transcribed from the legible beer columns; cider rows are excluded. Confirm against the image before publishing because this source is raster rather than machine-readable."
+    },
+    {
+      "id": "beera",
+      "name": "BEERA Bar & Shop",
+      "sourceUrl": "https://untappd.com/v/beera-bar-riga/9938945",
+      "sourceType": "current public Untappd venue tap menu",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Mango × Pineapple Gose","volumeMl":400,"price":6.5},{"name":"Mango × Pineapple Gose","volumeMl":250,"price":5.5},
+        {"name":"As Right As Rain","volumeMl":400,"price":7.0},{"name":"As Right As Rain","volumeMl":250,"price":6.0},
+        {"name":"Double Headed DDH West Coast IPA","volumeMl":400,"price":6.5},{"name":"Double Headed DDH West Coast IPA","volumeMl":250,"price":5.5},
+        {"name":"Through the Glass (2026)","volumeMl":400,"price":9.0},{"name":"Through the Glass (2026)","volumeMl":250,"price":7.5},
+        {"name":"SOUPITA","volumeMl":400,"price":6.5},{"name":"SOUPITA","volumeMl":250,"price":5.5},
+        {"name":"Kväär","volumeMl":400,"price":7.0},{"name":"Kväär","volumeMl":250,"price":6.0},
+        {"name":"TDH Single Hop Series Krush IPA","volumeMl":400,"price":6.2},{"name":"TDH Single Hop Series Krush IPA","volumeMl":250,"price":5.2},
+        {"name":"Dark Veil Imperial Stout With Maple & Espresso","volumeMl":400,"price":9.5},{"name":"Dark Veil Imperial Stout With Maple & Espresso","volumeMl":250,"price":8.0},
+        {"name":"Pärlipüüdja","volumeMl":400,"price":7.5},{"name":"Pärlipüüdja","volumeMl":250,"price":6.5},
+        {"name":"ABSTRACT #14","volumeMl":400,"price":6.0},{"name":"ABSTRACT #14","volumeMl":250,"price":5.0},
+        {"name":"Pilsner","volumeMl":400,"price":5.0},{"name":"Pilsner","volumeMl":250,"price":4.0},
+        {"name":"No Wheels","volumeMl":400,"price":5.0},{"name":"No Wheels","volumeMl":250,"price":4.0}
+      ],
+      "evidenceNotes": "Untappd page crawled 2026-09-02 identifies BEERA Bar Riga and shows 'ON TAP NOW (12 Items)' with 400 ml, 250 ml and flight prices. Only the 400/250 beer servings are included; flight prices omitted. Untappd also reports 99 historical/menu beers, but the current ON TAP NOW list is the defensible display set."
+    },
+    {
+      "id": "bellevue",
+      "name": "Bellevue Lobby Bar",
+      "sourceUrl": "https://bellevue.lv/assets/media/menu/2026-beverage-list.pdf",
+      "sourceType": "official 2026 beverage-list PDF",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Madonas unfiltered","volumeMl":300,"price":5.0},{"name":"Madonas unfiltered","volumeMl":500,"price":6.0},
+        {"name":"Lielvārdes","volumeMl":300,"price":4.5},{"name":"Lielvārdes","volumeMl":400,"price":5.0},{"name":"Lielvārdes","volumeMl":500,"price":5.5},
+        {"name":"Leffe or Kokmuiža non-alcoholic","volumeMl":330,"price":4.0},
+        {"name":"Stella Artois","volumeMl":330,"price":4.0},{"name":"Corona","volumeMl":330,"price":4.0},
+        {"name":"Birra Moretti","volumeMl":330,"price":4.5},{"name":"Paulaner","volumeMl":500,"price":5.0},
+        {"name":"Valmiermuiža light","volumeMl":500,"price":6.0},{"name":"Valmiermuiža dark","volumeMl":500,"price":6.0}
+      ],
+      "evidenceNotes": "Official 9-page 2026 PDF page 5 has ALUS / BEER, LOCAL DRAFTS and BOTTLED BEER. Current PDF text explicitly gives draft prices (Madonas 30/50 cl; Lielvārdes 30/40/50 cl) and bottled list. Bellevue's current restaurant page exposes the same rows and prices in HTML, which was used to resolve the PDF's two-column price ordering."
+    },
+    {
+      "id": "bibelot",
+      "name": "Bibelot",
+      "sourceUrl": "https://bibelot.bar/",
+      "sourceType": "official current menu page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Mežpils Light","volumeMl":300,"price":3.0},
+        {"name":"Tramvajs Unfiltered beer","volumeMl":300,"price":3.0}
+      ],
+      "evidenceNotes": "Official page's Draft section explicitly lists Mežpils / Light beer and Tramvajs / Unfiltered beer, both 0.3 l at €3.00. Kvas was excluded because it is not beer."
+    },
+    {
+      "id": "bon-vivant",
+      "name": "Bon-Vivant",
+      "sourceUrl": "https://www.bonvivant.lv/index_en",
+      "sourceType": "official current menu page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Leffe Blonde","volumeMl":330,"price":6.0},{"name":"Leffe Blonde","volumeMl":500,"price":7.0},
+        {"name":"Clausthaler Classic non-alcoholic","volumeMl":330,"price":3.5},
+        {"name":"Kronenbourg non-alcoholic","volumeMl":330,"price":5.5},
+        {"name":"Leffe Blonde non-alcoholic","volumeMl":330,"price":5.5}
+      ],
+      "evidenceNotes": "Official menu states the venue offers more than 18 draft and more than 150 bottled beers, but does not publish a complete current bottle list. Only rows with explicit name, volume and price are included; do not infer the unlisted beers from the assortment claim."
+    },
+    {
+      "id": "chambao",
+      "name": "Chambao",
+      "sourceUrl": "https://chambaoriga.lv/menu/",
+      "sourceType": "official current menu page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Mežpils Light","volumeMl":500,"price":5.0},
+        {"name":"Brooklyn Lager","volumeMl":500,"price":5.0},
+        {"name":"Kronenbourg 1664 Blanc","volumeMl":330,"price":5.0},
+        {"name":"Grimbergen Blonde","volumeMl":500,"price":5.0},
+        {"name":"Grimbergen Double Ambree","volumeMl":500,"price":5.0},
+        {"name":"Kronenbourg non-alcoholic","volumeMl":330,"price":4.0},
+        {"name":"Brooklyn non-alcoholic","volumeMl":330,"price":4.0}
+      ],
+      "evidenceNotes": "Official menu's Beer section explicitly lists five alcoholic beers and the Non-alcoholic beer section lists two NA beers, with country, volume and EUR price."
+    },
+    {
+      "id": "cuba",
+      "name": "Cuba Cafe",
+      "sourceUrl": "https://www.cubacaferiga.com/menu",
+      "sourceType": "official menu landing page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [],
+      "evidenceNotes": "Official page was reachable but exposes a cocktail/food menu without a machine-readable beer section. A third-party listing mentions Bauskas beer, and delivery listings may contain beverages, but neither was used as a venue-price source. Leave beer data empty until Cuba Cafe publishes a current in-venue menu/photo or a clearly identified current tap list."
+    },
+    {
+      "id": "duvels",
+      "name": "Duvel’s",
+      "sourceUrl": "https://www.gastropubduvels.lv/en/",
+      "sourceType": "official current menu page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Stella Artois","volumeMl":330,"price":6.0},{"name":"Stella Artois","volumeMl":500,"price":7.0},
+        {"name":"Cēsu Premium","volumeMl":330,"price":5.5},{"name":"Cēsu Premium","volumeMl":500,"price":6.5},
+        {"name":"Cēsu Brūža Unfiltered","volumeMl":330,"price":6.5},{"name":"Cēsu Brūža Unfiltered","volumeMl":500,"price":7.0},
+        {"name":"Grimbergen Blond","volumeMl":250,"price":5.5},{"name":"Grimbergen Blond","volumeMl":500,"price":7.0},
+        {"name":"Leffe Blond","volumeMl":330,"price":6.0},{"name":"Leffe Blond","volumeMl":500,"price":7.0},
+        {"name":"La Chouffe","volumeMl":330,"price":6.5},{"name":"Karmeliet Tripel","volumeMl":330,"price":7.0},
+        {"name":"Grimbergen Double","volumeMl":250,"price":5.5},{"name":"Grimbergen Double","volumeMl":500,"price":7.0},
+        {"name":"Leffe Bruin","volumeMl":330,"price":6.0},{"name":"Leffe Bruin","volumeMl":500,"price":7.0},
+        {"name":"Kronenbourg 1664 Blanc","volumeMl":330,"price":6.0},{"name":"Kronenbourg 1664 Blanc","volumeMl":500,"price":7.0},
+        {"name":"Hoegaarden White","volumeMl":330,"price":6.0},{"name":"Hoegaarden White","volumeMl":500,"price":7.0},
+        {"name":"Kasteel Rouge","volumeMl":330,"price":6.5},{"name":"Bacchus Kriek","volumeMl":330,"price":6.5},{"name":"Cherry Chouffe","volumeMl":330,"price":6.5},
+        {"name":"Palm Special","volumeMl":330,"price":6.0},{"name":"Palm Special","volumeMl":500,"price":7.0},{"name":"Pauwel Kwak","volumeMl":330,"price":7.0},{"name":"Vedett Extra Ordinary IPA","volumeMl":330,"price":6.5},
+        {"name":"Baptist Blanche","volumeMl":330,"price":6.0},{"name":"La Trappe Witte","volumeMl":330,"price":6.5},{"name":"Mongozo Pilsener","volumeMl":330,"price":6.0},{"name":"St. Bernardus Extra 4","volumeMl":330,"price":6.0},{"name":"Duvel 666","volumeMl":330,"price":7.0},{"name":"Orval","volumeMl":330,"price":6.5},
+        {"name":"Delirium Tremens","volumeMl":330,"price":7.5},{"name":"Duvel","volumeMl":330,"price":7.0},{"name":"Duvel Tripel Hop Citra","volumeMl":330,"price":7.5},{"name":"Delirium Argentum","volumeMl":330,"price":7.5},{"name":"Viven Imperial IPA","volumeMl":330,"price":8.2},{"name":"Prearis IPA","volumeMl":330,"price":7.0},{"name":"Buffalo Belgian Biter","volumeMl":330,"price":6.5},
+        {"name":"Duvel Triple Hop Cashmere","volumeMl":330,"price":7.5},{"name":"Westmalle Tripel","volumeMl":330,"price":6.9},{"name":"St. Bernardus Tripel","volumeMl":330,"price":5.5},{"name":"Chimay Tripel","volumeMl":330,"price":7.5},{"name":"Kasteel Tripel","volumeMl":330,"price":6.5},{"name":"Karmeliet Tripel","volumeMl":330,"price":6.5},
+        {"name":"St. Bernardus Pater 6","volumeMl":330,"price":7.0},{"name":"St. Bernardus Prior 8","volumeMl":330,"price":6.6},{"name":"Rochefort 6","volumeMl":330,"price":6.0},{"name":"Westmalle Double","volumeMl":330,"price":6.5},{"name":"Chimay Rouge","volumeMl":330,"price":6.5},{"name":"Kasteel Donker","volumeMl":330,"price":7.0},{"name":"Duchesse De Bourgogne","volumeMl":250,"price":6.0},
+        {"name":"Delirium Nocturnum","volumeMl":330,"price":7.5},{"name":"Rochefort 8","volumeMl":330,"price":6.5},{"name":"Chimay Blue","volumeMl":330,"price":7.5},{"name":"Gulden Draak","volumeMl":330,"price":6.5},{"name":"Rochefort 10","volumeMl":330,"price":7.5},{"name":"Kasteel Cuvée Du Chateau","volumeMl":330,"price":6.5},{"name":"Kasteel Barista Chocolate Quad","volumeMl":330,"price":7.5},{"name":"St. Bernardus ABT 12","volumeMl":330,"price":6.5},{"name":"Straffe Hendrik Quadrupel","volumeMl":330,"price":7.5},{"name":"Gulden Draak Imperial Stout","volumeMl":330,"price":8.7},
+        {"name":"Hoegaarden Rosé","volumeMl":250,"price":4.5},{"name":"Mongozo Banana","volumeMl":330,"price":6.5},{"name":"Liefmans Fruitesse","volumeMl":250,"price":6.5},{"name":"Lindemans Pecheresse","volumeMl":250,"price":5.5},{"name":"Bacchus Framboise","volumeMl":375,"price":7.5},{"name":"Bacchus Kriek","volumeMl":375,"price":7.5},{"name":"Floris Fraise","volumeMl":330,"price":6.5},{"name":"Floris Mango","volumeMl":330,"price":6.5},{"name":"Floris Pomme","volumeMl":330,"price":6.5},{"name":"Mort Subite Kriek Lambic","volumeMl":250,"price":5.5},{"name":"Timmermans Peache","volumeMl":250,"price":6.0},{"name":"Kasteel Rubus Framboise","volumeMl":330,"price":6.5},{"name":"Delirium Red","volumeMl":330,"price":7.5}
+      ],
+      "evidenceNotes": "Official page's BEER PARADISE section explicitly lists 18 draft beers and the named bottled-beer list with volumes and prices. Cider and the heading 'B/A ALUS 0.0%' without named/price rows were excluded. The page says it offers a larger assortment than the rows currently exposed; only explicit current rows are included."
+    },
+    {
+      "id": "fazenda",
+      "name": "Fazenda Āgenskalns",
+      "sourceUrl": "https://www.fazenda.lv/dzerienu-karte-fazenda-agenskalns",
+      "sourceType": "official current drinks-menu page",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Madonas draft","volumeMl":300,"price":4.0},{"name":"Madonas draft","volumeMl":500,"price":5.0},
+        {"name":"Valmiermuižas Amber Lager","volumeMl":500,"price":5.0},
+        {"name":"Valmiermuižas Dark Lager","volumeMl":500,"price":5.0},
+        {"name":"Kussh Magnum P.I. Milk Stout","volumeMl":330,"price":4.0},
+        {"name":"Kokmuiža non-alcoholic","volumeMl":330,"price":4.0}
+      ],
+      "evidenceNotes": "Official page's ALUS / BEER section explicitly lists Madonas draft at 30/50 cl, Valmiermuiža light/amber and dark, Kussh Magnum P.I. and Kokmuiža non-alcoholic. Prices are €4/€5 as shown; cider excluded."
+    },
+    {
+      "id": "ezitis-grecinieku",
+      "name": "Grēcinieku Ezītis miglā",
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Grecinieki.jpg",
+      "sourceType": "official current drinks-menu image",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Lāčplēsis Ekstra","volumeMl":400,"price":2.5},
+        {"name":"Lielvārdes Ķiršu","volumeMl":400,"price":3.9},
+        {"name":"Bauskas Gaišais","volumeMl":400,"price":3.9},
+        {"name":"Anarkist New England IPA","volumeMl":400,"price":3.9},
+        {"name":"Madonas Nefiltrētais","volumeMl":400,"price":4.4},
+        {"name":"Ezītis Miglā × Labietis","volumeMl":440,"price":4.6},
+        {"name":"Heineken","volumeMl":330,"price":4.1},
+        {"name":"Sol","volumeMl":330,"price":4.4},
+        {"name":"Tērvetes Senču","volumeMl":500,"price":4.2},
+        {"name":"Bauskas Tumšais","volumeMl":500,"price":4.5},
+        {"name":"Anarkist New England IPA","volumeMl":500,"price":4.6},
+        {"name":"Užavas Light","volumeMl":500,"price":4.6},
+        {"name":"Viedi","volumeMl":500,"price":5.0}
+      ],
+      "evidenceNotes": "Official 2026/03 menu image. Rows are transcribed from the legible beer columns; cider rows are excluded. Confirm against the image before publishing because this source is raster rather than machine-readable."
+    },
+    {
+      "id": "gust",
+      "name": "Gust",
+      "sourceUrl": "https://untappd.com/v/gust/14012302",
+      "sourceType": "current public Untappd venue tap menu",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Apple × Mango × Banana × Cinnamon Smoothie Sour Ale","volumeMl":300,"price":4.7},{"name":"Apple × Mango × Banana × Cinnamon Smoothie Sour Ale","volumeMl":500,"price":7.1},
+        {"name":"TDH Galaxy × Citra × Nelson Sauvin DIPA","volumeMl":300,"price":4.4},{"name":"TDH Galaxy × Citra × Nelson Sauvin DIPA","volumeMl":500,"price":6.5},
+        {"name":"TROPICAA IPA","volumeMl":300,"price":3.4},{"name":"TROPICAA IPA","volumeMl":500,"price":4.9},
+        {"name":"Užavas Gaišais","volumeMl":300,"price":3.2},{"name":"Užavas Gaišais","volumeMl":500,"price":4.5},
+        {"name":"SOURBIT / BLACK PASSION","volumeMl":300,"price":3.4},{"name":"SOURBIT / BLACK PASSION","volumeMl":500,"price":4.9},
+        {"name":"Cilpa Pale Ale","volumeMl":300,"price":3.5},{"name":"Cilpa Pale Ale","volumeMl":500,"price":5.0},
+        {"name":"Ginger and Azacca Beer","volumeMl":300,"price":3.3},{"name":"Ginger and Azacca Beer","volumeMl":500,"price":4.7},
+        {"name":"Sea Goes Radical Sour","volumeMl":300,"price":3.6},{"name":"Sea Goes Radical Sour","volumeMl":500,"price":5.2},
+        {"name":"Valmiermuižas Bezalkoholiskais","volumeMl":300,"price":2.5},{"name":"Valmiermuižas Bezalkoholiskais","volumeMl":500,"price":3.5}
+      ],
+      "evidenceNotes": "Untappd page crawled 2026-09-02 identifies Gust at Matīsa iela 8 and shows 'Beer river from TAPS (10 Items)' with current draft prices. The two cider rows in the list were excluded; eight beer rows are included."
+    },
+    {
+      "id": "hat",
+      "name": "HAT Brewery Taproom",
+      "sourceUrl": "https://untappd.com/v/hat-brewery-taproom/13514640",
+      "sourceType": "current public Untappd venue menu",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {"name":"Juicy Haze","volumeMl":500,"price":5.0},{"name":"Juicy Haze","volumeMl":300,"price":4.0},
+        {"name":"Hoppy Oasis IPA","volumeMl":500,"price":5.0},{"name":"Hoppy Oasis IPA","volumeMl":300,"price":4.0},
+        {"name":"Blue Tang DDH IPA","volumeMl":500,"price":6.0},{"name":"Blue Tang DDH IPA","volumeMl":300,"price":4.5},
+        {"name":"QUEST No 5 IPA","volumeMl":500,"price":6.0},{"name":"QUEST No 5 IPA","volumeMl":300,"price":4.5},
+        {"name":"Rudzu Muižas Pils","volumeMl":500,"price":5.0},{"name":"Rudzu Muižas Pils","volumeMl":300,"price":4.0},
+        {"name":"Ginger and Azacca Beer","volumeMl":500,"price":6.0},{"name":"Ginger and Azacca Beer","volumeMl":300,"price":4.5},
+        {"name":"Quest No6 IPA","volumeMl":500,"price":6.0},{"name":"Quest No6 IPA","volumeMl":300,"price":4.5},
+        {"name":"All Dorado Pale Ale","volumeMl":500,"price":5.0},{"name":"All Dorado Pale Ale","volumeMl":300,"price":4.0},
+        {"name":"Kapracis (Grave Digger)","volumeMl":500,"price":6.0},{"name":"Kapracis (Grave Digger)","volumeMl":300,"price":4.5},
+        {"name":"QUEST No 5 IPA","volumeMl":440,"price":4.0},{"name":"All Dorado Pale Ale","volumeMl":440,"price":3.5},
+        {"name":"Dolcita Citra Idaho 7","volumeMl":440,"price":4.0},{"name":"Hoppy Oasis IPA","volumeMl":440,"price":3.5},
+        {"name":"Juicy Haze","volumeMl":440,"price":3.5},{"name":"Key To Riga Porter","volumeMl":440,"price":3.5},
+        {"name":"Quest No4 IPA","volumeMl":440,"price":4.0},{"name":"Rasp Beery Punch Sour","volumeMl":440,"price":3.5},
+        {"name":"Tangerine Switch IPA","volumeMl":440,"price":4.0},{"name":"INCEPTION Series Non-Alcoholic Pale Ale","volumeMl":440,"price":5.0}
+      ],
+      "evidenceNotes": "Untappd page crawled 2026-09-02 identifies HAT Brewery Taproom, 66 Dzirnavu iela, and lists 9 current draft items plus 10 can items with serving sizes/prices. Cider was excluded. The duplicate QUEST/All Dorado entries reflect distinct draft/can serving formats."
+    }
+  ]
+}

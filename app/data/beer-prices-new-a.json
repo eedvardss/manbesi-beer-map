@@ -1,0 +1,255 @@
+{
+  "retrievedDate": "2026-09-02",
+  "scope": "Named Riga bar/pub/biergarten/nightclub records from inventory/riga-venues.json that are not represented by the same venue in app/venues.ts. Delivery feeds were used only as discovery evidence and never as price evidence.",
+  "venues": [
+    {
+      "name": "A'Drop",
+      "category": "bar",
+      "sourceUrl": "https://www.adrop.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site was reachable but no current beer menu with explicit venue prices was exposed. Do not use delivery prices."
+    },
+    {
+      "name": "Alus rūme Trofeja",
+      "category": "pub",
+      "address": "Avotu iela 74A, Rīga",
+      "sourceUrl": "https://trofeja.lv/lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site identifies the brewery/pub and products but does not publish a current tap list with serving sizes and on-site prices. Wolt menu was checked only for discovery; its prices were excluded as delivery prices."
+    },
+    {
+      "name": "Andalūzijas suns",
+      "category": "pub",
+      "address": "Elizabetes iela 83, Rīga",
+      "sourceUrl": "https://www.andaluzijassuns.lv/pages/menu",
+      "sourceType": "official current menu landing page",
+      "beerPrices": [],
+      "reason": "The current official menu landing page exposes drink-menu images, but the only machine-readable beer PDF found is an old menu (source crawl ~2020). It is not safe to display as a current 2026 price list without a fresh in-venue image or current menu export."
+    },
+    {
+      "name": "Angārs Bārs",
+      "category": "bar",
+      "address": "Tallinas iela 10, Rīga",
+      "sourceUrl": "https://www.kvartalaangars.lv/edienkarte/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official page links to a drinks menu but does not expose readable current beer names, volumes and venue prices in fetched content."
+    },
+    {
+      "name": "Aussie Pub",
+      "category": "pub",
+      "address": "Vaļņu iela 43, Rīga",
+      "sourceUrl": "https://www.aussiepubriga.com/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site was checked, but no publicly readable current beer menu with explicit serving sizes and prices was available."
+    },
+    {
+      "name": "Beer Museum",
+      "category": "pub",
+      "address": "Dzirnavu iela 34A, Rīga",
+      "sourceUrl": "https://beermuseumbar.lv/en/",
+      "sourceType": "official current website",
+      "beerPrices": [],
+      "knownBeerNamesWithoutPrice": ["Beermuseum Amber","Beermuseum Dark","Primus","Brugse Zot Blond","Brugse Zot Dubbel","Blanche de Bruges","Straffe Hendrik Tripel","Straffe Hendrik Quadrupel","Mystic Kriek","Mystic Peach","Charles Quint Ruby Red Strong","Tongerlo LUX","Tongerlo NOX","Charles Quint Golden Blond","Super 8 Blanche","Super 8 Flandrien","Craft Pilsener","Super 8 IPA","Super DuPA","Blurred Lines","Ongelovige Thomas","Guinness"],
+      "reason": "Official current page publishes a Draft beer list and beer specifications, but no serving sizes or prices. Names are retained as discovery evidence only; no prices were inferred."
+    },
+    {
+      "name": "BEERloga",
+      "category": "bar",
+      "address": "Lokomotīves iela 100, Rīga",
+      "sourceUrl": "https://beerloga.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site is only a landing page; the linked online menu is not a Riga venue-price source with reliably current EUR beer rows. Delivery listings were not used for prices."
+    },
+    {
+      "name": "Black Magic",
+      "category": "bar",
+      "address": "Kaļķu iela 10, Rīga",
+      "sourceUrl": "https://www.blackmagic.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site focuses on chocolate, cocktails and spirits; no current beer-price rows were exposed."
+    },
+    {
+      "name": "Bruklinas krogs un viskija bārs",
+      "category": "pub",
+      "address": "Lāčplēša iela 35, Rīga",
+      "sourceUrl": "https://www.brooklynpub.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site did not expose a machine-readable current beer menu with explicit serving sizes and venue prices."
+    },
+    {
+      "name": "Brūzis Manufaktūra",
+      "category": "pub",
+      "address": "Brīvības gatve 401, Rīga",
+      "sourceUrl": "https://bruzismanufaktura.lv/cafe/",
+      "sourceType": "official current cafe drinks menu",
+      "beerPrices": [
+        {"name":"Lutausis IPA","volumeMl":500,"price":5.0},
+        {"name":"Lutausis NEIPA","volumeMl":500,"price":5.0},
+        {"name":"Lutausis Šokolādes Porteris","volumeMl":500,"price":5.0},
+        {"name":"Lutausis Ziemassvētku porteris","volumeMl":500,"price":5.0},
+        {"name":"Tehniķis","volumeMl":500,"price":5.0},
+        {"name":"Arhitekts","volumeMl":500,"price":5.0},
+        {"name":"Ķīmiķis","volumeMl":500,"price":5.0},
+        {"name":"Apiņotais stūrmanis","volumeMl":500,"price":5.0},
+        {"name":"Stūrmanis","volumeMl":500,"price":5.0},
+        {"name":"Apiņotais stūrmanis","volumeMl":300,"price":4.0},
+        {"name":"Apiņotais stūrmanis","volumeMl":500,"price":5.0},
+        {"name":"Stūrmanis","volumeMl":300,"price":4.0},
+        {"name":"Stūrmanis","volumeMl":500,"price":5.0}
+      ],
+      "evidenceNotes": "Official menu page crawled last month. It explicitly labels the bottled rows as 'Uz vietas' (on site) €5.00 per 0.5 L and separately lists 300/500 ml non-alcoholic prices. The generic 'Jebkurš lejamais alus' row has no beer name, so it was not added as a named beer."
+    },
+    {
+      "name": "Cabo cafe",
+      "category": "bar",
+      "address": "Roberta Feldmaņa iela 8A, Rīga",
+      "sourceUrl": "https://cabo.lv/edieni-dzerieni/dzērienkarte/",
+      "sourceType": "official current drinks menu",
+      "beerPrices": [
+        {"name":"Mežpils gaišais alus","volumeMl":330,"price":3.0},{"name":"Mežpils gaišais alus","volumeMl":500,"price":4.0},
+        {"name":"Valmiermuižas gaišais alus","volumeMl":330,"price":4.0},{"name":"Valmiermuižas gaišais alus","volumeMl":500,"price":5.0},
+        {"name":"Brooklyn","volumeMl":330,"price":4.0},{"name":"Brooklyn","volumeMl":500,"price":5.0},
+        {"name":"Grimbergen Blond","volumeMl":330,"price":4.0},{"name":"Grimbergen Blond","volumeMl":500,"price":5.0},
+        {"name":"Grimbergen Dubbel","volumeMl":330,"price":5.0},{"name":"Grimbergen Dubbel","volumeMl":500,"price":6.0},
+        {"name":"Leffe Blond","volumeMl":330,"price":5.0},{"name":"Leffe Blond","volumeMl":500,"price":6.0},
+        {"name":"Bellevue Extra Kriek","volumeMl":330,"price":5.0},{"name":"Bellevue Extra Kriek","volumeMl":500,"price":6.0},
+        {"name":"Kronenbourg","volumeMl":330,"price":4.5},{"name":"Kronenbourg","volumeMl":500,"price":5.5}
+      ],
+      "evidenceNotes": "Official drinks page was crawled four weeks ago and explicitly lists eight draft beers with 330/500 ml venue prices. The separate 2026 PDF exists but its text is not exposed; the current HTML menu is used."
+    },
+    {
+      "name": "Craft Beer Station",
+      "category": "bar",
+      "address": "Lubānas iela 113C, Rīga",
+      "sourceUrl": "https://craft-station.com/home/en",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site confirms 12 taps and a large bottle/can selection but does not publish a current named tap list or prices."
+    },
+    {
+      "name": "Distillers Republic",
+      "category": "bar",
+      "address": "Vecpilsētas iela 8A, Rīga",
+      "sourceUrl": "https://www.distillersrepublic.com/bar",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site confirms draft/craft beer but exposes no current beer names, serving sizes and venue prices."
+    },
+    {
+      "name": "DJ bārs",
+      "category": "bar",
+      "address": "Laipu iela 5, Rīga",
+      "sourceUrl": "https://djbar.lv",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "No publicly readable current beer menu with explicit venue prices was found on the official site."
+    },
+    {
+      "name": "Fenikss",
+      "category": "bar",
+      "address": "Sarkandaugavas iela 2, Rīga",
+      "sourceUrl": "https://fenikss.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site does not expose a current beer menu with explicit serving sizes and on-site prices."
+    },
+    {
+      "name": "Folkklubs Ala Pagrabs",
+      "category": "pub",
+      "address": "Grēcinieku iela 26, Rīga",
+      "sourceUrl": "https://www.folkklubs.lv/menu/",
+      "sourceType": "official current food/menu page",
+      "beerPrices": [],
+      "reason": "Official current page contains beer-snack and food prices but no beer names, serving sizes and venue prices. Do not turn the 'beer platter' or free-beer promotion into beer-price data."
+    },
+    {
+      "name": "Klubs Depo",
+      "category": "nightclub",
+      "address": "Šarlotes iela 18A, Rīga",
+      "sourceUrl": "https://www.klubsdepo.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official site publishes events and venue information but no current beer menu/prices."
+    },
+    {
+      "name": "Labietis",
+      "category": "pub",
+      "address": "Aristīda Briāna iela 9A, Rīga",
+      "sourceUrl": "https://untappd.com/v/labietis/993603",
+      "sourceType": "current public Untappd venue tap list",
+      "beerPrices": [],
+      "knownBeerNamesWithoutPrice": ["Čupakabra","Virsaitis","Trīs indiāņi","Melnis","Tumsas Ragana","Soho Svitins","Radziņš","Soģis","Atblāzma","Gaismas Ragana","Mūsējais","Mauglis","E034","Pēteris Apinis","Mežs","Zintnieks"],
+      "reason": "Untappd page crawled in the current week and exposes today's 16 tap names/volumes but no prices. Labietis webshop prices are retail/take-away, not on-site prices, so they were excluded."
+    },
+    {
+      "name": "Laska V21",
+      "category": "bar",
+      "address": "Vagonu iela 21A, Rīga",
+      "sourceUrl": "https://www.laska.bar/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official Wix site and public social link were checked, but no current readable venue beer menu/prices were exposed."
+    },
+    {
+      "name": "Möku Riga",
+      "category": "bar",
+      "address": "Skolas iela 35, Rīga",
+      "sourceUrl": "https://moku.ee/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official brand site does not expose a Riga-specific current beer menu with venue prices; third-party menu pages are not sufficient evidence."
+    },
+    {
+      "name": "Nurme",
+      "category": "bar",
+      "address": "Avotu iela 53, Rīga",
+      "sourceUrl": "https://nurmebeer.com/",
+      "sourceType": "official brewery website",
+      "beerPrices": [],
+      "reason": "Official site identifies the brewery but does not publish a current Avotu bar tap list with on-site serving prices."
+    },
+    {
+      "name": "Sapņi un kokteiļi",
+      "category": "nightclub",
+      "address": "Blaumaņa iela 32, Rīga",
+      "sourceUrl": "https://www.suk.lv",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official nightclub site does not expose a current beer menu with explicit venue prices."
+    },
+    {
+      "name": "Sveiks, Švejk!",
+      "category": "pub",
+      "address": "Stabu iela 23, Rīga",
+      "sourceUrl": "https://www.svejk.lv/drinks.pdf",
+      "sourceType": "official drinks-menu PDF",
+      "beerPrices": [],
+      "reason": "Official PDF is dated August 2025 and therefore not safe to present as current 2026 venue pricing without a fresh menu confirmation."
+    },
+    {
+      "name": "Top",
+      "category": "nightclub",
+      "address": "Alfrēda Kalniņa iela 4, Rīga",
+      "sourceUrl": "https://www.topclub.lv/",
+      "sourceType": "official website",
+      "beerPrices": [],
+      "reason": "Official nightclub site has no publicly readable current beer menu/prices."
+    },
+    {
+      "name": "Victory Pub",
+      "category": "pub",
+      "address": "Tirgoņu iela 10, Rīga",
+      "sourceUrl": "https://victorypub.lv/drinks/",
+      "sourceType": "official drinks page",
+      "beerPrices": [],
+      "reason": "Official drinks page was reachable but does not expose readable current beer names, sizes and venue prices in fetched content."
+    }
+  ]
+}

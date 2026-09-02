@@ -1,0 +1,850 @@
+{
+  "retrievedDate": "2026-09-03",
+  "scope": "Audit of research queue ranks 1–25. Only current official venue menus, current in-venue menu images, or clearly current venue tap lists qualify for beerPrices. Delivery, retail, stale, ambiguous and guessed prices are excluded.",
+  "totals": {
+    "venuesChecked": 25,
+    "verifiedCurrentPriceVenues": 5,
+    "officialButStaleNeedsRefresh": 8,
+    "officialCurrencyAmbiguous": 0,
+    "menuNamesWithoutPrices": 3,
+    "noQualifyingSource": 9,
+    "beerRowsCaptured": 65
+  },
+  "venues": [
+    {
+      "queueRank": 1,
+      "osmType": "node",
+      "osmId": "11964360976",
+      "name": "A'Drop",
+      "category": "bar",
+      "address": "Antonijas iela, 12, LV-1010, Rīga",
+      "lat": 56.9586598,
+      "lon": 24.112371,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.adrop.lv/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official A'Drop site checked; no current venue beer menu with explicit serving volumes and prices was published."
+    },
+    {
+      "queueRank": 2,
+      "osmType": "node",
+      "osmId": "8672160991",
+      "name": "Alus rūme Trofeja",
+      "category": "pub",
+      "address": "Avotu iela, 74A, LV-1009, Rīga",
+      "lat": 56.9532003,
+      "lon": 24.1452627,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://trofeja.lv/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Trofeja site checked; available product information is retail/e-commerce rather than a current in-venue beer price menu, so it is excluded."
+    },
+    {
+      "queueRank": 3,
+      "osmType": "node",
+      "osmId": "3644610773",
+      "name": "Andalūzijas suns",
+      "category": "pub",
+      "address": "Elizabetes iela, 83, LV-1050, Rīga",
+      "lat": 56.9505313,
+      "lon": 24.1220744,
+      "sourceUrl": "http://www.andaluzijassuns.lv/MENU/DK.pdf",
+      "checkedUrls": [
+        "http://www.andaluzijassuns.lv/",
+        "http://www.andaluzijassuns.lv/MENU/DK.pdf"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official site has a current landing page, but the available official drink PDF is approximately six years old; its beer prices are stale and excluded pending refresh."
+    },
+    {
+      "queueRank": 4,
+      "osmType": "node",
+      "osmId": "12060927658",
+      "name": "Angārs Bārs",
+      "category": "bar",
+      "address": "Tallinas iela, 10, LV-1001, Rīga",
+      "lat": 56.9637234,
+      "lon": 24.1340185,
+      "sourceUrl": "https://www.kvartalaangars.lv/en/menu/",
+      "checkedUrls": [
+        "https://www.kvartalaangars.lv/en/menu/",
+        "https://www.kvartalaangars.lv/wp-content/uploads/2025/12/angars-drinks-menu-eng-scaled.jpg"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Mežpils Light",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Mežpils Light",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Mežpils Tramvajs",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Mežpils Tramvajs",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Grimbergen Dubbel",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Grimbergen Dubbel",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Dziru Kalve West Coast IPA",
+          "volumeMl": 440,
+          "price": 6
+        },
+        {
+          "name": "Dziru Kalve IPA Oceania",
+          "volumeMl": 440,
+          "price": 6
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Current official menu page (modified 2025-12-09) links the drinks menu image. All 12 beer rows below were transcribed from that image; prices are in EUR."
+    },
+    {
+      "queueRank": 5,
+      "osmType": "node",
+      "osmId": "4344769021",
+      "name": "Aussie Pub",
+      "category": "pub",
+      "address": "Vaļņu iela, 43, LV-1050, Rīga",
+      "lat": 56.9467312,
+      "lon": 24.1137968,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.aussiepubriga.com/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Aussie Pub site checked; no current itemized beer menu with venue prices was identified."
+    },
+    {
+      "queueRank": 6,
+      "osmType": "node",
+      "osmId": "6401983192",
+      "name": "Beer Museum",
+      "category": "pub",
+      "address": "Dzirnavu iela, 34A, LV-1010, Rīga",
+      "lat": 56.9584132,
+      "lon": 24.1130106,
+      "sourceUrl": "https://beermuseumbar.lv/en/",
+      "checkedUrls": [
+        "https://beermuseumbar.lv/en/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "menu_names_without_prices",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Beer Museum Bar page exposes beer/tap information but no explicit current prices. Names without prices are not displayable as price rows; third-party prices were excluded."
+    },
+    {
+      "queueRank": 7,
+      "osmType": "way",
+      "osmId": "45548901",
+      "name": "Black Magic",
+      "category": "bar",
+      "address": "Kaļķu iela, 10, LV-1050, Rīga",
+      "lat": 56.9486412,
+      "lon": 24.1089774,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.blackmagic.lv/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Black Magic site checked; it presents the venue/shop/cafe but no current itemized beer price list."
+    },
+    {
+      "queueRank": 8,
+      "osmType": "node",
+      "osmId": "2192199389",
+      "name": "Bruklinas krogs un viskija bārs",
+      "category": "pub",
+      "address": "Lāčplēša iela, 35, LV-1011, Rīga",
+      "lat": 56.9535179,
+      "lon": 24.127078,
+      "sourceUrl": "https://www.brooklynpub.lv/",
+      "checkedUrls": [
+        "https://www.brooklynpub.lv/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Brooklyn Pub menu content is timestamped 2022-05-27 and is stale as of this audit. Current delivery prices were excluded."
+    },
+    {
+      "queueRank": 9,
+      "osmType": "node",
+      "osmId": "1316197370",
+      "name": "Cabo cafe",
+      "category": "bar",
+      "address": "Roberta Feldmaņa iela, 8A, LV-1014, Rīga",
+      "lat": 57.0045916,
+      "lon": 24.1767692,
+      "sourceUrl": "https://cabo.lv/edieni-dzerieni/dzerienkarte/",
+      "checkedUrls": [
+        "https://cabo.lv/edieni-dzerieni/dzerienkarte/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Mežpils gaišais alus",
+          "volumeMl": 330,
+          "price": 3
+        },
+        {
+          "name": "Mežpils gaišais alus",
+          "volumeMl": 500,
+          "price": 4
+        },
+        {
+          "name": "Valmiermuižas gaišais alus",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Valmiermuižas gaišais alus",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Brooklyn",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Brooklyn",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Grimbergen Blond",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Grimbergen Blond",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Grimbergen Dubbel",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Grimbergen Dubbel",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Leffe Blond",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Leffe Blond",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Bellevue Extra Kriek",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Bellevue Extra Kriek",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Kronenbourg",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Kronenbourg",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Mežpils Saules Eils",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Valmiermuižas gaišā alus plūškoka kokteilis Frišs",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Valmiermuižas tumšais dūmalus",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Valmiermuižas Baltijas Porteris",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Kokmuižas “Mozaīka” APA",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Guinness Original",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Leffe Brune 5.0%",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Leffe Brune 6.5%",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Corona",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Corona Extra x6",
+          "volumeMl": 330,
+          "price": 22.5,
+          "packageCount": 6
+        },
+        {
+          "name": "Desperados",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Desperados x6",
+          "volumeMl": 330,
+          "price": 22.5,
+          "packageCount": 6
+        },
+        {
+          "name": "Kronenbourg Blanc Non Alco",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Beck’s Non Alco",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Kokmuižas b/a kviešu-aveņu",
+          "volumeMl": 330,
+          "price": 3.5
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Current official Cabo drinks menu page lists draft, bottled and non-alcoholic beer rows with volumes and EUR prices. Package rows marked x6 are retained as explicitly listed menu products."
+    },
+    {
+      "queueRank": 10,
+      "osmType": "node",
+      "osmId": "6375626085",
+      "name": "Distillers Republic",
+      "category": "bar",
+      "address": "Vecpilsētas iela, 8A, LV-1050, Rīga",
+      "lat": 56.9464562,
+      "lon": 24.1119159,
+      "sourceUrl": "https://www.distillersrepublic.com/bar",
+      "checkedUrls": [
+        "https://www.distillersrepublic.com/bar"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Distillers Republic bar page was checked; its beer/gallery material is from 2021 and no current priced beer menu was found."
+    },
+    {
+      "queueRank": 11,
+      "osmType": "node",
+      "osmId": "1826043559",
+      "name": "DJ bārs",
+      "category": "bar",
+      "address": "Laipu iela, 5, LV-1050, Rīga",
+      "lat": 56.9488525,
+      "lon": 24.1083779,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://djbar.lv"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official DJ Bar URL checked; no current accessible itemized beer menu with venue prices was identified."
+    },
+    {
+      "queueRank": 12,
+      "osmType": "node",
+      "osmId": "5600450921",
+      "name": "Ezītis miglā",
+      "category": "pub",
+      "address": "Brīvības gatve, 350A, LV-1006, Rīga",
+      "lat": 56.9816114,
+      "lon": 24.1947492,
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2024/12/Teikas-EM-dzerienkarte-24-1-1-scaled.jpg",
+      "checkedUrls": [
+        "http://ezitis.lv/teikas-ezitis-migla/",
+        "https://www.ezitis.lv/wp-content/uploads/2024/12/Teikas-EM-dzerienkarte-24-1-1-scaled.jpg"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Teika drinks menu image was uploaded 2024-12-11 and is stale for this 2026 audit; prices excluded pending a current menu."
+    },
+    {
+      "queueRank": 13,
+      "osmType": "node",
+      "osmId": "5693667925",
+      "name": "Ezītis miglā",
+      "category": "pub",
+      "address": "Avotu iela, 32, LV-1009, Rīga",
+      "lat": 56.9510473,
+      "lon": 24.1349985,
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2024/07/Avotu.jpg",
+      "checkedUrls": [
+        "http://ezitis.lv/avotu-ezitis-migla/",
+        "https://www.ezitis.lv/wp-content/uploads/2024/07/Avotu.jpg"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Avotu drinks menu image was uploaded 2024-07-12 and is stale for this 2026 audit; prices excluded pending a current menu."
+    },
+    {
+      "queueRank": 14,
+      "osmType": "node",
+      "osmId": "6073367566",
+      "name": "Ezītis miglā",
+      "category": "pub",
+      "address": "Slokas iela, 17, LV-1048, Rīga",
+      "lat": 56.9461871,
+      "lon": 24.0736795,
+      "sourceUrl": "https://www.ezitis.lv/kalnciema-ezitis/",
+      "checkedUrls": [
+        "http://ezitis.lv/kalnciema-ezitis/",
+        "https://www.ezitis.lv/wp-content/uploads/2022/11/kalnciema-dzerienkarte.jpg"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The latest official Kalnciema drink-menu material located is from 2022; current children/location media does not establish current beer prices, so stale prices are excluded."
+    },
+    {
+      "queueRank": 15,
+      "osmType": "node",
+      "osmId": "1302653955",
+      "name": "Fenikss",
+      "category": "bar",
+      "address": "Sarkandaugavas iela, 2, LV-1005, Rīga",
+      "lat": 56.9951101,
+      "lon": 24.126647,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://fenikss.lv/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Fenikss site checked; it describes the gaming venue and does not publish a current itemized beer price menu."
+    },
+    {
+      "queueRank": 16,
+      "osmType": "node",
+      "osmId": "3203344123",
+      "name": "Folkklubs Ala Pagrabs",
+      "category": "pub",
+      "address": "Grēcinieku iela, 26, LV-1050, Rīga",
+      "lat": 56.9461557,
+      "lon": 24.1078152,
+      "sourceUrl": "http://www.folkklubs.lv",
+      "checkedUrls": [
+        "http://www.folkklubs.lv"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "menu_names_without_prices",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Ala site/menu checked; it describes a large beer selection but does not expose explicit current beer name, serving volume and venue price rows."
+    },
+    {
+      "queueRank": 17,
+      "osmType": "node",
+      "osmId": "11018108905",
+      "name": "La casetta",
+      "category": "bar",
+      "address": "Tērbatas iela, 66, LV-1001, Rīga",
+      "lat": 56.957764,
+      "lon": 24.1305975,
+      "sourceUrl": "https://lacasetta.lv/edienkarte/",
+      "checkedUrls": [
+        "https://lacasetta.lv/edienkarte/",
+        "https://lacasetta.lv/wp-content/uploads/2026/02/2025.02-Menu-LV-A3-bez-linijam-kopija-1.png"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Zoltners",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Angelo Poretti",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Birra Moretti 0%",
+          "volumeMl": 330,
+          "price": 4
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Current official La Casetta menu image uploaded 2026-02; the three beer rows below were transcribed with volumes and EUR prices."
+    },
+    {
+      "queueRank": 18,
+      "osmType": "node",
+      "osmId": "3809582136",
+      "name": "Labietis",
+      "category": "pub",
+      "address": "Aristida Briāna iela, 9A, LV-1001, Rīga",
+      "lat": 56.9652497,
+      "lon": 24.1303896,
+      "sourceUrl": "https://labietis.lv/kulturkrogs/",
+      "checkedUrls": [
+        "https://labietis.lv/kulturkrogs/",
+        "https://business.untappd.com/locations/38199/themes/148319/js"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "menu_names_without_prices",
+      "beerPrices": [],
+      "menuBeerNames": [
+        "Čupakabra Sour - Tomato",
+        "Virsaitis (Chief) IPA - American",
+        "Trīs indiāņi (Three Indians) Pale Ale - American",
+        "Melnis (The Dark) Porter - Other",
+        "Tumsas Ragana (Witch of Darkness) Mead - Braggot",
+        "Soho Svitins (Soho Dandy) Bitter - Session",
+        "Radziņš (Typical Latvian Wheat Bread With Caraway) Wheat Beer - Other",
+        "Soģis (Judge) Smoked Beer",
+        "Atblāzma (Glow) Sour - Fruited Berliner Weisse",
+        "Gaismas Ragana (Witch Of Light) Mead - Braggot",
+        "Mūsējais Pale Ale - Other",
+        "Aroniju Ragana (Aronia Witch) Fruit Beer",
+        "E034 Wheat Beer - Hefeweizen",
+        "Gurķu Mežonis Wild Ale - Other",
+        "Mežs (Forest) Spiced",
+        "Zintnieks (Wizard) Mead - Other"
+      ],
+      "evidenceNotes": "Official Labietis current embedded tap list reports 16 beers and an update timestamp of Aug 29, but exposes no price values. No guessed or third-party prices are captured."
+    },
+    {
+      "queueRank": 19,
+      "osmType": "node",
+      "osmId": "12800153579",
+      "name": "MASA galerija & kultūrbārs",
+      "category": "bar",
+      "address": "Elizabetes iela, 67, LV-1050, Rīga",
+      "lat": 56.9526492,
+      "lon": 24.11997,
+      "sourceUrl": "https://www.masastudija.com/",
+      "checkedUrls": [
+        "https://www.masastudija.com/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Valmiermuiža gaišais alus",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Valmiermuiža tumšais alus",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Kokmuiža IPA 0%",
+          "volumeMl": 330,
+          "price": 4.5
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official MASA site currently publishes its menu images; the beer section lists the three beer rows below with volumes and EUR prices."
+    },
+    {
+      "queueRank": 20,
+      "osmType": "node",
+      "osmId": "3720374451",
+      "name": "Möku Riga",
+      "category": "bar",
+      "address": "Skolas iela, 35, LV-1010, Rīga",
+      "lat": 56.9607579,
+      "lon": 24.123247,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://moku.ee/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Möku site checked; no current itemized beer menu with in-venue prices was identified. Third-party tap lists/prices were excluded."
+    },
+    {
+      "queueRank": 21,
+      "osmType": "node",
+      "osmId": "1826035522",
+      "name": "Piana Vyshnia",
+      "category": "bar",
+      "address": "Šķūņu iela, 6, LV-1050, Rīga",
+      "lat": 56.9487861,
+      "lon": 24.1076081,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://pianavyshnia.com/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Piana Vyshnia site checked; no current itemized beer menu with venue prices was identified. Third-party directory prices were excluded."
+    },
+    {
+      "queueRank": 22,
+      "osmType": "node",
+      "osmId": "2285515946",
+      "name": "Pļavnieku Ezītis miglā",
+      "category": "bar",
+      "address": "Ulbrokas iela, 1A, LV-1021, Rīga",
+      "lat": 56.9393847,
+      "lon": 24.2145681,
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Aldaru-EM-drink-menu_plavnieku01-1-scaled.jpg",
+      "checkedUrls": [
+        "https://www.ezitis.lv/plavnieku-ezitis-migla",
+        "https://www.ezitis.lv/wp-content/uploads/2026/03/Aldaru-EM-drink-menu_plavnieku01-1-scaled.jpg"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 400,
+          "price": 2.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Bauskas Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Madonas Nefiltrētais",
+          "volumeMl": 400,
+          "price": 4.4
+        },
+        {
+          "name": "Ezītis Miglā x Labietis",
+          "volumeMl": 440,
+          "price": 4.6
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 330,
+          "price": 4.1
+        },
+        {
+          "name": "Sol",
+          "volumeMl": 330,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvetes Senču",
+          "volumeMl": 500,
+          "price": 4.2
+        },
+        {
+          "name": "Bauskas Tumšais",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Anarkist New England IPA",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Užavas",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Viedi",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Labietis Dzeltenā Saime",
+          "volumeMl": 440,
+          "price": 5.1
+        },
+        {
+          "name": "Labietis Sarkanā Saime",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "B/A Heineken",
+          "volumeMl": 330,
+          "price": 4.2
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Current official Pļavnieki drinks menu image uploaded 2026-03-10; 15 beer rows below were transcribed with volumes and EUR prices. Cider was excluded."
+    },
+    {
+      "queueRank": 23,
+      "osmType": "node",
+      "osmId": "3092908017",
+      "name": "Spot Kafé",
+      "category": "bar",
+      "address": "Jauniela, 19, LV-1050, Rīga",
+      "lat": 56.9488241,
+      "lon": 24.1058726,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "http://www.spotkafe.lv",
+        "https://spotkafe.lv/"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Spot Kafé site is current but exposes cocktails/venue information only, with no explicit beer rows and venue prices."
+    },
+    {
+      "queueRank": 24,
+      "osmType": "node",
+      "osmId": "1703777971",
+      "name": "Sveiks, Švejk!",
+      "category": "pub",
+      "address": "Stabu iela, 23, LV-1011, Rīga",
+      "lat": 56.9571677,
+      "lon": 24.1269263,
+      "sourceUrl": "https://www.svejk.lv/drinks.pdf",
+      "checkedUrls": [
+        "https://svejk.lv/lat.html",
+        "https://www.svejk.lv/drinks.pdf"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official drinks PDF is labeled August 2025 and is stale for this 2026 audit. Current delivery listings were excluded."
+    },
+    {
+      "queueRank": 25,
+      "osmType": "node",
+      "osmId": "494381229",
+      "name": "Vīna studija",
+      "category": "bar",
+      "address": "Elizabetes iela, 10, LV-1010, Rīga",
+      "lat": 56.9578232,
+      "lon": 24.1106167,
+      "sourceUrl": "https://vina-studija.lv/wp-content/uploads/2025/11/menu.pdf-12.pdf",
+      "checkedUrls": [
+        "https://www.vinastudija.lv/en/",
+        "https://vina-studija.lv/wp-content/uploads/2025/11/menu.pdf-12.pdf"
+      ],
+      "retrievedDate": "2026-09-03",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The latest official menu PDF located was uploaded 2025-11; it is not current enough to safely expose beer prices for this 2026 audit, so the beer section is flagged for refresh."
+    }
+  ]
+}

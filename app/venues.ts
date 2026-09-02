@@ -1,8 +1,22 @@
+import rigaVenueData from './data/riga-venue-points.json';
+import researchedBeerPricesA from './data/beer-prices-a.json';
+import researchedBeerPricesB from './data/beer-prices-b.json';
+import researchedNewBeerPricesA from './data/beer-prices-new-a.json';
+import researchedNewBeerPricesB from './data/beer-prices-new-b.json';
+import researchedNewBeerPricesC from './data/beer-prices-new-c.json';
+import researchedNewBeerPricesD from './data/beer-prices-new-d.json';
+import researchedNewBeerPricesE from './data/beer-prices-new-e.json';
+import researchedNewBeerPricesF from './data/beer-prices-new-f.json';
+import researchedNewBeerPricesG from './data/beer-prices-new-g.json';
+import researchedNewBeerPricesH from './data/beer-prices-new-h.json';
+import researchedNewBeerPricesI from './data/beer-prices-new-i.json';
+
 export type BeerPrice = {
   name: string;
-  volumeMl: number;
+  volumeMl: number | null;
   price: number;
   priceIsFrom?: boolean;
+  packageCount?: number;
 };
 
 export type Venue = {
@@ -13,7 +27,7 @@ export type Venue = {
   lat: number;
   lng: number;
   beer: string;
-  volumeMl: number;
+  volumeMl: number | null;
   price: number;
   priceIsFrom?: boolean;
   beerPrices?: BeerPrice[];
@@ -22,9 +36,23 @@ export type Venue = {
   sourceType: 'Oficiālā ēdienkarte' | 'Verificēta aktuālā alus karte';
 };
 
+export type VenuePoint = {
+  id: string;
+  name: string;
+  kind: string;
+  address: string;
+  lat: number;
+  lng: number;
+  sourceUrl: string;
+  sourceLabel: string;
+  category: string;
+};
+
+export type MapVenue = Venue | VenuePoint;
+
 export const checkedAt = '02.09.2026';
 
-export const venues: Venue[] = [
+const baseVenues: Venue[] = [
   {
     id: 'alus-muiza', name: 'Alus Muiža', kind: 'alus bārs', address: 'Ģertrūdes iela 45',
     lat: 56.9536063, lng: 24.1298322, beer: 'Brenguļu Tumšais', volumeMl: 500, price: 4.3,
@@ -177,7 +205,35 @@ export const venues: Venue[] = [
   },
 ];
 
-export const pricePerLitre = (venue: Venue) => venue.price / (venue.volumeMl / 1000);
+const dedupeBeerPrices = (prices: BeerPrice[]) => [...new Map(
+  prices.map((beer) => [`${beer.name}\u0000${beer.volumeMl}\u0000${beer.price}`, beer]),
+).values()];
+
+const unverifiedPriceVenueIds = new Set(['armoury', 'cuba', 'joker', 'kimmel', 'paddy']);
+
+const researchedBeerPrices = new Map([
+  ...researchedBeerPricesA.venues,
+  ...researchedBeerPricesB.venues,
+].filter((venue) => !unverifiedPriceVenueIds.has(venue.id)).map((venue) => [
+  venue.id,
+  dedupeBeerPrices(venue.beerPrices as BeerPrice[]),
+] as const));
+
+export const venues: Venue[] = baseVenues.filter((venue) => !unverifiedPriceVenueIds.has(venue.id)).map((venue) => {
+  const beerPrices = researchedBeerPrices.get(venue.id);
+  if (!beerPrices?.length) return venue;
+  const cheapest = beerPrices.reduce((best, beer) => beer.price < best.price ? beer : best);
+  return {
+    ...venue,
+    beer: cheapest.name,
+    volumeMl: cheapest.volumeMl,
+    price: cheapest.price,
+    priceIsFrom: cheapest.priceIsFrom,
+    beerPrices,
+  };
+});
+
+export const pricePerLitre = (venue: Venue) => venue.volumeMl ? venue.price / (venue.volumeMl / 1000) : Number.POSITIVE_INFINITY;
 
 export const venueBeerPrices = (venue: Venue): BeerPrice[] => venue.beerPrices ?? [{
   name: venue.beer,
@@ -185,3 +241,85 @@ export const venueBeerPrices = (venue: Venue): BeerPrice[] => venue.beerPrices ?
   price: venue.price,
   priceIsFrom: venue.priceIsFrom,
 }];
+
+export const isPricedVenue = (venue: MapVenue): venue is Venue => 'price' in venue;
+
+const categoryLabels: Record<string, string> = {
+  restaurant: 'restorāns',
+  bar: 'bārs',
+  pub: 'pubs',
+  biergarten: 'alus dārzs',
+  cafe: 'kafejnīca',
+  nightclub: 'naktsklubs',
+  fast_food: 'ātrā ēdināšana',
+  food_court: 'ēdināšanas zona',
+};
+
+const distanceMetres = (first: { lat: number; lng: number }, second: { lat: number; lng: number }) => {
+  const latitudeScale = 111_320;
+  const longitudeScale = Math.cos(((first.lat + second.lat) / 2) * Math.PI / 180) * latitudeScale;
+  return Math.hypot((first.lat - second.lat) * latitudeScale, (first.lng - second.lng) * longitudeScale);
+};
+
+const normalizeName = (value: string | null) => value?.toLocaleLowerCase('lv').replace(/[^\p{L}\p{N}]+/gu, '') ?? '';
+
+const newBeerMenus = new Map(researchedNewBeerPricesA.venues
+  .filter((venue) => venue.beerPrices.length > 0)
+  .map((venue) => [normalizeName(venue.name), {
+    sourceUrl: venue.sourceUrl,
+    beerPrices: dedupeBeerPrices(venue.beerPrices as BeerPrice[]),
+  }] as const));
+
+const newBeerMenusByOsmId = new Map([
+  ...researchedNewBeerPricesB.venues.filter((venue) => venue.status === 'verified_current'),
+  ...researchedNewBeerPricesC.venues.filter((venue) => venue.beerPrices.length > 0),
+  ...researchedNewBeerPricesD.venues.filter((venue) => venue.status === 'verified_current_prices'),
+  ...researchedNewBeerPricesE.venues.filter((venue) => venue.status === 'verified_current'),
+  ...researchedNewBeerPricesF.venues.filter((venue) => venue.beerPrices.length > 0),
+  ...researchedNewBeerPricesG.venues.filter((venue) => venue.status === 'verified_current_prices'),
+  ...researchedNewBeerPricesH.venues.filter((venue) => venue.beerPrices.length > 0),
+  ...researchedNewBeerPricesI.venues.filter((venue) => venue.status === 'verified_current'),
+].map((venue) => [String(venue.osmId), {
+  sourceUrl: venue.sourceUrl,
+  beerPrices: dedupeBeerPrices(venue.beerPrices as BeerPrice[]),
+}] as const));
+
+const venuePoints: MapVenue[] = rigaVenueData.venues
+  .filter((point) => !venues.some((venue) => {
+    const distance = distanceMetres(venue, point);
+    const knownName = normalizeName(venue.name);
+    const pointName = normalizeName(point.name);
+    return distance < 12 || (distance < 45 && Boolean(pointName) && (knownName.includes(pointName) || pointName.includes(knownName)));
+  }))
+  .map((point) => {
+    const kind = categoryLabels[point.category] ?? point.category;
+    const basePoint: VenuePoint = {
+      id: point.id,
+      name: point.name ?? `${kind[0].toLocaleUpperCase('lv')}${kind.slice(1)} bez nosaukuma`,
+      kind,
+      address: point.address ?? 'Adrese nav norādīta',
+      lat: point.lat,
+      lng: point.lng,
+      sourceUrl: point.osmUrl,
+      sourceLabel: 'OpenStreetMap vietas ieraksts',
+      category: point.category,
+    };
+    const osmId = point.id.slice(point.id.lastIndexOf('-') + 1);
+    const menu = newBeerMenusByOsmId.get(osmId) ?? (point.name ? newBeerMenus.get(normalizeName(point.name)) : null);
+    if (!menu?.sourceUrl) return basePoint;
+    const cheapest = menu.beerPrices.reduce((best, beer) => beer.price < best.price ? beer : best);
+    return {
+      ...basePoint,
+      beer: cheapest.name,
+      volumeMl: cheapest.volumeMl,
+      price: cheapest.price,
+      priceIsFrom: cheapest.priceIsFrom,
+      beerPrices: menu.beerPrices,
+      sourceUrl: menu.sourceUrl,
+      sourceLabel: 'Oficiālā vietas dzērienkarte',
+      sourceType: 'Oficiālā ēdienkarte',
+    } satisfies Venue;
+  });
+
+export const mapVenues: MapVenue[] = [...venues, ...venuePoints];
+export const osmSnapshotAt = rigaVenueData.osmTimestamp;

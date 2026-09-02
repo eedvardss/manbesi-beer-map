@@ -108,6 +108,7 @@ button { cursor: pointer; }
 .card-price { display: grid; justify-items: end; gap: 1px; }
 .card-price strong { color: #19211b; font-size: 14px; font-weight: 760; letter-spacing: -.025em; white-space: nowrap; }
 .card-price small { color: #89908a; font-size: 9px; white-space: nowrap; }
+.unpriced-label { align-self: center; color: #9aa19b; font-size: 9px; font-weight: 650; white-space: nowrap; }
 .empty-state { display: grid; justify-items: center; gap: 8px; padding: 48px 18px; color: #747b75; text-align: center; }
 .empty-state strong { color: #2b312c; font-size: 13px; }
 .empty-state span { font-size: 11px; }
@@ -121,11 +122,15 @@ button { cursor: pointer; }
 .marker-node[data-tone='mid'] { --marker-fill: #e4dc76; }
 .marker-node[data-tone='warm'] { --marker-fill: #f2bd64; }
 .marker-node[data-tone='high'] { --marker-fill: #ed8c69; }
+.marker-node[data-tone='unpriced'] { --marker-fill: #c8cfca; }
 .price-marker { width: 74px; height: 34px; border: 2px solid #fff; border-radius: 10px 10px 10px 3px; box-shadow: 0 3px 12px rgba(24,35,25,.24); color: #15231a; font-weight: 800; font-size: 12px; letter-spacing: -.02em; transition: transform .15s ease, box-shadow .15s ease, opacity .1s ease; }
 .price-marker:hover { transform: translateY(-3px) scale(1.07); box-shadow: 0 6px 16px rgba(24,35,25,.28); outline: 2px solid #173f2c; }
 .price-marker.active { position: relative; z-index: 3; opacity: 0; }
 .price-marker small { margin-right: 2px; font-size: 8px; }
 .cheap { background: #b8dfaa; }.mid { background: #e4dc76; }.warm { background: #f2bd64; }.high { background: #ed8c69; }
+.candidate-marker { position: absolute; top: 13px; left: 32px; width: 10px; height: 10px; padding: 0; border: 2px solid #fff; border-radius: 50%; background: var(--marker-fill); box-shadow: 0 2px 7px rgba(24,35,25,.22); opacity: .72; transition: transform .15s ease, opacity .1s ease; }
+.candidate-marker:hover { transform: scale(1.5); opacity: 1; }
+.candidate-marker.active { opacity: 0; }
 
 .marker-detail {
   position: absolute;
@@ -153,9 +158,15 @@ button { cursor: pointer; }
 .marker-beer-row > div strong { overflow: hidden; font-size: 11px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
 .marker-beer-row > div span { color: rgba(21, 35, 25, .6); font-size: 9px; }
 .marker-beer-price { font-size: 12px; font-weight: 760; white-space: nowrap; }
+.marker-price-pending { padding: 14px 8px 15px; color: rgba(21, 35, 25, .62); font-size: 10px; font-weight: 600; text-align: center; }
+.marker-node[data-tone='unpriced'] .marker-detail { transform-origin: 37px 18px; animation-name: candidate-morph; }
 @keyframes marker-morph {
   from { clip-path: inset(0 calc(100% - 78px) calc(100% - 38px) 0 round 12px); opacity: .92; }
   to { clip-path: inset(0 0 0 0 round 10px); opacity: 1; }
+}
+@keyframes candidate-morph {
+  from { clip-path: circle(5px at 37px 18px); opacity: .82; }
+  to { clip-path: circle(150% at 37px 18px); opacity: 1; }
 }
 
 .leaflet-control-attribution { padding: 2px 5px !important; background: rgba(255,255,255,.76) !important; color: #747b75 !important; font: 8px/1.25 var(--font-app) !important; }

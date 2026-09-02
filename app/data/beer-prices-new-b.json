@@ -1,0 +1,781 @@
+{
+  "retrievedDate": "2026-09-02",
+  "scope": "Research queue ranks 26–50. Only official venue menus, current in-venue menu images, or clearly current venue tap lists qualify for beerPrices. Delivery, retail, review and unverified crowd-sourced prices are excluded; stale official menus are flagged for refresh.",
+  "totals": {
+    "venuesChecked": 25,
+    "verifiedCurrentPriceVenues": 2,
+    "officialButStaleNeedsRefresh": 1,
+    "officialCurrencyAmbiguous": 1,
+    "menuNamesWithoutPrices": 1,
+    "noQualifyingSource": 21,
+    "beerRowsCaptured": 56
+  },
+  "venues": [
+    {
+      "queueRank": 26,
+      "osmType": "node",
+      "osmId": "13389112530",
+      "name": "Wine Collectors",
+      "category": "bar",
+      "address": "Elizabetes iela, 41/43, LV-1010, Rīga",
+      "lat": 56.9573652,
+      "lon": 24.1123096,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://barents.lv/#barents-wine-collectors"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Barents/Wine Collectors pages and the linked 2025 wine list were checked; they expose wine information but no current beer menu with venue prices."
+    },
+    {
+      "queueRank": 27,
+      "osmType": "node",
+      "osmId": "1806335482",
+      "name": "Sapņi un kokteiļi",
+      "category": "nightclub",
+      "address": "Blaumaņa iela, 32, LV-1011, Rīga",
+      "lat": 56.9521317,
+      "lon": 24.1254031,
+      "sourceUrl": "https://www.suk.lv/menus",
+      "checkedUrls": [
+        "https://www.suk.lv/menus",
+        "https://www.suk.lv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "official_menu_currency_ambiguous",
+      "beerPrices": [],
+      "menuBeerNames": [
+        "Valmiermuižas (lejamais) 0.3 l — 5 $",
+        "Valmiermuižas lejamais gaišais alus 0.5 l — 6 $",
+        "Beļģu aliņš Leffe Blonde / Brune 33 cl — 5.50 $",
+        "Corona — 5.50 $"
+      ],
+      "evidenceNotes": "The official venue menu page exposes beer lines, but renders the currency as \"$\" rather than EUR. No conversion or currency assumption is safe, so no displayable euro beer prices are captured. The menu page itself is the only qualifying venue-controlled evidence; delivery/review prices were excluded."
+    },
+    {
+      "queueRank": 28,
+      "osmType": "way",
+      "osmId": "653650039",
+      "name": "Brūzis Manufaktūra",
+      "category": "pub",
+      "address": null,
+      "lat": 56.989099,
+      "lon": 24.2297931,
+      "sourceUrl": "https://bruzismanufaktura.lv/cafe/",
+      "checkedUrls": [
+        "https://bruzismanufaktura.lv/cafe/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Jebkurš lejamais alus",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Jebkurš lejamais alus",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Lutausis IPA",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Lutausis NEIPA",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Lutausis Šokolādes Porteris",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Lutausis Ziemassvētku porteris",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Tehniķis",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Arhitekts",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Ķīmiķis",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Apiņotais stūrmanis",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Stūrmanis",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Apiņotais stūrmanis (bezalkoholiskais)",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Apiņotais stūrmanis (bezalkoholiskais)",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Stūrmanis (bezalkoholiskais)",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Stūrmanis (bezalkoholiskais)",
+          "volumeMl": 500,
+          "price": 5
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official current cafe menu lists draft beer and bottled beer with explicit on-site (“Uz vietas”) EUR prices and serving volumes. Takeaway (“Līdzi”) prices were deliberately excluded. The page identifies the Manufaktūra venue and is accessible as of the retrieval date."
+    },
+    {
+      "queueRank": 29,
+      "osmType": "node",
+      "osmId": "2420908317",
+      "name": "Kiwi Bar",
+      "category": "bar",
+      "address": "Skārņu iela, 7, LV-1050, Rīga",
+      "lat": 56.9479073,
+      "lon": 24.1087406,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "http://www.kiwibar.lv"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Kiwi Bar site confirms the venue and events but has no accessible current beer menu, tap list, or priced in-venue beer image."
+    },
+    {
+      "queueRank": 30,
+      "osmType": "node",
+      "osmId": "3606870257",
+      "name": "Balzambārs",
+      "category": "bar",
+      "address": "Torņa iela, 4, LV-1050, Rīga",
+      "lat": 56.9516233,
+      "lon": 24.1061924,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.bbars.lv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed official bbars.lv site identifies a different B Bārs location/menu; no current beer-price evidence matching Balzambārs at Torņa iela 4 was found."
+    },
+    {
+      "queueRank": 31,
+      "osmType": "node",
+      "osmId": "11305078113",
+      "name": "Craft Beer Station",
+      "category": "bar",
+      "address": "Lubānas iela, 113C, LV-1082, Rīga",
+      "lat": 56.932274,
+      "lon": 24.1993089,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://craft-station.com/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Craft Beer Station site confirms taps and bottles but publishes no named beer prices or current tap list."
+    },
+    {
+      "queueRank": 32,
+      "osmType": "way",
+      "osmId": "164294119",
+      "name": "Kultūras nams Atmoda",
+      "category": "bar",
+      "address": "Stabu iela, 10 k-2, LV-1010, Rīga",
+      "lat": 56.9584687,
+      "lon": 24.1236285,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://knatmoda.lv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Culture House Atmoda pages expose events/reservations but no current beer menu or priced in-venue beer evidence."
+    },
+    {
+      "queueRank": 33,
+      "osmType": "node",
+      "osmId": "12045153820",
+      "name": "Laska V21",
+      "category": "bar",
+      "address": "Vagonu iela, 21A, LV-1009, Rīga",
+      "lat": 56.9502839,
+      "lon": 24.1497884,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.laska.bar/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Laska site exposes events and venue information, but no current regular beer menu with names, volumes and prices."
+    },
+    {
+      "queueRank": 34,
+      "osmType": "node",
+      "osmId": "6375647985",
+      "name": "Nurme",
+      "category": "bar",
+      "address": "Avotu iela, 53, LV-1009, Rīga",
+      "lat": 56.9524478,
+      "lon": 24.1406775,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://nurmebeer.com/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Nurme site confirms beer service and seven taps, but publishes no current beer names, serving volumes and prices; third-party memory/review prices were excluded."
+    },
+    {
+      "queueRank": 35,
+      "osmType": "node",
+      "osmId": "4583709876",
+      "name": "Victory Pub",
+      "category": "pub",
+      "address": "Tirgoņu iela, 10, LV-1050, Rīga",
+      "lat": 56.9487718,
+      "lon": 24.1066691,
+      "sourceUrl": "https://victorypub.lv/drinks/",
+      "checkedUrls": [
+        "https://victorypub.lv/drinks/",
+        "https://victorypub.lv/wp-content/uploads/2024/10/victory_pub_drinks_2.jpg"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "official_menu_stale_needs_refresh",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Lielvārdes Lāgeris",
+          "volumeMl": 400,
+          "price": 5.5
+        },
+        {
+          "name": "Chesser",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Chesser",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Madonas Neitrālais / Unfiltered",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Madonas Neitrālais / Unfiltered",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Guinness",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Guinness",
+          "volumeMl": 300,
+          "price": 5.5
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 500,
+          "price": 7.5
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 300,
+          "price": 5.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu / Cherry",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Madonas",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Stella",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Desperados",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Heineken 0.0 (Non Alc.)",
+          "volumeMl": 330,
+          "price": 5
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Victory Pub drinks page publishes a drinks-menu image with beer names, serving sizes and EUR prices. The image URL is dated October 2024, so these are stale official-menu observations requiring refresh/venue confirmation before being treated as current."
+    },
+    {
+      "queueRank": 36,
+      "osmType": "relation",
+      "osmId": "9816662",
+      "name": "Egle",
+      "category": "pub",
+      "address": null,
+      "lat": 56.9484975,
+      "lon": 24.1068906,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://spogulegle.lv"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Egle site was not exposing a current menu or priced beer list; directory/Untappd references are not current venue-controlled price evidence."
+    },
+    {
+      "queueRank": 37,
+      "osmType": "node",
+      "osmId": "4958190321",
+      "name": "Top",
+      "category": "nightclub",
+      "address": "Alfrēda Kalniņa iela, 4, LV-1050, Rīga",
+      "lat": 56.9495485,
+      "lon": 24.1209928,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.topclub.lv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official TOP Club site lists current opening hours/events but no current beer menu with itemized prices."
+    },
+    {
+      "queueRank": 38,
+      "osmType": "node",
+      "osmId": "1926510347",
+      "name": "BEERloga",
+      "category": "bar",
+      "address": "Lokomotīves iela, 100, LV-1057, Rīga",
+      "lat": 56.9009694,
+      "lon": 24.2167578,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://beerloga.lv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official BEERloga.lv page is only a welcome page. Search surfaced delivery/third-party menus in non-EUR currency, which were excluded; no current Riga venue beer-price source was found."
+    },
+    {
+      "queueRank": 39,
+      "osmType": "node",
+      "osmId": "4159686991",
+      "name": "Ezītis miglā",
+      "category": "bar",
+      "address": "Dzelzavas iela, 44B, LV-1035, Rīga",
+      "lat": 56.958297,
+      "lon": 24.1799601,
+      "sourceUrl": "https://www.ezitis.lv/purcika-ezitis-migla/",
+      "checkedUrls": [
+        "https://www.ezitis.lv/purcika-ezitis-migla/",
+        "https://www.ezitis.lv/wp-content/uploads/2026/03/Purciks.jpg"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "verified_current",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 400,
+          "price": 2.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Lielvārdes Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Lielvārdes Tumšais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Madonas Nefiltrētais",
+          "volumeMl": 400,
+          "price": 4.4
+        },
+        {
+          "name": "Ezītis Miglā x Labietis /LV/",
+          "volumeMl": 440,
+          "price": 4.6
+        },
+        {
+          "name": "Heineken /NL/",
+          "volumeMl": 330,
+          "price": 4.1
+        },
+        {
+          "name": "Sol /MX/",
+          "volumeMl": 330,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvētes Senču /LV/",
+          "volumeMl": 500,
+          "price": 4.2
+        },
+        {
+          "name": "Bauskas Tumšais /LV/",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Anarkist New England IPA /DK/",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Užavas /LV/",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Viedi /LV/",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Dziru Kalve /LV/",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Prusaks /LV/",
+          "volumeMl": 500,
+          "price": 5.4
+        },
+        {
+          "name": "Labietis Pelēkā Saime /LV/",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Labietis Dzeltenā Saime /LV/",
+          "volumeMl": 440,
+          "price": 5.1
+        },
+        {
+          "name": "Labietis Sarkanā Saime /LV/",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Labietis Melnā Saime /LV/",
+          "volumeMl": 440,
+          "price": 5.4
+        },
+        {
+          "name": "Bauskas Gaišais /LV/",
+          "volumeMl": 500,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvētes Oriģinālais /LV/",
+          "volumeMl": 500,
+          "price": 4.7
+        },
+        {
+          "name": "B/A Heineken /NL/",
+          "volumeMl": 330,
+          "price": 4.2
+        }
+      ],
+      "menuBeerNames": [],
+      "evidenceNotes": "Official Purčika Ezītis page links the current drinks-card image at /wp-content/uploads/2026/03/Purciks.jpg. The image visibly lists draft and non-draft beer names, serving volumes and EUR prices; the cider rows were excluded. This is current official venue-controlled evidence retrieved on 2026-09-02."
+    },
+    {
+      "queueRank": 40,
+      "osmType": "node",
+      "osmId": "13351517198",
+      "name": "Klubs Depo",
+      "category": "nightclub",
+      "address": "Šarlotes iela, 18A, LV-1001, Rīga",
+      "lat": 56.9651537,
+      "lon": 24.1296182,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "http://www.klubsdepo.lv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The official Klubs Depo site was checked but no current itemized beer menu, tap list or priced in-venue menu image was accessible."
+    },
+    {
+      "queueRank": 41,
+      "osmType": "node",
+      "osmId": "1937653121",
+      "name": "Blues House",
+      "category": "bar",
+      "address": "Jura Alunāna iela, 2, LV-1010, Rīga",
+      "lat": 56.9560192,
+      "lon": 24.1093673,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/BluesHouseRiga/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page and public menu references did not provide a current venue-controlled beer menu with prices."
+    },
+    {
+      "queueRank": 42,
+      "osmType": "node",
+      "osmId": "8866636986",
+      "name": "Champions' Club",
+      "category": "pub",
+      "address": "Ropažu iela, 7A, LV-1039, Rīga",
+      "lat": 56.9758014,
+      "lon": 24.1709277,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/championsclublv/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    },
+    {
+      "queueRank": 43,
+      "osmType": "node",
+      "osmId": "4365038892",
+      "name": "Crazy Dog",
+      "category": "bar",
+      "address": "Aleksandra Čaka iela, 101, LV-1011, Rīga",
+      "lat": 56.9578097,
+      "lon": 24.1389574,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/crazydogbar"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "Wolt exposes delivery food/drink information but not a qualifying current in-venue beer price list; Facebook did not expose a current priced beer menu."
+    },
+    {
+      "queueRank": 44,
+      "osmType": "node",
+      "osmId": "1826022955",
+      "name": "Franču bārs",
+      "category": "bar",
+      "address": "Mazā Jaunavu iela, 8, LV-1050, Rīga",
+      "lat": 56.9485527,
+      "lon": 24.1073582,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/TheFrenchBar/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    },
+    {
+      "queueRank": 45,
+      "osmType": "node",
+      "osmId": "10267884978",
+      "name": "MyBeer / Mans alus",
+      "category": "bar",
+      "address": "Alksnāja iela, 10/12, LV-1050, Rīga",
+      "lat": 56.9461417,
+      "lon": 24.1114558,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/SalonsMyBeer"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices; retail prices were excluded."
+    },
+    {
+      "queueRank": 46,
+      "osmType": "node",
+      "osmId": "2820185264",
+      "name": "St Black",
+      "category": "bar",
+      "address": "Dzirnavu iela, 57A, LV-1010, Rīga",
+      "lat": 56.9559524,
+      "lon": 24.1183764,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/StBlackRiga/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    },
+    {
+      "queueRank": 47,
+      "osmType": "node",
+      "osmId": "10718622531",
+      "name": "Vīgante",
+      "category": "pub",
+      "address": "Stabu iela, 49A, LV-1011, Rīga",
+      "lat": 56.954615,
+      "lon": 24.1323044,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/KRODZINSVIGANTE/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    },
+    {
+      "queueRank": 48,
+      "osmType": "node",
+      "osmId": "4210551389",
+      "name": "Walters & Grapa",
+      "category": "bar",
+      "address": "Miera iela, 41, LV-1001, Rīga",
+      "lat": 56.9651959,
+      "lon": 24.1328592,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://facebook.com/waltersungrapa/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    },
+    {
+      "queueRank": 49,
+      "osmType": "way",
+      "osmId": "166227172",
+      "name": "Bolderāja",
+      "category": "bar",
+      "address": "Avotu iela, 29, LV-1009, Rīga",
+      "lat": 56.9512409,
+      "lon": 24.1350638,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/bolderaja27/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    },
+    {
+      "queueRank": 50,
+      "osmType": "node",
+      "osmId": "4457817192",
+      "name": "Depeche Mode bārs",
+      "category": "bar",
+      "address": "Mazā Pils iela, 5, LV-1050, Rīga",
+      "lat": 56.9505119,
+      "lon": 24.1027414,
+      "sourceUrl": null,
+      "checkedUrls": [
+        "https://www.facebook.com/dmbarriga/"
+      ],
+      "retrievedDate": "2026-09-02",
+      "status": "no_qualifying_source",
+      "beerPrices": [],
+      "menuBeerNames": [],
+      "evidenceNotes": "The listed Facebook page/public references did not provide a current venue-controlled beer menu with beer names, volumes and prices."
+    }
+  ]
+}

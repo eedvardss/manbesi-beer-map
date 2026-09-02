@@ -1,0 +1,3167 @@
+{
+  "retrievedDate": "2026-09-02",
+  "scope": "Second alphabetical half of the existing 30 Riga venues. Displayable prices come only from an official venue menu, current in-venue menu image, or clearly current venue-verified tap list. Wolt/Bolt and other delivery prices are excluded.",
+  "venues": [
+    {
+      "id": "islande",
+      "name": "Islande Lobby Bar",
+      "sourceUrl": "https://islandehotel.lv/wp-content/uploads/2026/04/RIH-a-la-carte-menu-2026.pdf",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Kokmuiža Celmlauzis Non-alcoholic (IPA)",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Valmiermuižas tumšais (Valmiermuiža Craft Brewery Dark Lager)",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Valmiermuiža Amber Lager",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Valmiermuižas gaišais (Valmiermuiža Craft Brewery Amber Lager), draft",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Valmiermuižas gaišais (Valmiermuiža Craft Brewery Amber Lager), draft",
+          "volumeMl": 500,
+          "price": 6
+        }
+      ],
+      "evidenceNotes": "Official Islande Hotel 2026 a-la-carte PDF, beer section."
+    },
+    {
+      "id": "joker",
+      "name": "Joker Klubs",
+      "sourceUrl": "https://jokerklubs.lv/wp-content/uploads/2025/01/drinks_menu_eng_01_2025.pdf",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Bauskas, draught",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Bauskas, draught",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Mītavas, draught",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Mītavas, draught",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Corona",
+          "volumeMl": 350,
+          "price": 3.5
+        },
+        {
+          "name": "Kronenbourg Blanc, non-alcoholic",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Užavas light",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Valmiermuižas beer, light/dark",
+          "volumeMl": 500,
+          "price": 5
+        }
+      ],
+      "evidenceNotes": "Official Joker Klubs drinks menu PDF (January 2025), beer section. It is the latest accessible official menu found, but its date makes a venue confirmation advisable before publishing as current. Cider rows omitted."
+    },
+    {
+      "id": "kakis-maisa",
+      "name": "Kaķis Maisā",
+      "sourceUrl": "https://untappd.com/v/kakis-maisa-local-craft-beer/11288693",
+      "sourceLabel": "Verificēta aktuālā alus karte",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Piektdienis",
+          "volumeMl": 300,
+          "price": 4.3
+        },
+        {
+          "name": "Piektdienis",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Piektdienis",
+          "volumeMl": 1000,
+          "price": 6.8
+        },
+        {
+          "name": "Greipfrūtu IPA",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Greipfrūtu IPA",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Greipfrūtu IPA",
+          "volumeMl": 1000,
+          "price": 7.5
+        },
+        {
+          "name": "MARAKUJAS Milkshake IPA",
+          "volumeMl": 300,
+          "price": 4.7
+        },
+        {
+          "name": "MARAKUJAS Milkshake IPA",
+          "volumeMl": 500,
+          "price": 6.3
+        },
+        {
+          "name": "MARAKUJAS Milkshake IPA",
+          "volumeMl": 1000,
+          "price": 7.9
+        },
+        {
+          "name": "TEIKAS Gaisma",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "TEIKAS Gaisma",
+          "volumeMl": 500,
+          "price": 5.3
+        },
+        {
+          "name": "TEIKAS Gaisma",
+          "volumeMl": 1000,
+          "price": 6.5
+        },
+        {
+          "name": "SINGLE HOP SABRO",
+          "volumeMl": 300,
+          "price": 4.7
+        },
+        {
+          "name": "SINGLE HOP SABRO",
+          "volumeMl": 500,
+          "price": 6.2
+        },
+        {
+          "name": "SINGLE HOP SABRO",
+          "volumeMl": 1000,
+          "price": 7.8
+        },
+        {
+          "name": "Vecais īrs",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Vecais īrs",
+          "volumeMl": 500,
+          "price": 5.7
+        },
+        {
+          "name": "Vecais īrs",
+          "volumeMl": 1000,
+          "price": 7.1
+        },
+        {
+          "name": "Sānslīde",
+          "volumeMl": 300,
+          "price": 5.1
+        },
+        {
+          "name": "Sānslīde",
+          "volumeMl": 500,
+          "price": 6.6
+        },
+        {
+          "name": "Sānslīde",
+          "volumeMl": 1000,
+          "price": 8.4
+        },
+        {
+          "name": "STRATACORE",
+          "volumeMl": 300,
+          "price": 5.2
+        },
+        {
+          "name": "STRATACORE",
+          "volumeMl": 500,
+          "price": 6.8
+        },
+        {
+          "name": "STRATACORE",
+          "volumeMl": 1000,
+          "price": 8.7
+        },
+        {
+          "name": "BEĻĢU VASARA",
+          "volumeMl": 300,
+          "price": 4.7
+        },
+        {
+          "name": "BEĻĢU VASARA",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "BEĻĢU VASARA",
+          "volumeMl": 1000,
+          "price": 7.5
+        },
+        {
+          "name": "Sazobe",
+          "volumeMl": 300,
+          "price": 4.8
+        },
+        {
+          "name": "Sazobe",
+          "volumeMl": 500,
+          "price": 5.7
+        },
+        {
+          "name": "Sazobe",
+          "volumeMl": 1000,
+          "price": 7.3
+        },
+        {
+          "name": "Good Soup",
+          "volumeMl": 300,
+          "price": 5.7
+        },
+        {
+          "name": "Good Soup",
+          "volumeMl": 500,
+          "price": 7.5
+        },
+        {
+          "name": "Good Soup",
+          "volumeMl": 1000,
+          "price": 9.4
+        },
+        {
+          "name": "Jāņoga | Red currant",
+          "volumeMl": 300,
+          "price": 4.6
+        },
+        {
+          "name": "Jāņoga | Red currant",
+          "volumeMl": 500,
+          "price": 6.1
+        },
+        {
+          "name": "Jāņoga | Red currant",
+          "volumeMl": 1000,
+          "price": 7.7
+        },
+        {
+          "name": "Gurķu Mežonis",
+          "volumeMl": 300,
+          "price": 7.8
+        },
+        {
+          "name": "Gurķu Mežonis",
+          "volumeMl": 500,
+          "price": 10.2
+        },
+        {
+          "name": "Gurķu Mežonis",
+          "volumeMl": 1000,
+          "price": 13.1
+        }
+      ],
+      "evidenceNotes": "Current verified venue tap list (15 items) linked from the official Kaķis Maisā beer-offer page. Mead and cider rows omitted.",
+      "officialVenueUrl": "https://www.kakismaisa.lv/alus-piedavajums/"
+    },
+    {
+      "id": "kimmel",
+      "name": "Kimmel Kvartāls",
+      "sourceUrl": "https://www.kimmelkvartals.lv/wp-content/uploads/2025/07/Dzesetavas-Menu-lv.pdf",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Bauskas alus, draft",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Lielvārdes kviešu alus, draft",
+          "volumeMl": 400,
+          "price": 5.5
+        },
+        {
+          "name": "Madonas alus, draft",
+          "volumeMl": 400,
+          "price": 6
+        },
+        {
+          "name": "Anarkist IPA, draft",
+          "volumeMl": 400,
+          "price": 6
+        },
+        {
+          "name": "Moretti alus, draft",
+          "volumeMl": 400,
+          "price": 5.5
+        },
+        {
+          "name": "Alus (brand not specified)",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Alus (brand not specified)",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Tanker Craft",
+          "volumeMl": null,
+          "price": 6
+        }
+      ],
+      "evidenceNotes": "Official Kimmel Kvartāls Dzesētavas menu PDF (2025). It is the latest accessible official menu found; generic bottled beer rows are preserved as printed and volume is null where the menu does not identify it."
+    },
+    {
+      "id": "kwak-gleznotaju",
+      "name": "KwakInn — Gleznotāju",
+      "sourceUrl": "https://kwakinnriga.mozello.lv/dzerienkarte/alus-pudeles/",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Stella Artois, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Stella Artois, draft",
+          "volumeMl": 500,
+          "price": 4.7
+        },
+        {
+          "name": "Leffe Blonde, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Leffe Blonde, draft",
+          "volumeMl": 500,
+          "price": 5.2
+        },
+        {
+          "name": "Leffe Brune, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Leffe Brune, draft",
+          "volumeMl": 500,
+          "price": 5.2
+        },
+        {
+          "name": "Duchesse de Bourgogne, draft",
+          "volumeMl": 300,
+          "price": 5.5
+        },
+        {
+          "name": "Duchesse de Bourgogne, draft",
+          "volumeMl": 500,
+          "price": 7.5
+        },
+        {
+          "name": "Des Rocks Brune, draft",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Des Rocks Brune, draft",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Blanshe de Bruxelles, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Blanshe de Bruxelles, draft",
+          "volumeMl": 500,
+          "price": 4.7
+        },
+        {
+          "name": "Framboise Boon, draft",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Framboise Boon, draft",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Chimay Trappist Blue Label",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Chimay Trappist White Label",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Chimay Trappist Red Label",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Westmalle Dubbel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Westmalle Tripel",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Rochefort №6",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Rochefort №8",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Rochefort №10",
+          "volumeMl": 330,
+          "price": 8.5
+        },
+        {
+          "name": "La Trappe Dubbel",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "La Trappe Quadruppel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "La Trappe Blond",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "La Trappe Witte",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Slaapmutske Dry hopped",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Mongozo Premium Pilsener",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Duvel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "La Chouffe",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Kasteel Triple",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Blond",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Delirium Tremens",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Brugse Zot Blond",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Straffe Hendrik Triple",
+          "volumeMl": 330,
+          "price": 7.3
+        },
+        {
+          "name": "Silly SWAF",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Cuvee des Trolls",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Rasta Troll",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Moinette Blonde",
+          "volumeMl": 330,
+          "price": 5.8
+        },
+        {
+          "name": "De Ranke Simplex",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "De la Senne Taras Boulba",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "De la Senne Zinnebir",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "St. Bernardus Watou Tripel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Corsendonk Agnus Triple",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Corsendonk Gold Tripel",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "St. Bernardus Pater 6",
+          "volumeMl": 330,
+          "price": 4.3
+        },
+        {
+          "name": "St. Bernardus Prior 8",
+          "volumeMl": 330,
+          "price": 5.3
+        },
+        {
+          "name": "Corsendonk Dark Dubbel",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Corsendonk Pater Dubbel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Pauwel Kwak",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Scotch Silly",
+          "volumeMl": 330,
+          "price": 5.8
+        },
+        {
+          "name": "Moinette Ambree",
+          "volumeMl": 330,
+          "price": 6.3
+        },
+        {
+          "name": "Bush Ambrée",
+          "volumeMl": 330,
+          "price": 7.3
+        },
+        {
+          "name": "Gulden Draak",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Cuvee du Chateau",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Donker",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Delirium Nocturnum",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Brugse Zot Dubbel",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Moinette Brune",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Jungle Joyn",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Party on a Jamaican beach",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Super Sessn",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Green Killer",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "St. Bernardus ABT 12",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Straffe Hendrik Quadrupel",
+          "volumeMl": 330,
+          "price": 8
+        },
+        {
+          "name": "MARTHA Brown Eyes",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Monk's Stout Dupont",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "De Struise Black Albert",
+          "volumeMl": 330,
+          "price": 10
+        },
+        {
+          "name": "De la Senne Imperial Donkey",
+          "volumeMl": 330,
+          "price": 8.5
+        },
+        {
+          "name": "Saison Dupont",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Brewer's Bridge",
+          "volumeMl": 330,
+          "price": 6.3
+        },
+        {
+          "name": "Silly Saison",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Blanche de Silly",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Blanche de Bruges",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Blanche de Bruxelles",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Lindemans Gueuze Cuvee Rene",
+          "volumeMl": 375,
+          "price": 9
+        },
+        {
+          "name": "Lindemans Faro",
+          "volumeMl": 250,
+          "price": 3.6
+        },
+        {
+          "name": "Timmermans Faro",
+          "volumeMl": 375,
+          "price": 8.5
+        },
+        {
+          "name": "Lindemans Gueuze",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Boon Oude Geuze",
+          "volumeMl": 375,
+          "price": 7.5
+        },
+        {
+          "name": "Geuze Mariage Parfait",
+          "volumeMl": 375,
+          "price": 9.5
+        },
+        {
+          "name": "Tilquin Oude Gueuze",
+          "volumeMl": 375,
+          "price": 15
+        },
+        {
+          "name": "Duchesse de Bourgogne",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Rodenbach Classic",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Rodenbach Grand Cru",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Verzet Oud Bruin",
+          "volumeMl": 330,
+          "price": 8
+        },
+        {
+          "name": "Biolegere",
+          "volumeMl": 250,
+          "price": 3.5
+        },
+        {
+          "name": "Bush de Noel",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Triomfbier Bio",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Silly Sour",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Kameradski Balsamico",
+          "volumeMl": 330,
+          "price": 11
+        },
+        {
+          "name": "Rodenbach Alexander",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Delirium Red",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Liefmans Fruitesse",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Framboise Boon",
+          "volumeMl": 375,
+          "price": 10
+        },
+        {
+          "name": "Boon Kriek Mariage Parfait",
+          "volumeMl": 375,
+          "price": 13.5
+        },
+        {
+          "name": "Dubisson Kriek Boon",
+          "volumeMl": 375,
+          "price": 15
+        },
+        {
+          "name": "Tilquin Oude Quetsche",
+          "volumeMl": 375,
+          "price": 23
+        },
+        {
+          "name": "Tilquin Oude Groseille Rouge",
+          "volumeMl": 375,
+          "price": 24
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Bacchus Kriek",
+          "volumeMl": 375,
+          "price": 7.5
+        },
+        {
+          "name": "Bacchus Framboise",
+          "volumeMl": 375,
+          "price": 8
+        },
+        {
+          "name": "Lindemans Kriek",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Framboise",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Pecheresse",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Cassis",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Apple",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Kriek Cuvee Rene",
+          "volumeMl": 375,
+          "price": 10.8
+        },
+        {
+          "name": "Mongozo Banana",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Bush Pêche Mel",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Timmermans Kriek Lambicus",
+          "volumeMl": 250,
+          "price": 7
+        },
+        {
+          "name": "Timmermans Strawberry Lambicus",
+          "volumeMl": 250,
+          "price": 6.5
+        },
+        {
+          "name": "Timmermans Peach Lambicus",
+          "volumeMl": 250,
+          "price": 7
+        },
+        {
+          "name": "MARTHA Guilty Pleasure",
+          "volumeMl": 330,
+          "price": 6.5
+        }
+      ],
+      "evidenceNotes": "Official KwakInn draft and bottled beer menus. This same menu is used at both KwakInn venues in the source venue list.",
+      "officialVenueUrl": "https://kwakinnriga.mozello.lv/dzerienkarte/izlejamais-alus/"
+    },
+    {
+      "id": "kwak-jauniela",
+      "name": "KwakInn — Jauniela",
+      "sourceUrl": "https://kwakinnriga.mozello.lv/dzerienkarte/alus-pudeles/",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Stella Artois, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Stella Artois, draft",
+          "volumeMl": 500,
+          "price": 4.7
+        },
+        {
+          "name": "Leffe Blonde, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Leffe Blonde, draft",
+          "volumeMl": 500,
+          "price": 5.2
+        },
+        {
+          "name": "Leffe Brune, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Leffe Brune, draft",
+          "volumeMl": 500,
+          "price": 5.2
+        },
+        {
+          "name": "Duchesse de Bourgogne, draft",
+          "volumeMl": 300,
+          "price": 5.5
+        },
+        {
+          "name": "Duchesse de Bourgogne, draft",
+          "volumeMl": 500,
+          "price": 7.5
+        },
+        {
+          "name": "Des Rocks Brune, draft",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Des Rocks Brune, draft",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Blanshe de Bruxelles, draft",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Blanshe de Bruxelles, draft",
+          "volumeMl": 500,
+          "price": 4.7
+        },
+        {
+          "name": "Framboise Boon, draft",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Framboise Boon, draft",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Chimay Trappist Blue Label",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Chimay Trappist White Label",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Chimay Trappist Red Label",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Westmalle Dubbel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Westmalle Tripel",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Rochefort №6",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Rochefort №8",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Rochefort №10",
+          "volumeMl": 330,
+          "price": 8.5
+        },
+        {
+          "name": "La Trappe Dubbel",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "La Trappe Quadruppel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "La Trappe Blond",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "La Trappe Witte",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Slaapmutske Dry hopped",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Mongozo Premium Pilsener",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Duvel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "La Chouffe",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Kasteel Triple",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Blond",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Delirium Tremens",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Brugse Zot Blond",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Straffe Hendrik Triple",
+          "volumeMl": 330,
+          "price": 7.3
+        },
+        {
+          "name": "Silly SWAF",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Cuvee des Trolls",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Rasta Troll",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Moinette Blonde",
+          "volumeMl": 330,
+          "price": 5.8
+        },
+        {
+          "name": "De Ranke Simplex",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "De la Senne Taras Boulba",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "De la Senne Zinnebir",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "St. Bernardus Watou Tripel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Corsendonk Agnus Triple",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Corsendonk Gold Tripel",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "St. Bernardus Pater 6",
+          "volumeMl": 330,
+          "price": 4.3
+        },
+        {
+          "name": "St. Bernardus Prior 8",
+          "volumeMl": 330,
+          "price": 5.3
+        },
+        {
+          "name": "Corsendonk Dark Dubbel",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Corsendonk Pater Dubbel",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Pauwel Kwak",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Scotch Silly",
+          "volumeMl": 330,
+          "price": 5.8
+        },
+        {
+          "name": "Moinette Ambree",
+          "volumeMl": 330,
+          "price": 6.3
+        },
+        {
+          "name": "Bush Ambrée",
+          "volumeMl": 330,
+          "price": 7.3
+        },
+        {
+          "name": "Gulden Draak",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Cuvee du Chateau",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Donker",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Delirium Nocturnum",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Brugse Zot Dubbel",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Moinette Brune",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Jungle Joyn",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Party on a Jamaican beach",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Super Sessn",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Green Killer",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "St. Bernardus ABT 12",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Straffe Hendrik Quadrupel",
+          "volumeMl": 330,
+          "price": 8
+        },
+        {
+          "name": "MARTHA Brown Eyes",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Monk's Stout Dupont",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "De Struise Black Albert",
+          "volumeMl": 330,
+          "price": 10
+        },
+        {
+          "name": "De la Senne Imperial Donkey",
+          "volumeMl": 330,
+          "price": 8.5
+        },
+        {
+          "name": "Saison Dupont",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Brewer's Bridge",
+          "volumeMl": 330,
+          "price": 6.3
+        },
+        {
+          "name": "Silly Saison",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Blanche de Silly",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Blanche de Bruges",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Blanche de Bruxelles",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Lindemans Gueuze Cuvee Rene",
+          "volumeMl": 375,
+          "price": 9
+        },
+        {
+          "name": "Lindemans Faro",
+          "volumeMl": 250,
+          "price": 3.6
+        },
+        {
+          "name": "Timmermans Faro",
+          "volumeMl": 375,
+          "price": 8.5
+        },
+        {
+          "name": "Lindemans Gueuze",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Boon Oude Geuze",
+          "volumeMl": 375,
+          "price": 7.5
+        },
+        {
+          "name": "Geuze Mariage Parfait",
+          "volumeMl": 375,
+          "price": 9.5
+        },
+        {
+          "name": "Tilquin Oude Gueuze",
+          "volumeMl": 375,
+          "price": 15
+        },
+        {
+          "name": "Duchesse de Bourgogne",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Rodenbach Classic",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Rodenbach Grand Cru",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Verzet Oud Bruin",
+          "volumeMl": 330,
+          "price": 8
+        },
+        {
+          "name": "Biolegere",
+          "volumeMl": 250,
+          "price": 3.5
+        },
+        {
+          "name": "Bush de Noel",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Triomfbier Bio",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Silly Sour",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Kameradski Balsamico",
+          "volumeMl": 330,
+          "price": 11
+        },
+        {
+          "name": "Rodenbach Alexander",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Delirium Red",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Liefmans Fruitesse",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Framboise Boon",
+          "volumeMl": 375,
+          "price": 10
+        },
+        {
+          "name": "Boon Kriek Mariage Parfait",
+          "volumeMl": 375,
+          "price": 13.5
+        },
+        {
+          "name": "Dubisson Kriek Boon",
+          "volumeMl": 375,
+          "price": 15
+        },
+        {
+          "name": "Tilquin Oude Quetsche",
+          "volumeMl": 375,
+          "price": 23
+        },
+        {
+          "name": "Tilquin Oude Groseille Rouge",
+          "volumeMl": 375,
+          "price": 24
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Bacchus Kriek",
+          "volumeMl": 375,
+          "price": 7.5
+        },
+        {
+          "name": "Bacchus Framboise",
+          "volumeMl": 375,
+          "price": 8
+        },
+        {
+          "name": "Lindemans Kriek",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Framboise",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Pecheresse",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Cassis",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Apple",
+          "volumeMl": 250,
+          "price": 4.3
+        },
+        {
+          "name": "Lindemans Kriek Cuvee Rene",
+          "volumeMl": 375,
+          "price": 10.8
+        },
+        {
+          "name": "Mongozo Banana",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Bush Pêche Mel",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Timmermans Kriek Lambicus",
+          "volumeMl": 250,
+          "price": 7
+        },
+        {
+          "name": "Timmermans Strawberry Lambicus",
+          "volumeMl": 250,
+          "price": 6.5
+        },
+        {
+          "name": "Timmermans Peach Lambicus",
+          "volumeMl": 250,
+          "price": 7
+        },
+        {
+          "name": "MARTHA Guilty Pleasure",
+          "volumeMl": 330,
+          "price": 6.5
+        }
+      ],
+      "evidenceNotes": "Same official KwakInn draft and bottled menu as Gleznotāju; copied by reference so both map venues expose the complete menu.",
+      "officialVenueUrl": "https://kwakinnriga.mozello.lv/dzerienkarte/izlejamais-alus/"
+    },
+    {
+      "id": "labietis-market",
+      "name": "Labietis Centrāltirgū",
+      "sourceUrl": "https://untappd.com/v/labietis-central-market/4285173",
+      "sourceLabel": "Verificēta aktuālā alus karte",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Mežs (Forest)",
+          "volumeMl": 250,
+          "price": 3.3
+        },
+        {
+          "name": "Mežs (Forest)",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Mežs (Forest)",
+          "volumeMl": 440,
+          "price": 2.8
+        },
+        {
+          "name": "Mežs (Forest)",
+          "volumeMl": 1000,
+          "price": 5.6
+        },
+        {
+          "name": "Mežs (Forest)",
+          "volumeMl": 2000,
+          "price": 9.5
+        },
+        {
+          "name": "Aroniju Ragana",
+          "volumeMl": 250,
+          "price": 3.5
+        },
+        {
+          "name": "Aroniju Ragana",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Aroniju Ragana",
+          "volumeMl": 440,
+          "price": 3
+        },
+        {
+          "name": "Aroniju Ragana",
+          "volumeMl": 1000,
+          "price": 6
+        },
+        {
+          "name": "E034 Wheat Beer",
+          "volumeMl": 250,
+          "price": 3.5
+        },
+        {
+          "name": "E034 Wheat Beer",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "E034 Wheat Beer",
+          "volumeMl": 440,
+          "price": 3
+        },
+        {
+          "name": "E034 Wheat Beer",
+          "volumeMl": 1000,
+          "price": 6
+        },
+        {
+          "name": "E034 Wheat Beer",
+          "volumeMl": 2000,
+          "price": 10.3
+        },
+        {
+          "name": "Trīs indiāņi",
+          "volumeMl": 250,
+          "price": 3.3
+        },
+        {
+          "name": "Trīs indiāņi",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Trīs indiāņi",
+          "volumeMl": 440,
+          "price": 2.8
+        },
+        {
+          "name": "Trīs indiāņi",
+          "volumeMl": 1000,
+          "price": 5.6
+        },
+        {
+          "name": "Trīs indiāņi",
+          "volumeMl": 2000,
+          "price": 9.5
+        },
+        {
+          "name": "Lenteņu Kāvējs",
+          "volumeMl": 250,
+          "price": 4.2
+        },
+        {
+          "name": "Lenteņu Kāvējs",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Lenteņu Kāvējs",
+          "volumeMl": 440,
+          "price": 3.6
+        },
+        {
+          "name": "Lenteņu Kāvējs",
+          "volumeMl": 1000,
+          "price": 7.2
+        },
+        {
+          "name": "Lenteņu Kāvējs",
+          "volumeMl": 2000,
+          "price": 12.7
+        },
+        {
+          "name": "Aroniju Humpaliņa",
+          "volumeMl": 250,
+          "price": 6.3
+        },
+        {
+          "name": "Aroniju Humpaliņa",
+          "volumeMl": 500,
+          "price": 7.8
+        },
+        {
+          "name": "Aroniju Humpaliņa",
+          "volumeMl": 375,
+          "price": 6.3
+        },
+        {
+          "name": "Aroniju Humpaliņa",
+          "volumeMl": 1000,
+          "price": 10.9
+        },
+        {
+          "name": "Aroniju Humpaliņa",
+          "volumeMl": 2000,
+          "price": 21
+        }
+      ],
+      "evidenceNotes": "Current venue-verified Labietis Central Market tap list. Meads are omitted. The venue page also advertises a larger bottle/can list; only beer rows with explicit prices surfaced in the current tap-list capture are included here.",
+      "officialVenueUrl": "https://labietis.lv/en/taproom/central-market/",
+      "missingDataReason": "The current public tap-list capture exposes six priced beer products but indicates a broader bottle/can selection; unsurfaced rows are not guessed or filled from delivery platforms. One suspicious source value (Aroniju Ragana 2L) was omitted rather than trusted.",
+      "unpricedCurrentRows": [
+        "Additional bottle/can rows are present on the venue-verified page but were not transcribed without a stable explicit row-level capture."
+      ]
+    },
+    {
+      "id": "motormuzejs",
+      "name": "Motormuzeja restorāns",
+      "sourceUrl": "https://www.gardumgardi.lv/edienkarte",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra, Gaišais, draft",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Lāčplēsis Ekstra, Gaišais, draft",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Valmiermuižas gaišais alus",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Beck's bezalkoholiskais alus",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Tērvetes bezalkoholiskais alus",
+          "volumeMl": 500,
+          "price": 4
+        }
+      ],
+      "evidenceNotes": "Official Gardum Gardi menu page with current drinks-menu image. Image URL: https://static.wixstatic.com/media/5c61d7_0b49fc409d074f18a735bafac0682500~mv2.jpg/v1/fill/w_730,h_1199,al_c,q_85,enc_avif,quality_auto/Dz%C4%93rienu%20karte_3.jpg"
+    },
+    {
+      "id": "nurme",
+      "name": "Nurme Brewery & Taproom",
+      "sourceUrl": "https://untappd.com/v/nurme-brewery-and-taproom/10568297",
+      "sourceLabel": "Verificēta aktuālā alus karte",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Prebarrel",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Prebarrel",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Twilight To Starlight",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Twilight To Starlight",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Dawn To Dusk",
+          "volumeMl": 300,
+          "price": 4.7
+        },
+        {
+          "name": "Dawn To Dusk",
+          "volumeMl": 500,
+          "price": 6.2
+        },
+        {
+          "name": "Triangulum",
+          "volumeMl": 300,
+          "price": 4.1
+        },
+        {
+          "name": "Triangulum",
+          "volumeMl": 500,
+          "price": 5.4
+        },
+        {
+          "name": "Tender Beast",
+          "volumeMl": 300,
+          "price": 5.3
+        },
+        {
+          "name": "Tender Beast",
+          "volumeMl": 500,
+          "price": 7.1
+        },
+        {
+          "name": "Good Soup",
+          "volumeMl": 300,
+          "price": 4.1
+        },
+        {
+          "name": "Good Soup",
+          "volumeMl": 500,
+          "price": 5.4
+        },
+        {
+          "name": "Übertragung",
+          "volumeMl": 300,
+          "price": 3.9
+        },
+        {
+          "name": "Übertragung",
+          "volumeMl": 500,
+          "price": 5.2
+        },
+        {
+          "name": "Mežonīgais Atvars",
+          "volumeMl": 300,
+          "price": 4.3
+        },
+        {
+          "name": "Mežonīgais Atvars",
+          "volumeMl": 500,
+          "price": 5.8
+        },
+        {
+          "name": "Superdelic Lowrider",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Superdelic Lowrider",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Pearfection",
+          "volumeMl": 300,
+          "price": 5.5
+        },
+        {
+          "name": "Pearfection",
+          "volumeMl": 500,
+          "price": 7.3
+        },
+        {
+          "name": "Pūoj",
+          "volumeMl": 300,
+          "price": 5.3
+        },
+        {
+          "name": "Pūoj",
+          "volumeMl": 500,
+          "price": 7.1
+        }
+      ],
+      "evidenceNotes": "Current verified Nurme Brewery & Taproom tap list (12 items). Cider row omitted.",
+      "officialVenueUrl": "https://nurmebeer.com"
+    },
+    {
+      "id": "paddy",
+      "name": "Paddy Whelan’s",
+      "sourceUrl": "https://www.pub.lv/web/wp-content/uploads/2024/02/beer_on_tap_packaged_menu.pdf",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Kilkenny Irish Beer",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Kilkenny Irish Beer",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Kilkenny Irish Beer",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Kilkenny Irish Beer",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Brewdog Punk IPA",
+          "volumeMl": 200,
+          "price": 4
+        },
+        {
+          "name": "Brewdog Punk IPA",
+          "volumeMl": 400,
+          "price": 6.9
+        },
+        {
+          "name": "Brewdog Punk IPA",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Brewdog Punk IPA",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Paddy Irish Lager",
+          "volumeMl": 200,
+          "price": 3.2
+        },
+        {
+          "name": "Paddy Irish Lager",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Paddy Irish Lager",
+          "volumeMl": 1000,
+          "price": 8
+        },
+        {
+          "name": "Paddy Irish Lager",
+          "volumeMl": 4000,
+          "price": 30
+        },
+        {
+          "name": "Sānslīde IPA Malduguns",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Sānslīde IPA Malduguns",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Sānslīde IPA Malduguns",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Sānslīde IPA Malduguns",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Mežpils / Craft Pale Lager",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Mežpils / Craft Pale Lager",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Mežpils / Craft Pale Lager",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Mežpils / Craft Pale Lager",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Valmiermuižas Craft Brewery",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Valmiermuižas Craft Brewery",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Valmiermuižas Craft Brewery",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Valmiermuižas Craft Brewery",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Brenguļu (Abula) Gaišais",
+          "volumeMl": 200,
+          "price": 3.2
+        },
+        {
+          "name": "Brenguļu (Abula) Gaišais",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Brenguļu (Abula) Gaišais",
+          "volumeMl": 1000,
+          "price": 8
+        },
+        {
+          "name": "Brenguļu (Abula) Gaišais",
+          "volumeMl": 4000,
+          "price": 30
+        },
+        {
+          "name": "Užavas gaišais",
+          "volumeMl": 200,
+          "price": 3.2
+        },
+        {
+          "name": "Užavas gaišais",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Užavas gaišais",
+          "volumeMl": 1000,
+          "price": 8
+        },
+        {
+          "name": "Užavas gaišais",
+          "volumeMl": 4000,
+          "price": 30
+        },
+        {
+          "name": "Paulaner Hefe-Weissbier",
+          "volumeMl": 200,
+          "price": 3.2
+        },
+        {
+          "name": "Paulaner Hefe-Weissbier",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Paulaner Hefe-Weissbier",
+          "volumeMl": 1000,
+          "price": 8
+        },
+        {
+          "name": "Paulaner Hefe-Weissbier",
+          "volumeMl": 4000,
+          "price": 30
+        },
+        {
+          "name": "Carlsberg",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Carlsberg",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Carlsberg",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Carlsberg",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Leffe Brown",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Leffe Brown",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Leffe Brown",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Leffe Brown",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 200,
+          "price": 5.1
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 400,
+          "price": 7.4
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 1000,
+          "price": 12.9
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 4000,
+          "price": 50
+        },
+        {
+          "name": "Bacchus Kriekenbier",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Bacchus Kriekenbier",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Bacchus Kriekenbier",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Bacchus Kriekenbier",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Hoegaarden Witbier",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Hoegaarden Witbier",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Hoegaarden Witbier",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Hoegaarden Witbier",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Stella Artois Pale Lager",
+          "volumeMl": 200,
+          "price": 3.7
+        },
+        {
+          "name": "Stella Artois Pale Lager",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Stella Artois Pale Lager",
+          "volumeMl": 1000,
+          "price": 11.9
+        },
+        {
+          "name": "Stella Artois Pale Lager",
+          "volumeMl": 4000,
+          "price": 45
+        },
+        {
+          "name": "Tramvajs Unfiltered",
+          "volumeMl": 200,
+          "price": 3.5
+        },
+        {
+          "name": "Tramvajs Unfiltered",
+          "volumeMl": 400,
+          "price": 5.8
+        },
+        {
+          "name": "Tramvajs Unfiltered",
+          "volumeMl": 1000,
+          "price": 10
+        },
+        {
+          "name": "Tramvajs Unfiltered",
+          "volumeMl": 4000,
+          "price": 40
+        },
+        {
+          "name": "Valmiermuiža Dark, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Pauwel Kwak, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Guinness HH13 Lager, packaged",
+          "volumeMl": null,
+          "price": 5
+        },
+        {
+          "name": "La Trappe Tripel, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "La Trappe Quadrupel, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Duvel Strong Ale, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "La Chouffe Strong Ale, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "La Chouffe Cherry, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Leffe Blond N/A, packaged",
+          "volumeMl": null,
+          "price": 5
+        },
+        {
+          "name": "Leffe Brun N/A, packaged",
+          "volumeMl": null,
+          "price": 5
+        },
+        {
+          "name": "Sierra Nevada Torpedo Extra IPA, packaged",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Corona, packaged",
+          "volumeMl": null,
+          "price": 5
+        }
+      ],
+      "evidenceNotes": "Official Paddy Whelan's drinks page links the beer-on-tap/packaged menu PDF (dated February 2024). It is the latest accessible official menu found, so venue confirmation is advisable before publishing as current. Draft beer rows transcribed; cider rows omitted. Packaged rows are listed with null volume because the PDF's package-size columns did not map unambiguously in text extraction.",
+      "officialVenueUrl": "https://www.paddywhelans.com/en/drinks/"
+    },
+    {
+      "id": "ezitis-palasta",
+      "name": "Palasta Ezītis miglā",
+      "sourceUrl": "https://www.ezitis.lv/palasta-ielas-ezitis-migla/",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra, draft",
+          "volumeMl": 400,
+          "price": 2.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu, draft",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Bauskas Gaišais, draft",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Anarkist New England IPA, draft",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Madonas Nefiltrētais, draft",
+          "volumeMl": 400,
+          "price": 4.4
+        },
+        {
+          "name": "Ezītis Miglā x Labietis",
+          "volumeMl": 440,
+          "price": 4.6
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 330,
+          "price": 4.1
+        },
+        {
+          "name": "SOL",
+          "volumeMl": 330,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvetes Senču",
+          "volumeMl": 500,
+          "price": 4.2
+        },
+        {
+          "name": "Bauskas Tumšais",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Užavas Light",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Viedi",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Labietis Dzeltenā Saime",
+          "volumeMl": 440,
+          "price": 5.1
+        },
+        {
+          "name": "Labietis Sarkanā Saime",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Heineken, non-alcoholic",
+          "volumeMl": 330,
+          "price": 4.2
+        },
+        {
+          "name": "Labietis, non-alcoholic",
+          "volumeMl": 440,
+          "price": 5.1
+        }
+      ],
+      "evidenceNotes": "Official Palasta Ezītis page with current menu image https://www.ezitis.lv/wp-content/uploads/2026/03/Palasta-majaslapa-01-scaled.jpg. Cider rows omitted."
+    },
+    {
+      "id": "skyline",
+      "name": "Skyline Bar",
+      "sourceUrl": "https://skylinebar.lv/wp-content/uploads/2026/03/SkyLine_Drinks_menu_225x200_2026-03-09_v1.pdf",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Cēsu Nefiltrētais Brūža",
+          "volumeMl": 400,
+          "price": 7.5
+        },
+        {
+          "name": "Cēsu Premium Gaišais",
+          "volumeMl": 400,
+          "price": 7.5
+        },
+        {
+          "name": "Sezonas alus izvēle",
+          "volumeMl": null,
+          "price": 9
+        },
+        {
+          "name": "Valmiermuižas",
+          "volumeMl": null,
+          "price": 9
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": null,
+          "price": 8
+        },
+        {
+          "name": "Bezalkoholiskais alus pudelēs",
+          "volumeMl": 300,
+          "price": 7.5
+        }
+      ],
+      "evidenceNotes": "Official Skyline Bar March 2026 drinks-menu PDF. Rows whose printed volume is not explicit are preserved with null volume.",
+      "officialVenueUrl": "https://skylinebar.lv/"
+    },
+    {
+      "id": "armoury",
+      "name": "The Armoury Bar",
+      "sourceUrl": "https://www.thearmourybar.com/drinks-menu",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [],
+      "evidenceNotes": "Official drinks-menu route is live, but its publicly accessible content exposes no readable beer rows or prices.",
+      "missingDataReason": "No current official beer menu, current in-venue menu image, or current venue-verified tap list with explicit prices was found. Third-party/delivery prices were intentionally not used."
+    },
+    {
+      "id": "banshee",
+      "name": "The Banshee",
+      "sourceUrl": "https://untappd.com/v/the-banshee/11248889",
+      "sourceLabel": "Verificēta aktuālā alus karte",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 100,
+          "price": 1.8
+        },
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 250,
+          "price": 3.5
+        },
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "The Emotional Support PILS",
+          "volumeMl": 150,
+          "price": 1.5
+        },
+        {
+          "name": "The Emotional Support PILS",
+          "volumeMl": 250,
+          "price": 3
+        },
+        {
+          "name": "The Emotional Support PILS",
+          "volumeMl": 500,
+          "price": 4.8
+        },
+        {
+          "name": "Estrella Galicia Especial",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Estrella Galicia Especial",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Estrella Galicia Especial",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Cilpa",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Cilpa",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Cilpa",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Ginger and Azacca Beer Seltzer",
+          "volumeMl": 100,
+          "price": 1.5
+        },
+        {
+          "name": "Ginger and Azacca Beer Seltzer",
+          "volumeMl": 250,
+          "price": 3
+        },
+        {
+          "name": "Ginger and Azacca Beer Seltzer",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Mežpils Ķiršu / Cherry Lager",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Mežpils Ķiršu / Cherry Lager",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Mežpils Ķiršu / Cherry Lager",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "SOURBIT / BERLINER WEISSE",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "SOURBIT / BERLINER WEISSE",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "SOURBIT / BERLINER WEISSE",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "PINEFRUIT",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "PINEFRUIT",
+          "volumeMl": 250,
+          "price": 5
+        },
+        {
+          "name": "PINEFRUIT",
+          "volumeMl": 500,
+          "price": 7.5
+        },
+        {
+          "name": "Pļauja",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Pļauja",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Pļauja",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "THIRD DIMENSION / TDH TIPA",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "THIRD DIMENSION / TDH TIPA",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "THIRD DIMENSION / TDH TIPA",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Hoppy Oasis",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Hoppy Oasis",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Hoppy Oasis",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "QUEST No 5, WEST COAST IPA",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "QUEST No 5, WEST COAST IPA",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "QUEST No 5, WEST COAST IPA",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "SOURBIT / BLACK PASSION",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "SOURBIT / BLACK PASSION",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "SOURBIT / BLACK PASSION",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Staropramen Premium / Ležák 12",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Staropramen Premium / Ležák 12",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Staropramen Premium / Ležák 12",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "CHILLINN / RED",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "CHILLINN / RED",
+          "volumeMl": 250,
+          "price": 4.5,
+          "format": "can"
+        },
+        {
+          "name": "CHILLINN / RED",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Leffe Blonde / Blond",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Leffe Blonde / Blond",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Leffe Blonde / Blond",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Juicy Haze",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Juicy Haze",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Juicy Haze",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Quest No6 - COLD IPA",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Quest No6 - COLD IPA",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Quest No6 - COLD IPA",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "1664 Blanc",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "1664 Blanc",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "1664 Blanc",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "All Dorado",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "All Dorado",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "All Dorado",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 100,
+          "price": 2.2
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 500,
+          "price": 7
+        }
+      ],
+      "evidenceNotes": "Current verified venue tap list (24 items). Somersby Pear Cider and Klasiskais/Original cider rows omitted."
+    },
+    {
+      "id": "two-more",
+      "name": "Two More Beers",
+      "sourceUrl": "https://twomorebeers.lv/wp-content/uploads/2026/04/TwoMoreBeers_DrinkMenu.pdf",
+      "sourceLabel": "Oficiālā ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "retrievedDate": "2026-09-02",
+      "beerPrices": [
+        {
+          "name": "Two More Beers Lager",
+          "volumeMl": 400,
+          "price": 6.2
+        },
+        {
+          "name": "Two More Beers Lager",
+          "volumeMl": 1000,
+          "price": 13.95
+        },
+        {
+          "name": "Two More Beers Lager",
+          "volumeMl": 3000,
+          "price": 41.85
+        },
+        {
+          "name": "Two More Beers Craft IPA",
+          "volumeMl": 400,
+          "price": 6.2
+        },
+        {
+          "name": "Two More Beers Craft IPA",
+          "volumeMl": 1000,
+          "price": 13.95
+        },
+        {
+          "name": "Two More Beers Craft IPA",
+          "volumeMl": 3000,
+          "price": 41.85
+        },
+        {
+          "name": "Two More Beers Rye Porter",
+          "volumeMl": 400,
+          "price": 6.5
+        },
+        {
+          "name": "Two More Beers Rye Porter",
+          "volumeMl": 1000,
+          "price": 14.63
+        },
+        {
+          "name": "Two More Beers Rye Porter",
+          "volumeMl": 3000,
+          "price": 43.88
+        },
+        {
+          "name": "Shepherd Neame First Drop Session IPA",
+          "volumeMl": 400,
+          "price": 8
+        },
+        {
+          "name": "Shepherd Neame First Drop Session IPA",
+          "volumeMl": 1000,
+          "price": 15.75
+        },
+        {
+          "name": "Shepherd Neame First Drop Session IPA",
+          "volumeMl": 3000,
+          "price": 47.25
+        },
+        {
+          "name": "Lielvārdes kviešu",
+          "volumeMl": 400,
+          "price": 6.5
+        },
+        {
+          "name": "Lielvārdes kviešu",
+          "volumeMl": 1000,
+          "price": 14.63
+        },
+        {
+          "name": "Lielvārdes kviešu",
+          "volumeMl": 3000,
+          "price": 43.88
+        },
+        {
+          "name": "Hoegaarden Wit",
+          "volumeMl": 400,
+          "price": 7
+        },
+        {
+          "name": "Hoegaarden Wit",
+          "volumeMl": 1000,
+          "price": 15.75
+        },
+        {
+          "name": "Hoegaarden Wit",
+          "volumeMl": 3000,
+          "price": 47.25
+        },
+        {
+          "name": "Weihenstephaner Hefe Weissbier",
+          "volumeMl": 400,
+          "price": 7
+        },
+        {
+          "name": "Weihenstephaner Hefe Weissbier",
+          "volumeMl": 1000,
+          "price": 15.75
+        },
+        {
+          "name": "Weihenstephaner Hefe Weissbier",
+          "volumeMl": 3000,
+          "price": 47.25
+        },
+        {
+          "name": "Steenbrugge Blond",
+          "volumeMl": 400,
+          "price": 7
+        },
+        {
+          "name": "Steenbrugge Blond",
+          "volumeMl": 1000,
+          "price": 15.75
+        },
+        {
+          "name": "Steenbrugge Blond",
+          "volumeMl": 3000,
+          "price": 47.25
+        },
+        {
+          "name": "Pauwel Kwak",
+          "volumeMl": 400,
+          "price": 8
+        },
+        {
+          "name": "Pauwel Kwak",
+          "volumeMl": 1000,
+          "price": 18
+        },
+        {
+          "name": "Pauwel Kwak",
+          "volumeMl": 3000,
+          "price": 54
+        },
+        {
+          "name": "Kasteel Rubus",
+          "volumeMl": 400,
+          "price": 9.7
+        },
+        {
+          "name": "Kasteel Rubus",
+          "volumeMl": 1000,
+          "price": 21.83
+        },
+        {
+          "name": "Kasteel Rubus",
+          "volumeMl": 3000,
+          "price": 65.48
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 400,
+          "price": 6.7
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 1000,
+          "price": 15.08
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 3000,
+          "price": 45.23
+        },
+        {
+          "name": "Dziru Kalve Cherryphilia",
+          "volumeMl": 400,
+          "price": 6.5
+        },
+        {
+          "name": "Dziru Kalve Cherryphilia",
+          "volumeMl": 1000,
+          "price": 14.63
+        },
+        {
+          "name": "Dziru Kalve Cherryphilia",
+          "volumeMl": 3000,
+          "price": 43.88
+        },
+        {
+          "name": "Labietis Gaismas Ragana",
+          "volumeMl": 400,
+          "price": 7.5
+        },
+        {
+          "name": "Labietis Gaismas Ragana",
+          "volumeMl": 1000,
+          "price": 16.88
+        },
+        {
+          "name": "Labietis Gaismas Ragana",
+          "volumeMl": 3000,
+          "price": 50.63
+        },
+        {
+          "name": "Valmiermuižas Gaišais",
+          "volumeMl": 400,
+          "price": 6.8
+        },
+        {
+          "name": "Valmiermuižas Gaišais",
+          "volumeMl": 1000,
+          "price": 15.3
+        },
+        {
+          "name": "Valmiermuižas Gaišais",
+          "volumeMl": 3000,
+          "price": 45.9
+        },
+        {
+          "name": "Valmiermuižas Bezalkoholiskais",
+          "volumeMl": 400,
+          "price": 5.5
+        },
+        {
+          "name": "Valmiermuižas Bezalkoholiskais",
+          "volumeMl": 1000,
+          "price": 12.38
+        },
+        {
+          "name": "Valmiermuižas Bezalkoholiskais",
+          "volumeMl": 3000,
+          "price": 37.13
+        },
+        {
+          "name": "Bauskas Klasika",
+          "volumeMl": 400,
+          "price": 6.8
+        },
+        {
+          "name": "Bauskas Klasika",
+          "volumeMl": 1000,
+          "price": 15.3
+        },
+        {
+          "name": "Bauskas Klasika",
+          "volumeMl": 3000,
+          "price": 45.9
+        },
+        {
+          "name": "Paulaner Oktoberfest",
+          "volumeMl": 400,
+          "price": 6.5
+        },
+        {
+          "name": "Paulaner Oktoberfest",
+          "volumeMl": 1000,
+          "price": 14.63
+        },
+        {
+          "name": "Paulaner Oktoberfest",
+          "volumeMl": 3000,
+          "price": 43.88
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 400,
+          "price": 6.5
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 1000,
+          "price": 14.63
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 3000,
+          "price": 43.88
+        },
+        {
+          "name": "Madonas nefiltrētais",
+          "volumeMl": 400,
+          "price": 6.8
+        },
+        {
+          "name": "Madonas nefiltrētais",
+          "volumeMl": 1000,
+          "price": 15.3
+        },
+        {
+          "name": "Madonas nefiltrētais",
+          "volumeMl": 3000,
+          "price": 45.9
+        },
+        {
+          "name": "Duna Kuldīgas Pilsner",
+          "volumeMl": 400,
+          "price": 6.5
+        },
+        {
+          "name": "Duna Kuldīgas Pilsner",
+          "volumeMl": 1000,
+          "price": 14.63
+        },
+        {
+          "name": "Duna Kuldīgas Pilsner",
+          "volumeMl": 3000,
+          "price": 43.88
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 400,
+          "price": 6.8
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 1000,
+          "price": 15.3
+        },
+        {
+          "name": "Pilsner Urquell",
+          "volumeMl": 3000,
+          "price": 45.9
+        }
+      ],
+      "evidenceNotes": "Official Two More Beers April 2026 drinks menu. Rows marked Check QR have no public price and are not fabricated; cider/shandy rows omitted.",
+      "officialVenueUrl": "https://twomorebeers.lv/",
+      "unpricedCurrentRows": [
+        "Ārpus — Check QR",
+        "Nurme — Check QR",
+        "Pohjala — Check QR",
+        "Bottle/can list behind QR without static item prices"
+      ]
+    }
+  ],
+  "scalableSourcePatterns": [
+    "Official venue menu pages and PDFs are the strongest source and preserve the venue's own serving-size and price rows.",
+    "Many Riga craft venues publish live Untappd venue pages; use only pages marked or linked as the venue and record retrieval dates because tap lists change frequently.",
+    "Official sites often embed current menu images in Wix or WordPress uploads; retain the image URL as evidence and manually review OCR rather than using delivery menus.",
+    "Use Wolt or Bolt only for venue or beer-name discovery. Their prices may be marked up and are not displayable venue prices without independent venue-menu confirmation.",
+    "When a current menu exposes an item but not a price or volume, keep it in an unpriced/missing list and do not infer a value."
+  ]
+}
