@@ -321,5 +321,8 @@ const venuePoints: MapVenue[] = rigaVenueData.venues
     } satisfies Venue;
   });
 
-export const mapVenues: MapVenue[] = [...venues, ...venuePoints];
+export const mapVenues: Venue[] = [
+  ...venues,
+  ...venuePoints.filter(isPricedVenue),
+];
 export const osmSnapshotAt = rigaVenueData.osmTimestamp;

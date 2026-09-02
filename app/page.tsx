@@ -171,8 +171,6 @@ export default function Home() {
     });
     return [...result].sort((a, b) => {
       if (sortMode === 'name') return a.name.localeCompare(b.name, 'lv');
-      if (!isPricedVenue(a)) return isPricedVenue(b) ? 1 : a.name.localeCompare(b.name, 'lv');
-      if (!isPricedVenue(b)) return -1;
       if (sortMode === 'litre') return pricePerLitre(a) - pricePerLitre(b);
       return a.price - b.price || (b.volumeMl ?? 0) - (a.volumeMl ?? 0);
     });
