@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { darkRigaStyle } from './map-style';
+import { formatClockTime, getRigaClock, isVenueOpenAt, type RigaClock } from './opening-hours';
 import { isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
 
 type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
@@ -51,10 +52,10 @@ const getMapLibreRuntime = (module: unknown) => {
     ?? (module as MapLibreRuntime);
 };
 
-function VenueCard({ venue, selected, onSelect }: { venue: MapVenue; selected: boolean; onSelect: () => void }) {
+function VenueCard({ venue, selected, openState, onSelect }: { venue: MapVenue; selected: boolean; openState: boolean | null; onSelect: () => void }) {
   const priced = isPricedVenue(venue);
   return (
-    <article className={`venue-card ${selected ? 'is-selected' : ''}`} data-venue-id={venue.id}>
+    <article className={`venue-card${selected ? ' is-selected' : ''}${openState === false ? ' is-closed' : ''}`} data-venue-id={venue.id}>
       <button className="venue-card-target" onClick={onSelect} aria-label={`Parādīt kartē: ${venue.name}`} />
       <div className="venue-card-main">
         <span className="venue-copy">
@@ -162,6 +163,27 @@ export default function Home() {
   const [sortMode, setSortMode] = useState<SortMode>('price');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mobileListOpen, setMobileListOpen] = useState(false);
+  const [rigaClock, setRigaClock] = useState<RigaClock | null>(null);
+  const [selectedMinutes, setSelectedMinutes] = useState(0);
+  const [timeIsLive, setTimeIsLive] = useState(true);
+
+  useEffect(() => {
+    const syncClock = () => {
+      const clock = getRigaClock();
+      setRigaClock(clock);
+      if (timeIsLive) setSelectedMinutes(clock.minutes);
+    };
+    syncClock();
+    const interval = window.setInterval(syncClock, 30_000);
+    return () => window.clearInterval(interval);
+  }, [timeIsLive]);
+
+  const selectedDayIndex = rigaClock?.dayIndex ?? null;
+  const openStates = useMemo(() => new Map(mapVenues.map((venue) => [
+    venue.id,
+    selectedDayIndex === null ? null : isVenueOpenAt(venue.id, { dayIndex: selectedDayIndex, minutes: selectedMinutes }),
+  ])), [selectedDayIndex, selectedMinutes]);
+  const venueOpenState = (venueId: string) => openStates.get(venueId) ?? null;
 
   const filtered = useMemo(() => {
     const q = normalizeSearch(query.trim());
@@ -303,6 +325,13 @@ export default function Home() {
     });
   }, [filtered, mapReady, selectedId]);
 
+  useEffect(() => {
+    if (!mapReady) return;
+    markerRefs.current.forEach((marker, venueId) => {
+      marker.getElement().classList.toggle('is-closed', openStates.get(venueId) === false);
+    });
+  }, [filtered, mapReady, openStates, selectedId]);
+
   const chooseVenue = (venue: MapVenue) => {
     const map = mapRef.current;
     if (map && map.getZoom() !== 16) {
@@ -359,7 +388,7 @@ export default function Home() {
 
           <div className="venue-list">
             {filtered.length ? filtered.map((venue) => (
-              <VenueCard key={venue.id} venue={venue} selected={selectedId === venue.id} onSelect={() => chooseVenue(venue)} />
+              <VenueCard key={venue.id} venue={venue} selected={selectedId === venue.id} openState={venueOpenState(venue.id)} onSelect={() => chooseVenue(venue)} />
             )) : (
               <div className="empty-state"><Beer size={26} /><strong>Nekas neatradās</strong><span>Pamēģini citu vārdu vai cenu diapazonu.</span><Button variant="outline" onClick={clearFilters}>Notīrīt filtrus</Button></div>
             )}
@@ -369,6 +398,33 @@ export default function Home() {
         <div className="map-wrap">
           <div ref={mapNodeRef} className="map" aria-label="Rīgas alus cenu karte" />
           <Button className="mobile-results" onClick={() => setMobileListOpen(true)}><Beer size={16} /> {filtered.length} vietas</Button>
+          {rigaClock && (
+            <section className="mobile-time-dock" aria-label="Kartes laiks">
+              <div className="time-dock-label">
+                <span>{timeIsLive ? 'Tagad' : 'Šodien'}</span>
+                <strong>{formatClockTime(selectedMinutes)}</strong>
+                {!timeIsLive && <button onClick={() => setTimeIsLive(true)}>Tagad</button>}
+              </div>
+              <div className="time-slider-wrap">
+                <div className="time-slider-ticks" aria-hidden="true">
+                  {Array.from({ length: 25 }, (_, index) => <i key={index} />)}
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="1439"
+                  step="1"
+                  value={selectedMinutes}
+                  onChange={(event) => {
+                    setTimeIsLive(false);
+                    setSelectedMinutes(Number(event.target.value));
+                  }}
+                  aria-label="Izvēlēties laiku"
+                  aria-valuetext={formatClockTime(selectedMinutes)}
+                />
+              </div>
+            </section>
+          )}
         </div>
       </section>
 
