@@ -2,12 +2,14 @@
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- the fixed cursor requires a scroll-driven custom slider */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import * as maplibreModule from 'maplibre-gl';
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
-import { ArrowDownWideNarrow, Beer, Search, X } from 'lucide-react';
+import { ArrowDownWideNarrow, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 import { darkRigaStyle } from './map-style';
 import { formatClockTime, getRigaClock, isVenueOpenAt, type RigaClock } from './opening-hours';
 import {
@@ -25,6 +27,12 @@ type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
 type SortMode = 'price' | 'litre' | 'name';
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
 const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
+const priceBandOptions = [
+  { value: 'all', label: 'Visas' },
+  { value: 'under5', label: 'zem 5 €' },
+  { value: 'fiveToSix', label: '5–6 €' },
+  { value: 'over6', label: 'virs 6 €' },
+] as const;
 const mobileMarkerOffset = (detailHeight: number): [number, number] => [-37, 34 - detailHeight / 2];
 type ModelContext = {
   registerTool: (tool: {
@@ -49,6 +57,10 @@ const markerTone = (price: number) => {
   if (price <= 6) return 'warm';
   return 'high';
 };
+
+function BeerMark({ className = '' }: { className?: string }) {
+  return <Image className={className} src="/beer-mark.svg" width={28} height={28} alt="" aria-hidden="true" />;
+}
 
 type MapLibreRuntime = {
   Map: typeof import('maplibre-gl').Map;
@@ -432,6 +444,8 @@ export default function Home() {
     setPriceBand('all');
   };
 
+  const priceBandIndex = priceBandOptions.findIndex((option) => option.value === priceBand);
+
   return (
     <main className="app-shell">
       <section className="workspace">
@@ -439,7 +453,7 @@ export default function Home() {
         <aside className={`sidebar ${mobileListOpen ? 'mobile-open' : ''}`}>
           <div className="sidebar-head">
             <div className="panel-title">
-              <div className="brand-lockup"><Beer size={18} strokeWidth={2.4} /><strong>Rīgas alus</strong></div>
+              <div className="brand-lockup"><BeerMark className="brand-mark" /><strong>Rīgas alus</strong></div>
               <button className="mobile-close" onClick={() => setMobileListOpen(false)} aria-label="Aizvērt vietu sarakstu"><X size={18} /></button>
             </div>
 
@@ -449,10 +463,26 @@ export default function Home() {
               {query && <button onClick={() => setQuery('')} aria-label="Notīrīt meklēšanu"><X size={15} /></button>}
             </label>
 
+            <div className="price-filter" aria-label="Cenas filtrs">
+              <div className="price-filter-caption"><span>Cena</span><strong>{priceBandOptions[priceBandIndex].label}</strong></div>
+              <Slider
+                value={[priceBandIndex]}
+                min={0}
+                max={priceBandOptions.length - 1}
+                step={1}
+                aria-label="Cenas diapazons"
+                onValueChange={(value) => {
+                  const index = Array.isArray(value) ? value[0] : value;
+                  setPriceBand(priceBandOptions[Math.round(index)]?.value ?? 'all');
+                }}
+              />
+              <div className="price-filter-labels" aria-hidden="true">
+                {priceBandOptions.map((option) => <span key={option.value}>{option.label}</span>)}
+              </div>
+            </div>
+
             <div className="filter-row" aria-label="Cenas filtrs">
-              {([
-                ['all', 'Visas'], ['under5', 'zem 5 €'], ['fiveToSix', '5–6 €'], ['over6', 'virs 6 €'],
-              ] as const).map(([value, label]) => (
+              {priceBandOptions.map(({ value, label }) => (
                 <Button
                   key={value}
                   size="sm"
@@ -482,14 +512,14 @@ export default function Home() {
             {filtered.length ? filtered.map((venue) => (
               <VenueCard key={venue.id} venue={venue} selected={selectedId === venue.id} openState={venueOpenState(venue.id)} onSelect={() => chooseVenue(venue)} />
             )) : (
-              <div className="empty-state"><Beer size={26} /><strong>Nekas neatradās</strong><span>Pamēģini citu vārdu vai cenu diapazonu.</span><Button variant="outline" onClick={clearFilters}>Notīrīt filtrus</Button></div>
+              <div className="empty-state"><BeerMark className="empty-mark" /><strong>Nekas neatradās</strong><span>Pamēģini citu vārdu vai cenu diapazonu.</span><Button variant="outline" onClick={clearFilters}>Notīrīt filtrus</Button></div>
             )}
           </div>
         </aside>
 
         <div className="map-wrap">
           <div ref={mapNodeRef} className="map" aria-label="Rīgas alus cenu karte" />
-          <Button className="mobile-results" onClick={() => setMobileListOpen(true)}><Beer size={16} /> {filtered.length} vietas</Button>
+          <Button className="mobile-results" onClick={() => setMobileListOpen(true)}><BeerMark className="results-mark" /> {filtered.length} vietas</Button>
           {rigaClock && (
             <section className="mobile-time-dock" aria-label="Kartes laiks">
               <div className="time-dock-label">
