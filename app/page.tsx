@@ -179,6 +179,9 @@ export default function Home() {
   const mapNodeRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markerRefs = useRef<Map<string, MapLibreMarker>>(new Map());
+  const venueListRef = useRef<HTMLDivElement>(null);
+  const venueGliderRef = useRef<HTMLDivElement>(null);
+  const hoveredVenueIdRef = useRef<string | null>(null);
   const suppressNextZoomDismissRef = useRef(false);
   const timeScrollerRef = useRef<HTMLDivElement>(null);
   const ignoreTimelineScrollRef = useRef(false);
@@ -444,6 +447,25 @@ export default function Home() {
     setPriceBand('all');
   };
 
+  const hideVenueGlider = () => {
+    hoveredVenueIdRef.current = null;
+    venueGliderRef.current?.classList.remove('is-visible');
+  };
+
+  const moveVenueGlider = (target: EventTarget | null) => {
+    if (window.matchMedia('(max-width: 720px)').matches || !(target instanceof Element)) return;
+    const list = venueListRef.current;
+    const glider = venueGliderRef.current;
+    const card = target.closest<HTMLElement>('.venue-card');
+    if (!list || !glider || !card || !list.contains(card)) return;
+    const venueId = card.dataset.venueId ?? null;
+    if (hoveredVenueIdRef.current === venueId) return;
+    hoveredVenueIdRef.current = venueId;
+    glider.style.height = `${card.offsetHeight}px`;
+    glider.style.transform = `translate3d(0, ${card.offsetTop}px, 0)`;
+    glider.classList.add('is-visible');
+  };
+
   const priceBandIndex = priceBandOptions.findIndex((option) => option.value === priceBand);
 
   return (
@@ -508,7 +530,17 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="venue-list">
+          <div
+            ref={venueListRef}
+            className="venue-list"
+            onPointerMove={(event) => moveVenueGlider(event.target)}
+            onPointerLeave={hideVenueGlider}
+            onFocusCapture={(event) => moveVenueGlider(event.target)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) hideVenueGlider();
+            }}
+          >
+            <div ref={venueGliderRef} className="venue-hover-glider" aria-hidden="true" />
             {filtered.length ? filtered.map((venue) => (
               <VenueCard key={venue.id} venue={venue} selected={selectedId === venue.id} openState={venueOpenState(venue.id)} onSelect={() => chooseVenue(venue)} />
             )) : (
