@@ -20,6 +20,7 @@ const timelineStepMinutes = 15;
 const timelineStepPixels = 12;
 const timelineMaxMinutes = 30 * 60;
 const timelineTicks = Array.from({ length: timelineMaxMinutes / timelineStepMinutes + 1 }, (_, index) => index * timelineStepMinutes);
+const mobileMarkerOffset = (detailHeight: number): [number, number] => [-37, 34 - detailHeight / 2];
 type ModelContext = {
   registerTool: (tool: {
     name: string;
@@ -357,6 +358,7 @@ export default function Home() {
     if (!map || !mapReady) return;
 
     const maplibre = getMapLibreRuntime(maplibreModule);
+    let mobileCenterFrame: number | null = null;
     markerRefs.current.forEach((marker) => marker.remove());
     markerRefs.current.clear();
 
@@ -371,13 +373,33 @@ export default function Home() {
           return;
         }
         setSelectedId(venue.id);
-        map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true });
+        if (!window.matchMedia('(max-width: 720px)').matches) {
+          map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true });
+        }
       });
       const marker = new maplibre.Marker({ element, anchor: 'bottom-left' })
         .setLngLat([venue.lng, venue.lat])
         .addTo(map);
       markerRefs.current.set(venue.id, marker);
+
+      if (active && window.matchMedia('(max-width: 720px)').matches) {
+        mobileCenterFrame = window.requestAnimationFrame(() => {
+          const detailHeight = element.querySelector<HTMLElement>('.marker-detail')?.getBoundingClientRect().height ?? 34;
+          const centerExpandedMarker = () => map.easeTo({
+            center: [venue.lng, venue.lat],
+            offset: mobileMarkerOffset(detailHeight),
+            duration: 350,
+            essential: true,
+          });
+          if (map.isMoving()) void map.once('moveend', centerExpandedMarker);
+          else centerExpandedMarker();
+        });
+      }
     });
+
+    return () => {
+      if (mobileCenterFrame !== null) window.cancelAnimationFrame(mobileCenterFrame);
+    };
   }, [filtered, mapReady, selectedId]);
 
   useEffect(() => {
@@ -389,6 +411,7 @@ export default function Home() {
 
   const chooseVenue = (venue: MapVenue) => {
     const map = mapRef.current;
+    if (window.matchMedia('(max-width: 720px)').matches) setMobileListOpen(false);
     if (map && map.getZoom() !== 16) {
       suppressNextZoomDismissRef.current = true;
       void map.once('moveend', () => {
@@ -407,6 +430,7 @@ export default function Home() {
   return (
     <main className="app-shell">
       <section className="workspace">
+        {mobileListOpen && <button className="mobile-scrim" onClick={() => setMobileListOpen(false)} aria-label="Aizvērt vietu sarakstu" />}
         <aside className={`sidebar ${mobileListOpen ? 'mobile-open' : ''}`}>
           <div className="sidebar-head">
             <div className="panel-title">
@@ -500,8 +524,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
-      {mobileListOpen && <button className="mobile-scrim" onClick={() => setMobileListOpen(false)} aria-label="Aizvērt vietu sarakstu" />}
     </main>
   );
 }
