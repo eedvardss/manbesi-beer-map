@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-03T18:30:00+02:00",
+  "checkedAt": "2026-09-03T22:00:00+02:00",
   "venues": [
     {
       "id": "thirsty-bulldog",
@@ -2670,12 +2670,37 @@
           "price": 6
         },
         {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 500,
+          "price": 8
+        },
+        {
+          "name": "Grimbergen Dubbel",
+          "volumeMl": 500,
+          "price": 8
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc",
+          "volumeMl": 500,
+          "price": 8
+        },
+        {
           "name": "Guinness 4.2%",
           "volumeMl": 500,
           "price": 8
         },
         {
           "name": "Leffe Blond 6.6%",
+          "volumeMl": 500,
+          "price": 8
+        },
+        {
+          "name": "Hoegaarden",
+          "volumeMl": 500,
+          "price": 8
+        },
+        {
+          "name": "Stella Artois",
           "volumeMl": 500,
           "price": 8
         }
@@ -2704,7 +2729,163 @@
         ],
         "sourceUrl": "https://colonelbrewpub.lv/"
       },
-      "evidenceNotes": "The live official page describes house-brewed light/dark beer, Belgian classics and sports matches on screens. Its Drinks tab lists these four beers at 500 ml with explicit EUR prices; no prices were inferred. Coordinates geocoded for Meistaru iela 23."
+      "evidenceNotes": "The live official page describes house-brewed light/dark beer, Belgian classics and sports matches on screens. Its Drinks tab lists all nine beers at 500 ml with explicit EUR prices; cider was excluded and no prices were inferred. Coordinates geocoded for Meistaru iela 23."
+    },
+    {
+      "id": "folkklubs-ala-pagrabs",
+      "name": "Folkklubs ALA Pagrabs",
+      "kind": "folkklubs / alus pagrabs",
+      "address": "Peldu iela 19, Rīga, LV-1050",
+      "lat": 56.9461557,
+      "lng": 24.1078152,
+      "sourceUrl": "https://de.restaurantguru.com/Folkklubs-Ala-Pagrabs-Riga/menu",
+      "sourceLabel": "Nesens ALA alus kartes foto",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "beerPrices": [
+        { "name": "Madonas alus", "volumeMl": 300, "price": 4 },
+        { "name": "Madonas alus", "volumeMl": 500, "price": 5 },
+        { "name": "Brenguļu gaišais", "volumeMl": 300, "price": 4 },
+        { "name": "Brenguļu gaišais", "volumeMl": 500, "price": 5 },
+        { "name": "Brenguļu tumšais", "volumeMl": 300, "price": 4 },
+        { "name": "Brenguļu tumšais", "volumeMl": 500, "price": 5 },
+        { "name": "Bauskas gaišais", "volumeMl": 300, "price": 3.8 },
+        { "name": "Bauskas gaišais", "volumeMl": 500, "price": 4.5 },
+        { "name": "Latgales tumšais", "volumeMl": 300, "price": 3.2 },
+        { "name": "Latgales tumšais", "volumeMl": 500, "price": 4 },
+        { "name": "Brālis rūgtais", "volumeMl": 300, "price": 3.8 },
+        { "name": "Brālis rūgtais", "volumeMl": 500, "price": 4.5 },
+        { "name": "Tērvete", "volumeMl": 300, "price": 4 },
+        { "name": "Tērvete", "volumeMl": 500, "price": 5 },
+        { "name": "Lielvārdes gaišais", "volumeMl": 300, "price": 3.8 },
+        { "name": "Lielvārdes gaišais", "volumeMl": 500, "price": 4.5 },
+        { "name": "Lielvārdes tumšais", "volumeMl": 300, "price": 3.8 },
+        { "name": "Lielvārdes tumšais", "volumeMl": 500, "price": 4.5 },
+        { "name": "Valmiermuižas gaišais", "volumeMl": 300, "price": 4.8 },
+        { "name": "Valmiermuižas gaišais", "volumeMl": 500, "price": 6 },
+        { "name": "Valmiermuižas tumšais", "volumeMl": 300, "price": 4.8 },
+        { "name": "Valmiermuižas tumšais", "volumeMl": 500, "price": 6 },
+        { "name": "Rīgas alus", "volumeMl": 300, "price": 4 },
+        { "name": "Rīgas alus", "volumeMl": 500, "price": 5 },
+        { "name": "Iļģuciema klasiskais medalus", "volumeMl": 300, "price": 4 },
+        { "name": "Iļģuciema klasiskais medalus", "volumeMl": 500, "price": 5 },
+        { "name": "Iļģuciema dzērveņu medalus", "volumeMl": 300, "price": 4 },
+        { "name": "Iļģuciema dzērveņu medalus", "volumeMl": 500, "price": 5 },
+        { "name": "Iļģuciema kaņepju-ingvera medalus", "volumeMl": 300, "price": 4 },
+        { "name": "Iļģuciema kaņepju-ingvera medalus", "volumeMl": 500, "price": 5 },
+        { "name": "Lielvārdes ķiršu", "volumeMl": 300, "price": 4 },
+        { "name": "Lielvārdes ķiršu", "volumeMl": 500, "price": 5 },
+        { "name": "Lielvārdes kviešu", "volumeMl": 300, "price": 3.8 },
+        { "name": "Lielvārdes kviešu", "volumeMl": 500, "price": 4.5 },
+        { "name": "Folkkluba ALA Hazy IPA", "volumeMl": 300, "price": 4.2 },
+        { "name": "Folkkluba ALA Hazy IPA", "volumeMl": 500, "price": 5.5 },
+        { "name": "Viedi Sazobe", "volumeMl": 300, "price": 4.2 },
+        { "name": "Viedi Sazobe", "volumeMl": 500, "price": 5.5 },
+        { "name": "TEIKA Piektdienis", "volumeMl": 300, "price": 4.8 },
+        { "name": "TEIKA Piektdienis", "volumeMl": 500, "price": 6 },
+        { "name": "Malduguns Sānslīde", "volumeMl": 300, "price": 4.8 },
+        { "name": "Malduguns Sānslīde", "volumeMl": 500, "price": 6 },
+        { "name": "HAT Brewery — mainīgais alus", "volumeMl": 300, "price": 4.2 },
+        { "name": "HAT Brewery — mainīgais alus", "volumeMl": 500, "price": 5.5 },
+        { "name": "Hopalaa — mainīgais alus", "volumeMl": 300, "price": 4.8 },
+        { "name": "Hopalaa — mainīgais alus", "volumeMl": 500, "price": 6 },
+        { "name": "Kokmuiža bezalkoholiskais", "volumeMl": 330, "price": 4 },
+        { "name": "Lāčplēsis bezalkoholiskais lāgeris", "volumeMl": 500, "price": 4 },
+        { "name": "Kokmuiža Jaunā Strāva", "volumeMl": 330, "price": 4 },
+        { "name": "Mūrbūdu Aronia 0", "volumeMl": 330, "price": 4 }
+      ],
+      "hours": {
+        "mon": ["14:00-02:00"],
+        "tue": ["16:00-02:00"],
+        "wed": ["16:00-02:00"],
+        "thu": ["16:00-02:00"],
+        "fri": ["16:00-04:00"],
+        "sat": ["16:00-04:00"],
+        "sun": ["14:00-04:00"],
+        "sourceUrl": "https://tablejourney.com/latvia/riga/casual-dining/folkklubs-ala-pagrabs/",
+        "note": "Darba laiks verificēts 05.06.2026."
+      },
+      "evidenceNotes": "Nesen augšupielādētā vietas alus kartes fotogrāfijā redzami alus nosaukumi, tilpumi un cenas. Iekļautas visas alus rindas un abi glāžu tilpumi; sidrs un 3 l krūzes izlaistas, bet mainīgie krāni saglabāti tieši tā, kā tie nosaukti kartē."
+    },
+    {
+      "id": "victory-pub",
+      "name": "Victory Pub",
+      "kind": "pubs / sporta bārs",
+      "address": "Tirgoņu iela 10, Rīga, LV-1050",
+      "lat": 56.9487718,
+      "lng": 24.1066691,
+      "sourceUrl": "https://victorypub.lv/drinks/",
+      "sourceLabel": "Victory Pub — oficiālā dzērienu karte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        { "name": "Lāčplēsis Ekstra", "volumeMl": 500, "price": 5.5 },
+        { "name": "Lāčplēsis Ekstra", "volumeMl": 300, "price": 4 },
+        { "name": "Lielvārdes Lāgeris", "volumeMl": 400, "price": 5.5 },
+        { "name": "Chesser", "volumeMl": 500, "price": 6 },
+        { "name": "Chesser", "volumeMl": 300, "price": 4 },
+        { "name": "Madonas Neitrālais / Unfiltered", "volumeMl": 500, "price": 6 },
+        { "name": "Madonas Neitrālais / Unfiltered", "volumeMl": 300, "price": 4 },
+        { "name": "Heineken", "volumeMl": 500, "price": 6.5 },
+        { "name": "Heineken", "volumeMl": 300, "price": 4.5 },
+        { "name": "Guinness", "volumeMl": 500, "price": 7 },
+        { "name": "Guinness", "volumeMl": 300, "price": 5.5 },
+        { "name": "Leffe Blonde", "volumeMl": 500, "price": 7.5 },
+        { "name": "Leffe Blonde", "volumeMl": 300, "price": 5.5 },
+        { "name": "Lielvārdes Ķiršu / Cherry", "volumeMl": 500, "price": 5.5 },
+        { "name": "Madonas", "volumeMl": 500, "price": 6 },
+        { "name": "Stella", "volumeMl": 330, "price": 5 },
+        { "name": "Desperados", "volumeMl": 330, "price": 5 },
+        { "name": "Corona Extra", "volumeMl": 330, "price": 5 },
+        { "name": "Heineken 0.0", "volumeMl": 330, "price": 5 }
+      ],
+      "hours": {
+        "mon": ["11:00-00:00"],
+        "tue": ["11:00-00:00"],
+        "wed": ["11:00-00:00"],
+        "thu": ["11:00-04:00"],
+        "fri": ["11:00-04:00"],
+        "sat": ["11:00-04:00"],
+        "sun": ["11:00-00:00"],
+        "sourceUrl": "https://victorypub.lv/"
+      },
+      "evidenceNotes": "The currently published official drinks page still links this exact beer menu, so the year in the image asset path is not treated as evidence that it is stale. Every beer row with an explicit size and EUR price was included; no delivery menu was used."
+    },
+    {
+      "id": "ms-mr-beer-taphouse",
+      "name": "Ms&Mr Beer Taphouse",
+      "kind": "alus bārs / beer garden",
+      "address": "Mazā Miesnieku iela 1, Rīga, LV-1050",
+      "lat": 56.9503403,
+      "lng": 24.1040688,
+      "sourceUrl": "https://untappd.com/v/ms-and-mr-beer-taphouse/9156322",
+      "sourceLabel": "Untappd — verificēta Ms&Mr Beer alus karte",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "beerPrices": [
+        { "name": "Lāčplēsis Ekstra", "volumeMl": 440, "price": 6.5 },
+        { "name": "Lāčplēsis Ekstra", "volumeMl": 250, "price": 5 },
+        { "name": "IPA Reloaded", "volumeMl": 440, "price": 6.5 },
+        { "name": "IPA Reloaded", "volumeMl": 250, "price": 5 },
+        { "name": "Madonas Svētku Nefiltrēts", "volumeMl": 440, "price": 6.5 },
+        { "name": "Madonas Svētku Nefiltrēts", "volumeMl": 250, "price": 5 },
+        { "name": "Anarkist New England IPA", "volumeMl": 440, "price": 6.5 },
+        { "name": "Anarkist New England IPA", "volumeMl": 250, "price": 5 },
+        { "name": "Lielvārdes Kviešu", "volumeMl": 440, "price": 6.5 },
+        { "name": "Lielvārdes Kviešu", "volumeMl": 250, "price": 5 },
+        { "name": "Lielvārdes Tumšais", "volumeMl": 440, "price": 6.5 },
+        { "name": "Lielvārdes Tumšais", "volumeMl": 250, "price": 5 },
+        { "name": "Lielvārdes Ķiršu", "volumeMl": 440, "price": 6.5 },
+        { "name": "Lielvārdes Ķiršu", "volumeMl": 250, "price": 5 }
+      ],
+      "hours": {
+        "mon": ["13:00-00:00"],
+        "tue": ["13:00-00:00"],
+        "wed": ["13:00-00:00"],
+        "thu": ["13:00-00:00"],
+        "fri": ["13:00-02:00"],
+        "sat": ["13:00-02:00"],
+        "sun": ["13:00-00:00"],
+        "sourceUrl": "https://untappd.com/v/ms-and-mr-beer-taphouse/9156322"
+      },
+      "evidenceNotes": "The venue's verified Untappd page publishes seven active taps with both 250 ml and 440 ml prices, current venue activity and weekly hours. All seven active tap beers and both serving sizes were included."
     }
   ]
 }
