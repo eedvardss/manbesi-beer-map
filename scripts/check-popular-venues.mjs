@@ -10,7 +10,7 @@ const [{ text: bundledSource }] = (await build({
 })).outputFiles;
 const { popularVenueData } = await import(`data:text/javascript;base64,${Buffer.from(bundledSource).toString('base64')}`);
 
-assert.equal(popularVenueData.venues.length, 12, 'Expected four PĪGA branches and eight newly verified bars');
+assert.equal(popularVenueData.venues.length, 19, 'Expected four PĪGA branches and fifteen newly verified bars');
 assert.equal(popularVenueData.venues.filter((venue) => venue.id.startsWith('piga-')).length, 4);
 
 const expectedBeerCounts = new Map([
@@ -26,6 +26,13 @@ const expectedBeerCounts = new Map([
   ['joker-deglava-100', 1],
   ['joker-kastranes-3a', 1],
   ['joker-tilta-8', 1],
+  ['joker-deglava-160a', 1],
+  ['joker-juglas-45', 1],
+  ['joker-jurmalas-gatve-85', 1],
+  ['joker-kurzemes-prospekts-21', 1],
+  ['joker-prusu-20', 1],
+  ['joker-ritupes-2', 1],
+  ['joker-visku-14', 1],
 ]);
 
 for (const venue of popularVenueData.venues) {
@@ -36,4 +43,4 @@ for (const venue of popularVenueData.venues) {
   assert(venue.hours.sourceUrl.startsWith('https://'), `Invalid hours source for ${venue.name}`);
 }
 
-console.log('Validated 12 popular-bar additions and 136 beer price rows.');
+console.log('Validated 19 popular-bar additions and 143 beer price rows.');
