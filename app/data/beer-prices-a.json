@@ -174,10 +174,21 @@
       "id": "cuba",
       "name": "Cuba Cafe",
       "sourceUrl": "https://www.cubacaferiga.com/menu",
-      "sourceType": "official menu landing page",
-      "retrievedDate": "2026-09-02",
-      "beerPrices": [],
-      "evidenceNotes": "Official page was reachable but exposes a cocktail/food menu without a machine-readable beer section. A third-party listing mentions Bauskas beer, and delivery listings may contain beverages, but neither was used as a venue-price source. Leave beer data empty until Cuba Cafe publishes a current in-venue menu/photo or a clearly identified current tap list."
+      "sourceType": "official current menu image",
+      "retrievedDate": "2026-09-04",
+      "beerPrices": [
+        {"name":"Corona Extra","volumeMl":330,"price":5.0},
+        {"name":"Bauskas tumšais","volumeMl":500,"price":5.0},
+        {"name":"Guinness Draught","volumeMl":440,"price":6.0},
+        {"name":"Heineken 0%","volumeMl":330,"price":3.5},
+        {"name":"Lielvārdes gaišais","volumeMl":400,"price":5.0},
+        {"name":"Madonas Nefiltrētais","volumeMl":300,"price":4.0},
+        {"name":"Madonas Nefiltrētais","volumeMl":500,"price":5.5},
+        {"name":"Tanker IPA","volumeMl":400,"price":6.0},
+        {"name":"Heineken","volumeMl":300,"price":3.5},
+        {"name":"Heineken","volumeMl":500,"price":5.0}
+      ],
+      "evidenceNotes": "Cuba Cafe's live official menu page embeds its beer menu image with beer names, serving sizes, and on-premise EUR prices. The cider row is omitted."
     },
     {
       "id": "duvels",

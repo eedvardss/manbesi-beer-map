@@ -54,7 +54,7 @@ export type VenuePoint = {
 
 export type MapVenue = Venue | VenuePoint;
 
-export const checkedAt = '03.09.2026';
+export const checkedAt = '04.09.2026';
 
 const baseVenues: Venue[] = [
   {
@@ -221,7 +221,7 @@ const distanceMetres = (first: { lat: number; lng: number }, second: { lat: numb
 
 const normalizeName = (value: string | null) => value?.toLocaleLowerCase('lv').replace(/[^\p{L}\p{N}]+/gu, '') ?? '';
 
-const unverifiedPriceVenueIds = new Set(['armoury', 'cuba', 'joker', 'kimmel', 'paddy']);
+const unverifiedPriceVenueIds = new Set(['kimmel', 'paddy']);
 
 const researchedBeerPrices = new Map([
   ...researchedBeerPricesA.venues,
@@ -244,7 +244,9 @@ export const venues: Venue[] = baseVenues.filter((venue) => !unverifiedPriceVenu
   });
   const beerPrices = dedupeBeerPrices([
     ...(researchedBeerPrices.get(venue.id) ?? []),
-    ...(supplementalMenu?.beerPrices ?? []),
+    ...(venue.id === 'two-more' && researchedBeerPrices.has(venue.id)
+      ? []
+      : (supplementalMenu?.beerPrices ?? [])),
   ]);
   if (!beerPrices?.length) return venue;
   const cheapest = beerPrices.reduce((best, beer) => beer.price < best.price ? beer : best);
@@ -284,7 +286,7 @@ const categoryLabels: Record<string, string> = {
   food_court: 'ēdināšanas zona',
 };
 
-const nonBarBaseVenueIds = new Set(['two-more', 'bon-vivant', 'chambao', 'fazenda', 'motormuzejs']);
+const nonBarBaseVenueIds = new Set(['chambao', 'fazenda', 'motormuzejs']);
 const drinkingVenueCategories = new Set(['bar', 'pub', 'biergarten', 'nightclub']);
 const nonBarVenuePointIds = new Set([
   'osm-node-11018108905', // La Casetta is a restaurant despite its OSM bar tag.
