@@ -10,16 +10,21 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { darkRigaStyle } from './map-style';
 import { formatClockTime, getRigaClock, isVenueOpenAt, type RigaClock } from './opening-hours';
+import {
+  timelineContentWidth,
+  timelineMaxMinutes,
+  timelineStepMinutes,
+  timelineStepPixels,
+  timelineTickLabel,
+  timelineTickPosition,
+  timelineTicks,
+} from './time-slider.mjs';
 import { isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
 
 type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
 type SortMode = 'price' | 'litre' | 'name';
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
 const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
-const timelineStepMinutes = 15;
-const timelineStepPixels = 12;
-const timelineMaxMinutes = 30 * 60;
-const timelineTicks = Array.from({ length: timelineMaxMinutes / timelineStepMinutes + 1 }, (_, index) => index * timelineStepMinutes);
 const mobileMarkerOffset = (detailHeight: number): [number, number] => [-37, 34 - detailHeight / 2];
 type ModelContext = {
   registerTool: (tool: {
@@ -505,15 +510,15 @@ export default function Home() {
                 >
                   <div
                     className="time-slider-content"
-                    style={{ width: `calc(100% + ${(timelineTicks.length - 1) * timelineStepPixels}px)` }}
+                    style={{ width: timelineContentWidth }}
                     aria-hidden="true"
                   >
                     {timelineTicks.map((minutes, index) => (
                       <i
                         key={minutes}
                         className={minutes % 60 === 0 ? 'is-hour' : ''}
-                        data-label={minutes % 120 === 0 ? String(Math.floor(minutes / 60) % 24).padStart(2, '0') : undefined}
-                        style={{ left: `calc(50% + ${index * timelineStepPixels}px)` }}
+                        data-label={timelineTickLabel(minutes)}
+                        style={{ left: timelineTickPosition(index) }}
                       />
                     ))}
                   </div>
