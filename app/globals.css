@@ -190,15 +190,18 @@ button { cursor: pointer; }
     width: auto;
     height: min(72dvh, 650px);
     border-radius: 18px;
+    background: #fbfcfa;
     transform: translateY(calc(100% + 20px));
     transition: transform .24s cubic-bezier(.22,.7,.28,1);
+    backdrop-filter: none;
   }
   .sidebar.mobile-open { transform: translateY(0); }
   .mobile-close { display: grid; }
   .mobile-results { position: fixed; z-index: 1100; bottom: 112px; left: 50%; display: flex; height: 43px; transform: translateX(-50%); border-radius: 999px; box-shadow: 0 8px 24px rgba(23,31,25,.25); }
-  .mobile-scrim { position: fixed; z-index: 1200; inset: 0; display: block; border: 0; background: rgba(16, 22, 17, .2); backdrop-filter: blur(2px); }
+  .mobile-scrim { position: fixed; z-index: 1200; inset: 0; display: block; border: 0; background: rgba(16, 22, 17, .24); }
   .maplibregl-ctrl-bottom-right { bottom: 148px; }
-  .marker-detail { width: min(226px, calc(100vw - 32px)); }
+  .marker-detail { left: 37px; width: min(226px, calc(100vw - 32px)); transform: translateX(-50%); transform-origin: 50% 18px; animation-name: marker-morph-mobile; }
+  .marker-node[data-tone='unpriced'] .marker-detail { transform-origin: 50% 18px; animation-name: candidate-morph-mobile; }
 
   .mobile-time-dock {
     position: fixed;
@@ -231,6 +234,15 @@ button { cursor: pointer; }
   .time-slider-wrap input::-moz-range-track { height: 30px; background: transparent; }
   .time-slider-wrap input::-moz-range-thumb { width: 6px; height: 30px; border: 0; border-radius: 999px; background: #ffd51f; box-shadow: 0 0 0 1px rgba(255,213,31,.24), 0 1px 8px rgba(255,213,31,.28); }
   .time-slider-wrap:focus-within { border-radius: 9px; box-shadow: 0 0 0 2px rgba(255,213,31,.24); }
+
+  @keyframes marker-morph-mobile {
+    from { clip-path: inset(0 calc(50% - 39px) calc(100% - 38px) calc(50% - 39px) round 12px); opacity: .92; }
+    to { clip-path: inset(0 0 0 0 round 10px); opacity: 1; }
+  }
+  @keyframes candidate-morph-mobile {
+    from { clip-path: circle(5px at 50% 18px); opacity: .82; }
+    to { clip-path: circle(150% at 50% 18px); opacity: 1; }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

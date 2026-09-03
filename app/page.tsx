@@ -315,8 +315,12 @@ export default function Home() {
       element.style.zIndex = active ? '2000' : isPricedVenue(venue) ? '1000' : '0';
       element.addEventListener('click', (event) => {
         event.stopPropagation();
-        setSelectedId((current) => current === venue.id ? null : venue.id);
-        map.panTo([venue.lng, venue.lat], { duration: 300 });
+        if (active) {
+          setSelectedId(null);
+          return;
+        }
+        setSelectedId(venue.id);
+        map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true });
       });
       const marker = new maplibre.Marker({ element, anchor: 'bottom-left' })
         .setLngLat([venue.lng, venue.lat])
