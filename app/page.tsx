@@ -453,7 +453,15 @@ export default function Home() {
               {([
                 ['all', 'Visas'], ['under5', 'zem 5 €'], ['fiveToSix', '5–6 €'], ['over6', 'virs 6 €'],
               ] as const).map(([value, label]) => (
-                <Button key={value} size="sm" variant={priceBand === value ? 'default' : 'outline'} onClick={() => setPriceBand(value)}>{label}</Button>
+                <Button
+                  key={value}
+                  size="sm"
+                  variant={priceBand === value ? 'default' : 'outline'}
+                  aria-pressed={priceBand === value}
+                  onClick={() => setPriceBand(value)}
+                >
+                  {label}
+                </Button>
               ))}
             </div>
 
