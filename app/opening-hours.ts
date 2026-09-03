@@ -1,4 +1,5 @@
 import expandedVenueData from './data/verified-venues-expansion.json';
+import { popularVenueData } from './popular-venues';
 
 export type DayHours = string[] | null;
 
@@ -152,7 +153,7 @@ export const venueOpeningHours: Record<string, VenueOpeningHours> = {
   ], 'https://www.skapisriga.com/'),
 };
 
-expandedVenueData.venues.forEach((venue) => {
+[...expandedVenueData.venues, ...popularVenueData.venues].forEach((venue) => {
   if (!venue.hours) return;
   venueOpeningHours[venue.id] = {
     mon: venue.hours.mon,
@@ -164,7 +165,7 @@ expandedVenueData.venues.forEach((venue) => {
     sun: venue.hours.sun,
     sourceUrl: venue.hours.sourceUrl,
     checkedAt,
-    note: venue.hours.note,
+    note: 'note' in venue.hours && typeof venue.hours.note === 'string' ? venue.hours.note : undefined,
   };
 });
 

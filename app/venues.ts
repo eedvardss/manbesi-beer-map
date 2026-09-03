@@ -12,6 +12,7 @@ import researchedNewBeerPricesH from './data/beer-prices-new-h.json';
 import researchedNewBeerPricesI from './data/beer-prices-new-i.json';
 import researchedNewBeerPricesJ from './data/beer-prices-new-j.json';
 import expandedVenueData from './data/verified-venues-expansion.json';
+import { popularVenueData } from './popular-venues';
 
 export type BeerPrice = {
   name: string;
@@ -361,7 +362,10 @@ const existingMapVenues: Venue[] = [
     .filter(isPricedVenue),
 ];
 
-const expandedVenues: Venue[] = expandedVenueData.venues.map((venue) => {
+const expandedVenues: Venue[] = [
+  ...expandedVenueData.venues,
+  ...popularVenueData.venues,
+].map((venue) => {
   const beerPrices = dedupeBeerPrices(venue.beerPrices as BeerPrice[])
     .sort((first, second) => first.price - second.price);
   const cheapest = beerPrices[0];
