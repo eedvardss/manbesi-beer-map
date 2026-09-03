@@ -1,4 +1,5 @@
 'use client';
+/* oxlint-disable jsx-a11y/prefer-tag-over-role -- the fixed cursor requires a scroll-driven custom slider */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as maplibreModule from 'maplibre-gl';
@@ -15,6 +16,10 @@ type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
 type SortMode = 'price' | 'litre' | 'name';
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
 const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
+const timelineStepMinutes = 15;
+const timelineStepPixels = 12;
+const timelineMaxMinutes = 30 * 60;
+const timelineTicks = Array.from({ length: timelineMaxMinutes / timelineStepMinutes + 1 }, (_, index) => index * timelineStepMinutes);
 type ModelContext = {
   registerTool: (tool: {
     name: string;
@@ -157,6 +162,9 @@ export default function Home() {
   const mapRef = useRef<MapLibreMap | null>(null);
   const markerRefs = useRef<Map<string, MapLibreMarker>>(new Map());
   const suppressNextZoomDismissRef = useRef(false);
+  const timeScrollerRef = useRef<HTMLDivElement>(null);
+  const ignoreTimelineScrollRef = useRef(false);
+  const timelineFrameRef = useRef<number | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [query, setQuery] = useState('');
   const [priceBand, setPriceBand] = useState<PriceBand>('all');
@@ -178,12 +186,55 @@ export default function Home() {
     return () => window.clearInterval(interval);
   }, [timeIsLive]);
 
-  const selectedDayIndex = rigaClock?.dayIndex ?? null;
+  const selectedDayOffset = Math.floor(selectedMinutes / (24 * 60));
+  const selectedMinuteOfDay = selectedMinutes % (24 * 60);
+  const selectedDayIndex = rigaClock ? (rigaClock.dayIndex + selectedDayOffset) % 7 : null;
   const openStates = useMemo(() => new Map(mapVenues.map((venue) => [
     venue.id,
-    selectedDayIndex === null ? null : isVenueOpenAt(venue.id, { dayIndex: selectedDayIndex, minutes: selectedMinutes }),
-  ])), [selectedDayIndex, selectedMinutes]);
+    selectedDayIndex === null ? null : isVenueOpenAt(venue.id, { dayIndex: selectedDayIndex, minutes: selectedMinuteOfDay }),
+  ])), [selectedDayIndex, selectedMinuteOfDay]);
   const venueOpenState = (venueId: string) => openStates.get(venueId) ?? null;
+
+  useEffect(() => {
+    if (!timeIsLive || !rigaClock || !timeScrollerRef.current) return;
+    ignoreTimelineScrollRef.current = true;
+    timeScrollerRef.current.scrollTo({
+      left: (rigaClock.minutes / timelineStepMinutes) * timelineStepPixels,
+      behavior: 'auto',
+    });
+    const release = window.setTimeout(() => {
+      ignoreTimelineScrollRef.current = false;
+    }, 50);
+    return () => window.clearTimeout(release);
+  }, [rigaClock, timeIsLive]);
+
+  useEffect(() => () => {
+    if (timelineFrameRef.current !== null) window.cancelAnimationFrame(timelineFrameRef.current);
+  }, []);
+
+  const setTimelineFromScroll = () => {
+    if (ignoreTimelineScrollRef.current || !timeScrollerRef.current) return;
+    if (timelineFrameRef.current !== null) window.cancelAnimationFrame(timelineFrameRef.current);
+    timelineFrameRef.current = window.requestAnimationFrame(() => {
+      const nextMinutes = Math.max(0, Math.min(
+        timelineMaxMinutes,
+        Math.round(timeScrollerRef.current!.scrollLeft / timelineStepPixels) * timelineStepMinutes,
+      ));
+      setTimeIsLive(false);
+      setSelectedMinutes(nextMinutes);
+      timelineFrameRef.current = null;
+    });
+  };
+
+  const moveTimeline = (minutes: number) => {
+    const nextMinutes = Math.max(0, Math.min(timelineMaxMinutes, minutes));
+    setTimeIsLive(false);
+    setSelectedMinutes(nextMinutes);
+    timeScrollerRef.current?.scrollTo({
+      left: (nextMinutes / timelineStepMinutes) * timelineStepPixels,
+      behavior: 'smooth',
+    });
+  };
 
   const filtered = useMemo(() => {
     const q = normalizeSearch(query.trim());
@@ -405,27 +456,45 @@ export default function Home() {
           {rigaClock && (
             <section className="mobile-time-dock" aria-label="Kartes laiks">
               <div className="time-dock-label">
-                <span>{timeIsLive ? 'Tagad' : 'Šodien'}</span>
-                <strong>{formatClockTime(selectedMinutes)}</strong>
+                <span>{timeIsLive ? 'Tagad' : selectedDayOffset ? 'Rīt' : 'Šodien'}</span>
+                <strong>{formatClockTime(selectedMinuteOfDay)}</strong>
                 {!timeIsLive && <button onClick={() => setTimeIsLive(true)}>Tagad</button>}
               </div>
               <div className="time-slider-wrap">
-                <div className="time-slider-ticks" aria-hidden="true">
-                  {Array.from({ length: 25 }, (_, index) => <i key={index} />)}
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="1439"
-                  step="1"
-                  value={selectedMinutes}
-                  onChange={(event) => {
-                    setTimeIsLive(false);
-                    setSelectedMinutes(Number(event.target.value));
-                  }}
+                {/* A native range cannot keep its thumb fixed while the scale scrolls beneath it. */}
+                <div
+                  ref={timeScrollerRef}
+                  className="time-slider-scroller"
+                  role="slider"
+                  tabIndex={0}
                   aria-label="Izvēlēties laiku"
-                  aria-valuetext={formatClockTime(selectedMinutes)}
-                />
+                  aria-valuemin={0}
+                  aria-valuemax={timelineMaxMinutes}
+                  aria-valuenow={selectedMinutes}
+                  aria-valuetext={`${selectedDayOffset ? 'Rīt' : 'Šodien'} ${formatClockTime(selectedMinuteOfDay)}`}
+                  onScroll={setTimelineFromScroll}
+                  onKeyDown={(event) => {
+                    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                    event.preventDefault();
+                    moveTimeline(selectedMinutes + (event.key === 'ArrowRight' ? timelineStepMinutes : -timelineStepMinutes));
+                  }}
+                >
+                  <div
+                    className="time-slider-content"
+                    style={{ width: `calc(100% + ${(timelineTicks.length - 1) * timelineStepPixels}px)` }}
+                    aria-hidden="true"
+                  >
+                    {timelineTicks.map((minutes, index) => (
+                      <i
+                        key={minutes}
+                        className={minutes % 60 === 0 ? 'is-hour' : ''}
+                        data-label={minutes % 120 === 0 ? String(Math.floor(minutes / 60) % 24).padStart(2, '0') : undefined}
+                        style={{ left: `calc(50% + ${index * timelineStepPixels}px)` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <span className="time-slider-cursor" aria-hidden="true" />
               </div>
             </section>
           )}
