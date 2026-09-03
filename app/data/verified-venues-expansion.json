@@ -1,0 +1,2710 @@
+{
+  "checkedAt": "2026-09-03T18:30:00+02:00",
+  "venues": [
+    {
+      "id": "thirsty-bulldog",
+      "name": "The Thirsty Bulldog Sports Pub",
+      "kind": "sports bar",
+      "address": "Vecpilsētas iela 8A, Rīga, LV-1050",
+      "lat": 56.946489,
+      "lng": 24.1119252,
+      "sourceUrl": "https://untappd.com/v/the-thirsty-bulldog-sports-pub/11178749?menu_id=131817",
+      "sourceLabel": "Verified Untappd venue menus: Draught Beer and Bottle Beer",
+      "sourceType": "Verificēta aktuālā alus karte",
+      "beerPrices": [
+        {
+          "name": "1664 Blanc",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "1664 Blanc",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Carlsberg Pilsner",
+          "volumeMl": 400,
+          "price": 5
+        },
+        {
+          "name": "Carlsberg Pilsner",
+          "volumeMl": 250,
+          "price": 3.5
+        },
+        {
+          "name": "Krombacher Hell / Premium Lager",
+          "volumeMl": 500,
+          "price": 4.8
+        },
+        {
+          "name": "Krombacher Hell / Premium Lager",
+          "volumeMl": 250,
+          "price": 3
+        },
+        {
+          "name": "QUEST No 5",
+          "volumeMl": 500,
+          "price": 6.9
+        },
+        {
+          "name": "QUEST No 5",
+          "volumeMl": 250,
+          "price": 4.4
+        },
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Staropramen Premium",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Staropramen Premium",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Cilpa",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Cilpa",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Brooklyn Lager",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "Mežpils Ķiršu",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Mežpils Ķiršu",
+          "volumeMl": 250,
+          "price": 4
+        },
+        {
+          "name": "PINEFRUIT",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "PINEFRUIT",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Ginger, Azacca & Strawberry Beer Seltzer",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Ginger, Azacca & Strawberry Beer Seltzer",
+          "volumeMl": 250,
+          "price": 3
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Medalus",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Mežpils Bezalkoholiskais",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Mežpils Tradicionālais",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Simply the West",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "1664 Blanc 0.0%",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "1664 Rosé",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Brooklyn Special Effects Hoppy Lager",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Fruitesse",
+          "volumeMl": 250,
+          "price": 6
+        },
+        {
+          "name": "Kriek Brut",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 335,
+          "price": 5
+        },
+        {
+          "name": "Guinness Draught 0.0",
+          "volumeMl": 440,
+          "price": 5.7
+        },
+        {
+          "name": "CHILLINN / RED",
+          "volumeMl": 440,
+          "price": 6.9
+        },
+        {
+          "name": "CHILLINN’ / WITH ORANGE & PINK GUAVA",
+          "volumeMl": 440,
+          "price": 7.1
+        },
+        {
+          "name": "CLOUD #42",
+          "volumeMl": 440,
+          "price": 7.1
+        },
+        {
+          "name": "GALAXY ECHOES",
+          "volumeMl": 440,
+          "price": 7.4
+        },
+        {
+          "name": "JUICEXPLODE / PINK GUAVA",
+          "volumeMl": 440,
+          "price": 7.7
+        },
+        {
+          "name": "LOLLIPOP: PINEAPPLE & CRANBERRY & HIBISCUS",
+          "volumeMl": 440,
+          "price": 7.8
+        },
+        {
+          "name": "PINEAPPLE PULSE",
+          "volumeMl": 440,
+          "price": 7.4
+        },
+        {
+          "name": "SOURBIT / BLACK PASSION",
+          "volumeMl": 440,
+          "price": 7
+        },
+        {
+          "name": "SOURBIT / PINA COLADA 2026",
+          "volumeMl": 440,
+          "price": 7.8
+        },
+        {
+          "name": "SUMMERTIME 2026",
+          "volumeMl": 440,
+          "price": 7
+        },
+        {
+          "name": "420: Super Sour Diesel",
+          "volumeMl": 440,
+          "price": 7.2
+        },
+        {
+          "name": "Dual Coast",
+          "volumeMl": 440,
+          "price": 7
+        },
+        {
+          "name": "Featherstone",
+          "volumeMl": 440,
+          "price": 7.2
+        },
+        {
+          "name": "KAIROS",
+          "volumeMl": 440,
+          "price": 7.8
+        },
+        {
+          "name": "Sea Goes Radical",
+          "volumeMl": 440,
+          "price": 6.7
+        },
+        {
+          "name": "Salted Plum Sour",
+          "volumeMl": 330,
+          "price": 8.5
+        },
+        {
+          "name": "Staropramen Premium",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Apple × Mango × Banana × Cinnamon Smoothie Sour Ale",
+          "volumeMl": 440,
+          "price": 8.3
+        },
+        {
+          "name": "Blueberry × Grape × Blackberry × Plum × Pineapple Smoothie Sour Ale",
+          "volumeMl": 440,
+          "price": 8.2
+        },
+        {
+          "name": "DDH Hopchest DIPA",
+          "volumeMl": 440,
+          "price": 7.3
+        },
+        {
+          "name": "DDH Hopheart IPA",
+          "volumeMl": 440,
+          "price": 7.8
+        },
+        {
+          "name": "DDH Nelson Sauvin Session IPA",
+          "volumeMl": 440,
+          "price": 7.8
+        },
+        {
+          "name": "Mango × Grape × Pineapple × Banana × Ice Cream Smoothie Sour Ale",
+          "volumeMl": 440,
+          "price": 8.3
+        },
+        {
+          "name": "Nelson Sauvin × Simcoe × Superdelic West Coast IPA",
+          "volumeMl": 440,
+          "price": 7.9
+        },
+        {
+          "name": "Pear × Apple Berliner Weisse",
+          "volumeMl": 440,
+          "price": 7.8
+        }
+      ],
+      "hours": {
+        "mon": [
+          "17:00-02:00"
+        ],
+        "tue": [
+          "17:00-02:00"
+        ],
+        "wed": [
+          "17:00-02:00"
+        ],
+        "thu": [
+          "17:00-02:00"
+        ],
+        "fri": [
+          "14:00-02:00"
+        ],
+        "sat": [
+          "14:00-02:00"
+        ],
+        "sun": [
+          "14:00-02:00"
+        ],
+        "sourceUrl": "https://untappd.com/v/the-thirsty-bulldog-sports-pub/11178749"
+      },
+      "evidenceNotes": "Verified venue. Draught menu updated 2026-04-30; bottle menu live at check. Ciders/mead omitted; one unpriced item omitted."
+    },
+    {
+      "id": "long-island-bar",
+      "name": "Long Island Bar",
+      "kind": "bar",
+      "address": "Šķūņu iela 6, Rīga, LV-1050",
+      "lat": 56.9487302,
+      "lng": 24.1076268,
+      "sourceUrl": "https://longisland.lv/menu",
+      "sourceLabel": "Official venue menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Piebalga",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Corona",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Leffe",
+          "volumeMl": null,
+          "price": 6
+        }
+      ],
+      "hours": {
+        "mon": [
+          "17:00-02:00"
+        ],
+        "tue": [
+          "17:00-02:00"
+        ],
+        "wed": [
+          "17:00-02:00"
+        ],
+        "thu": [
+          "17:00-02:00"
+        ],
+        "fri": [
+          "17:00-04:00"
+        ],
+        "sat": [
+          "17:00-04:00"
+        ],
+        "sun": [
+          "17:00-02:00"
+        ],
+        "sourceUrl": "https://longisland.lv/index",
+        "note": "Oficiālā lapa brīdina, ka darba laiks var mainīties atkarībā no viesu skaita."
+      },
+      "evidenceNotes": "Official live menu; volume is not published for Corona or Leffe."
+    },
+    {
+      "id": "sveiks-svejk",
+      "name": "Sveiks, Švejk!",
+      "kind": "pub",
+      "address": "Stabu iela 23, Rīga, LV-1011",
+      "lat": 56.9571981,
+      "lng": 24.1269758,
+      "sourceUrl": "https://www.svejk.lv/drinks.pdf",
+      "sourceLabel": "Official drinks menu PDF",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Premium Lager",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Premium Lager",
+          "volumeMl": 500,
+          "price": 4.9
+        },
+        {
+          "name": "The Original",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "The Original",
+          "volumeMl": 500,
+          "price": 4.9
+        },
+        {
+          "name": "Bohemian Lager",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Bohemian Lager",
+          "volumeMl": 500,
+          "price": 4.9
+        },
+        {
+          "name": "Dark Lager",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Dark Lager",
+          "volumeMl": 500,
+          "price": 4.9
+        },
+        {
+          "name": "Original",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Original",
+          "volumeMl": 500,
+          "price": 4.9
+        },
+        {
+          "name": "Tērvetes",
+          "volumeMl": 300,
+          "price": 4.2
+        },
+        {
+          "name": "Tērvetes",
+          "volumeMl": 500,
+          "price": 4.9
+        },
+        {
+          "name": "Licorne Black",
+          "volumeMl": 300,
+          "price": 4.3
+        },
+        {
+          "name": "Licorne Black",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Cherry Chouffe",
+          "volumeMl": 300,
+          "price": 6
+        },
+        {
+          "name": "Cherry Chouffe",
+          "volumeMl": 500,
+          "price": 6.9
+        },
+        {
+          "name": "Leffe Blond",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Leffe Blond",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Limburgse Witte",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Limburgse Witte",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Complot IPA",
+          "volumeMl": 300,
+          "price": 5
+        },
+        {
+          "name": "Complot IPA",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Pilsner The Original",
+          "volumeMl": 500,
+          "price": 5.3
+        },
+        {
+          "name": "Kozel Premium",
+          "volumeMl": 500,
+          "price": 5.3
+        },
+        {
+          "name": "Kozel Dark",
+          "volumeMl": 500,
+          "price": 5.3
+        },
+        {
+          "name": "Weihenstephaner Hefe Weissbier",
+          "volumeMl": 500,
+          "price": 5.8
+        },
+        {
+          "name": "Franziskaner Weissbier",
+          "volumeMl": 500,
+          "price": 5.8
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Guinness Draught 0.0",
+          "volumeMl": 440,
+          "price": 4.8
+        },
+        {
+          "name": "Kokmuiža Celmlauzis IPA 0.0",
+          "volumeMl": 330,
+          "price": 4
+        },
+        {
+          "name": "Bezalkoholiskais alus 0.0",
+          "volumeMl": 500,
+          "price": 3.9
+        }
+      ],
+      "hours": {
+        "mon": [
+          "11:00-23:00"
+        ],
+        "tue": [
+          "11:00-23:00"
+        ],
+        "wed": [
+          "11:00-23:00"
+        ],
+        "thu": [
+          "11:00-23:00"
+        ],
+        "fri": [
+          "11:00-23:00"
+        ],
+        "sat": [
+          "12:00-23:00"
+        ],
+        "sun": [
+          "12:00-23:00"
+        ],
+        "sourceUrl": "https://svejk.lv/lat.html"
+      },
+      "evidenceNotes": "Official PDF updated April 2026; all beer rows and published draught sizes captured."
+    },
+    {
+      "id": "andaluzijas-suns",
+      "name": "Andalūzijas Suns",
+      "kind": "bar",
+      "address": "Elizabetes iela 83, Rīga, LV-1050",
+      "lat": 56.9505626,
+      "lng": 24.122122,
+      "sourceUrl": "https://www.andaluzijassuns.lv/pages/menu",
+      "sourceLabel": "Official drinks-menu images",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Heineken",
+          "volumeMl": 400,
+          "price": 6
+        },
+        {
+          "name": "Lielvārdes",
+          "volumeMl": 400,
+          "price": 6
+        },
+        {
+          "name": "Madonas Nefiltrētais",
+          "volumeMl": 400,
+          "price": 7
+        },
+        {
+          "name": "Anarkist New England IPA",
+          "volumeMl": 400,
+          "price": 6
+        },
+        {
+          "name": "Valmiermuižas gaišais",
+          "volumeMl": 400,
+          "price": 7
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Valmiermuižas tumšais",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Kokmuižas Celmlauzis bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Heineken bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 3.5
+        }
+      ],
+      "hours": {
+        "mon": [
+          "10:00-23:00"
+        ],
+        "tue": [
+          "10:00-23:00"
+        ],
+        "wed": [
+          "10:00-23:00"
+        ],
+        "thu": [
+          "10:00-23:00"
+        ],
+        "fri": [
+          "10:00-23:00"
+        ],
+        "sat": [
+          "10:00-23:00"
+        ],
+        "sun": [
+          "10:00-23:00"
+        ],
+        "sourceUrl": "https://www.andaluzijassuns.lv/pages/menu"
+      },
+      "evidenceNotes": "Official current menu page and venue hours; all beer rows captured, cider omitted."
+    },
+    {
+      "id": "voodoo-olybet-sports-bar",
+      "name": "Voodoo OlyBet Sports Bar",
+      "kind": "sports bar / casino bar",
+      "address": "Elizabetes iela 55, Rīga, LV-1010",
+      "lat": 56.9550177,
+      "lng": 24.1177516,
+      "sourceUrl": "https://olybetsportsbar.com/lv/en/drinks/",
+      "sourceLabel": "Official Voodoo drinks menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Mežpils",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Mežpils",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Madonas nefiltrēts",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Madonas nefiltrēts",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Corona",
+          "volumeMl": 355,
+          "price": 4
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Kronenbourg 1664 Blanc bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 3.5
+        },
+        {
+          "name": "Heineken bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 3.5
+        }
+      ],
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ],
+        "sourceUrl": "https://olybetsportsbar.com/lv/en/locations/",
+        "note": "Official location listing says 24/7."
+      },
+      "evidenceNotes": "Menu explicitly applies only to Voodoo OlyBet Sports Bar; prices were not copied to other OlyBet branches."
+    },
+    {
+      "id": "teikas-ezitis-migla",
+      "name": "Teikas Ezītis miglā",
+      "kind": "bar",
+      "address": "Brīvības gatve 350A, Rīga, LV-1006",
+      "lat": 56.9815633,
+      "lng": 24.1946974,
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Teika-majaslapa-01-scaled.jpg",
+      "sourceLabel": "Official 2026 branch drinks menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 400,
+          "price": 2.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Lielvārdes Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Bauskas Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Madonas Nefiltrētais",
+          "volumeMl": 400,
+          "price": 4.4
+        },
+        {
+          "name": "Ezītis Miglā × Labietis",
+          "volumeMl": 440,
+          "price": 4.6
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 330,
+          "price": 4.1
+        },
+        {
+          "name": "Sol",
+          "volumeMl": 330,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvetes Senču",
+          "volumeMl": 500,
+          "price": 4.2
+        },
+        {
+          "name": "Bauskas Tumšais",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Anarkist New England IPA",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Užavas Gaišais",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Viedi",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Fišers",
+          "volumeMl": 500,
+          "price": 4.7
+        },
+        {
+          "name": "Dzīru Kalve",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Labietis Dzeltenā Saime",
+          "volumeMl": 440,
+          "price": 5.1
+        },
+        {
+          "name": "Labietis Sarkanā Saime",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Heineken bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 4.2
+        }
+      ],
+      "hours": {
+        "mon": [
+          "12:00-23:00"
+        ],
+        "tue": [
+          "12:00-23:00"
+        ],
+        "wed": [
+          "12:00-23:00"
+        ],
+        "thu": [
+          "12:00-23:00"
+        ],
+        "fri": [
+          "12:00-02:00"
+        ],
+        "sat": [
+          "12:00-02:00"
+        ],
+        "sun": [
+          "12:00-23:00"
+        ],
+        "sourceUrl": "https://www.ezitis.lv/teikas-ezitis-migla/"
+      },
+      "evidenceNotes": "Official March 2026 branch-specific menu image; cider omitted."
+    },
+    {
+      "id": "avotu-ezitis-migla",
+      "name": "Avotu Ezītis miglā",
+      "kind": "bar",
+      "address": "Avotu iela 32, Rīga, LV-1009",
+      "lat": 56.9510873,
+      "lng": 24.1350982,
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Avoti.jpg",
+      "sourceLabel": "Official 2026 branch drinks menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 400,
+          "price": 2.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Lielvārdes Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Anarkist New England IPA",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Madonas Nefiltrētais",
+          "volumeMl": 400,
+          "price": 4.4
+        },
+        {
+          "name": "Ezītis Miglā × Labietis",
+          "volumeMl": 440,
+          "price": 4.6
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 330,
+          "price": 4.1
+        },
+        {
+          "name": "Sol",
+          "volumeMl": 330,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvetes Senču",
+          "volumeMl": 500,
+          "price": 4.2
+        },
+        {
+          "name": "Bauskas Tumšais",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Užavas Gaišais",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Anarkist New England IPA",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Viedi",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Labietis Grey Family",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Labietis Yellow Family",
+          "volumeMl": 440,
+          "price": 5.1
+        },
+        {
+          "name": "Labietis Red Family",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Labietis Black Family",
+          "volumeMl": 440,
+          "price": 5.4
+        },
+        {
+          "name": "Bauskas Gaišais",
+          "volumeMl": 500,
+          "price": 4.4
+        },
+        {
+          "name": "Madonas",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Heineken bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 4.2
+        }
+      ],
+      "hours": {
+        "mon": [
+          "13:00-23:00"
+        ],
+        "tue": [
+          "13:00-23:00"
+        ],
+        "wed": [
+          "13:00-23:00"
+        ],
+        "thu": [
+          "13:00-00:00"
+        ],
+        "fri": [
+          "13:00-02:00"
+        ],
+        "sat": [
+          "13:00-02:00"
+        ],
+        "sun": [
+          "13:00-22:00"
+        ],
+        "sourceUrl": "https://www.ezitis.lv/avotu-ielas-ezitis-migla/"
+      },
+      "evidenceNotes": "Official March 2026 branch-specific menu image; cider omitted."
+    },
+    {
+      "id": "kalnciema-ezitis-migla",
+      "name": "Kalnciema Ezītis miglā",
+      "kind": "bar",
+      "address": "Slokas iela 17, Rīga, LV-1048",
+      "lat": 56.9461951,
+      "lng": 24.0736275,
+      "sourceUrl": "https://www.ezitis.lv/wp-content/uploads/2026/03/Kalnciems.jpg",
+      "sourceLabel": "Official 2026 branch drinks menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Lāčplēsis Ekstra",
+          "volumeMl": 400,
+          "price": 2.5
+        },
+        {
+          "name": "Lielvārdes Ķiršu",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Lielvārdes Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Bauskas Gaišais",
+          "volumeMl": 400,
+          "price": 3.9
+        },
+        {
+          "name": "Madonas Nefiltrētais",
+          "volumeMl": 400,
+          "price": 4.4
+        },
+        {
+          "name": "Ezītis Miglā × Labietis",
+          "volumeMl": 440,
+          "price": 4.6
+        },
+        {
+          "name": "Heineken",
+          "volumeMl": 330,
+          "price": 4.1
+        },
+        {
+          "name": "Sol",
+          "volumeMl": 330,
+          "price": 4.4
+        },
+        {
+          "name": "Tērvetes Senču",
+          "volumeMl": 500,
+          "price": 4.2
+        },
+        {
+          "name": "Bauskas Tumšais",
+          "volumeMl": 500,
+          "price": 4.5
+        },
+        {
+          "name": "Anarkist New England IPA",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Užavas Gaišais",
+          "volumeMl": 500,
+          "price": 4.6
+        },
+        {
+          "name": "Viedi",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Pruask",
+          "volumeMl": 500,
+          "price": 5.4
+        },
+        {
+          "name": "Labietis Pelēkā Saime",
+          "volumeMl": 440,
+          "price": 5
+        },
+        {
+          "name": "Labietis Dzeltenā Saime",
+          "volumeMl": 440,
+          "price": 5.1
+        },
+        {
+          "name": "Labietis Sarkanā Saime",
+          "volumeMl": 440,
+          "price": 5.3
+        },
+        {
+          "name": "Labietis Melnā Saime",
+          "volumeMl": 440,
+          "price": 5.4
+        },
+        {
+          "name": "Bauskas Gaišais",
+          "volumeMl": 500,
+          "price": 4.4
+        },
+        {
+          "name": "Madonas",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Heineken bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 4.2
+        }
+      ],
+      "hours": {
+        "mon": [
+          "11:00-23:00"
+        ],
+        "tue": [
+          "11:00-23:00"
+        ],
+        "wed": [
+          "11:00-23:00"
+        ],
+        "thu": [
+          "11:00-23:00"
+        ],
+        "fri": [
+          "11:00-02:00"
+        ],
+        "sat": [
+          "11:00-02:00"
+        ],
+        "sun": [
+          "11:00-23:00"
+        ],
+        "sourceUrl": "https://www.ezitis.lv/kalnciema-ezitis-migla/"
+      },
+      "evidenceNotes": "Official March 2026 branch-specific menu image; cider omitted."
+    },
+    {
+      "id": "avalon-lobby-bar",
+      "name": "Avalon Hotel Lobby Bar",
+      "kind": "hotel lobby bar",
+      "address": "13. janvāra iela 19, Rīga, LV-1050",
+      "lat": 56.9454917,
+      "lng": 24.1120178,
+      "sourceUrl": "https://hotelavalon.eu/files/documents/attachments/bar-menu.pdf",
+      "sourceLabel": "Official Lobby Bar menu PDF",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 300,
+          "price": 4.7
+        },
+        {
+          "name": "Mežpils Gaišais",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 300,
+          "price": 5.3
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 300,
+          "price": 5.2
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Mežpils Tumšais",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Kronenbourg Blanc bezalkoholiskais",
+          "volumeMl": 330,
+          "price": 4.3
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 350,
+          "price": 5
+        }
+      ],
+      "hours": {
+        "mon": [
+          "12:00-24:00"
+        ],
+        "tue": [
+          "12:00-24:00"
+        ],
+        "wed": [
+          "12:00-24:00"
+        ],
+        "thu": [
+          "12:00-24:00"
+        ],
+        "fri": [
+          "12:00-24:00"
+        ],
+        "sat": [
+          "12:00-24:00"
+        ],
+        "sun": [
+          "12:00-24:00"
+        ],
+        "sourceUrl": "https://hotelavalon.eu/Restaurant/lobby-bar"
+      },
+      "evidenceNotes": "Official page announces new menu from 7 April 2026; linked PDF metadata updated 14 August 2026."
+    },
+    {
+      "id": "ac-lounge-riga",
+      "name": "AC Lounge",
+      "kind": "hotel bar",
+      "address": "Dzirnavu iela 33, Rīga, LV-1010",
+      "lat": 56.9587436,
+      "lng": 24.1132477,
+      "sourceUrl": "https://www.achotelriga.com/_files/ugd/aad7b6_c30369197ab949439ea8e0325d961fe0.pdf",
+      "sourceLabel": "Official Drinks Menu 2026",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Lielvārdes Gaišais",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Lielvārdes Gaišais",
+          "volumeMl": 500,
+          "price": 8.5
+        },
+        {
+          "name": "Valmiermuiža Tumšais",
+          "volumeMl": 500,
+          "price": 8.5
+        },
+        {
+          "name": "Valmiermuiža Gaišais",
+          "volumeMl": 500,
+          "price": 8.5
+        },
+        {
+          "name": "Corona",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Heineken bezalkoholiskais",
+          "volumeMl": null,
+          "price": 6
+        }
+      ],
+      "hours": {
+        "mon": [
+          "07:00-23:00"
+        ],
+        "tue": [
+          "07:00-23:00"
+        ],
+        "wed": [
+          "07:00-23:00"
+        ],
+        "thu": [
+          "07:00-23:00"
+        ],
+        "fri": [
+          "07:00-23:00"
+        ],
+        "sat": [
+          "07:00-23:00"
+        ],
+        "sun": [
+          "07:00-23:00"
+        ],
+        "sourceUrl": "https://www.achotelriga.com/restaurant"
+      },
+      "evidenceNotes": "Official venue page links A4_JAUNIE MENU_2026; PDF metadata 20 May 2026. Heineken volume is unstated."
+    },
+    {
+      "id": "barduck-restobar",
+      "name": "Barduck Restobar",
+      "kind": "restobar / hookah bar",
+      "address": "Lāčplēša iela 53-1F, Rīga, LV-1011",
+      "lat": 56.9523213,
+      "lng": 24.130213,
+      "sourceUrl": "https://barduck.eu/lv/menu-lv/",
+      "sourceLabel": "Official live venue menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Corona Extra",
+          "volumeMl": 355,
+          "price": 4
+        },
+        {
+          "name": "Desperados",
+          "volumeMl": 330,
+          "price": 4.5
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Grimbergen Blonde",
+          "volumeMl": 500,
+          "price": 5.3
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Kronenbourg Blanc",
+          "volumeMl": 500,
+          "price": 5.3
+        },
+        {
+          "name": "Mežpils Speciālais",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Mežpils Speciālais",
+          "volumeMl": 500,
+          "price": 5.3
+        }
+      ],
+      "hours": {
+        "mon": [
+          "12:00-00:00"
+        ],
+        "tue": [
+          "12:00-00:00"
+        ],
+        "wed": [
+          "12:00-00:00"
+        ],
+        "thu": [
+          "12:00-00:00"
+        ],
+        "fri": [
+          "12:00-02:00"
+        ],
+        "sat": [
+          "12:00-02:00"
+        ],
+        "sun": [
+          "12:00-00:00"
+        ],
+        "sourceUrl": "https://barduck.eu/lv/find-us-lv/"
+      },
+      "evidenceNotes": "Current official venue menu and hours; cider omitted."
+    },
+    {
+      "id": "discovery-forty3",
+      "name": "Forty3 Pool Club",
+      "kind": "biljarda un sporta bārs",
+      "address": "Krišjāņa Barona iela 41/43, Rīga, LV-1011",
+      "lat": 56.955139,
+      "lng": 24.12875,
+      "sourceUrl": "https://forty3.lv/en/prices/",
+      "sourceLabel": "Forty3 oficiālā bāra cenu lapa",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Mežpils Light",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Mežpils Light",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Blanc 1664",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Blanc 1664",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Valmiermuiža Light",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Valmiermuiža Light",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Mežpils (bottle)",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Corona (bottle)",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Blanc 1664 0%",
+          "volumeMl": null,
+          "price": 4
+        }
+      ],
+      "hours": {
+        "mon": [
+          "16:00-00:00"
+        ],
+        "tue": [
+          "16:00-00:00"
+        ],
+        "wed": [
+          "16:00-00:00"
+        ],
+        "thu": [
+          "16:00-00:00"
+        ],
+        "fri": [
+          "16:00-02:00"
+        ],
+        "sat": [
+          "12:00-02:00"
+        ],
+        "sun": [
+          "12:00-00:00"
+        ],
+        "sourceUrl": "https://forty3.lv/en"
+      },
+      "evidenceNotes": "Oficiālā bāra cenu lapa nodala alus sadaļu; visas alus rindas un abi norādītie tilpumi iekļauti. 0% Blanc tilpums avotā nav dots. Koordinātas iegūtas no oficiālās lapas strukturētajiem datiem."
+    },
+    {
+      "id": "discovery-bowling-meness",
+      "name": "Mēness boulinga centra bārs",
+      "kind": "boulinga un sporta bārs",
+      "address": "Vaidavas iela 4, Rīga, LV-1084",
+      "lat": 56.963851,
+      "lng": 24.1755454,
+      "sourceUrl": "https://www.bowling.lv/userfiles/File/Cenas%20Restorans%20un%20Bars/Menu%20to%20Print/Boulinga%20centra%20Meness%20edienkarte%2007022026.pdf",
+      "sourceLabel": "Mēness 07.02.2026 bāra ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Mežpils",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Mežpils",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Carlsberg",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Carlsberg",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Tērvetes",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Tērvetes",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Bezalkoholiskais alus",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Užavas Tumšais",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Užavas Gaišais",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Bauskas Tumšais",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Bauskas Gaišais",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Aldaris Ķiršu alus",
+          "volumeMl": 500,
+          "price": 5
+        }
+      ],
+      "hours": {
+        "mon": [
+          "12:00-00:00"
+        ],
+        "tue": [
+          "12:00-00:00"
+        ],
+        "wed": [
+          "12:00-00:00"
+        ],
+        "thu": [
+          "12:00-00:00"
+        ],
+        "fri": [
+          "12:00-00:00"
+        ],
+        "sat": [
+          "12:00-00:00"
+        ],
+        "sun": [
+          "12:00-00:00"
+        ],
+        "sourceUrl": "https://boulings-bowling.lv/"
+      },
+      "evidenceNotes": "Tiešs oficiālajā domēnā publicēts PDF, kura faila nosaukums datēts 07.02.2026; visas alus rindas iekļautas un sidrs izlaists. Pašreizējā oficiālā centra lapa apstiprina adresi, bāru un ikdienas laiku. Koordinātas no OSM Mēness centra punkta."
+    },
+    {
+      "id": "discovery-garaza",
+      "name": "Bārs Garāža",
+      "kind": "viskija bārs",
+      "address": "Aldaru iela 10, Rīga, LV-1050",
+      "lat": 56.9510041,
+      "lng": 24.1065469,
+      "sourceUrl": "https://garazabars.lv/lv/section:alkohols",
+      "sourceLabel": "Garāžas venue-managed digitālā dzērienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Aizputes nefiltrētais",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Aizputes nefiltrētais",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Mītava",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Mītava",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Iļģuciema Medalus",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Valmiermuižas tumšais",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Duna IPA",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Jever Pilsener",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Corona",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Desperados",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Paulaner Hefe-Weissbier",
+          "volumeMl": 500,
+          "price": 5.5
+        },
+        {
+          "name": "Guinness Draught",
+          "volumeMl": 400,
+          "price": 5.5
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Bezalkoholiskais alus (Warsteiner/Corona)",
+          "volumeMl": 330,
+          "price": 5
+        }
+      ],
+      "hours": {
+        "mon": [
+          "11:00-24:00"
+        ],
+        "tue": [
+          "11:00-24:00"
+        ],
+        "wed": [
+          "11:00-24:00"
+        ],
+        "thu": [
+          "11:00-24:00"
+        ],
+        "fri": [
+          "11:00-02:00"
+        ],
+        "sat": [
+          "11:00-02:00"
+        ],
+        "sun": [
+          "11:00-23:00"
+        ],
+        "sourceUrl": "https://garazabars.lv/"
+      },
+      "evidenceNotes": "Venue-managed ChoiceQR lapa pati identificē vietu kā Bārs Garāža, publicē precīzu adresi, koordinātas un nedēļas darba laiku. Visas aktīvās izlejamā un pudeļu alus rindas no dzīvās ALKOHOLS sadaļas iekļautas."
+    },
+    {
+      "id": "discovery-paddy-current",
+      "name": "Paddy Whelan's Irish Pub & Sports Bar",
+      "kind": "īru pubs un sporta bārs",
+      "address": "Grēcinieku iela 4, Rīga, LV-1050",
+      "lat": 56.946951,
+      "lng": 24.1102062,
+      "sourceUrl": "https://paddywhelans.choiceqr.com/lv/section:beer-cider",
+      "sourceLabel": "Paddy Whelan's aktuālā venue-managed alus karte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Guinness Draught 4.2%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Guinness Draught 4.2%",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Guinness Draught 4.2%",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Kilkenny Irish Beer 4.3%",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Kilkenny Irish Beer 4.3%",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Kilkenny Irish Beer 4.3%",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Old Speckled Hen",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Old Speckled Hen",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Old Speckled Hen",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Spitfire Amber Ale",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Spitfire Amber Ale",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Spitfire Amber Ale",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Paddy Irish Lager 5%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Paddy Irish Lager 5%",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Paddy Irish Lager 5%",
+          "volumeMl": 1000,
+          "price": 11
+        },
+        {
+          "name": "Paddy Irish Lager 5%",
+          "volumeMl": 3000,
+          "price": 30
+        },
+        {
+          "name": "Paddy Irish Lager 5%",
+          "volumeMl": 5000,
+          "price": 45
+        },
+        {
+          "name": "Valmiermuižas gaišais (nefiltrēts)",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Valmiermuižas gaišais (nefiltrēts)",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Valmiermuižas gaišais (nefiltrēts)",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Valmiermuižas gaišais (nefiltrēts)",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Valmiermuižas gaišais (nefiltrēts)",
+          "volumeMl": 5000,
+          "price": 50
+        },
+        {
+          "name": "Valmiermuižas gaišais alus 5.2%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Valmiermuižas gaišais alus 5.2%",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Valmiermuižas gaišais alus 5.2%",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Valmiermuižas gaišais alus 5.2%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Valmiermuižas gaišais alus 5.2%",
+          "volumeMl": 5000,
+          "price": 50
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 1000,
+          "price": 12.5
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 3000,
+          "price": 36
+        },
+        {
+          "name": "Valmiermuižas tumšais alus",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Brenguļu Gaišais 5.6%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Brenguļu Gaišais 5.6%",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Brenguļu Gaišais 5.6%",
+          "volumeMl": 1000,
+          "price": 11
+        },
+        {
+          "name": "Brenguļu Gaišais 5.6%",
+          "volumeMl": 3000,
+          "price": 30
+        },
+        {
+          "name": "Brenguļu Gaišais 5.6%",
+          "volumeMl": 5000,
+          "price": 45
+        },
+        {
+          "name": "Paulaner Münchner Hell",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Paulaner Münchner Hell",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Paulaner Münchner Hell",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Paulaner Münchner Hell",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Paulaner Münchner Hell",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Pilsner Urquell Plzeňský Prazdroj 4.4%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Pilsner Urquell Plzeňský Prazdroj 4.4%",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Pilsner Urquell Plzeňský Prazdroj 4.4%",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Pilsner Urquell Plzeňský Prazdroj 4.4%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Pilsner Urquell Plzeňský Prazdroj 4.4%",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Stella Artois Pale Lager 5%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Stella Artois Pale Lager 5%",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Stella Artois Pale Lager 5%",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Stella Artois Pale Lager 5%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Stella Artois Pale Lager 5%",
+          "volumeMl": 5000,
+          "price": 50
+        },
+        {
+          "name": "Hoegaarden Witbier 4.7%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Hoegaarden Witbier 4.7%",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Hoegaarden Witbier 4.7%",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Hoegaarden Witbier 4.7%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Hoegaarden Witbier 4.7%",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Erdinger Weissbier",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Erdinger Weissbier",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Erdinger Weissbier",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Erdinger Weissbier",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Erdinger Weissbier",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Põhjala Sun City",
+          "volumeMl": 400,
+          "price": 7.5
+        },
+        {
+          "name": "Kasteel Rouge 8%",
+          "volumeMl": 300,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Rouge 8%",
+          "volumeMl": 500,
+          "price": 8.5
+        },
+        {
+          "name": "Kasteel Rouge 8%",
+          "volumeMl": 1000,
+          "price": 16
+        },
+        {
+          "name": "Kasteel Rouge 8%",
+          "volumeMl": 3000,
+          "price": 45
+        },
+        {
+          "name": "Kasteel Rouge 8%",
+          "volumeMl": 5000,
+          "price": 65
+        },
+        {
+          "name": "Leffe Blonde Belgian Ale 6.6%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Leffe Blonde Belgian Ale 6.6%",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Leffe Blonde Belgian Ale 6.6%",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Leffe Blonde Belgian Ale 6.6%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Leffe Blonde Belgian Ale 6.6%",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Leffe Brown Abbey Dubbel 6.5%",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Leffe Brown Abbey Dubbel 6.5%",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Leffe Brown Abbey Dubbel 6.5%",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Leffe Brown Abbey Dubbel 6.5%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Leffe Brown Abbey Dubbel 6.5%",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Affel Belgian Rouge",
+          "volumeMl": 300,
+          "price": 4.5
+        },
+        {
+          "name": "Affel Belgian Rouge",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Affel Belgian Rouge",
+          "volumeMl": 1000,
+          "price": 13
+        },
+        {
+          "name": "Affel Belgian Rouge",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Affel Belgian Rouge",
+          "volumeMl": 5000,
+          "price": 55
+        },
+        {
+          "name": "Sānslīde IPA Malduguns 6.5%",
+          "volumeMl": 300,
+          "price": 4
+        },
+        {
+          "name": "Sānslīde IPA Malduguns 6.5%",
+          "volumeMl": 500,
+          "price": 6.7
+        },
+        {
+          "name": "Sānslīde IPA Malduguns 6.5%",
+          "volumeMl": 1000,
+          "price": 12
+        },
+        {
+          "name": "Sānslīde IPA Malduguns 6.5%",
+          "volumeMl": 3000,
+          "price": 35
+        },
+        {
+          "name": "Sānslīde IPA Malduguns 6.5%",
+          "volumeMl": 5000,
+          "price": 50
+        },
+        {
+          "name": "Kronenbourg Blanc 0.0%",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Lindemans Pecheresse",
+          "volumeMl": 250,
+          "price": 5
+        },
+        {
+          "name": "Corona 4.5%",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Leffe Blond N/A 0%",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Leffe Brun N/A 0%",
+          "volumeMl": 330,
+          "price": 5
+        },
+        {
+          "name": "Guinness B/A 0.0%",
+          "volumeMl": null,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Rouge 0.00%",
+          "volumeMl": null,
+          "price": 6
+        }
+      ],
+      "hours": {
+        "mon": [
+          "12:00-24:00"
+        ],
+        "tue": [
+          "12:00-24:00"
+        ],
+        "wed": [
+          "12:00-24:00"
+        ],
+        "thu": [
+          "12:00-24:00"
+        ],
+        "fri": [
+          "12:00-24:00"
+        ],
+        "sat": [
+          "12:00-24:00"
+        ],
+        "sun": [
+          "12:00-24:00"
+        ],
+        "sourceUrl": "https://paddywhelans.choiceqr.com/lv/online-menu",
+        "note": "Venue-managed lapa pašlaik rāda vienotu 12:00-24:00 darba lauku, nevis detalizētu nedēļas grafiku."
+      },
+      "evidenceNotes": "Iepriekš mapē noraidītais 2024 PDF ir aizstāts ar dzīvu venue-managed ChoiceQR karti; ALUS & SIDRS sadaļa atjaunināta 20.08.2026 un katras alus opcijas tilpums/cena nolasīta no lapas datiem. Sidri izlaisti. Guinness B/A avotā kļūdaini rāda “0,44ml”, bet Kasteel Rouge 0.00% tilpumu nenorāda, tādēļ abi saglabāti ar null. Koordinātas no OSM vietas ieraksta."
+    },
+    {
+      "id": "discovery-gastro-pub-abbey",
+      "name": "Gastro Pub Abbey",
+      "kind": "gastropubs",
+      "address": "Kaļķu iela 6, Rīga, LV-1050",
+      "lat": 56.94848176498344,
+      "lng": 24.108506451015067,
+      "sourceUrl": "https://gastropubabbey.lv/",
+      "sourceLabel": "Gastro Pub Abbey oficiālā alus karte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Leffe Blonde",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Leffe Brune",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Leffe Brune",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Hoegaarden White",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Hoegaarden White",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Stella Artois",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Stella Artois",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Cēsu Premium",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Cēsu Premium",
+          "volumeMl": 500,
+          "price": 6.5
+        },
+        {
+          "name": "Piebalgas",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Piebalgas",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Cēsu Brūža nefiltrētais",
+          "volumeMl": 300,
+          "price": 6.5
+        },
+        {
+          "name": "Cēsu Brūža nefiltrētais",
+          "volumeMl": 500,
+          "price": 7
+        },
+        {
+          "name": "Kasteel Rouge",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Vedett Extra Ordinary IPA",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Baptist Blanche",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "La Trappe Witte Trappist",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Mongozo Premium Pilzener Gluten Free",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Duvel 666",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "St. Bernardus Extra 4",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Orval",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Duvel",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Duvel Triple Hop Citra",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Delirium Tremens",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Duvel Triple Hop Cashmere",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Chimay Triple",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Westmalle Triple",
+          "volumeMl": 330,
+          "price": 6.9
+        },
+        {
+          "name": "Karmeliet Triple",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "St. Bernardus Triple",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Kasteel Triple",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Leffe Rituel 9",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Leffe Tripel",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Buffalo Belgian Bitter",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Viven Imperial IPA",
+          "volumeMl": 330,
+          "price": 8.2
+        },
+        {
+          "name": "Delirium Argentum",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Prearis IPA",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Gulden Draak Imperial Stout",
+          "volumeMl": 330,
+          "price": 8.7
+        },
+        {
+          "name": "St. Bernardus Pater 6",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "St. Bernardus Prior 8",
+          "volumeMl": 330,
+          "price": 6.6
+        },
+        {
+          "name": "Rochefort Nr 6",
+          "volumeMl": 330,
+          "price": 6
+        },
+        {
+          "name": "Westmalle Double",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Chimay Rouge",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Kasteel Donker",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Delirium Nocturnum",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Rochefort Nr 8",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Chimay Blue",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Gulden Draak",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Rochefort Nr 10",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Kasteel Cuvée du Château",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "St. Bernardus ABT 12",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Straffe Hendrik Quadrupel",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Kasteel Barista Chocolate Quad",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Duchesse de Bourgogne",
+          "volumeMl": 250,
+          "price": 6
+        },
+        {
+          "name": "Hoegaarden Rosée",
+          "volumeMl": 250,
+          "price": 4.5
+        },
+        {
+          "name": "Mongozo Banana",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Liefmans Fruitesse",
+          "volumeMl": 250,
+          "price": 6.5
+        },
+        {
+          "name": "Lindemans Pecheresse",
+          "volumeMl": 250,
+          "price": 5.5
+        },
+        {
+          "name": "Bacchus Framboise",
+          "volumeMl": null,
+          "price": 7.5
+        },
+        {
+          "name": "Bacchus Kriek",
+          "volumeMl": null,
+          "price": 7.5
+        },
+        {
+          "name": "Floris Fraise",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Floris Mango",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Floris Pomme",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Mort Subite Kriek Lambic",
+          "volumeMl": 250,
+          "price": 5.5
+        },
+        {
+          "name": "Timmermans Peche",
+          "volumeMl": 250,
+          "price": 6
+        },
+        {
+          "name": "Kasteel Rubus Framboise",
+          "volumeMl": 330,
+          "price": 6.5
+        },
+        {
+          "name": "Delirium Red",
+          "volumeMl": 330,
+          "price": 7.5
+        },
+        {
+          "name": "Leffe Ruby",
+          "volumeMl": 330,
+          "price": 7
+        },
+        {
+          "name": "Leffe Ruby",
+          "volumeMl": 750,
+          "price": 21
+        },
+        {
+          "name": "Leffe Blonde 0%",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Leffe Brune 0%",
+          "volumeMl": 330,
+          "price": 5.5
+        },
+        {
+          "name": "Corona Extra",
+          "volumeMl": 330,
+          "price": 5
+        }
+      ],
+      "hours": {
+        "mon": [
+          "10:00-23:00"
+        ],
+        "tue": [
+          "10:00-23:00"
+        ],
+        "wed": [
+          "10:00-23:00"
+        ],
+        "thu": [
+          "10:00-23:00"
+        ],
+        "fri": [
+          "10:00-01:00"
+        ],
+        "sat": [
+          "10:00-01:00"
+        ],
+        "sun": [
+          "10:00-22:00"
+        ],
+        "sourceUrl": "https://gastropubabbey.lv/",
+        "note": "Izmantots detalizētais dienu grafiks kontaktu sadaļā; lapas kājenē redzams pretrunīgs vispārīgs grafiks."
+      },
+      "evidenceNotes": "Dzīvā pirmās puses lapa identificē vietu kā gastropubu un publicē pilnu izlejamā un pudeļu alus katalogu. Visas alus rindas iekļautas; atsevišķi zem 'Cider' publicētais produkts izlaists. Bacchus Framboise/Kriek tilpums avotā ir acīmredzami bojāts kā “375cl”, tādēļ nav minēts un saglabāts null. Koordinātas no oficiālās lapas kartes datiem."
+    },
+    {
+      "id": "ansamblis",
+      "name": "Ansamblis",
+      "kind": "mūzikas bārs",
+      "address": "Robežu iela 38, Rīga",
+      "lat": 56.9222152,
+      "lng": 24.0777717,
+      "sourceUrl": "https://www.ansamblis.lv/edienkarte/",
+      "sourceLabel": "Ansamblis — ēdienkarte",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Ansambļa iecienītais gaišais",
+          "volumeMl": 300,
+          "price": 3
+        },
+        {
+          "name": "Ansambļa iecienītais gaišais",
+          "volumeMl": 500,
+          "price": 4
+        },
+        {
+          "name": "Dziru kalve IPA",
+          "volumeMl": 300,
+          "price": 3.5
+        },
+        {
+          "name": "Dziru kalve IPA",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Valmiermuiža gaišais",
+          "volumeMl": 500,
+          "price": 5
+        },
+        {
+          "name": "Beck's 0.0%",
+          "volumeMl": 330,
+          "price": 5.5
+        }
+      ],
+      "hours": null,
+      "evidenceNotes": "Official music venue menu supplies every beer price and volume currently published. Official menu identifies the address; dependable weekly hours were not found."
+    },
+    {
+      "id": "colonel-brew-pub",
+      "name": "Colonel Brew Pub & Kitchen",
+      "kind": "brew pub / sports bar",
+      "address": "Meistaru iela 23, Vecrīga, Rīga, LV-1050",
+      "lat": 56.9491973,
+      "lng": 24.1086734,
+      "sourceUrl": "https://colonelbrewpub.lv/",
+      "sourceLabel": "Colonel Brew Pub live official drinks menu",
+      "sourceType": "Oficiālā ēdienkarte",
+      "beerPrices": [
+        {
+          "name": "Colonel Light Beer 5.3%",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Colonel Dark Beer 5.7%",
+          "volumeMl": 500,
+          "price": 6
+        },
+        {
+          "name": "Guinness 4.2%",
+          "volumeMl": 500,
+          "price": 8
+        },
+        {
+          "name": "Leffe Blond 6.6%",
+          "volumeMl": 500,
+          "price": 8
+        }
+      ],
+      "hours": {
+        "mon": [
+          "10:00-23:00"
+        ],
+        "tue": [
+          "10:00-23:00"
+        ],
+        "wed": [
+          "10:00-23:00"
+        ],
+        "thu": [
+          "10:00-23:00"
+        ],
+        "fri": [
+          "10:00-23:00"
+        ],
+        "sat": [
+          "10:00-23:00"
+        ],
+        "sun": [
+          "10:00-23:00"
+        ],
+        "sourceUrl": "https://colonelbrewpub.lv/"
+      },
+      "evidenceNotes": "The live official page describes house-brewed light/dark beer, Belgian classics and sports matches on screens. Its Drinks tab lists these four beers at 500 ml with explicit EUR prices; no prices were inferred. Coordinates geocoded for Meistaru iela 23."
+    }
+  ]
+}

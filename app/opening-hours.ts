@@ -1,3 +1,5 @@
+import expandedVenueData from './data/verified-venues-expansion.json';
+
 export type DayHours = string[] | null;
 
 export type VenueOpeningHours = {
@@ -149,6 +151,22 @@ export const venueOpeningHours: Record<string, VenueOpeningHours> = {
     [], [], ['17:00-00:00'], ['17:00-00:00'], ['17:00-04:00'], ['17:00-04:00'], [],
   ], 'https://www.skapisriga.com/'),
 };
+
+expandedVenueData.venues.forEach((venue) => {
+  if (!venue.hours) return;
+  venueOpeningHours[venue.id] = {
+    mon: venue.hours.mon,
+    tue: venue.hours.tue,
+    wed: venue.hours.wed,
+    thu: venue.hours.thu,
+    fri: venue.hours.fri,
+    sat: venue.hours.sat,
+    sun: venue.hours.sun,
+    sourceUrl: venue.hours.sourceUrl,
+    checkedAt,
+    note: venue.hours.note,
+  };
+});
 
 const parseMinutes = (value: string) => {
   const [hours, minutes] = value.split(':').map(Number);

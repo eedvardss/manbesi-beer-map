@@ -11,6 +11,7 @@ import researchedNewBeerPricesG from './data/beer-prices-new-g.json';
 import researchedNewBeerPricesH from './data/beer-prices-new-h.json';
 import researchedNewBeerPricesI from './data/beer-prices-new-i.json';
 import researchedNewBeerPricesJ from './data/beer-prices-new-j.json';
+import expandedVenueData from './data/verified-venues-expansion.json';
 
 export type BeerPrice = {
   name: string;
@@ -284,7 +285,11 @@ const categoryLabels: Record<string, string> = {
 
 const nonBarBaseVenueIds = new Set(['two-more', 'bon-vivant', 'chambao', 'fazenda', 'motormuzejs']);
 const drinkingVenueCategories = new Set(['bar', 'pub', 'biergarten', 'nightclub']);
-const nonBarVenuePointIds = new Set(['osm-node-11018108905']); // La Casetta is a restaurant despite its OSM bar tag.
+const nonBarVenuePointIds = new Set([
+  'osm-node-11018108905', // La Casetta is a restaurant despite its OSM bar tag.
+  'osm-node-4382264754', // OlyBet menu is explicitly valid only at Voodoo, not Jugla.
+  'osm-node-6685178387', // OlyBet menu is explicitly valid only at Voodoo, not Teika.
+]);
 const isEzitisVenue = (venue: MapVenue) => normalizeName(venue.name).includes('ezītis');
 
 const newBeerMenus = new Map(researchedNewBeerPricesA.venues
@@ -347,12 +352,45 @@ const venuePoints: MapVenue[] = rigaVenueData.venues
     } satisfies Venue;
   });
 
-export const mapVenues: Venue[] = [
+const existingMapVenues: Venue[] = [
   ...venues.filter((venue) => !nonBarBaseVenueIds.has(venue.id)),
   ...venuePoints
     .filter((venue) => 'category' in venue
       && !nonBarVenuePointIds.has(venue.id)
       && (drinkingVenueCategories.has(venue.category) || isEzitisVenue(venue)))
     .filter(isPricedVenue),
+];
+
+const expandedVenues: Venue[] = expandedVenueData.venues.map((venue) => {
+  const beerPrices = dedupeBeerPrices(venue.beerPrices as BeerPrice[])
+    .sort((first, second) => first.price - second.price);
+  const cheapest = beerPrices[0];
+  return {
+    id: venue.id,
+    name: venue.name,
+    kind: venue.kind,
+    address: venue.address,
+    lat: venue.lat,
+    lng: venue.lng,
+    beer: cheapest.name,
+    volumeMl: cheapest.volumeMl,
+    price: cheapest.price,
+    priceIsFrom: cheapest.priceIsFrom,
+    packageCount: cheapest.packageCount,
+    beerPrices,
+    sourceUrl: venue.sourceUrl,
+    sourceLabel: venue.sourceLabel,
+    sourceType: venue.sourceType as Venue['sourceType'],
+  };
+});
+
+export const mapVenues: Venue[] = [
+  ...existingMapVenues,
+  ...expandedVenues.filter((candidate) => !existingMapVenues.some((known) => {
+    const candidateName = normalizeName(candidate.name);
+    const knownName = normalizeName(known.name);
+    return candidate.id === known.id
+      || candidateName === knownName;
+  })),
 ];
 export const osmSnapshotAt = rigaVenueData.osmTimestamp;
