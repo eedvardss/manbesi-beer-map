@@ -14,6 +14,193 @@ type ResearchedVenue = {
 const official = 'Oficiālā ēdienkarte' as const;
 
 const venues: ResearchedVenue[] = [
+{
+  "id": "tinto-vina-telpa",
+  "name": "Tinto vīna telpa",
+  "kind": "vīna bārs",
+  "address": "Elizabetes iela 59, Rīga, LV-1050",
+  "lat": 56.9538981,
+  "lng": 24.1186641,
+  "sourceUrl": "https://www.tinto.lv/_files/ugd/0b7d52_4defa24b724b421fa8b61e2eb0829a43.pdf",
+  "sourceLabel": "Tinto oficiālā ēdienkarte, alus sadaļa",
+  "sourceType": "Oficiālā ēdienkarte",
+  "beerPrices": [
+    {
+      "name": "Valmiermuižas gaišais (bottled)",
+      "volumeMl": 330,
+      "price": 4.5
+    },
+    {
+      "name": "Valmiermuižas tumšais (bottled)",
+      "volumeMl": 330,
+      "price": 4.5
+    },
+    {
+      "name": "Madonas alus (bottled)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Valmiermuižas gaišais (draft)",
+      "volumeMl": 300,
+      "price": 5.5
+    },
+    {
+      "name": "Valmiermuižas gaišais (draft)",
+      "volumeMl": 500,
+      "price": 6.5
+    },
+    {
+      "name": "Madonas nefiltrētais (draft)",
+      "volumeMl": 300,
+      "price": 5.5
+    },
+    {
+      "name": "Madonas nefiltrētais (draft)",
+      "volumeMl": 500,
+      "price": 6.5
+    }
+  ],
+  "hours": {
+    "mon": [
+      "12:00-23:00"
+    ],
+    "tue": [
+      "12:00-23:00"
+    ],
+    "wed": [
+      "12:00-23:00"
+    ],
+    "thu": [
+      "12:00-23:00"
+    ],
+    "fri": [
+      "12:00-23:30"
+    ],
+    "sat": [
+      "12:00-23:00"
+    ],
+    "sun": [
+      "12:00-22:00"
+    ],
+    "sourceUrl": "https://www.google.com/maps/search/Tinto+wine+food+Riga"
+  },
+  "evidenceNotes": "Current first-party menu linked from tinto.lv/dienkarte, page 7 visually verified 2026-09-04: explicit EUR, bottle sizes and shared draught size/price schedule. Seven named beer options; Fris beer cocktail and generic unnamed alcohol-free beer excluded. Wine-bar scope corroborated by official TINTO vina telpa about page explicitly welcoming a wine-only pause before cinema, plus current wine-bar listing. Google Maps provides exact pin and all seven weekly hours; live Google hours supersede the aggregator opening-time discrepancy. Menu notes 10% service fee for reservations of six guests or more."
+},
+{
+  "id": "objekts-boar-bbq",
+  "name": "Objekts x Boar BBQ",
+  "kind": "bārs un pasākumu vieta",
+  "address": "Sporta iela 2 k-3, Rīga, LV-1013",
+  "lat": 56.962649,
+  "lng": 24.119153,
+  "sourceUrl": "https://objektsbbq.lv/assets/drinks-menu-lv-2-DQOeE7dr.jpg",
+  "sourceLabel": "Objekts x Boar BBQ oficiālā dzērienu karte",
+  "sourceType": "Oficiālā ēdienkarte",
+  "beerPrices": [
+    {
+      "name": "Pooka Lager (draft)",
+      "volumeMl": 1500,
+      "price": 13
+    },
+    {
+      "name": "Pooka Lager (draft)",
+      "volumeMl": 500,
+      "price": 5
+    },
+    {
+      "name": "Pooka Lager (draft)",
+      "volumeMl": 300,
+      "price": 4
+    },
+    {
+      "name": "Mītava gaišais (draft)",
+      "volumeMl": 1500,
+      "price": 10
+    },
+    {
+      "name": "Mītava gaišais (draft)",
+      "volumeMl": 500,
+      "price": 4
+    },
+    {
+      "name": "Mītava gaišais (draft)",
+      "volumeMl": 300,
+      "price": 3.5
+    },
+    {
+      "name": "Piebalgas gaišais (draft)",
+      "volumeMl": 1500,
+      "price": 13
+    },
+    {
+      "name": "Piebalgas gaišais (draft)",
+      "volumeMl": 500,
+      "price": 5
+    },
+    {
+      "name": "Piebalgas gaišais (draft)",
+      "volumeMl": 300,
+      "price": 4.5
+    },
+    {
+      "name": "Valmiermuiža (draft)",
+      "volumeMl": 1500,
+      "price": 16
+    },
+    {
+      "name": "Valmiermuiža (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Valmiermuiža (draft)",
+      "volumeMl": 300,
+      "price": 5
+    },
+    {
+      "name": "Leffe Blonde (draft)",
+      "volumeMl": 1500,
+      "price": 16
+    },
+    {
+      "name": "Leffe Blonde (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Leffe Blonde (draft)",
+      "volumeMl": 300,
+      "price": 5
+    },
+    {
+      "name": "Corona Extra",
+      "volumeMl": 330,
+      "price": 4
+    }
+  ],
+  "hours": {
+    "mon": [],
+    "tue": [],
+    "wed": [
+      "16:00-00:00"
+    ],
+    "thu": [
+      "16:00-00:00"
+    ],
+    "fri": [
+      "16:00-01:00"
+    ],
+    "sat": [
+      "14:00-01:00"
+    ],
+    "sun": [
+      "14:00-00:00"
+    ],
+    "sourceUrl": "https://objektsbbq.lv/"
+  },
+  "evidenceNotes": "Official live drinks-menu page links this menu image, visually verified 2026-09-04. Draught columns are 1.5 L, 0.5 L and 0.3 L; all 15 named draught options and Corona Extra included. Cider, generic unnamed alcohol-free beer and Fris beer cocktail excluded. Official website publishes weekly hours; private events may alter them. Google Maps confirms exact venue pin 56.962649,24.119153 and Sporta 2 k-3 address, distinct from Zefirs in the same quarter."
+},
   {
     id: 'lidl-arena-bar',
     name: 'Lidl Arena bārs',

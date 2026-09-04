@@ -2369,6 +2369,78 @@
       ],
       "reason": "Unclaimed one-review listing with no hours, website, phone, menu, or itemized price evidence.",
       "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "When Coffee Meets Whisky",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://wcmw.bar/"
+      ],
+      "reason": "Official site lists three beer amounts but beer currency and serving sizes remain unlabeled; held pending explicit menu confirmation.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Popcorn Dinner & Show",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://popcorn-riga.lv/bar/"
+      ],
+      "reason": "Official PDF has beer prices but regular walk-in weekly bar hours are unconfirmed; current offer is ticketed dinner shows.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Nurme — Avotu",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://nurmebeer.com/"
+      ],
+      "reason": "Separate Avotu 53 bar confirmed, but no current branch-specific on-premise beer tariff located; Vagonu prices not copied.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Garage — Berga Bazārs",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://vinabars.lv/"
+      ],
+      "reason": "Official live wine list has no named beer prices; not the already accepted Garaza on Aldaru.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Le Magnum Bar",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://lemagnumbar.com/"
+      ],
+      "reason": "Official page confirms Strelnieku 2A but exposes no itemized current beer menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Truff Le Pig",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://restaurantguru.com/Truff-Le-Pig-Riga/menu"
+      ],
+      "reason": "Menu-image discovery did not yield an owner-controlled current itemized beer price source.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Jackie Bar",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://en.johnrestaurant.com/jackiebar"
+      ],
+      "reason": "Official cocktail-bar page does not publish usable named beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "RŪM",
+      "districtCategory": "Rīga — bar research",
+      "sourceUrls": [
+        "https://festimo.lv/rum/"
+      ],
+      "reason": "Bar lead at Aristida Briana 9A, no current named on-premise beer tariff located.",
+      "outcome": "insufficient_evidence"
     }
   ],
   "counts": {
