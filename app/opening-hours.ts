@@ -1,5 +1,6 @@
 import expandedVenueData from './data/verified-venues-expansion.json';
 import { popularVenueData } from './popular-venues';
+import { verifiedVenueData150 } from './verified-venues-150';
 
 export type DayHours = string[] | null;
 
@@ -153,7 +154,7 @@ export const venueOpeningHours: Record<string, VenueOpeningHours> = {
   ], 'https://www.skapisriga.com/'),
 };
 
-[...expandedVenueData.venues, ...popularVenueData.venues].forEach((venue) => {
+[...expandedVenueData.venues, ...popularVenueData.venues, ...verifiedVenueData150.venues].forEach((venue) => {
   if (!venue.hours) return;
   venueOpeningHours[venue.id] = {
     mon: venue.hours.mon,
