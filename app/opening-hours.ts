@@ -1,6 +1,7 @@
 import expandedVenueData from './data/verified-venues-expansion.json';
 import { popularVenueData } from './popular-venues';
 import { verifiedVenueData150 } from './verified-venues-150';
+import { verifiedVenueDataPost150 } from './verified-venues-post-150';
 
 export type DayHours = string[] | null;
 
@@ -33,7 +34,7 @@ const weekdayIndexes: Record<string, number> = {
   Sun: 6,
 };
 
-const checkedAt = '2026-09-03';
+const checkedAt = '2026-09-04';
 type Week = [DayHours, DayHours, DayHours, DayHours, DayHours, DayHours, DayHours];
 
 const schedule = (week: Week, sourceUrl: string, note?: string): VenueOpeningHours => ({
@@ -68,12 +69,21 @@ export const venueOpeningHours: Record<string, VenueOpeningHours> = {
   gust: schedule([
     ['17:00-23:00'], ['17:00-23:00'], ['17:00-23:00'], ['17:00-23:00'], ['17:00-00:00'], ['17:00-00:00'], [],
   ], 'https://untappd.com/v/gust/14012302'),
+  armoury: schedule([
+    ['16:00-02:00'], ['16:00-02:00'], ['16:00-02:00'], ['16:00-02:00'], ['16:00-04:00'], ['16:00-04:00'], ['16:00-02:00'],
+  ], 'https://www.thearmourybar.com/reservations'),
   beera: schedule([
     ['15:00-00:00'], ['15:00-00:00'], ['15:00-00:00'], ['15:00-00:00'], ['15:00-02:00'], ['14:00-02:00'], ['14:00-23:00'],
   ], 'https://beerabar.lv/contact-us/'),
   banshee: schedule([
     ['14:00-00:00'], ['14:00-00:00'], ['14:00-00:00'], ['14:00-00:00'], ['14:00-02:00'], ['14:00-02:00'], ['14:00-00:00'],
   ], 'https://www.thebansheeriga.com/menu'),
+  'two-more': schedule([
+    ['12:00-23:00'], ['12:00-23:00'], ['12:00-23:00'], ['12:00-23:00'], ['12:00-00:00'], ['12:00-00:00'], ['12:00-23:00'],
+  ], 'https://twomorebeers.lv/en/', 'Used the official venue-hours block; an embedded Instagram bio shows a conflicting older schedule.'),
+  'bon-vivant': schedule([
+    ['12:00-23:00'], ['12:00-23:00'], ['12:00-23:00'], ['12:00-23:00'], ['12:00-01:00'], ['12:00-01:00'], ['12:00-23:00'],
+  ], 'https://www.bonvivant.lv/index_en', 'Used the official day-by-day restaurant-hours table; the footer contains a conflicting older opening time.'),
   'kwak-gleznotaju': schedule([
     ['12:00-01:00'], ['12:00-01:00'], ['12:00-01:00'], ['12:00-01:00'], ['12:00-02:00'], ['12:00-02:00'], ['12:00-01:00'],
   ], 'https://kwakinnriga.mozello.lv/kontakti/'),
@@ -94,7 +104,34 @@ export const venueOpeningHours: Record<string, VenueOpeningHours> = {
   ], 'https://bellevue.lv/en/faq'),
   islande: schedule([
     null, null, null, null, null, null, null,
-  ], 'https://islandehotel.lv/lv/restorani/', 'Oficiālā lapa nenorāda Lobby Bar darba laiku.'),
+  ], 'https://islandehotel.lv/dinning/', 'Oficiālā lapa nenorāda Lobby Bar darba laiku; tajā redzamais 12:00–23:00 grafiks attiecas tikai uz Rooftop Terrace.'),
+  joker: schedule([
+    ['09:00-21:00'], ['09:00-21:00'], ['09:00-21:00'], ['09:00-21:00'], ['09:00-21:00'], ['11:00-21:00'], ['11:00-21:00'],
+  ], 'https://jokerklubs.lv/en/contact-us/', 'Restaurant “Silts” hours at Joker Klubs, not the unrelated Joker gaming-hall chain.'),
+  cuba: schedule([
+    ['12:00-00:00'], ['12:00-02:00'], ['12:00-01:00'], ['12:00-02:00'], ['12:00-03:00'], ['12:00-03:00'], ['12:00-00:00'],
+  ], 'https://www.google.com/maps/place/Cuba+Cafe/@56.948923,24.1060217,17z/data=!4m7!3m6!1s0x46eecfd73c7ec7ef:0x54c0e0af867ebdf9!8m2!3d56.948923!4d24.1060217!10e2!16s%2Fg%2F11dxj0flyp', 'Current Google schedule corroborated by RestaurantGuru and R23; the official Wix hours block contains placeholder data.'),
+  ansamblis: schedule([
+    [], ['12:00-22:00'], ['12:00-22:00'], ['12:00-22:00'], ['12:00-23:00'], ['12:00-23:00'], ['12:00-22:00'],
+  ], 'https://restaurantguru.com/Ansamblis-Riga', 'Current claimed Google-derived listing, updated in August 2026; the official contact page does not publish hours.'),
+  zefirs: schedule([
+    ['16:00-21:00'], ['16:00-23:00'], ['16:00-23:00'], ['16:00-23:00'], ['16:00-00:00'], ['14:00-23:30'], ['14:00-21:00'],
+  ], 'https://www.waze.com/ru/live-map/directions/zefirs-sporta-iela-2-riga?to=place.w.15794746.158078528.23494284'),
+  'sinners-bar': schedule([
+    [], [], ['19:00-03:00'], ['19:00-04:00'], ['17:00-05:00'], ['17:00-05:00'], ['19:00-02:00'],
+  ], 'https://restaurantguru.com/The-Sinners-Club-Riga', 'Current complete Google-derived schedule; the official site confirms the branch but only gives a general 18:00 opening statement.'),
+  'alus-rume-trofeja': schedule([
+    ['17:00-23:00'], ['17:00-23:00'], ['17:00-00:00'], ['17:00-00:00'], ['16:00-02:00'], ['16:00-00:00'], ['16:00-23:00'],
+  ], 'https://www.waze.com/live-map/directions/latvia/riga/riga/alus-rume-trofeja?to=place.ChIJZXr2qkrP7kYR6YAlHZe8VR8'),
+  '1983-bars': schedule([
+    [], ['17:30-00:00'], ['17:30-00:00'], ['17:30-00:00'], ['17:30-02:00'], ['17:30-02:00'], ['17:30-00:00'],
+  ], 'https://restaurantguru.com/1983-Riga', 'Current Google-derived listing updated 2026-09-02 and corroborated by the venue social profile.'),
+  'baka-bars': schedule([
+    ['12:00-00:00'], ['12:00-00:00'], ['12:00-00:00'], ['12:00-00:00'], ['12:00-02:00'], ['12:00-00:00'], [],
+  ], 'https://fr.restaurantguru.com/BAKA-Riga', 'Current Google-derived listing updated 2026-09-02; a malformed Tripadvisor split schedule was not used.'),
+  'kimmel-dzesetava': schedule([
+    [], [], ['16:00-23:00'], ['16:00-23:00'], ['16:00-03:00'], ['11:00-03:00'], ['11:00-22:00'],
+  ], 'https://www.kimmelkvartals.lv/dzesetavas-piedavajums/'),
   skyline: schedule([
     ['15:00-01:00'], ['15:00-01:00'], ['15:00-01:00'], ['15:00-01:00'], ['15:00-02:00'], ['12:00-02:00'], ['12:00-01:00'],
   ], 'https://skylinebar.lv/en/'),
@@ -154,7 +191,7 @@ export const venueOpeningHours: Record<string, VenueOpeningHours> = {
   ], 'https://www.skapisriga.com/'),
 };
 
-[...expandedVenueData.venues, ...popularVenueData.venues, ...verifiedVenueData150.venues].forEach((venue) => {
+[...expandedVenueData.venues, ...popularVenueData.venues, ...verifiedVenueData150.venues, ...verifiedVenueDataPost150.venues].forEach((venue) => {
   if (!venue.hours) return;
   venueOpeningHours[venue.id] = {
     mon: venue.hours.mon,

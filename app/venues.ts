@@ -14,6 +14,7 @@ import researchedNewBeerPricesJ from './data/beer-prices-new-j.json';
 import expandedVenueData from './data/verified-venues-expansion.json';
 import { popularVenueData } from './popular-venues';
 import { verifiedVenueData150 } from './verified-venues-150';
+import { verifiedVenueDataPost150 } from './verified-venues-post-150';
 
 export type BeerPrice = {
   name: string;
@@ -211,7 +212,7 @@ const baseVenues: Venue[] = [
 ];
 
 const dedupeBeerPrices = (prices: BeerPrice[]) => [...new Map(
-  prices.map((beer) => [`${beer.name}\u0000${beer.volumeMl}\u0000${beer.price}`, beer]),
+  prices.map((beer) => [`${normalizeName(beer.name)}\u0000${beer.volumeMl}\u0000${beer.price}`, beer]),
 ).values()];
 
 const distanceMetres = (first: { lat: number; lng: number }, second: { lat: number; lng: number }) => {
@@ -287,6 +288,14 @@ const categoryLabels: Record<string, string> = {
   food_court: 'ēdināšanas zona',
 };
 
+const venueNameOverrides: Record<string, string> = {
+  'osm-node-4159686991': 'Purčika Ezītis miglā',
+  'osm-node-10709927452': 'Tallinas Ezītis miglā',
+  'osm-node-12733275708': 'Ķengaraga Ezītis miglā',
+  'osm-node-10704645478': 'Tērbatas Ezītis miglā',
+  'osm-node-790320835': 'Imantas Ezītis miglā',
+};
+
 const nonBarBaseVenueIds = new Set(['chambao', 'fazenda', 'motormuzejs']);
 const drinkingVenueCategories = new Set(['bar', 'pub', 'biergarten', 'nightclub']);
 const nonBarVenuePointIds = new Set([
@@ -329,7 +338,7 @@ const venuePoints: MapVenue[] = rigaVenueData.venues
     const kind = categoryLabels[point.category] ?? point.category;
     const basePoint: VenuePoint = {
       id: point.id,
-      name: point.name ?? `${kind[0].toLocaleUpperCase('lv')}${kind.slice(1)} bez nosaukuma`,
+      name: venueNameOverrides[point.id] ?? point.name ?? `${kind[0].toLocaleUpperCase('lv')}${kind.slice(1)} bez nosaukuma`,
       kind,
       address: point.address ?? 'Adrese nav norādīta',
       lat: point.lat,
@@ -369,6 +378,7 @@ const expandedVenues: Venue[] = [
   ...expandedVenueData.venues,
   ...popularVenueData.venues,
   ...verifiedVenueData150.venues,
+  ...verifiedVenueDataPost150.venues,
 ].map((venue) => {
   const beerPrices = dedupeBeerPrices(venue.beerPrices as BeerPrice[])
     .sort((first, second) => first.price - second.price);

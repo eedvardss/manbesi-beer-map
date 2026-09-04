@@ -1,0 +1,2380 @@
+{
+  "checkedAt": "2026-09-04",
+  "policy": "Rejected or held because the venue failed the current, named, on-premise beer-price evidence standard, was outside scope, was closed, or duplicated an accepted physical location.",
+  "rejectedCandidates": [
+    {
+      "name": "A'Drop",
+      "districtCategory": "Antonijas iela 12, Rīga, LV-1010 — bar",
+      "sourceUrls": [
+        "https://www.adrop.lv/"
+      ],
+      "reason": "The official site confirms the venue but publishes no current itemized beer names, serving sizes, and on-premise prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Aiko",
+      "districtCategory": "Plēksnes iela 9, Rīga, LV-1016 — bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/address/riga-pleksnes-iela-9-lv-1016/departments"
+      ],
+      "reason": "The current address record marks Bārs-Kafejnīca AIKO as excluded/terminated on 2024-04-24. It must not be merged with Berzini at the same address.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Aka Latviešu virtuve",
+      "districtCategory": "Kalēju iela 37, Rīga, LV-1050 — bar",
+      "sourceUrls": [
+        "https://akariga.lv/wp-content/uploads/2024/03/Aka-Restaurant-Drinklist.pdf",
+        "https://latvianfood.lv/"
+      ],
+      "reason": "AKA is explicitly a restaurant and was specifically excluded by the user's bar-only rule; its drink-list PDF is also dated 2024.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Alchimist Bar",
+      "districtCategory": "Audēju iela 14, Rīga, LV-1050 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/search?query=Alchimist%20Bar%20Aud%C4%93ju%20iela%2014%20Riga"
+      ],
+      "reason": "No active owner-controlled venue page, current beer menu, verified tap list, or current readable in-venue beer-price image could be located for this inventory record.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Alus banka",
+      "districtCategory": "Pļavnieki — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/12581951729"
+      ],
+      "reason": "Only a map point was found; no independent active-status evidence or published on-premise beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Alus Bode",
+      "districtCategory": "Sarkandaugava — beer shop/bar",
+      "sourceUrls": [
+        "https://alusbode.lv/",
+        "https://www.google.com/maps/place/Alus+Bode,+lejamais+alus,+B%C4%80RS/@56.9931584,24.1238337,17z/data=!4m6!3m5!1s0x46eecf74b43ba3a1:0xc71b3c8d93395db9!8m2!3d56.9931584!4d24.1238337!16s%2Fg%2F11dfh57jjw"
+      ],
+      "reason": "Official site gives a current lineup and weekly hours but no prices; Google menu photos are from 2015-2017.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Alus bārs",
+      "districtCategory": "Avotu iela 47, Rīga, LV-1009 — bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/nekustamie-ipasumi/property/01000290035",
+        "https://www.talka.lv/delo-truba"
+      ],
+      "reason": "The venue is active and documented in 2026, but it has no official current beer menu or exact itemized beer/size/price source. A 2013 article is stale and does not provide qualifying beer rows.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Alus Celle",
+      "districtCategory": "Riga — beer venue",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Alus+Celle"
+      ],
+      "reason": "No current exact on-premise beer price menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Alus darbnīca TEIKA",
+      "districtCategory": "Teika / brewshop-tap point",
+      "sourceUrls": [
+        "https://restaurantguru.com/Alus-darbnica-TEIKA-Riga",
+        "https://teikabeer.lv/",
+        "https://www.google.com/maps/place/Alus+darbn%C4%ABca+TEIKA/@56.982,24.200,17z"
+      ],
+      "reason": "Current lineup, venue identity, and hours are available, but no current exact on-premise prices. Current taps and hours are public, but no on-premise prices or serving sizes are published; keg-rental figures are retail/off-premise.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Alus Dārzs",
+      "districtCategory": "Purvciems — beer bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Alus+D%C4%81rzs/@56.9553822,24.1743201,17z"
+      ],
+      "reason": "Closed/non-operating; excluded regardless of historic menu evidence.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Alus Krogs Brālis",
+      "districtCategory": "Rīga / beer pub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Alus-Krogs-Bralis-Riga",
+        "https://www.foodyas.com/LV/Riga/614420451920088/Alus-Krogs-Bralis"
+      ],
+      "reason": "The newest menu artifact found is dated 2025-08-22; no current 2026 complete beer price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Alus pagrabiņš",
+      "districtCategory": "Melnsila iela 17, Rīga, LV-1083 — bar",
+      "sourceUrls": [
+        "https://shadyriga.wordpress.com/2019/01/30/alus-bars-pagraba-melnsila-iela/"
+      ],
+      "reason": "Only a 2019 article was found; it is stale and does not publish current itemized beer prices or sizes.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Andalūzijas suns",
+      "districtCategory": "Berga Bazārs / restaurant-bar",
+      "sourceUrls": [
+        "http://www.andaluzijassuns.lv/MENU/DK.pdf",
+        "https://www.andaluzijassuns.lv/pages/menu"
+      ],
+      "reason": "The available exact drink PDF is approximately six years old, and the venue is restaurant-led.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Andante Vinyl Bar",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Andante-Old-Riga-Riga/menu",
+        "https://www.andante.global/"
+      ],
+      "reason": "The only exact beer-board photo located is about one year old; no current price confirmation.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Angārs Meža bārs",
+      "districtCategory": "Tallinas iela 10, Rīga, LV-1001 — bar",
+      "sourceUrls": [
+        "https://www.kvartalaangars.lv/en/angars-2/",
+        "https://www.kvartalaangars.lv/koncertzale/"
+      ],
+      "reason": "This is an outdoor/seasonal service area inside the already mapped Angārs Tallinas kvartāls venue, not an independently priced bar. The official site publishes no separate Meža bārs beer list.",
+      "outcome": "duplicate"
+    },
+    {
+      "name": "Aperitivo",
+      "districtCategory": "Raiņa bulvāris 33, Rīga, LV-1050 — bar",
+      "sourceUrls": [
+        "https://docs.pilseta24.lv/pilseta24/pdf_books/zl_pdfs/p_riga.pdf"
+      ],
+      "reason": "Only a 2017 directory reference was found; no current active venue identity or current itemized beer menu could be verified.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "At Your Mom's bar",
+      "districtCategory": "Avoti — cocktail bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/At-Your-Moms-bar-Riga"
+      ],
+      "reason": "Current listing says temporarily closed and no itemized beer price menu is published.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Atspulgs",
+      "districtCategory": "Kaļķu iela 22, Rīga, LV-1050 — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Atspulgs-Riga",
+        "https://www.zl.lv/en/company/atspulgs-bars"
+      ],
+      "reason": "The venue appears active, but no current exact beer/size/price menu is published. Current public warnings also identify it as a frequently renamed tourist-scam bar, so it is unsuitable for the curated map without strong owner evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Austrumu robeža",
+      "districtCategory": "Vecrīga / theatre restaurant",
+      "sourceUrls": [
+        "https://www.austrumurobeza.lv/restorans/"
+      ],
+      "reason": "The official menu has exact beers, but the venue is explicitly a theatre restaurant rather than a bar-first venue.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Autentika B2",
+      "districtCategory": "Centrs — event bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Autentika-Riga/menu"
+      ],
+      "reason": "The event bar appears active, but no current itemized beer price menu is published.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "BABYLON",
+      "districtCategory": "Kaļķu iela 11B, Rīga, LV-1050 — nightclub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Babylon-Riga"
+      ],
+      "reason": "The listing provides identity only; no current beer rows with serving sizes and on-premise prices were found. Unrelated Babylon restaurant results were excluded.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "BACIO nakts klubs",
+      "districtCategory": "Rīga / nightclub",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing publishes no prices and no Riga-specific owner beer menu surfaced.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Baltijas Biljards Nr. 1",
+      "districtCategory": "Imanta — billiards club",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Baltijas+Biljards+Nr.1"
+      ],
+      "reason": "No dependable current operating listing and no current itemized beer-price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bar Garage",
+      "districtCategory": "Purvciems/Pļavnieki edge — neighborhood bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Bar+Garage/@56.9514801,24.2107898,17z/data=!4m6!3m5!1s0x46eecd001d49ca8b:0xdb23d2981f3fa75b!8m2!3d56.9514801!4d24.2107898!16s%2Fg%2F11y6jhddxc"
+      ],
+      "reason": "Active listing, but its itemized menu photos are from July 2024; no current official menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bar Six",
+      "districtCategory": "Vecrīga / speakeasy cocktail bar",
+      "sourceUrls": [
+        "https://barsix.lv",
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The official site gives only a cocktail starting price and no itemized beer list or beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bar Varde / Frog",
+      "districtCategory": "outer Riga — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Bar+Varde"
+      ],
+      "reason": "Only itemized menu evidence found was from 2023; no current official/menu-photo replacement.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bar XIII",
+      "districtCategory": "Centrs / cocktail bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "Available menu material is approximately two years old and cocktail-focused; no current complete beer prices were found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Barkos",
+      "districtCategory": "Riga — beverage seller",
+      "sourceUrls": [
+        "https://barkos.lv/"
+      ],
+      "reason": "Available prices are wholesale/retail rather than on-premise bar service.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Basement Bar",
+      "districtCategory": "Centrs — event bar",
+      "sourceUrls": [
+        "https://ra.co/events/2347771"
+      ],
+      "reason": "Current event evidence confirms the venue, but no current itemized beer price menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Batiskafs",
+      "districtCategory": "Purvciems — neighborhood bar",
+      "sourceUrls": [
+        "https://www.top-rated.online/cities/Riga/place/p/16499000/Batiskafs"
+      ],
+      "reason": "Temporarily closed with no current tariff.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Beer House — Kaļķu iela",
+      "districtCategory": "Vecrīga — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/5273793921"
+      ],
+      "reason": "No current venue-controlled itemized beer price list could be verified.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "BEERloga",
+      "districtCategory": "Ķengarags — beer bar",
+      "sourceUrls": [
+        "https://beerloga.lv/",
+        "https://www.google.com/maps/place/BEERloga/@56.9009694,24.2167578,17z"
+      ],
+      "reason": "Official on-premise page uses only generic unnamed alus rows; branded exact prices located elsewhere were delivery/retail prices and were excluded.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bergamo",
+      "districtCategory": "Stirnu iela 40A, Rīga, LV-1084 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/search?query=Bergamo%20Stirnu%20iela%2040A%20Riga"
+      ],
+      "reason": "No accessible current official venue menu, verified tap list, or recent readable in-venue beer-price image was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bermuda",
+      "districtCategory": "Baltāsbaznīcas iela 42, Rīga, LV-1015 — pub",
+      "sourceUrls": [
+        "https://latvia-streets.openalfa.com/streets/kreimenu-iela-vecmilgravis-riga",
+        "https://www.lursoft.lv/nekustamie-ipasumi/baltasbaznicas-iela-riga"
+      ],
+      "reason": "Local listings provide location context but no current official beer menu with names, sizes, and on-premise prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Berzini",
+      "districtCategory": "Plēksnes iela 9, Rīga, LV-1016 — bar",
+      "sourceUrls": [
+        "https://latvia-streets.openalfa.com/streets/pleksnes-iela-daugavgriva-daugavgrivas-sala-riga",
+        "https://www.lursoft.lv/real-estate-properties/pleksnes-iela-9-riga-lv-1016"
+      ],
+      "reason": "Current address listings identify Berzini, but no current official/current beer menu was found. The terminated Aiko record at the same address cannot be reused.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Billi Bar",
+      "districtCategory": "Imanta — bar/cafe",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Billi+Bar/@56.9629446,24.0091826,17z/data=!4m6!3m5!1s0x46eedb610661a6e7:0x817fd4e5d05e3d5d!8m2!3d56.9629446!4d24.0091826!16s%2Fg%2F11lh3q2ggp"
+      ],
+      "reason": "No current on-premise beer menu; menu/highlight material is food-only and the last drinks evidence was from 2023.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Black Buffalo",
+      "districtCategory": "Vecrīga — pizzeria-bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Black-Buffalo-Riga/menu"
+      ],
+      "reason": "Restaurant-led pizzeria with no strict current complete on-premise beer tariff.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Black Dragon",
+      "districtCategory": "Latgales apkaime — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/1705181583"
+      ],
+      "reason": "Only directory and map references were found; no current itemized on-premise beer tariff.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Blues House",
+      "districtCategory": "Jura Alunāna iela 2, Rīga, LV-1010 — bar",
+      "sourceUrls": [
+        "https://www.facebook.com/BluesHouseRiga/"
+      ],
+      "reason": "The public owner/social presence provides no accessible current venue-controlled beer menu with exact prices and serving sizes.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bolderāja",
+      "districtCategory": "Avoti / bar",
+      "sourceUrls": [
+        "https://www.facebook.com/bolderaja27/"
+      ],
+      "reason": "No current venue-controlled priced beer menu was exposed.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bona",
+      "districtCategory": "Jasmuižas iela 7A, Rīga, LV-1021 — bar",
+      "sourceUrls": [
+        "https://latvia-streets.openalfa.com/streets/jasmuizas-iela-plavnieki-riga"
+      ],
+      "reason": "Local listings provide location context but no current owner-controlled beer menu, hours, or exact itemized prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "BONO Bar",
+      "districtCategory": "Rīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The Riga listing says price not specified; searches surfaced unrelated foreign BONO menus, not evidence for the Riga venue.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Brooklyn Pub",
+      "districtCategory": "Vecrīga / pub",
+      "sourceUrls": [
+        "https://www.brooklynpub.lv/"
+      ],
+      "reason": "The official menu content is timestamped 2022-05-27 and is stale; delivery feeds were excluded.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bruklinas krogs un viskija bārs",
+      "districtCategory": "Lāčplēša iela 35, Rīga, LV-1011 — pub",
+      "sourceUrls": [
+        "https://www.brooklynpub.lv/"
+      ],
+      "reason": "The official menu content is timestamped 2022-05-27 and is stale. Delivery prices were excluded.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bufete Gauja",
+      "districtCategory": "Stabu iela 32, Rīga, LV-1011 — bar",
+      "sourceUrls": [
+        "https://www.facebook.com/bufetegauja"
+      ],
+      "reason": "The public owner presence establishes the venue, but no accessible current complete beer menu or current readable menu image with sizes and prices was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Buzzing Grilbārs",
+      "districtCategory": "Vecrīga — grill bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Buzzing-Grilbars-Riga/menu"
+      ],
+      "reason": "The latest useful menu is about a year old, the official site is unavailable, and the venue is restaurant-led.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Bāriņš",
+      "districtCategory": "Altonavas iela 22, Rīga, LV-1004 — bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/nekustamie-ipasumi/property/01009140469",
+        "https://www.viszinis.lv/Altonavas-iela-22"
+      ],
+      "reason": "Current property sources only say a bar is or recently was at the address. No active venue-controlled source, menu, weekly hours, or exact beer prices could be verified.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Bārs Marmelāde",
+      "districtCategory": "Āgenskalns Market — cocktail/cafe bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/B%C4%81rs+Marmel%C4%81de/@56.9361309,24.0713312,17z/data=!4m6!3m5!1s0x46eed1d275391b09:0xcde83fb0090b17d7!8m2!3d56.9361309!4d24.0713312!16s%2Fg%2F11qbfpk87p"
+      ],
+      "reason": "Current bar/hours confirmed, but Google Menu contains only unlabeled highlights and no itemized named beer price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Carousel",
+      "districtCategory": "Mārupes iela 8, Rīga, LV-1002 — bar",
+      "sourceUrls": [
+        "https://mapcarta.com/N7396247203",
+        "https://www.viszinis.lv/Marupes-iela-8"
+      ],
+      "reason": "Map/property sources only indicate that a bar is or recently was present. No current owner identity, menu, weekly hours, or exact beer prices were found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Casino Olympic",
+      "districtCategory": "Nīcgales iela 2A, Rīga, LV-1035 — bar",
+      "sourceUrls": [
+        "https://www.olympic-casino.lv/"
+      ],
+      "reason": "The operator website does not publish a current branch-level beer menu with exact names, sizes, and on-premise prices for this location.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Caurvejš",
+      "districtCategory": "Vecmīlgrāvis — informal bar listing",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Caurvej%C5%A1/@57.0319983,24.1110548,17z/data=!4m6!3m5!1s0x46eec54da96f661f:0xb32c14ee871d7b20!8m2!3d57.0319983!4d24.1110548!16s%2Fg%2F11sr_786pk"
+      ],
+      "reason": "Only three reviews and a 24-hour informal listing; no website, menu, or itemized beer-price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Champions' Club",
+      "districtCategory": "Teika — pub",
+      "sourceUrls": [
+        "https://www.facebook.com/championsclublv/"
+      ],
+      "reason": "No current complete itemized beer price menu could be verified.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Chateau Verdens",
+      "districtCategory": "Bērzaunes iela 12A, Rīga, LV-1039 — bar",
+      "sourceUrls": [
+        "https://verdens.lv/en/",
+        "https://verdens.lv/en/stores",
+        "https://wolt.com/lv/lva/riga/venue/chateau-verdens-brzaunes"
+      ],
+      "reason": "The location is primarily a wine shop and tasting studio. Public product prices are retail/delivery, not on-premise bar prices; no current on-site beer menu exists.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Chomsky",
+      "districtCategory": "Centrs — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Chomsky-Riga"
+      ],
+      "reason": "Closed.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Cloud Nine",
+      "districtCategory": "Centrs / cocktail bar",
+      "sourceUrls": [
+        "https://cloudnine.lv/lv",
+        "https://drive.google.com/file/d/1Lkt2tjhwaUncbX5yy37Z1Nb953bSQ4Zj/view"
+      ],
+      "reason": "The owner-linked menu is explicitly from March 2025 and is stale for the September 2026 dataset.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Comedy Latvia bārs",
+      "districtCategory": "Centrs — comedy bar",
+      "sourceUrls": [
+        "https://beztabu.tv3.lv/iedvesmai/atverts-pirmais-komedijas-bars-latvija-comedy-latvia-bars/"
+      ],
+      "reason": "The venue is identifiable and active, but no current itemized beer price menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Coyote Fly",
+      "districtCategory": "Vecrīga — nightclub",
+      "sourceUrls": [
+        "https://www.coyotefly.lv/"
+      ],
+      "reason": "The club appears active, but no current itemized on-premise beer price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Craft Beer Station",
+      "districtCategory": "Pļavnieki — craft beer bar",
+      "sourceUrls": [
+        "https://untappd.com/v/craft-beer-station/11232116",
+        "https://www.google.com/maps/place/Craft+Beer+Station/@56.9323136,24.1992935,17z/data=!4m6!3m5!1s0x46eecd4a0e169af1:0x5146a7453797882!8m2!3d56.9323136!4d24.1992935!16s%2Fg%2F11qnbtdzyb"
+      ],
+      "reason": "Active venue and recent check-ins, but Untappd venue is unverified and lacks on-premise prices; latest menu photo found was October 2022.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Crazy Dog",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://www.facebook.com/crazydogbar"
+      ],
+      "reason": "Only delivery or public listings surfaced; no qualifying current on-premise beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Crystal club",
+      "districtCategory": "Lāčplēša iela 52, Rīga, LV-1011 — nightclub",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "A current nightlife listing confirms the name but states that prices are not specified; no owner-controlled current beer menu surfaced.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Cyber Club",
+      "districtCategory": "Audēju iela 14, Rīga, LV-1050 — bar",
+      "sourceUrls": [
+        "https://playroom.lv/lv/listing/cyber-club/"
+      ],
+      "reason": "The listing confirms a drinks bar inside an esports club but publishes no beer names, serving sizes, or on-premise prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Daiquiri",
+      "districtCategory": "Baznīcas iela 37, Rīga, LV-1010 — bar",
+      "sourceUrls": [
+        "https://www.gimletnordic.com/",
+        "https://www.tripadvisor.com/Restaurant_Review-g274967-d23712612-Reviews-Daiquiri_Riga-Riga_Riga_Region.html"
+      ],
+      "reason": "The venue is cocktail-focused and public listings say beer is served, but no current exact beer-price menu was accessible.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "DarkCloud",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Dark-Cloud-Riga/menu"
+      ],
+      "reason": "The surfaced price artifact was stale or implausible and could not be tied to a current complete in-venue menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "De Commerce Gastro Pub 1871",
+      "districtCategory": "Aspazijas bulvāris 38, Rīga, LV-1050 — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/De-Commerce-Gastro-Pub-1871-Riga/menu",
+        "https://www.tripadvisor.fr/Restaurant_Review-g274967-d6664458-Reviews-De_Commerce_Gastro_Pub_1871-Riga_Riga_Region.html"
+      ],
+      "reason": "This is a hotel restaurant/gastropub rather than a bar-first venue. The only menu image found is six years old and no current exact beer list is published.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Depeche Mode bārs",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://www.facebook.com/dmbarriga/"
+      ],
+      "reason": "No current venue-controlled itemized beer-price menu was exposed.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "diennakts veikals",
+      "districtCategory": "Skolas iela 25, Rīga, LV-1010 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/search?query=Skolas%20iela%2025%20Riga"
+      ],
+      "reason": "This generic record describes a 24-hour shop, not a documented on-premise bar venue.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Divi Tomāti",
+      "districtCategory": "Centrs / restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Divi-Tomati-Riga/menu"
+      ],
+      "reason": "Ordinary restaurant-first venue outside the requested scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "DJ bārs",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://djbar.lv"
+      ],
+      "reason": "The official site has no accessible current beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "DOM",
+      "districtCategory": "Vecrīga — high-end restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Dom-Riga/menu"
+      ],
+      "reason": "High-end restaurant explicitly excluded by the requested scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Doma dārzs",
+      "districtCategory": "Vecrīga / restaurant terrace",
+      "sourceUrls": [
+        "https://rigathisweek.lv/object/dining/open-air-restaurants-jun-sep/doma-darzs/1138"
+      ],
+      "reason": "The venue is restaurant-first; the listing mentions 21 taps but provides no named beer, serving-size, and price rows.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Domini Canes",
+      "districtCategory": "Vecrīga / restaurant",
+      "sourceUrls": [
+        "https://dominicanes.lv/en/menu/"
+      ],
+      "reason": "The official menu has exact beers, but this is an ordinary restaurant-first venue explicitly outside the requested scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Dream",
+      "districtCategory": "Pļavnieku iela 2A, Rīga, LV-1021 — pub",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/search?query=Dream%20P%C4%BCavnieku%20iela%202A%20Riga"
+      ],
+      "reason": "No current official venue identity, menu, verified tap list, or readable current in-venue beer-price image was found; public map data indicates vandalism/uncertain operation.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Dziļi violets",
+      "districtCategory": "Krišjāņa Barona iela 78, Rīga, LV-1001 — bar",
+      "sourceUrls": [
+        "https://wanderlog.com/place/details/10430829/dzi%C4%BCi-violets"
+      ],
+      "reason": "The venue is marked permanently closed. Recent corporate records for a similarly named company do not prove the bar remains open.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Egle",
+      "districtCategory": "Tirgoņu iela 20, Rīga — pub",
+      "sourceUrls": [
+        "https://spogulegle.lv"
+      ],
+      "reason": "The official Egle site does not expose a current menu or priced beer list; directory and Untappd references are not current venue-controlled price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Elite club Zelenka",
+      "districtCategory": "Dižozolu iela 1, Rīga, LV-1058 — bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/nedvizhimost/property/01000790438"
+      ],
+      "reason": "Only a property alias was found; no active owner-controlled venue source, menu, opening schedule, or exact beer prices could be verified.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fashion Museum Cafe",
+      "districtCategory": "Vecrīga / museum cafe",
+      "sourceUrls": [
+        "https://www.fashionmuseumriga.lv/wp-content/uploads/2025/09/menu-for-web-august-2025.pdf"
+      ],
+      "reason": "The menu has exact beer prices, but the venue is a museum cafe, not a bar-first venue.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Favela Riga",
+      "districtCategory": "Andrejosta — nightlife venue",
+      "sourceUrls": [
+        "https://restaurantguru.com/Favela-Riga"
+      ],
+      "reason": "The nightlife venue appears active, but no current itemized beer price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fazenda",
+      "districtCategory": "Āgenskalns/Centrs — restaurant chain",
+      "sourceUrls": [
+        "https://fazenda.lv/"
+      ],
+      "reason": "Ordinary restaurant chain rather than bar-first venue; excluded by user scope.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fenikss",
+      "districtCategory": "Dzelzavas iela 21A, Rīga, LV-1084 — bar",
+      "sourceUrls": [
+        "https://casino.fenikss.lv/spelu-zales/",
+        "https://fenikss.lv/"
+      ],
+      "reason": "The operator site identifies the casino branch but does not publish a current branch-level beer menu with exact names, sizes, and on-premise prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fenikss — Bauskas iela 75A",
+      "districtCategory": "Bauskas iela 75A, Rīga, LV-1004 — gaming bar/casino",
+      "sourceUrls": [
+        "https://fenikss.lv/",
+        "https://www.openstreetmap.org/way/205778831"
+      ],
+      "reason": "The operator site does not publish a current branch-level or explicitly shared beer menu with exact names, EUR prices and serving sizes for this location.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fenikss — Ilūkstes iela 40",
+      "districtCategory": "Ilūkstes iela 40, Rīga, LV-1082 — gaming bar/casino",
+      "sourceUrls": [
+        "https://fenikss.lv/",
+        "https://www.openstreetmap.org/node/4171914190"
+      ],
+      "reason": "The official chain site supplies no current branch-specific or explicitly chain-wide on-premise beer price menu. No exact beer price may be transferred from another Fenikss branch.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fenikss — Sarkandaugavas iela 2",
+      "districtCategory": "Sarkandaugavas iela 2, Rīga, LV-1005 — gaming bar/casino",
+      "sourceUrls": [
+        "https://fenikss.lv/",
+        "https://www.openstreetmap.org/node/1302653955"
+      ],
+      "reason": "The official Fenikss site describes the chain but publishes no current branch-level on-premise beer menu with exact named items, EUR prices and serving sizes; chain pricing cannot be inferred for this branch.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fifii",
+      "districtCategory": "Klusais centrs — restaurant-club",
+      "sourceUrls": [
+        "https://fifii.lv/en/dzerienkarte/",
+        "https://restaurantguru.com/amp/Fifii-Riga"
+      ],
+      "reason": "Current listings mark the venue closed or temporarily closed, and it is an explicitly restaurant-led business outside the requested scope.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "FIRST",
+      "districtCategory": "Andrejostas iela 5 k-3, Rīga, LV-1045 — nightclub",
+      "sourceUrls": [
+        "https://firstclub.lv/wp-content/uploads/2024/05/White-Minimalistic-Bar-Drinks-Price-Menu-compressed-new.pdf",
+        "https://shop.aula.lv/event/the-boring-opening-favela-ufg39k",
+        "https://www.openstreetmap.org/node/4928407021"
+      ],
+      "reason": "The only owner-domain drinks PDF is a 2024 artifact, while a current 2026 event source identifies Favela Nightclub as the venue operating at the exact premises. The FIRST OSM identity cannot be established as the current operator, so its old menu was not reused.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Five One 51 Riga",
+      "districtCategory": "Kalēju iela 51, Rīga, LV-1050 — bar/restaurant",
+      "sourceUrls": [
+        "https://drive.google.com/drive/folders/1GJSzqqQrqJMSmpRwUE4Yh8ISFimnwZV2",
+        "https://drive.google.com/file/d/18KHVRyrnxGj9uzoWv8OX2bGV6FrIlZty/view",
+        "https://restaurantguru.com/Five-One-51-Riga-Riga/menu",
+        "https://www.openstreetmap.org/node/3639657580"
+      ],
+      "reason": "The current venue-specific DRINKS image (created/modified 2026-02-02) publishes exact beer names and numeric amounts, and bottle sizes, but it does not print a currency anywhere. Draft rows also omit serving volume. Because the audit requires explicit currency rather than inference from the Riga location, none of these rows qualifies for publication.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fortūna",
+      "districtCategory": "Dzelzavas iela 44, Rīga, LV-1035 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/4159728590"
+      ],
+      "reason": "Only the OSM candidate point was found. No active owner page, current weekly hours, official menu, verified current tap list, or recent attributable in-venue menu photo establishes publishable beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Frank's Garage",
+      "districtCategory": "Vagonu iela 21, Rīga, LV-1009 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/11895656518"
+      ],
+      "reason": "No current owner-controlled menu, verified current tap list, recent attributable menu-board photo, or complete weekly schedule was found for this exact venue identity.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Franču bārs",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://www.facebook.com/TheFrenchBar/"
+      ],
+      "reason": "No current venue-controlled itemized beer-price menu was exposed.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Friends Club",
+      "districtCategory": "Centrs — karaoke nightclub",
+      "sourceUrls": [
+        "https://clubfriends.lv/en/pub/",
+        "https://restaurantguru.com/Friends-Pub-Riga/menu"
+      ],
+      "reason": "The venue is active, but its only accessible menu upload is about two years old and current owner posts do not publish beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Fēnikss Riga branches",
+      "districtCategory": "multiple districts — gaming hall bars",
+      "sourceUrls": [
+        "https://casino.fenikss.lv/"
+      ],
+      "reason": "Official site confirms halls/bars and current locations, but provides no shared or branch-specific current beer price menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Gentlemen's Royal Club",
+      "districtCategory": "Aspazijas bulvāris 32, Rīga, LV-1050 — nightclub/gentlemen's club",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/6617344220",
+        "https://www.royal.lv/"
+      ],
+      "reason": "The current official site confirms the active club, address and daily 22:00-06:00 hours, but advertises only a premium bar generally and publishes no named beer, serving volume or numeric beer price.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Gimlet",
+      "districtCategory": "Baznīcas iela 37, Rīga, LV-1010 — cocktail bar",
+      "sourceUrls": [
+        "https://www.gimletnordic.com/menu",
+        "https://www.openstreetmap.org/node/9883720001"
+      ],
+      "reason": "The live official menu is expressly a rotating sample of cocktails and publishes neither beer rows nor prices. The official page confirms hours and address but cannot verify an on-premise beer price.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Golden Coffee",
+      "districtCategory": "Vecrīga — cafe-restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Golden-Coffee-Riga/menu"
+      ],
+      "reason": "Ordinary cafe-restaurant outside the requested bar-only scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Grand Bar",
+      "districtCategory": "Aspazijas bulvāris 22, Rīga, LV-1050 — former hotel whisky bar/current private event room",
+      "sourceUrls": [
+        "https://www.kempinski.com/en/grand-hotel-kempinski-riga/meetings-events/venues/grand-bar",
+        "https://www.kempinski.com/en/grand-hotel-kempinski-riga/restaurants-bars/lobby-lounge",
+        "https://www.openstreetmap.org/node/6576490816"
+      ],
+      "reason": "Kempinski's current official site now presents Grand Bar as a private meeting/event room rather than a weekly public bar; the public hotel outlet is Lobby Lounge. No current Grand Bar public beer menu or weekly public hours exists for the residual identity.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Greenwood",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing says price not specified and no current official beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Grilbārs Šašliki",
+      "districtCategory": "Kārļa Ulmaņa gatve 204, Rīga, LV-1029 — pub/grill bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/way/110795237"
+      ],
+      "reason": "No active first-party page, current branch menu, verified tap list, or recent legible in-venue beer-price photo could be tied to this exact venue.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Grill Garden",
+      "districtCategory": "Rīga / restaurant",
+      "sourceUrls": [
+        "http://grillgarden.lv"
+      ],
+      "reason": "The venue is restaurant-first and no current official complete beer category was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "GUNSnLASERS Riga branches",
+      "districtCategory": "multiple outer districts — entertainment/event venues",
+      "sourceUrls": [
+        "https://gunsnlasers.lv/"
+      ],
+      "reason": "Current venues and event service are documented, but no exact current named on-premise beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "GURU Club Rīga",
+      "districtCategory": "Vecrīga / nightclub",
+      "sourceUrls": [
+        "https://fr.restaurantguru.com/GURU-Club-Riga-Riga",
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "Current listings confirm the club but publish no beer item, serving-size, and price rows.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Hanza Pub",
+      "districtCategory": "Centrs / pub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Hanza-Pub-Riga"
+      ],
+      "reason": "No current venue-controlled complete beer price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Happy End",
+      "districtCategory": "Skolas iela 2, Rīga, LV-1010 — karaoke bar/nightclub",
+      "sourceUrls": [
+        "https://digitalarthouse.eu/happyend",
+        "https://digitalarthouse.eu/rent_lv",
+        "https://www.openstreetmap.org/node/12887221308"
+      ],
+      "reason": "The current official pages confirm the karaoke bar and address but publish no named beer, serving size or numeric beer price. A special-event all-inclusive offer is not an itemized normal on-premise menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Havanas terase",
+      "districtCategory": "Aristida Briāna iela 9 k-1, Rīga, LV-1001 — seasonal terrace bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/nekustamie-ipasumi/property/01000242009",
+        "https://www.openstreetmap.org/node/3809582135"
+      ],
+      "reason": "Current results repeat the OSM/cadastral place name only. No current owner page, complete weekly public schedule, itemized beer menu, verified tap list, or recent attributable menu photo was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Herbārijs Rooftop",
+      "districtCategory": "Centrs / rooftop cocktail bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Herbarijs-Riga/menu",
+        "https://www.galleriariga.lv/en/stores/herbarijs"
+      ],
+      "reason": "The current claimed-owner menu was inspected completely and contains food, cocktails, and wine but no complete beer category.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "HEX",
+      "districtCategory": "Elizabetes iela 2A, Rīga, LV-1010 — cocktail bar",
+      "sourceUrls": [
+        "https://www.liveriga.com/lv/10171-bars-xiii",
+        "https://www.openstreetmap.org/node/10969127968"
+      ],
+      "reason": "A current official tourism listing confirms the cocktail bar and address, but no owner-controlled beer menu, exact beer prices, serving sizes, or complete weekly hours were found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Hookah Place Riga",
+      "districtCategory": "Jauniela 14-11, Rīga, LV-1050 — hookah bar",
+      "sourceUrls": [
+        "https://calliano.lv/lv/",
+        "https://restaurantguru.com/Hookah-Place-Riga-Riga",
+        "https://www.openstreetmap.org/node/6289041385"
+      ],
+      "reason": "Current 2026 listings mark the venue permanently closed. Historical hookah-bar descriptions and reviews cannot establish an active venue or current beer prices.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Hot-Rio",
+      "districtCategory": "Krišjāņa Barona iela 70, Rīga, LV-1001 — nightclub",
+      "sourceUrls": [
+        "https://hot-rio-naktsklubs-osa-pluss-c-80699.kontakti.lv/lv/",
+        "https://restaurantguru.com/Hot-Rio-coctail-bar-and-Disco-Riga",
+        "https://www.openstreetmap.org/node/10704645476"
+      ],
+      "reason": "Directory pages identify the club but provide no owner-maintained current beer menu. RestaurantGuru states that it lacks up-to-date owner information; no exact current beer, EUR price and size evidence was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Ibis Kitchen Bar Riga Centre",
+      "districtCategory": "Centrs — hotel bar",
+      "sourceUrls": [
+        "https://all.accor.com/hotel/8545/index.en.shtml"
+      ],
+      "reason": "Official venue evidence exists, but no current itemized beer price menu is published.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "ICON",
+      "districtCategory": "Vecrīga / nightclub",
+      "sourceUrls": [
+        "https://restaurantguru.com/ICON-Riga"
+      ],
+      "reason": "No current complete beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Ilkrogs",
+      "districtCategory": "Ziepniekkalns — neighborhood pub-restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Ilkrogs-Riga/menu"
+      ],
+      "reason": "The venue is active, but its available user menu is two years old, Bolt is delivery-only, and the business is restaurant-led.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Intriga",
+      "districtCategory": "Augusta Deglava iela 69H, Rīga, LV-1082 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/way/120729623"
+      ],
+      "reason": "No current official venue page, weekly public schedule, owner menu, verified tap list, or recent attributable menu-board photo with exact beer prices was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Iļģuciema rūpnīcas veikals",
+      "districtCategory": "Kurzemes prospekts 3, Rīga, LV-1067 — factory shop/retail",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/11968423248"
+      ],
+      "reason": "This is explicitly a factory retail shop, not an on-premise bar/pub. Retail bottle prices are outside the venue-price scope and cannot be shown as bar prices.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Jumts aizbraucis",
+      "districtCategory": "Alekša iela 1, Rīga, LV-1005 — bar/cafe",
+      "sourceUrls": [
+        "https://restaurantguru.com/Jumts-aizbraucis-kafejnica-Riga",
+        "https://www.openstreetmap.org/node/11339092001"
+      ],
+      "reason": "The current venue listing marks the location permanently closed; historical menu/check-in material cannot establish current on-premise prices.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Jungle House",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing says price not specified; no owner-controlled current beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Jägermeister",
+      "districtCategory": "Bruņinieku iela 2, Rīga, LV-1010 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/13045438191"
+      ],
+      "reason": "The generic branded OSM point could not be matched to an active owner identity, current full weekly hours, or a current venue-specific beer menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Kafejnīca SIA KARGAT",
+      "districtCategory": "Sarkandaugava — neighborhood bar/cafe",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Kafejn%C4%ABca,+SIA+%22KARGAT%22/@56.9945019,24.1262739,17z/data=!4m6!3m5!1s0x46eecf0cada157cb:0x6c640a90a3cd6c93!8m2!3d56.9945019!4d24.1262739!16s%2Fg%2F11b6llb9c6"
+      ],
+      "reason": "Only itemized menu evidence located was from 2020; no current official or venue-uploaded beer price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Karjala Grill Bar",
+      "districtCategory": "Centrs / bar-grill",
+      "sourceUrls": [
+        "https://restaurantguru.com/Karjala-Grill-Bar-Riga/menu"
+      ],
+      "reason": "The owner menu located is from 2025 and did not provide a current exact beer-price category.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Kaņepes Kultūras centrs",
+      "districtCategory": "Skolas iela 15, Rīga, LV-1010 — cultural bar/event venue",
+      "sourceUrls": [
+        "https://old.kanepes.lv/lv/kontakti/",
+        "https://www.openstreetmap.org/way/132198528"
+      ],
+      "reason": "The accessible first-party site is historical and the only beer-tasting/price material found is from 2019. No current owner menu, recent venue menu-board photo, or verified current priced tap list was available.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Kimmel Kvartāls",
+      "districtCategory": "Bruņinieku iela 2, Rīga, LV-1010 — beer garden",
+      "sourceUrls": [
+        "https://www.kimmelkvartals.lv/",
+        "https://www.kimmelkvartals.lv/wp-content/uploads/2025/06/KIMMEL_dzerienkarte_labota_print_02.pdf",
+        "https://www.openstreetmap.org/way/1323706364"
+      ],
+      "reason": "This exact venue identity and coordinates are already present in the current map as Kimmel Kvartāls (`id: kimmel`) with its official beer menu; adding the residual OSM row would duplicate it.",
+      "outcome": "duplicate"
+    },
+    {
+      "name": "Kino bārs",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Kino-bars-Riga"
+      ],
+      "reason": "No current official venue or menu source was found and current operating status remains unresolved.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Kiwi Bar",
+      "districtCategory": "Skārņu iela 7, Rīga, LV-1050 — sports pub",
+      "sourceUrls": [
+        "http://www.kiwibar.lv",
+        "https://www.openstreetmap.org/node/2420908317"
+      ],
+      "reason": "The official site confirms the venue and events but exposes no accessible current beer menu, priced tap list, or current attributable menu-board image with exact items, prices and sizes.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Kiwi Sports Pub",
+      "districtCategory": "Vecrīga / pub",
+      "sourceUrls": [
+        "http://www.kiwibar.lv",
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The site confirms the venue and events, but no accessible current tap list or priced beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Klondaika Riga branches",
+      "districtCategory": "multiple districts — gaming/sports bars",
+      "sourceUrls": [
+        "https://www.klondaika.lv/"
+      ],
+      "reason": "No current shared official beer menu proven to apply to all branches and no sufficiently recent branch-specific menu photos.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Klubs DEPO",
+      "districtCategory": "Vecrīga / music club",
+      "sourceUrls": [
+        "https://www.klubsdepo.lv/"
+      ],
+      "reason": "The official site publishes events and venue information but no current beer menu or prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Klubs Piens",
+      "districtCategory": "Centrs — nightclub",
+      "sourceUrls": [
+        "http://www.piens.nu"
+      ],
+      "reason": "Only old guide material was found and no current itemized beer prices are published.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Koya Riga",
+      "districtCategory": "Andrejosta — high-end restaurant and bar",
+      "sourceUrls": [
+        "https://koyarestaurant.com/"
+      ],
+      "reason": "The official drinks menu has beer prices, but the venue is a high-end restaurant without evidence of a distinct independently operating bar; excluded by scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Krastmalas krogs",
+      "districtCategory": "11. novembra krastmala 35, Rīga, LV-1050 — pub",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/5094266122"
+      ],
+      "reason": "No current official identity, complete weekly schedule, owner menu, verified current tap list, or recent attributable in-venue beer-price photo was found for this exact pub.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Krokodils",
+      "districtCategory": "Avoti — cocktail bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Krokodils-Riga/menu"
+      ],
+      "reason": "The venue appears active but publishes no current itemized beer price list.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "KuKū bārs",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://www.liveriga.com/lv/14045-jaunas-vietas-pilseta/"
+      ],
+      "reason": "A current listing says it offers a broad craft-beer selection but publishes no beer names, serving sizes, or prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "La Casetta",
+      "districtCategory": "Tērbatas iela 66, Rīga, LV-1001 — Italian restaurant",
+      "sourceUrls": [
+        "https://lacasetta.lv/edienkarte/",
+        "https://lacasetta.lv/wp-content/uploads/2026/02/2025.02-Menu-LV-A3-bez-linijam-kopija-1.png",
+        "https://www.openstreetmap.org/node/11018108905"
+      ],
+      "reason": "Although a current official menu contains exact beer prices, La Casetta is an ordinary Italian restaurant rather than a bar/pub-first venue. The current app explicitly excludes this OSM point on that basis.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Labietis — Aristida Briāna",
+      "districtCategory": "Centrs — brewery taproom",
+      "sourceUrls": [
+        "https://labietis.lv/",
+        "https://untappd.com/v/labietis/1199206"
+      ],
+      "reason": "Current tap identities and venue hours are verifiable, but neither official nor verified Untappd evidence publishes actual on-premise prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Laska V21",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://www.laska.bar/"
+      ],
+      "reason": "The current official venue and event site publishes no itemized beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Lauvas alus",
+      "districtCategory": "Centrs/Grīziņkalns — beer shop/pub listing",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Lauvas+alus/@56.9623039,24.138119,17z"
+      ],
+      "reason": "Evidence indicates a retail-first beer outlet; no defensible current on-premise bar price list.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Leģenda 1934",
+      "districtCategory": "Centrs / restaurant-bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Legenda-1934-Riga"
+      ],
+      "reason": "The venue is restaurant-first and potentially inactive; no current complete beer-price evidence was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Liepa",
+      "districtCategory": "Avotu iela 23A, Rīga, LV-1011 — bar/pub",
+      "sourceUrls": [
+        "https://untappd.com/v/liepa-bar/10218180",
+        "https://www.openstreetmap.org/node/6521600285"
+      ],
+      "reason": "Current venue activity confirms a beer bar, but Untappd check-ins do not publish venue prices and no current owner menu or recent attributable beer-price board was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Limonāde",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/address/riga-peldu-iela-26/28-lv-1050/departments"
+      ],
+      "reason": "The source confirms a beverage-serving business but no current beer menu or tap price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Lokāls Veldze",
+      "districtCategory": "Rīga / bar-cafe",
+      "sourceUrls": [
+        "https://wolt.com/en/lva/riga/restaurant/lokals-veldze"
+      ],
+      "reason": "Only a delivery feed was found; delivery prices are not valid on-premise evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Lucky Beerhouse",
+      "districtCategory": "Grēcinieku iela 11, Rīga, LV-1050 — beerhouse/pub-restaurant",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/445460345",
+        "https://www.tripadvisor.com/Restaurant_Review-g274967-d25456611-Reviews-Lucky_Beerhouse-Riga_Riga_Region.html"
+      ],
+      "reason": "The currently maintained claimed listing confirms the venue, address and weekly hours, but no reopenable current itemized beer-menu artifact with exact EUR prices and serving sizes was available. Old review prose and discounts are not menu evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Ludza",
+      "districtCategory": "Ludzas iela 58, Rīga, LV-1003 — pub",
+      "sourceUrls": [
+        "https://www.lursoft.lv/nekustamie-ipasumi/property/01000440099",
+        "https://www.openstreetmap.org/way/150897546"
+      ],
+      "reason": "Address/registry data identifies the map point but no active owner page, complete weekly hours, current menu, verified tap list, or recent attributable beer-price photo was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Lust Bar Riga",
+      "districtCategory": "Vecrīga / cocktail-hookah bar",
+      "sourceUrls": [
+        "https://lustbar.lv/",
+        "https://restaurantguru.com/amp/Lust-Riga-Bar-and-Night-Club-Riga"
+      ],
+      "reason": "The venue and current hours are verified, but no current itemized beer prices were found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "M&Z Purvciema 50",
+      "districtCategory": "Purvciems — neighborhood bar/cafe",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/M%26Z+Purvciema+50"
+      ],
+      "reason": "A July 2026 review mentions beer at EUR 2.50, but gives no beer name or serving size; no itemized official/menu-photo evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Manchester Pub",
+      "districtCategory": "Vecrīga / pub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Manchester-Pub-Riga"
+      ],
+      "reason": "The pub appears active, but no current owner-controlled exact beer price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Maverick Barber and Bar",
+      "districtCategory": "Miera iela 5, Rīga, LV-1001 — barber shop and bar",
+      "sourceUrls": [
+        "https://pakalpojumi.pvd.gov.lv/lv/ipvd/objects?ipvd_objects_search_form%5Bsearch_performed%5D=t&page=939",
+        "https://restaurantguru.com/Maverick-Barber-and-Bar-Riga",
+        "https://www.openstreetmap.org/node/9919380934"
+      ],
+      "reason": "Current registry/listing evidence supports an active hybrid barbershop-bar and beer service, but no current owner menu or recent legible venue-specific menu image publishes exact beer names, EUR prices and serving sizes.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Mednieku bārs",
+      "districtCategory": "Imanta — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Mednieku+b%C4%81rs/@56.9677262,24.0143525,17z/data=!4m6!3m5!1s0x46eec571d6f514bb:0x7bebee7a8ac539fe!8m2!3d56.9677262!4d24.0143525!16s%2Fg%2F11tb5r7z9t"
+      ],
+      "reason": "Active listing, but no official menu and no current itemized beer-price photo.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Mednieku krogs",
+      "districtCategory": "Brīvības iela 103-55, Rīga, LV-1001 — pub",
+      "sourceUrls": [
+        "https://www.lursoft.lv/adrese/brivibas-iela-103-riga-lv-1001/strukturvienibas",
+        "https://www.openstreetmap.org/node/6982406180"
+      ],
+      "reason": "The current registry-derived address record marks the Mednieku krogs operating unit excluded/closed on 2024-10-12. No active successor under this identity or current price evidence was found.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Melnā Piektdiena",
+      "districtCategory": "Brīvības gatve 193C, Rīga, LV-1039 — concert/nightclub venue",
+      "sourceUrls": [
+        "https://ticketshop.lv/en/events/107439",
+        "https://www.openstreetmap.org/node/1795805153"
+      ],
+      "reason": "Current events establish that the venue operates, but it does not publish a normal full weekly public schedule or a current itemized beer menu. Event-specific opening does not satisfy the weekly-hours requirement, and anecdotal bar references do not verify prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Mercure Riga Centre Work & Play Bar",
+      "districtCategory": "Centrs — hotel bar",
+      "sourceUrls": [
+        "https://all.accor.com/hotel/9436/index.en.shtml"
+      ],
+      "reason": "Official venue evidence exists, but no current itemized beer price menu is published.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Miezis & Kompānija. Vecrīga",
+      "districtCategory": "13. janvāra iela 21, Rīga, LV-1050 — beer bar",
+      "sourceUrls": [
+        "https://untappd.com/v/miezis-un-kompanija-vecriga/8420770",
+        "https://www.openstreetmap.org/node/6375622485"
+      ],
+      "reason": "The current venue page marks this Vecrīga location permanently closed (venue page last updated 2025-03-24). Historical check-ins and menus were not reused.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Miezis un Kompānija Vecrīga",
+      "districtCategory": "Vecrīga / craft-beer bar",
+      "sourceUrls": [
+        "https://untappd.com/v/miezis-un-kompanija-vecriga/8420770"
+      ],
+      "reason": "The venue is permanently closed; historical check-ins and menus are not current evidence.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Moltto",
+      "districtCategory": "Ģertrūdes iela 20, Rīga, LV-1011 — coffee/wine restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Moltto-Riga/menu",
+        "https://www.liveriga.com/lt/12298-fika",
+        "https://www.openstreetmap.org/node/10312972309"
+      ],
+      "reason": "Current sources identify Moltto primarily as a specialty coffee/wine restaurant rather than a bar/pub-first venue. The available current menu material does not provide a qualifying exact on-premise beer item, EUR price and serving size.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Mon Cheri",
+      "districtCategory": "Vecrīga — restaurant-bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Mon-Cheri-Riga/menu"
+      ],
+      "reason": "High-end restaurant outside the requested bar-only scope; no strict current beer tariff was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Moods.lv",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Moods-Riga"
+      ],
+      "reason": "No current venue-controlled beer prices were found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Möku Riga",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://moku.ee/"
+      ],
+      "reason": "The official brand site has no Riga-specific current itemized beer menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Mājas bārs",
+      "districtCategory": "Rūpniecības iela 11, Rīga, LV-1010 — bar",
+      "sourceUrls": [
+        "https://latvia-streets.openalfa.com/streets/rupniecibas-iela-centrs-riga",
+        "https://www.openstreetmap.org/node/1212802232"
+      ],
+      "reason": "Search results only mirror the OSM point. No active owner identity, current weekly public hours, current menu, verified tap list, or recent attributable menu-board photo was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Nekādu problēmu",
+      "districtCategory": " — biergarten",
+      "sourceUrls": [
+        "https://restaurantguru.com/No-Problem-Riga/menu",
+        "https://untappd.com/v/nekadu-problemu/9719538"
+      ],
+      "reason": "A currently active check-in page exists, but it is unverified and publishes no venue menu, serving sizes, or prices. The residual candidate has no address, while third-party sources conflict on the location. No owner-controlled current itemized beer price was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Night Club Valknut",
+      "districtCategory": "Rīga / nightclub",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing says price not specified and no current itemized beer menu surfaced.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Northern Grip",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Northern-Grip-Riga"
+      ],
+      "reason": "No current itemized beer-price menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "NoSaints hidden bar",
+      "districtCategory": "Vecrīga / cocktail bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The venue is active but no itemized beer price-and-size menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "O'Learys Riga branches",
+      "districtCategory": "Riga Plaza/Akropole — sports-bar chain",
+      "sourceUrls": [
+        "https://olearys.com/en-lv/akropole-riga/",
+        "https://olearys.com/en-lv/riga-plaza/"
+      ],
+      "reason": "Official current Riga menus located were food-only; drink-price HTML found during review was tied to another country and cannot be applied to Riga.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "OAZE",
+      "districtCategory": "Kurzemes prospekts, 3, LV-1067, Rīga — bar",
+      "sourceUrls": [
+        "https://pakalpojumi.pvd.gov.lv/lv/ipvd/objects?ipvd_objects_search_form%5Bsearch_performed%5D=t&page=1041",
+        "https://www.openstreetmap.org/node/11968423246"
+      ],
+      "reason": "The current PVD listing identifies an eating establishment inside Imanta market rather than a supported standalone bar. No official menu or exact on-premise beer price was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "OTTO Hotel & Sun",
+      "districtCategory": "Āgenskalns — hotel restaurant",
+      "sourceUrls": [
+        "https://ottohotel.lv/"
+      ],
+      "reason": "No distinct public bar with a current itemized beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "O’Neil’s",
+      "districtCategory": "Vecrīga / pub",
+      "sourceUrls": [
+        "https://restaurantguru.com/ONeills-Riga"
+      ],
+      "reason": "No current complete on-premise beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Pantera",
+      "districtCategory": "Zandartu iela, 2A, LV-1015, Rīga — pub",
+      "sourceUrls": [
+        "https://www.lursoft.lv/nekustamie-ipasumi/zandartu-iela-2a-riga-lv-1015",
+        "https://www.openstreetmap.org/node/1716459517"
+      ],
+      "reason": "Only cadastral/OSM name traces were found; the address is associated with a social residential building. No reliable evidence of an active public venue, hours, or current beer menu exists.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "PAPILLON Gentlemen’s Club",
+      "districtCategory": "Vecrīga / nightclub",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing says price not specified and no current beer menu surfaced.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Peter's Brewhouse",
+      "districtCategory": "Vecrīga — brewpub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Peters-Brewhouse-Riga"
+      ],
+      "reason": "Permanently closed; stale prices cannot be published.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Pie Bellas",
+      "districtCategory": "Pilsoņu iela, 2, LV-1002, Rīga — bar",
+      "sourceUrls": [
+        "https://www.lursoft.lv/real-estate-properties/property/01000560044",
+        "https://www.viszinis.lv/Pilsonu-iela-2"
+      ],
+      "reason": "Only property/cadastral name traces were found. They do not prove a currently operating bar and provide no current beer menu, price, serving size, or full hours.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Pie Bārdas",
+      "districtCategory": "Krišjāņa Valdemāra iela, 145 k-1, LV-1013, Rīga — bar",
+      "sourceUrls": [
+        "https://www.1188.lv/katalogs/kafejnica-bars-krogs-2681/pie-bardas-567563",
+        "https://www.viszinis.lv/Krisjana-Valdemara-iela-145"
+      ],
+      "reason": "Directory/property sources only say the bar is or recently was at this address. No current owner source, exact weekly hours, or itemized beer price was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "pie tilta",
+      "districtCategory": "Purvciems/Pļavnieki edge — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/pie+tilta/@56.953,24.205,17z"
+      ],
+      "reason": "Latest itemized beer-price photo found was from 2022; no current official menu or current venue-uploaded replacement.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Pieci vilki",
+      "districtCategory": "Stabu iela, 6, LV-1010, Rīga — pub",
+      "sourceUrls": [
+        "https://kladite.lv/pieraksti/pieci-vilki/",
+        "https://restaurantguru.com/Pieci-Vilki-Riga"
+      ],
+      "reason": "The pub appears active, but the only exact beer prices located are from a 2008 post and are denominated in Latvian lats. No current owner-published or recent itemized EUR beer price was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Piga",
+      "districtCategory": "Dagmāras iela, 7A, LV-1007, Rīga — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/4776558557"
+      ],
+      "reason": "Exact branch/address duplicate of the existing map venue PĪGA Iļģuciems.",
+      "outcome": "duplicate"
+    },
+    {
+      "name": "Pils",
+      "districtCategory": "Āgenskalns — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Pils/@56.937593,24.075887,17z/data=!4m6!3m5!1s0x46eed03cd7649e3f:0x8abe5c979dfb7308!8m2!3d56.937593!4d24.075887!16s%2Fg%2F11b_2q3k46"
+      ],
+      "reason": "Latest itemized beer-menu photo found was October 2024, outside the under-12-month rule; no current official price menu.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Pils Bar — Grand Palace Hotel",
+      "districtCategory": "Vecrīga — hotel bar",
+      "sourceUrls": [
+        "https://grandpalaceriga.com/pils-bar/"
+      ],
+      "reason": "The official menu covers food and afternoon tea but publishes no current beer tariff.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Pirts Nr. 1 bar",
+      "districtCategory": "Dārzciems — sauna/event bar",
+      "sourceUrls": [
+        "https://pirtsnr1.lv/"
+      ],
+      "reason": "Only itemized drinks-price evidence found was dated 2024; no current official price list.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Pirts Nr.1",
+      "districtCategory": "Rīga / sauna",
+      "sourceUrls": [
+        "https://restaurantguru.com/Pirts-Nr1-Riga"
+      ],
+      "reason": "This is a sauna and entertainment service, not a public bar-first venue.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Pocha",
+      "districtCategory": "Lāčplēša iela, 78, LV-1011, Rīga — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/search/R%C4%ABga%2C%20L%C4%81%C4%8Dpl%C4%93%C5%A1a%20iela%2078",
+        "https://www.openstreetmap.org/way/113803369"
+      ],
+      "reason": "Current place results identify Pocha as a Korean restaurant, not a bar-led venue. No qualifying current on-premise beer menu was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "POSEIDONS Club",
+      "districtCategory": "Rīga / nightclub",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing publishes no prices and no current complete owner beer menu surfaced.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Pounder",
+      "districtCategory": "Centrāltirgus iela, 3 k-2, LV-1050, Rīga — bar",
+      "sourceUrls": [
+        "https://untappd.com/v/pounder/8901416",
+        "https://www.adresoistorija.com/lv-LV/centr%C4%81ltirgus-iela-3-k-2-latgales-priek%C5%A1pils%C4%93ta-r%C4%ABga-lv-1050-latvia-3812"
+      ],
+      "reason": "The only specific venue page is unverified Untappd with no owner menu or prices; the other trace is historical/address aggregation. Current operating status, complete hours, and exact itemized beer prices could not be verified.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Puce. Club at Night",
+      "districtCategory": "Vecrīga / nightclub",
+      "sourceUrls": [
+        "https://de.restaurantguru.com/Puce-Klubs-Nakti-Riga",
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The club is current and beer is mentioned, but no exact current beer price or serving size is published.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Purple Haze",
+      "districtCategory": "Purvciems — cocktail/hookah bar",
+      "sourceUrls": [
+        "https://menu.ps.me/HVCZJCyuxk4",
+        "https://www.google.com/maps/place/Purple+Haze/@56.9494958,24.1812796,17z/data=!4m6!3m5!1s0x46eece13ab942675:0xad4c7dce31695c90!8m2!3d56.9494958!4d24.1812796!16s%2Fg%2F11gh2vjk6l"
+      ],
+      "reason": "Strict evidence passes, but rejected from this batch as a duplicate already present in verified-venues-post-150.ts.",
+      "outcome": "duplicate"
+    },
+    {
+      "name": "Queens Pub",
+      "districtCategory": "Vecrīga / pub",
+      "sourceUrls": [
+        "https://queens.lv"
+      ],
+      "reason": "The current site says 18 beers but gives no beer prices; the linked July 2024 PDF is food-only and stale.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Radio bar",
+      "districtCategory": "Šķūņu iela, 17, LV-1050, Rīga — nightclub",
+      "sourceUrls": [
+        "https://mapcarta.com/N4819761796",
+        "https://radiobar.lv/",
+        "https://www.atputasbazes.lv/lv/restorani_kafe/3"
+      ],
+      "reason": "The old venue domain is now an unrelated SEO/blog site and the remaining nightclub/directory listings are stale or OSM-derived. No current venue-controlled menu, beer price, or reliable current weekly hours was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Radisson Blu Elizabete bar",
+      "districtCategory": "Centrs — hotel lobby bar",
+      "sourceUrls": [
+        "https://www.radissonhotels.com/en-us/hotels/radisson-blu-riga-elizabete/dining"
+      ],
+      "reason": "The official dining page confirms the bar but gives no branch-specific itemized beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Radisson Daugava Lobby Bar",
+      "districtCategory": "Torņakalns/Āgenskalns edge — hotel lobby bar",
+      "sourceUrls": [
+        "https://www.radissonhotels.com/en-us/hotels/radisson-blu-daugava-riga/restaurants-and-bars"
+      ],
+      "reason": "Official venue page confirms the bar but publishes no current itemized beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "RedDoors Sports Bar",
+      "districtCategory": "Rīga / sports bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing says price not specified and no owner-controlled current beer menu surfaced.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Reggae Bar Riga",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The active listing publishes no beer price rows.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Republika",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Republika-Riga"
+      ],
+      "reason": "The venue appears closed or inactive and no current menu was found.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Revolution",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing says price not specified and no current official itemized beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Riga Islande Hotel private bowling bar service",
+      "districtCategory": "Ķīpsala — private bowling/event venue",
+      "sourceUrls": [
+        "https://islandehotel.lv/bowling-center/",
+        "https://islandehotel.lv/wp-content/uploads/2025/10/Boulinga-centra-%C4%93dienu-un-dz%C4%93rienu-pied%C4%81v%C4%81jums_2026_EN-1.pdf"
+      ],
+      "reason": "Only open for pre-booked private events with no published weekly public hours; the drink offer is event-order material, not a walk-in bar schedule.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "RIONE",
+      "districtCategory": "Centrs / pizzeria-restaurant",
+      "sourceUrls": [
+        "https://rione.lv/"
+      ],
+      "reason": "The menu has beer, but the venue is an ordinary pizza restaurant outside the requested scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Rixwell Elefant Hotel bar",
+      "districtCategory": "Šampēteris — hotel bar",
+      "sourceUrls": [
+        "https://www.rixwell.com/en/hotels/rixwell-elefant-hotel"
+      ],
+      "reason": "First-party material found was food/accommodation oriented and did not publish a current named beer price list.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Rixwell Old Riga Palace hotel bar",
+      "districtCategory": "Vecrīga — hotel bar",
+      "sourceUrls": [
+        "https://www.rixwell.com/en/hotels/rixwell-old-riga-palace-hotel"
+      ],
+      "reason": "Official hotel material does not publish a current itemized beer price menu.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Rock Café Riga",
+      "districtCategory": "Vecrīga / music bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Latvijas-1-Rokkafejnica-Riga/menu",
+        "https://rockcafe.lv/"
+      ],
+      "reason": "The venue is active, but no current complete itemized beer-price menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Roll With It",
+      "districtCategory": "Centrs / sushi restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Roll-With-It-Riga/menu"
+      ],
+      "reason": "A current menu exists, but the venue is an ordinary restaurant-first business outside the requested bar-only scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Rozā pērle",
+      "districtCategory": "Miglas iela 26, Rīga, LV-1016 — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Roza-Perle-Riga/menu",
+        "https://www.waze.com/live-map/directions/roza-perle%2C-bars-miglas-iela-26-riga?to=place.w.15729210.157554247.15589457"
+      ],
+      "reason": "Active family grill restaurant/barbecue venue rather than a bar-first venue. The newest RestaurantGuru 'menu' image is an October 2025 opening-hours notice, not an itemized beer menu; no exact current beer prices were found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Secret Event",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "Beer names are mentioned publicly, but no complete current prices or sizes are published; the current R23 listing says price not specified.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Senču krogs",
+      "districtCategory": "Imanta — pub",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Sen%C4%8Du+krogs/@56.9508373,24.0005507,17z/data=!4m6!3m5!1s0x46eedab880839845:0x53d890103d44299!8m2!3d56.9508373!4d24.0005507!16s%2Fg%2F11zg6lrmt"
+      ],
+      "reason": "Latest itemized menu photo found was May 2025, outside the strict freshness cutoff.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Shot Cafe",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "The current listing confirms the venue but publishes no prices; old menu photos were excluded.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "SNOOKER Academy",
+      "districtCategory": "Purvciems — pool/snooker club",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/SNOOKER+Academy"
+      ],
+      "reason": "No published on-premise beer menu, weekly venue schedule, or exact beer-price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Soraksans",
+      "districtCategory": "Centrs / restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Soraksans-Riga/menu"
+      ],
+      "reason": "Ordinary restaurant-first venue outside the requested scope.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Sound Factory",
+      "districtCategory": "Vecrīga — night bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Sound-Factory-Riga"
+      ],
+      "reason": "Active signals exist, but no current itemized beer menu could be verified; old promotional prices were rejected.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Speak Easy",
+      "districtCategory": "Centrs / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Speak-Easy-Riga"
+      ],
+      "reason": "The venue and hours appear current but no itemized beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Spot Kafe",
+      "districtCategory": "Centrs / cafe-bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Spot-Kafe-Riga/menu"
+      ],
+      "reason": "The current menu material is coffee and food; no complete beer-price category was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "St Black",
+      "districtCategory": "Dzirnavu iela, 57A, LV-1010, Rīga — bar",
+      "sourceUrls": [
+        "https://mapcarta.com/N2820185264",
+        "https://mapy.com/ru/?id=94420644&source=osm",
+        "https://www.facebook.com/StBlackRiga/"
+      ],
+      "reason": "The bar appears active and hours are available from map aggregators, but no owner-controlled or recent itemized beer menu with exact prices and serving sizes was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Stacijas Robeža",
+      "districtCategory": "Audēju iela, 1, LV-1050, Rīga — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Stacijas-Robeza-bars-Train-Station-Bar-Riga",
+        "https://untappd.com/v/stacijas-robeza/13405055"
+      ],
+      "reason": "Recent check-ins verify an active bar and identify Piebalgas beers, but the Untappd venue is explicitly unverified and publishes no menu prices or serving sizes. No qualifying current itemized price source was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Sudraba pakavs",
+      "districtCategory": "Ulbrokas iela, 14, LV-1021, Rīga — bar",
+      "sourceUrls": [
+        "https://viss.lv/?k=84525",
+        "https://www.viszinis.lv/Ulbrokas-iela-14"
+      ],
+      "reason": "Only directory/property traces were found. There is no current owner menu, exact itemized beer price, or complete verified weekly schedule.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Sweatshop Sports Bar",
+      "districtCategory": "Vecrīga / sports bar",
+      "sourceUrls": [
+        "https://r23.lv/hospitality/baars/riga"
+      ],
+      "reason": "A current owner food menu was located, but it does not contain a complete beer-price category.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Tallinas pagalms",
+      "districtCategory": "Tallinas quarter / seasonal event bars",
+      "sourceUrls": [
+        "https://restaurantguru.com/Tallinas-Pagalms-Riga"
+      ],
+      "reason": "This is a seasonal multi-operator event complex, not a single bar with a current complete beer price list.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Teātra bārs",
+      "districtCategory": "Centrs — live-music bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Teatra-bars-Riga/menu"
+      ],
+      "reason": "The venue is active, but the only accessible menu is about one year old and the official site exposes no current beer tariff.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "The Sinners City",
+      "districtCategory": "Tallinas iela, 10, LV-1001, Rīga — bar",
+      "sourceUrls": [
+        "https://sinners.lv/",
+        "https://viss.lv/en/?p=178124"
+      ],
+      "reason": "The official 2026 site confirms an active Saturday rooftop/nightlife concept at Tallinas kvartāls, but publishes neither a beer menu nor prices and does not provide a full Monday-Sunday schedule.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "This Place Doesn't Need a Name — Stabu",
+      "districtCategory": "Centrs — breakfast and cocktail bar",
+      "sourceUrls": [
+        "https://nonameriga.com/wp-content/uploads/2023/04/Avotu_Menu.pdf",
+        "https://wolt.com/en/lva/riga/restaurant/this-place-doesnt-need-a-name-stabu"
+      ],
+      "reason": "The owner PDF is from April 2023; the current Wolt feed is delivery-only and contains no qualifying on-premise beer tariff.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Tims Mints",
+      "districtCategory": "Vecrīga / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Tims-Mints-Riga"
+      ],
+      "reason": "Only review-level aggregate pricing was found; beer identity and serving size are absent, so a per-item price cannot be inferred.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Tip Top",
+      "districtCategory": "Brīvības gatve, 480, LV-1024, Rīga — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/way/90036959",
+        "https://www.waze.com/lv/live-map/directions/tip-top-veikals-bars-brivibas-gatve-480-riga?to=place.w.15925818.159061572.16222387"
+      ],
+      "reason": "The current listing describes a hybrid shop-bar (veikals-bārs), outside the project's bar/pub scope, and no on-premise beer menu with exact prices was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "TOSS Boulinga Halle bar",
+      "districtCategory": "Ķengarags — bowling/event bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/TOSS+Boulinga+Halle",
+        "https://www.toss.lv/"
+      ],
+      "reason": "No current named beer plus exact price evidence; historic menus are too old.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Tower",
+      "districtCategory": "Teika — nightclub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Tower-nightclub-Riga"
+      ],
+      "reason": "The nightclub appears active, but no current itemized on-premise beer price list was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Trīs vīri laivā",
+      "districtCategory": "Avotu iela, 35, LV-1009, Rīga — pub",
+      "sourceUrls": [
+        "https://pakalpojumi.pvd.gov.lv/lv/ipvd/objects?ipvd_objects_search_form%5Bsearch_performed%5D=t&page=343",
+        "https://www.karbonade.lv/krodzins-tris-viri-laiva-286",
+        "https://www.waze.com/fil/live-map/directions/tris-viri-laiva-avotu-iela-35-riga?to=place.w.15794746.158209599.14312951"
+      ],
+      "reason": "The pub is active, but the available sources provide hours/registration and an old percentage discount rather than a current base beer price. No qualifying current itemized on-premise beer menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Tveice",
+      "districtCategory": "Ziemeļu iela, 5, LV-1005, Rīga — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Tveice-Riga",
+        "https://www.openstreetmap.org/node/4421861589"
+      ],
+      "reason": "Current venue listing marks Tveice permanently closed.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Ugunsvija",
+      "districtCategory": "Aristida Briāna iela, 10, LV-1001, Rīga — bar",
+      "sourceUrls": [
+        "https://theeuropeanbarguide.com/ugunsvija-riga-%F0%9F%87%B1%F0%9F%87%BB/",
+        "https://www.facebook.com/ugunsvija",
+        "https://www.tripadvisor.co.uk/Restaurant_Review-g274967-d33243180-Reviews-Ugunsvija-Riga_Riga_Region.html"
+      ],
+      "reason": "Multiple recent sources establish an active dedicated pub, but none publishes a current exact itemized beer price and serving size. The venue therefore cannot be added without inventing data.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vagonu zāle",
+      "districtCategory": "Vagonu iela, 21, LV-1009, Rīga — nightclub",
+      "sourceUrls": [
+        "https://nurmebeer.com/",
+        "https://www.openstreetmap.org/node/10235109602"
+      ],
+      "reason": "The official complex page describes Vagonu zāle as a concert/event hall and lists separate bars at the same site. It has no independent stable bar menu or weekly hours; the site's dedicated bar venues are handled separately in the map.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Valhalla",
+      "districtCategory": "Kungu iela, 8, LV-1050, Rīga — nightclub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Sparks-bars-Riga",
+        "https://www.openstreetmap.org/node/11681533116"
+      ],
+      "reason": "Recent customer evidence on the current place listing states that the venue shut down permanently; remaining map listings are stale.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Valmiermuižas alus vēstniecība Briāna",
+      "districtCategory": "Briāna quarter / brewery shop-taproom",
+      "sourceUrls": [
+        "https://untappd.com/v/valmiermuizas-alus-vestnieciba-riga/355422",
+        "https://valmiermuiza.lv/pages/contact"
+      ],
+      "reason": "The official site publishes current venue details but only retail web-shop prices; Untappd has names or check-ins, not verified current on-premise prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Van Gogh",
+      "districtCategory": "Vecrīga / bar-club",
+      "sourceUrls": [
+        "https://restaurantguru.com/Van-Gogh-Riga"
+      ],
+      "reason": "No current complete itemized beer prices were found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vans",
+      "districtCategory": "Īslīces iela, 7, LV-1058, Rīga — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Vans-Riga",
+        "https://van.lv/takeaway/section%3Aedienkarte"
+      ],
+      "reason": "The owner menu and current listing present Vans as a food-led cafe/restaurant. The owner menu contains no beer items, so it is outside scope and lacks qualifying beer-price evidence.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Vecais Pēteris",
+      "districtCategory": "Ūnijas iela, 76, LV-1084, Rīga — pub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Vecais-Peteris-Krodzins-Riga",
+        "https://untappd.com/w/krodzins-vecais-peteris/483926",
+        "https://vecaispeteris.lv/",
+        "https://wolt.com/lv/lva/riga/restaurant/vecais-peteris-krodzins"
+      ],
+      "reason": "The venue is active and full hours are available, but the official and delivery menus show food only. Untappd confirms beer presence without venue prices or serving sizes. No qualifying current itemized on-premise beer price was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vecmeita ar kaķi",
+      "districtCategory": "Vecrīga / tavern-restaurant",
+      "sourceUrls": [
+        "https://restaurantguru.com/Vecmeita-ar-Kaki-Riga/menu",
+        "https://www.waze.com/pt-PT/live-map/directions/vecmeita-ar-kaki-maza-pils-iela-1-riga?to=place.w.15794746.157947455.6394896"
+      ],
+      "reason": "The current owner food menu and hours are available, but no beer section or prices are published; the venue is restaurant-led.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "VEF BĀRS",
+      "districtCategory": "Teika/VEF — event bar",
+      "sourceUrls": [
+        "https://vefkvartals.lv/en/offers/vef-bars/",
+        "https://vefkvartals.lv/wp-content/uploads/2025/02/23.jpg"
+      ],
+      "reason": "Official live menu is excellent and current-on-site, but the bar operates only at public/corporate events and has no published weekly hours; held per explicit parent rule.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Velna ducis",
+      "districtCategory": "Lāčplēša iela, 100, LV-1003, Rīga — bar",
+      "sourceUrls": [
+        "https://mapcarta.com/N1306164979",
+        "https://www.lursoft.lv/real-estate-properties/property/01000400032"
+      ],
+      "reason": "Only OSM/cadastral name traces were found. No reliable proof of an active venue, current weekly hours, or current itemized beer menu exists.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vespa garāža",
+      "districtCategory": "Valkas iela, 6, LV-1010, Rīga — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Vespa-Garazh-Riga",
+        "https://www.vespas.lv/",
+        "https://www.waze.com/lv/live-map/directions/vespa-garazh-valkas-iela-6-riga?to=place.w.15794746.157947456.21794003"
+      ],
+      "reason": "The current owner site is a Vespa repair/service business, while bar/cafe descriptions are legacy or conflicting. No current owner-controlled bar menu or exact beer price was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Vest",
+      "districtCategory": "Āgenskalns Market — market bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Vest/@56.9359175,24.0723626,17z/data=!4m6!3m5!1s0x46eed1f667102343:0x2cb7a26fab849a73!8m2!3d56.9359175!4d24.0723626!16s%2Fg%2F11rzdgj73m"
+      ],
+      "reason": "Active bar, but its only menu photo is from August 2022 and current highlights do not publish exact named beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "VilaVi",
+      "districtCategory": "outer Riga — restaurant",
+      "sourceUrls": [
+        "https://vilavi.lv/"
+      ],
+      "reason": "Ordinary restaurant rather than bar-first venue; excluded by scope even where drinks are sold.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vinilbārs",
+      "districtCategory": "Āgenskalns — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Vinilb%C4%81rs/@56.9427498,24.0656595,17z/data=!4m6!3m5!1s0x46eed01985c0f321:0xd683cf78fee2b25!8m2!3d56.9427498!4d24.0656595!16s%2Fg%2F11c2y9n3vg"
+      ],
+      "reason": "Current activity is confirmed, but the only beer-price/menu highlight found was from 2019; no current itemized prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vinilbārs Kalnciema 39",
+      "districtCategory": "Āgenskalns / bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Vinilbars-Kalnciema-39-Riga"
+      ],
+      "reason": "No current itemized beer-price menu was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Visi savējie",
+      "districtCategory": "Nometņu iela, 58A, LV-1002, Rīga — pub",
+      "sourceUrls": [
+        "https://wolt.com/lv/lva/riga/restaurant/restorns-visi-savjie",
+        "https://www.waze.com/live-map/directions/lv/riga/restorans-visi-savejie-and-catering?to=place.ChIJTRf-az3Q7kYRDc8awntE9sc"
+      ],
+      "reason": "Current sources identify an ordinary restaurant/catering business, and the only menu surfaced is a delivery-food menu. It is outside the bar-led scope and lacks on-premise beer-price evidence.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Vīgante",
+      "districtCategory": "Stabu iela, 49A, LV-1011, Rīga — pub",
+      "sourceUrls": [
+        "https://pakalpojumi.pvd.gov.lv/lv/ipvd/objects?ipvd_objects_search_form%5Bsearch_performed%5D=t&page=791",
+        "https://restaurantguru.com/Vigante-Riga"
+      ],
+      "reason": "Current sources identify a food-led restaurant with delivery service, not a bar-led venue. No exact current on-premise beer price was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Vīna studija",
+      "districtCategory": "Elizabetes iela, 10, LV-1010, Rīga — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/node/494381229",
+        "https://www.vinastudija.lv/en/"
+      ],
+      "reason": "The concept is wine-led retail/restaurant rather than a beer bar, and the official site provides no qualifying current itemized on-premise beer prices.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Walters & Grapa",
+      "districtCategory": "Miera iela, 41, LV-1001, Rīga — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Walters-and-Grapa-Riga",
+        "https://restaurantguru.com/Walters-and-Grapa-Riga/menu",
+        "https://www.facebook.com/waltersungrapa/"
+      ],
+      "reason": "The craft bar is active, but no current owner-published or recent itemized beer price with serving size was found. Search results contained only old or approximate anecdotal prices, which were rejected.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "WhyNot",
+      "districtCategory": "Krišjāņa Valdemāra iela, 73, LV-1013, Rīga — bar",
+      "sourceUrls": [
+        "https://calliano.lv/kalyannie/whynot",
+        "https://restaurantguru.com/WhyNot-Riga",
+        "https://www.waze.com/lv/live-map/directions/whynot-krisjana-valdemara-iela-73-riga?to=place.w.15794746.158078528.21967914"
+      ],
+      "reason": "The hookah/drinks bar is active and complete hours are available, but its owner domain is unavailable and no current itemized beer price or serving size was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Wine Collectors",
+      "districtCategory": "Elizabetes iela, 41/43, LV-1010, Rīga — bar",
+      "sourceUrls": [
+        "https://barents.lv/#barents-wine-collectors",
+        "https://winecollectors.tablein.com/lv",
+        "https://wolt.com/lv/lva/riga/venue/barents-wine-collectors"
+      ],
+      "reason": "Official sources describe a wine collection/wine bistro and retail wine delivery, not a beer-led bar. No current on-premise beer menu or beer price was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Zebras",
+      "districtCategory": "Dzirnavu iela, 104, LV-1050, Rīga — bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Bars-Kad-Zebras-Deg-Riga",
+        "https://untappd.com/v/pret-straumi/12141242",
+        "https://www.waze.com/live-map/directions/lv/riga/bars-zebras?to=place.ChIJj5BH2yzO7kYR5FZZaHRa5tY"
+      ],
+      "reason": "The address hosts an active rock bar and has also been listed under the name Pret Straumi, but neither current listing publishes an itemized beer price. The only exact price found is a 2018 anecdote and is too stale to publish.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Zelta ķilava",
+      "districtCategory": "Grīziņkalns — bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/Zelta+%C4%B7ilava/@56.9597939,24.142572,17z"
+      ],
+      "reason": "Beer availability is corroborated, but no exact current named beer plus price and serving-size evidence was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Ziemeļu Enkurs",
+      "districtCategory": "Centrs — brewery taproom",
+      "sourceUrls": [
+        "http://www.ziemeluenkurs.lv/",
+        "https://www.findglocal.com/LV/Riga/1482418208494173/Zieme%C4%BCu-Enkurs-alus-dar%C4%ABtava"
+      ],
+      "reason": "Only stale 2021–2022 evidence was found; the location has been replaced and no current tariff exists.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Zilais dimants",
+      "districtCategory": "Tilta iela, 5, LV-1005, Rīga — bar",
+      "sourceUrls": [
+        "https://mapcarta.com/N10856132608",
+        "https://mapcarta.com/N1305176327",
+        "https://www.lursoft.lv/address/riga-kreimenu-iela-4a-lv-1015/departments",
+        "https://www.viszinis.lv/Tilta-iela-5"
+      ],
+      "reason": "Current registry/map sources identify this as a gambling hall with a bar, not a standalone bar/pub. No official itemized on-premise beer prices were found. | Only OSM/property traces describe a shop-bar. No owner-controlled active venue evidence, complete weekly hours, or exact current on-premise beer price was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Zobens un Lemess",
+      "districtCategory": "Centrs / metal bar",
+      "sourceUrls": [
+        "https://restaurantguru.com/Zobens-un-Lemess-Riga"
+      ],
+      "reason": "The former venue appears replaced or rebranded as Ugunsvija; no current menu tied to the old identity was found.",
+      "outcome": "closed_or_inactive"
+    },
+    {
+      "name": "Čaula",
+      "districtCategory": "Purvciema iela 18, Rīga, LV-1035 — bar",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/search?query=%C4%8Caula%20Purvciema%20iela%2018%20Riga"
+      ],
+      "reason": "No accessible current official venue menu, tap list, or recent readable in-venue beer-price image was found.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Četri krasti",
+      "districtCategory": "Meldru iela 3, Rīga, LV-1015 — pub",
+      "sourceUrls": [
+        "https://www.openstreetmap.org/search?query=%C4%8Cetri%20krasti%20Meldru%20iela%203%20Riga"
+      ],
+      "reason": "Searches returned unrelated results and no current owner-controlled venue/menu source with exact beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Ēlande",
+      "districtCategory": "Brīvības gatve 249, Rīga, LV-1006 — biergarten",
+      "sourceUrls": [
+        "https://www.photoriga.com/2019/09/cafe-elande-kafejnica-elande.html",
+        "https://www.tripadvisor.co.uk/Restaurant_Review-g274967-d7132404-Reviews-Elande-Riga_Riga_Region.html"
+      ],
+      "reason": "This is an ordinary restaurant/cafe with a garden rather than a bar-first venue, and no current exact beer menu was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Ķirmis",
+      "districtCategory": "Matīsa iela 30, Rīga, LV-1001 — pub",
+      "sourceUrls": [
+        "https://restaurantguru.com/Krodzins-kirmis-Riga",
+        "https://www.openstreetmap.org/node/6416738194"
+      ],
+      "reason": "Current listings support the venue identity and beer service, but no official/current itemized beer menu or recent venue-specific menu photo with exact on-premise prices was found. Delivery prices were excluded.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Šašliki bārs",
+      "districtCategory": "Sarkandaugava — bar/grill",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/%C5%A0a%C5%A1liki+b%C4%81rs/@56.9960862,24.1299791,17z/data=!4m6!3m5!1s0x46eecf0cdfe24c57:0x61e08131ff319f48!8m2!3d56.9960862!4d24.1299791!16s%2Fg%2F11dxsvk3s6"
+      ],
+      "reason": "Current listing is active, but the available menu is food-only; last usable drinks photo was from 2024.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Šašliki Mangaļos",
+      "districtCategory": "Mores iela, 22, LV-1034, Rīga — pub",
+      "sourceUrls": [
+        "https://receptes.tvnet.lv/7511795/rigas-kulta-edieni-10-estuves-labaja-krasta-kur-nobaudit-gardu-sasliku",
+        "https://www.openstreetmap.org/way/115567317"
+      ],
+      "reason": "This is presented as a shashlik eatery/restaurant rather than a bar-led venue. The current feature provides food prices only; no exact current on-premise beer price was found.",
+      "outcome": "out_of_scope"
+    },
+    {
+      "name": "Обрыгалавка",
+      "districtCategory": "Vecmīlgrāvis — informal bar listing",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/%D0%9E%D0%B1%D1%80%D1%8B%D0%B3%D0%B0%D0%BB%D0%B0%D0%B2%D0%BA%D0%B0/@57.0332655,24.1050993,17z/data=!4m6!3m5!1s0x46eec50062df775d:0x2e010c7eb7e00553!8m2!3d57.0332655!4d24.1050993!16s%2Fg%2F11x9648w1s"
+      ],
+      "reason": "Two-review informal/unclaimed listing with no address number, hours, website, menu, or defensible price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Пивозарня",
+      "districtCategory": "Pļavnieki — bar listing",
+      "sourceUrls": [
+        "https://www.google.com/maps/place/%D0%9F%D0%B8%D0%B2%D0%BE%D0%B7%D0%B0%D1%80%D0%BD%D1%8F/@56.9469761,24.1970707,17z/data=!4m6!3m5!1s0x46eecf00259888d9:0x86204ea613f87e1!8m2!3d56.9469761!4d24.1970707!16s%2Fg%2F11x650gn9h"
+      ],
+      "reason": "Unclaimed one-review listing with no hours, website, phone, menu, or itemized price evidence.",
+      "outcome": "insufficient_evidence"
+    }
+  ],
+  "counts": {
+    "closed_or_inactive": 19,
+    "duplicate": 4,
+    "insufficient_evidence": 186,
+    "out_of_scope": 40
+  }
+}

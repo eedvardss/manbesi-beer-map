@@ -53,18 +53,17 @@ const venues: ResearchedVenue[] = [
   {
     id: 'manana-riga', name: 'Mañana', kind: 'taco bārs', address: 'Stabu iela 10-1, Rīga, LV-1010',
     lat: 56.9586925, lng: 24.1232075,
-    sourceUrl: 'https://ugc.production.linktr.ee/0ee406ea-5386-4db0-a35a-8273b160d003_ENG-MANANA-DRINK-2026-SPRING-WEEB.pdf',
+    sourceUrl: 'https://ugc.production.linktr.ee/5cc16141-e6e6-468d-9e6e-f497989a7eed_LV-MANANA-DRINK-2026-SPRING-WEB.pdf',
     sourceLabel: 'Mañana — official Spring 2026 drinks menu PDF', sourceType: official,
     beerPrices: [
       { name: 'Bauskas Light (draft)', volumeMl: 400, price: 5.5 }, { name: 'Lielvārdes Lager (draft)', volumeMl: 400, price: 5.5 },
       { name: 'Lielvārdes Cherry (draft)', volumeMl: 400, price: 6 }, { name: 'Madonas Unfiltered (draft)', volumeMl: 400, price: 6 },
-      { name: 'Anarkist IPA (draft)', volumeMl: 400, price: 6 }, { name: 'Estrella', volumeMl: 330, price: 5 },
+      { name: 'Aanarkist IPA (draft)', volumeMl: 400, price: 6 }, { name: 'Estrella', volumeMl: 330, price: 5 },
       { name: 'Solveza', volumeMl: 330, price: 5 }, { name: 'SOL', volumeMl: 330, price: 5 },
-      { name: 'Non Alcoholic Beer', volumeMl: 330, price: 4.5 }, { name: 'Valmiermuiža', volumeMl: 330, price: 5 },
-      { name: 'Bottled Beer — ASK STAFF', volumeMl: null, price: 7 },
+      { name: 'Valmiermuiža', volumeMl: 330, price: 5 },
     ],
     hours: { mon: [], tue: ['16:00-23:00'], wed: ['16:00-23:00'], thu: ['16:00-23:00'], fri: ['12:00-02:00'], sat: ['12:00-02:00'], sun: ['12:00-23:00'], sourceUrl: 'https://www.waze.com/live-map/directions/lv/riga/manana?to=place.ChIJ9b2LHt7P7kYRJwQcOeHk8IY' },
-    evidenceNotes: 'Official Spring 2026 drink PDF; complete beer section transcribed.',
+    evidenceNotes: 'Official May 2026 Latvian drinks PDF; all nine named beer rows transcribed. The generic non-alcoholic beer and ask-the-staff bottled assortment rows were excluded because no beer identity is published; cider was excluded.',
   },
   {
     id: 'barn-fries-riga', name: 'BARN.fries', kind: 'frī bārs / casual bārs', address: 'Šķūņu iela 10, Rīga, LV-1050',
