@@ -1,3 +1,4 @@
+import { dedupeBeerPrices } from './beer-identity';
 import rigaVenueData from './data/riga-venue-points.json';
 import researchedBeerPricesA from './data/beer-prices-a.json';
 import researchedBeerPricesB from './data/beer-prices-b.json';
@@ -211,10 +212,6 @@ const baseVenues: Venue[] = [
   },
 ];
 
-const dedupeBeerPrices = (prices: BeerPrice[]) => [...new Map(
-  prices.map((beer) => [`${normalizeName(beer.name)}\u0000${beer.volumeMl}\u0000${beer.price}`, beer]),
-).values()];
-
 const distanceMetres = (first: { lat: number; lng: number }, second: { lat: number; lng: number }) => {
   const latitudeScale = 111_320;
   const longitudeScale = Math.cos(((first.lat + second.lat) / 2) * Math.PI / 180) * latitudeScale;
@@ -265,7 +262,7 @@ export const venues: Venue[] = baseVenues.filter((venue) => !unverifiedPriceVenu
 
 export const pricePerLitre = (venue: Venue) => venue.volumeMl
   ? venue.price / (venue.volumeMl * (venue.packageCount ?? 1) / 1000)
-  : Number.POSITIVE_INFINITY;
+  : null;
 
 export const venueBeerPrices = (venue: Venue): BeerPrice[] => venue.beerPrices ?? [{
   name: venue.beer,

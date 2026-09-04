@@ -1,3 +1,4 @@
+/* oxlint-disable jsx-a11y/prefer-tag-over-role -- reusable polymorphic primitives retain their ARIA semantics without changing layout */
 'use client';
 
 import { useMemo } from 'react';

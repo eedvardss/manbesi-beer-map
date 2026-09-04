@@ -1,3 +1,4 @@
+/* oxlint-disable jsx-a11y/prefer-tag-over-role -- reusable polymorphic primitives retain their ARIA semantics without changing layout */
 'use client';
 
 import * as React from 'react';
@@ -95,12 +96,15 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+    // Synchronize external Embla state before subscribing.
+    // oxlint-disable-next-line react/react-compiler
     onSelect(api);
     api.on('reInit', onSelect);
     api.on('select', onSelect);
 
     return () => {
       api?.off('select', onSelect);
+      api?.off('reInit', onSelect);
     };
   }, [api, onSelect]);
 

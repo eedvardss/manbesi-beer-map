@@ -5,12 +5,17 @@ import {
   timelineTicks,
   timelineTrackPixels,
   timelineTickLabel,
+  timelineTickPosition,
+  timelineContentWidth,
 } from '../app/time-slider.mjs';
 
 const viewportWidth = 298;
 const selectedMinutes = 21 * 60;
 const selectedIndex = selectedMinutes / timelineStepMinutes;
 const contentWidth = viewportWidth + timelineTrackPixels;
+assert.equal(timelineContentWidth, `calc(100% + ${timelineTrackPixels}px)`);
+const expression = timelineTickPosition(selectedIndex);
+assert.equal(expression, `calc((100% - ${timelineTrackPixels}px) / 2 + ${selectedIndex * timelineStepPixels}px)`);
 const tickPosition = (contentWidth - timelineTrackPixels) / 2 + selectedIndex * timelineStepPixels;
 const scrollLeft = selectedIndex * timelineStepPixels;
 

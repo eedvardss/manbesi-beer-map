@@ -1,3 +1,4 @@
+import { beerIdentity, assertNoConflictingPrices } from '../app/beer-identity';
 import { venueOpeningHours } from '../app/opening-hours';
 import { mapVenues, venueBeerPrices } from '../app/venues';
 
@@ -53,6 +54,7 @@ for (const [name, venues] of groups((venue) => normalize(venue.name))) {
 
 for (const venue of mapVenues) {
   const beers = venueBeerPrices(venue);
+  try { assertNoConflictingPrices(beers); } catch (error) { failures.push(`${venue.id}: ${String(error)}`); }
   if (!venue.name.trim()) failures.push(`Empty name: ${venue.id}`);
   if (!venue.address.trim() || /adrese nav norādīta/i.test(venue.address)) failures.push(`Missing exact address: ${venue.id}`);
   if (!Number.isFinite(venue.lat) || !Number.isFinite(venue.lng)
@@ -70,7 +72,8 @@ for (const venue of mapVenues) {
     if (beer.volumeMl !== null && (!Number.isFinite(beer.volumeMl) || beer.volumeMl <= 0)) {
       failures.push(`Invalid volume: ${venue.id} / ${beer.name}`);
     }
-    const beerKey = `${normalize(beer.name)}|${beer.volumeMl}|${beer.price}`;
+    if (beer.packageCount !== undefined && (!Number.isInteger(beer.packageCount) || beer.packageCount <= 0)) failures.push(`Invalid package count: ${venue.id} / ${beer.name}`);
+    const beerKey = beerIdentity(beer);
     if (beerKeys.has(beerKey)) failures.push(`Duplicate beer row: ${venue.id} / ${beer.name} / ${beer.volumeMl} / ${beer.price}`);
     beerKeys.add(beerKey);
   }

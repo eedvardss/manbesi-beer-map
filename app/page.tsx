@@ -23,8 +23,7 @@ import {
 } from './time-slider.mjs';
 import { isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
 
-type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
-type SortMode = 'price' | 'litre' | 'name';
+import { queryVenues, type PriceBand, type SortMode } from './beer-query';
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
 const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
 const priceBandOptions = [
@@ -46,10 +45,6 @@ type ModelContext = {
 };
 
 const euro = (value: number) => value.toLocaleString('lv-LV', { style: 'currency', currency: 'EUR' });
-const normalizeSearch = (value: string) => value
-  .toLocaleLowerCase('lv')
-  .normalize('NFD')
-  .replace(/\p{M}+/gu, '');
 
 const markerTone = (price: number) => {
   if (price < 4) return 'cheap';
@@ -89,7 +84,7 @@ function VenueCard({ venue, selected, openState, onSelect }: { venue: MapVenue; 
         {priced ? (
           <span className="card-price">
             <strong>{venue.priceIsFrom ? 'no ' : ''}{euro(venue.price)}</strong>
-            <small>{euro(pricePerLitre(venue))}/l</small>
+            <small>{pricePerLitre(venue) === null ? 'Tilpums nav norādīts' : `${venue.priceIsFrom ? 'no ' : ''}${euro(pricePerLitre(venue)!)} /l`}</small>
           </span>
         ) : <span className="unpriced-label">nav cenu</span>}
       </div>
@@ -105,6 +100,7 @@ function createMarkerNode(venue: MapVenue, active: boolean) {
 
   const priceButton = document.createElement('button');
   priceButton.type = 'button';
+  priceButton.setAttribute('aria-expanded', String(active));
   if (priced) {
     priceButton.className = `price-marker ${markerTone(venue.price)}${active ? ' active' : ''}`;
     priceButton.setAttribute('aria-label', `${venue.name}, ${euro(venue.price)}`);
@@ -257,23 +253,7 @@ export default function Home() {
     });
   };
 
-  const filtered = useMemo(() => {
-    const q = normalizeSearch(query.trim());
-    const result = mapVenues.filter((venue) => {
-      const beerNames = isPricedVenue(venue) ? venueBeerPrices(venue).map((beer) => beer.name).join(' ') : '';
-      const matchesText = !q || normalizeSearch([venue.name, venue.address, beerNames, venue.kind].join(' ')).includes(q);
-      const matchesPrice = priceBand === 'all'
-        || (isPricedVenue(venue) && ((priceBand === 'under5' && venue.price < 5)
-          || (priceBand === 'fiveToSix' && venue.price >= 5 && venue.price <= 6)
-          || (priceBand === 'over6' && venue.price > 6)));
-      return matchesText && matchesPrice;
-    });
-    return [...result].sort((a, b) => {
-      if (sortMode === 'name') return a.name.localeCompare(b.name, 'lv');
-      if (sortMode === 'litre') return pricePerLitre(a) - pricePerLitre(b);
-      return a.price - b.price || (b.volumeMl ?? 0) - (a.volumeMl ?? 0);
-    });
-  }, [priceBand, query, sortMode]);
+  const filtered = useMemo(() => queryVenues(mapVenues, query, priceBand, sortMode), [priceBand, query, sortMode]);
 
   useEffect(() => {
     const context = (document as Document & { modelContext?: ModelContext }).modelContext;
@@ -308,16 +288,7 @@ export default function Home() {
         setQuery(nextQuery);
         setPriceBand(nextBand);
         setSortMode(nextSort);
-        const normalized = normalizeSearch(nextQuery.trim());
-        const matches = mapVenues.filter((venue) => {
-          const beerNames = isPricedVenue(venue) ? venueBeerPrices(venue).map((beer) => beer.name).join(' ') : '';
-          const text = normalizeSearch([venue.name, venue.address, beerNames, venue.kind].join(' '));
-          return (!normalized || text.includes(normalized))
-            && (nextBand === 'all'
-              || (isPricedVenue(venue) && ((nextBand === 'under5' && venue.price < 5)
-                || (nextBand === 'fiveToSix' && venue.price >= 5 && venue.price <= 6)
-                || (nextBand === 'over6' && venue.price > 6))));
-        });
+        const matches = queryVenues(mapVenues, nextQuery, nextBand, nextSort);
         return { count: matches.length, venues: matches.slice(0, 10).map((venue) => venue.name) };
       },
     }, { signal: lifecycle.signal })).catch(() => undefined);
@@ -379,16 +350,36 @@ export default function Home() {
 
     const maplibre = getMapLibreRuntime(maplibreModule);
     let mobileCenterFrame: number | null = null;
-    markerRefs.current.forEach((marker) => marker.remove());
-    markerRefs.current.clear();
+    const visibleIds = new Set(filtered.map(venue => venue.id));
+    markerRefs.current.forEach((marker, id) => {
+      if (!visibleIds.has(id)) { marker.remove(); markerRefs.current.delete(id); }
+    });
 
     filtered.forEach((venue) => {
       const active = venue.id === selectedId;
-      const element = createMarkerNode(venue, active);
+      const existing = markerRefs.current.get(venue.id);
+      const signature = JSON.stringify([active, venue.beer, venue.price, venue.volumeMl, venue.packageCount, venue.priceIsFrom, venue.beerPrices]);
+      if (existing?.getElement().dataset.signature === signature) return;
+      const fresh = createMarkerNode(venue, active);
+      const element = existing?.getElement() ?? fresh;
+      if (existing) {
+        const button = element.querySelector('button')!;
+        const nextButton = fresh.querySelector('button')!;
+        button.className = nextButton.className;
+        button.setAttribute('aria-label', nextButton.getAttribute('aria-label')!);
+        button.setAttribute('aria-expanded', String(active));
+        button.replaceChildren(...Array.from(nextButton.childNodes));
+        element.classList.toggle('is-open', active);
+        element.dataset.tone = fresh.dataset.tone;
+        element.querySelector('.marker-detail')?.remove();
+        const detail = fresh.querySelector('.marker-detail');
+        if (detail) element.appendChild(detail);
+      }
+      element.dataset.signature = signature;
       element.style.zIndex = active ? '2000' : isPricedVenue(venue) ? '1000' : '0';
-      element.addEventListener('click', (event) => {
+      if (!existing) element.addEventListener('click', (event) => {
         event.stopPropagation();
-        if (active) {
+        if (element.classList.contains('is-open')) {
           setSelectedId(null);
           return;
         }
@@ -397,7 +388,7 @@ export default function Home() {
           map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true });
         }
       });
-      const marker = new maplibre.Marker({ element, anchor: 'bottom-left' })
+      const marker = existing ?? new maplibre.Marker({ element, anchor: 'bottom-left' })
         .setLngLat([venue.lng, venue.lat])
         .addTo(map);
       markerRefs.current.set(venue.id, marker);
