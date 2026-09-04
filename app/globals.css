@@ -99,7 +99,7 @@ button { cursor: pointer; }
 .result-tools > strong { color: rgba(255,255,255,.45); font-size: 10px; font-weight: 620; }
 .result-tools [data-slot='select-trigger'] { height: 27px; max-width: 142px; padding: 0 6px; border: 0; border-radius: 8px; background: transparent; color: rgba(255,255,255,.68); font-size: 10px; font-weight: 650; box-shadow: none; }
 .result-tools [data-slot='select-trigger']:hover { background: rgba(255,255,255,.06); }
-[data-slot='select-content'] { padding: 5px; border: 1px solid rgba(255,255,255,.1); border-radius: 11px; background: #151a17; color: #edf1ee; box-shadow: 0 16px 38px rgba(0,0,0,.48); }
+[data-slot='select-content'] { --accent: #2c302e; --accent-foreground: #f7f9f7; --popover: #151a17; --popover-foreground: #edf1ee; padding: 5px; border: 1px solid rgba(255,255,255,.1); border-radius: 11px; background: #151a17; color: #edf1ee; box-shadow: 0 16px 38px rgba(0,0,0,.48); }
 [data-slot='select-item'] { min-height: 32px; padding: 0 32px 0 10px; border-radius: 7px; color: rgba(255,255,255,.72); font-size: 12px; }
 [data-slot='select-item']:hover, [data-slot='select-item'][data-highlighted], [data-slot='select-item'][data-selected] { background: rgba(255,255,255,.1) !important; color: #f7f9f7 !important; }
 
