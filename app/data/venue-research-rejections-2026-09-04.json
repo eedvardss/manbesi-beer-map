@@ -1172,15 +1172,6 @@
       "outcome": "insufficient_evidence"
     },
     {
-      "name": "Koya Riga",
-      "districtCategory": "Andrejosta — high-end restaurant and bar",
-      "sourceUrls": [
-        "https://koyarestaurant.com/"
-      ],
-      "reason": "The official drinks menu has beer prices, but the venue is a high-end restaurant without evidence of a distinct independently operating bar; excluded by scope.",
-      "outcome": "out_of_scope"
-    },
-    {
       "name": "Krastmalas krogs",
       "districtCategory": "11. novembra krastmala 35, Rīga, LV-1050 — pub",
       "sourceUrls": [
@@ -1220,21 +1211,23 @@
     },
     {
       "name": "Labietis — Aristida Briāna",
-      "districtCategory": "Centrs — brewery taproom",
+      "districtCategory": "Centrs / brewery taproom",
       "sourceUrls": [
-        "https://labietis.lv/",
-        "https://untappd.com/v/labietis/1199206"
+        "https://labietis.lv/taproom/kulturkrogs/",
+        "https://untappd.com/v/labietis/993603",
+        "https://www.google.com/maps/search/Labietis+Aristida+Briana+Riga"
       ],
-      "reason": "Current tap identities and venue hours are verifiable, but neither official nor verified Untappd evidence publishes actual on-premise prices.",
+      "reason": "Correct verified Untappd venue 993603 publishes names and sizes but no numeric prices. Four Maps menu images reviewed: 2024 tap names without prices, two 2017 menus, and a July 2026 upload whose image-capture date is June 2018. Stale tariff explicitly rejected.",
       "outcome": "insufficient_evidence"
     },
     {
       "name": "Laska V21",
-      "districtCategory": "Centrs / bar",
+      "districtCategory": "Vagonu iela 21 / bar and concert venue",
       "sourceUrls": [
-        "https://www.laska.bar/"
+        "https://www.laska.bar/",
+        "https://untappd.com/v/laska-v21/11907632"
       ],
-      "reason": "The current official venue and event site publishes no itemized beer prices.",
+      "reason": "Official hours and July 2026 new-menu launch corroborate active bar, but no current itemized priced beer menu recovered; Untappd is unverified.",
       "outcome": "insufficient_evidence"
     },
     {
@@ -1888,11 +1881,11 @@
     },
     {
       "name": "Spot Kafe",
-      "districtCategory": "Centrs / cafe-bar",
+      "districtCategory": "Jauniela 19/1 / cocktail bar",
       "sourceUrls": [
-        "https://restaurantguru.com/Spot-Kafe-Riga/menu"
+        "https://spotkafe.lv/"
       ],
-      "reason": "The current menu material is coffee and food; no complete beer-price category was found.",
+      "reason": "Current 2026 website confirms active late-night cocktail bar; inspected HTML has cocktail highlights but no beer prices or full drinks-menu link.",
       "outcome": "insufficient_evidence"
     },
     {
@@ -2417,11 +2410,11 @@
     },
     {
       "name": "Truff Le Pig",
-      "districtCategory": "Rīga — bar research",
+      "districtCategory": "Centrs / wine bar",
       "sourceUrls": [
-        "https://restaurantguru.com/Truff-Le-Pig-Riga/menu"
+        "https://menu02.restaurantguru.com/m2/Pub-and-bar-Truff-Le-Pig-menu-5bo.jpg"
       ],
-      "reason": "Menu-image discovery did not yield an owner-controlled current itemized beer price source.",
+      "reason": "Recent menu photograph inspected visually: food only, no itemized beer tariff.",
       "outcome": "insufficient_evidence"
     },
     {
@@ -2440,6 +2433,82 @@
         "https://festimo.lv/rum/"
       ],
       "reason": "Bar lead at Aristida Briana 9A, no current named on-premise beer tariff located.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Vīna Studija Splendid",
+      "districtCategory": "Elizabetes iela 61 / wine bar",
+      "sourceUrls": [
+        "https://vina-studija.lv/",
+        "https://vina-studija.lv/wp-content/uploads/2026/02/winedrink-menu-11.pdf"
+      ],
+      "reason": "Live-linked February 2026 PDF contains wine and cocktails, but no beer category; old indexed beer menu is not the current linked tariff.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "BARENTS Cocktail & Seafood Bar",
+      "districtCategory": "Smilšu iela 3 / cocktail bar",
+      "sourceUrls": [
+        "https://barents.lv/",
+        "https://barents.lv/wp-content/uploads/2025/12/eng-nordic-11.12.25.pdf"
+      ],
+      "reason": "Current official linked 13-page cocktail/bar menu inspected: no named beer price rows. Restaurant and cocktail/bar scope confirmed, but beer evidence incomplete.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Legs or Tears",
+      "districtCategory": "Laipu iela 2-4 / wine bar",
+      "sourceUrls": [
+        "https://www.google.com/maps/search/Legs+or+Tears+Riga",
+        "https://untappd.com/v/legs-or-tears/13722439"
+      ],
+      "reason": "Current bar and craft-beer check-ins confirmed, but no itemized priced beer menu in visible Maps overview or unverified Untappd listing.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "LOWINE",
+      "districtCategory": "Dzirnavu iela 43 / wine bar",
+      "sourceUrls": [
+        "https://lowinebar.lv/"
+      ],
+      "reason": "Official menu routes and current wine-bar hours inspected; no current itemized beer tariff recovered.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Noble Wine Bar",
+      "districtCategory": "Elizabetes iela 33 / wine bar",
+      "sourceUrls": [
+        "https://noblewine.lv/en/noble-wine-bar/"
+      ],
+      "reason": "Live official page confirms wine bar and full weekly hours, but no named beer prices.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "GONGU",
+      "districtCategory": "Palasta iela 9 / cocktail bars",
+      "sourceUrls": [
+        "https://gongu.lv/"
+      ],
+      "reason": "Official page confirms two cocktail bars, but no beer tariff found. Unrelated Vercel prototype has inconsistent address and is not used.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Table 7",
+      "districtCategory": "Kaļķu iela 2 / gastrobar",
+      "sourceUrls": [
+        "https://table7.lv/lv/",
+        "https://table7.vercel.app/"
+      ],
+      "reason": "Official site returns HTTP 500. Unverified Vercel prototype has nonworking menu and inconsistent hours, so not accepted as price evidence.",
+      "outcome": "insufficient_evidence"
+    },
+    {
+      "name": "Gauja",
+      "districtCategory": "Stabu iela 32 / pub",
+      "sourceUrls": [
+        "https://www.google.com/maps/search/Gauja+Stabu+32+Riga"
+      ],
+      "reason": "August 2026 Maps drinks-menu photo by Haralds Mednis (CIABIhCo-jmYVUHBaf-CAzB_ufGe) has named beers and sizes/prices, but no explicit currency on the photographed page. Adjacent May 2026 food pages also lack currency. Held under existing explicit-currency rule; not treated as missing all prices.",
       "outcome": "insufficient_evidence"
     }
   ],

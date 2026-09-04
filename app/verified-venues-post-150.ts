@@ -15,6 +15,190 @@ const official = 'Oficiālā ēdienkarte' as const;
 
 const venues: ResearchedVenue[] = [
 {
+  "id": "kuku-bars",
+  "name": "KuKū bārs",
+  "kind": "alus bārs",
+  "address": "Dzirnavu iela 15, Rīga, LV-1010",
+  "lat": 56.9608414,
+  "lng": 24.1090388,
+  "sourceUrl": "https://www.google.com/maps/place/KuK%C5%AB+b%C4%81rs/@56.9606973,24.1087972,3a,75y,90t/data=!3m8!1e2!3m6!1sCIABIhCSjnYTdn-RaIj0EnbSO1S5!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgps-cs-s%2FAHRPTWmxCPsJth6eb8-3roNAvQ0MQrzMLw1uPWAYrloCqtjYmu9tpT3_Wj5nOLPwqppsTN_brb27Ft1FHqWrfk3GtOi6-TsLuCEcw8EReZ-yfJtVchXLPALQI8KMW1QcB6Iy3G4OBKZtf4dgbn4%3Dw203-h286-k-no!7i1132!8i1600!4m9!3m8!1s0x46eecfaaa4bfcc3b:0x16c68e4e9bbb696c!8m2!3d56.9608414!4d24.1090388!10e5!14m1!1BCgIYIQ!16s%2Fg%2F11mzjmyffd",
+  "sourceLabel": "KuKū īpašnieka alus karte Google Maps, 2026. gada janvāris",
+  "sourceType": "Verificēta aktuālā alus karte",
+  "beerPrices": [
+    {
+      "name": "Viedi Blondais Grēks (draft)",
+      "volumeMl": 300,
+      "price": 4.5
+    },
+    {
+      "name": "Viedi Blondais Grēks (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Malduguns Cilpa (draft)",
+      "volumeMl": 300,
+      "price": 5
+    },
+    {
+      "name": "Malduguns Cilpa (draft)",
+      "volumeMl": 500,
+      "price": 6.5
+    },
+    {
+      "name": "Labietis Mežs (draft)",
+      "volumeMl": 300,
+      "price": 5
+    },
+    {
+      "name": "Labietis Mežs (draft)",
+      "volumeMl": 500,
+      "price": 6.5
+    },
+    {
+      "name": "DUNA Kuldīgas Pilsner (draft)",
+      "volumeMl": 300,
+      "price": 4.5
+    },
+    {
+      "name": "DUNA Kuldīgas Pilsner (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Teika Alus Vecais Īrs (draft)",
+      "volumeMl": 300,
+      "price": 5
+    },
+    {
+      "name": "Teika Alus Vecais Īrs (draft)",
+      "volumeMl": 500,
+      "price": 6.5
+    },
+    {
+      "name": "Ārpus DDH Hopheart IPA (draft)",
+      "volumeMl": 300,
+      "price": 5.5
+    },
+    {
+      "name": "Ārpus DDH Hopheart IPA (draft)",
+      "volumeMl": 500,
+      "price": 7
+    },
+    {
+      "name": "Valmiermuiža Lager (draft)",
+      "volumeMl": 300,
+      "price": 5
+    },
+    {
+      "name": "Valmiermuiža Lager (draft)",
+      "volumeMl": 500,
+      "price": 6.5
+    }
+  ],
+  "hours": {
+    "mon": [
+      "11:00-23:00"
+    ],
+    "tue": [
+      "11:00-23:00"
+    ],
+    "wed": [
+      "11:00-23:00"
+    ],
+    "thu": [
+      "11:00-23:00"
+    ],
+    "fri": [
+      "11:00-02:00"
+    ],
+    "sat": [
+      "11:00-02:00"
+    ],
+    "sun": [],
+    "sourceUrl": "https://www.google.com/maps/search/KuK%C5%AB+b%C4%81rs+Dzirnavu+15"
+  },
+  "evidenceNotes": "Verified 2026-09-04: readable owner-uploaded January 2026 menu photo, contributor KuKu bars 103864037717763074438, beer photo CIABIhCSjnYTdn-RaIj0EnbSO1S5. Seven named draught beers, two sizes each with explicit EUR signs and shared 0.3/0.5l footer; Talavas cider excluded. Current owner Google post promotes local beer February 27 through September 30 2026, corroborating active bar. Full weekly Google schedule and exact place pin verified, distinct from the KUK coffee shop at Dzirnavu 66A. Official kukubar.lv domain unavailable during verification; menu source transparently retained as owner photo, not a fabricated website tariff."
+},
+{
+  "id": "koya-bars",
+  "name": "KOYA bārs",
+  "kind": "kokteiļbārs",
+  "address": "Andrejostas iela 5k-15, Rīga, LV-1045",
+  "lat": 56.9620323,
+  "lng": 24.0941181,
+  "sourceUrl": "https://koyarestaurant.eu/?lang=en",
+  "sourceLabel": "KOYA oficiālā interaktīvā dzērienu karte",
+  "sourceType": "Oficiālā ēdienkarte",
+  "beerPrices": [
+    {
+      "name": "Heineken (draft)",
+      "volumeMl": 330,
+      "price": 5
+    },
+    {
+      "name": "Heineken (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Birra Moretti (draft)",
+      "volumeMl": 400,
+      "price": 5
+    },
+    {
+      "name": "Birra Moretti (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Bauskas (draft)",
+      "volumeMl": 330,
+      "price": 5
+    },
+    {
+      "name": "Bauskas (draft)",
+      "volumeMl": 500,
+      "price": 6
+    },
+    {
+      "name": "Corona (bottle)",
+      "volumeMl": 330,
+      "price": 6
+    },
+    {
+      "name": "Heineken alcohol-free (bottle)",
+      "volumeMl": 330,
+      "price": 5
+    }
+  ],
+  "hours": {
+    "mon": [
+      "12:00-23:00"
+    ],
+    "tue": [
+      "12:00-23:00"
+    ],
+    "wed": [
+      "12:00-23:00"
+    ],
+    "thu": [
+      "12:00-23:00"
+    ],
+    "fri": [
+      "12:00-04:00"
+    ],
+    "sat": [
+      "12:00-04:00"
+    ],
+    "sun": [
+      "10:30-16:00"
+    ],
+    "sourceUrl": "https://koyarestaurant.eu/?lang=en"
+  },
+  "evidenceNotes": "Verified 2026-09-04 from live official full drinks modal and its script.js?v=1.3.2: eight beer size/price rows, explicit Prices in euro. Birra Moretti smaller serve is explicitly 40cl, retained without normalizing to 33cl. Cider excluded. Venue explicitly runs a cocktail bar until 04:00 Friday/Saturday. Official weekly hours corroborated by Latvian owner Tablein listing https://koya.tablein.com/lv/; Sunday brunch only 10:30-16:00, not an evening bar session. Official schedule supersedes shorter Google hours. Exact Google Maps pin matches official DMS coordinates. Groups over five incur 10% service charge."
+},
+{
   "id": "tinto-vina-telpa",
   "name": "Tinto vīna telpa",
   "kind": "vīna bārs",
