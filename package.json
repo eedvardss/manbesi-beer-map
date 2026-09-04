@@ -1,5 +1,5 @@
 {
-  "name": "sites-project",
+  "name": "manbesi-beer-map",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -17,7 +17,8 @@
     "check": "npm run lint && npm run typecheck && npm test && npm run audit:data",
     "test:browser": "node scripts/check-mobile-interactions.mjs",
     "prebuild": "npm run check",
-    "check:all": "npm run check && npm run test:browser"
+    "check:all": "npm run check && npm run test:browser",
+    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
@@ -44,7 +45,6 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
     "@cloudflare/workers-types": "4.20260515.1",
-    "@openai/sites-vite-plugin": "0.2.0",
     "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",

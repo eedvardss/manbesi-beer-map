@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "manbesi-beer-map",
+  "account_id": "875a2a8f6b98ba89fed45195f385e738",
+  "main": "vinext/server/fetch-handler",
+  "compatibility_date": "2026-09-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": { "enabled": true }
+}
