@@ -8,3 +8,7 @@
 - The displayed marker price is computed from the cheapest verified beer serving. The expanded marker lists every verified beer row stored for that venue.
 
 Each beer row needs a beer name, numeric EUR price, and a serving volume in millilitres when the source publishes one. Keep the source URL and evidence notes with every research batch.
+
+## Serving-size completeness
+
+Include every source-verified beer-and-serving combination, regardless of size: small glasses, standard pours, large mugs, jugs, pitchers, and towers. Never omit a row merely because its serving is large or shared. Transcribe separately printed prices; do not invent prices by scaling another size. Keep any calculated comparison separate from the published price. When auditing a menu, inspect every size column before describing its beer list as complete.
