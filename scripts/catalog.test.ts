@@ -23,6 +23,16 @@ await test('native API preserves every published serving and source', async () =
   assert.equal(await unchanged.text(), '');
 });
 
+await test('catalog revalidation handles compressed ETags and tag lists', () => {
+  const etag = GET(new Request('https://manbesi.lv/api/venues')).headers.get('ETag')!;
+  for (const validator of [`W/${etag}`, `"unrelated,opaque", W/${etag}`, '*']) {
+    const response = GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': validator } }));
+    assert.equal(response.status, 304);
+  }
+  const changed = GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': 'W/"older-catalog"' } }));
+  assert.equal(changed.status, 200);
+});
+
 await test('litre markers show and color the winning unit price', () => {
   const [ala] = queryVenues(mapVenues, 'ALA Pagrabs', 'all', 'litre');
   const beer = { name: ala.beer, price: ala.price, volumeMl: ala.volumeMl, packageCount: ala.packageCount };

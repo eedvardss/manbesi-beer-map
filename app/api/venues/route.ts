@@ -10,7 +10,12 @@ export function GET(request: Request) {
     'X-Content-Type-Options': 'nosniff',
     ETag: etag,
   };
-  return request.headers.get('If-None-Match') === etag
+  // Compression can weaken an ETag. GET revalidation uses weak comparison
+  // and may include several candidate tags (RFC 9110, section 13.1.2).
+  const validator = request.headers.get('If-None-Match')?.trim() ?? '';
+  const unchanged = validator === '*' || validator.match(/(?:W\/)?"[^"]*"/g)
+    ?.some((candidate) => candidate.replace(/^W\//, '') === etag) === true;
+  return unchanged
     ? new Response(null, { status: 304, headers })
     : new Response(catalogJson, { headers });
 }

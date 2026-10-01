@@ -18,7 +18,7 @@ Installed tools: Xcode 26.6, Swift 6.3.3, iOS SDK 26.5. Deployment target: iOS 2
 
 ## Useful next milestones
 
-1. Verify light/dark mode, large text, small iPhones, offline refresh, and denied location access.
+1. Extend verified light-mode and offline-refresh coverage to dark mode, large text, smaller iPhones, and denied location access.
 2. Bring saved places, shareable links, and serving-size filters to the website where appropriate.
 3. Improve source freshness per venue instead of relying on a global research date.
 4. Add evidenced happy-hour intervals and reviewed price correction submissions.
