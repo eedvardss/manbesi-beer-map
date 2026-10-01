@@ -4,6 +4,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import * as maplibreModule from 'maplibre-gl';
+import { setWorkerUrl } from 'maplibre-gl';
+import mapWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
 import { ArrowDownWideNarrow, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,7 +23,8 @@ import {
   timelineTickPosition,
   timelineTicks,
 } from './time-slider.mjs';
-import { isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
+import { checkedAt, isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
+import { markerAmount, markerTone } from './price-presentation';
 
 import { queryVenues, type PriceBand, type SortMode } from './beer-query';
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
@@ -45,13 +48,6 @@ type ModelContext = {
 };
 
 const euro = (value: number) => value.toLocaleString('lv-LV', { style: 'currency', currency: 'EUR' });
-
-const markerTone = (price: number) => {
-  if (price < 4) return 'cheap';
-  if (price <= 5) return 'mid';
-  if (price <= 6) return 'warm';
-  return 'high';
-};
 
 function BeerMark({ className = '' }: { className?: string }) {
   return <Image className={className} src="/beer-mark.svg" width={28} height={28} alt="" aria-hidden="true" />;
@@ -92,24 +88,27 @@ function VenueCard({ venue, selected, openState, onSelect }: { venue: MapVenue; 
   );
 }
 
-function createMarkerNode(venue: MapVenue, active: boolean) {
+function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
   const priced = isPricedVenue(venue);
   const root = document.createElement('div');
   root.className = `marker-node${active ? ' is-open' : ''}`;
-  root.dataset.tone = priced ? markerTone(venue.price) : 'unpriced';
+  root.dataset.tone = priced ? markerTone(venue, sort) : 'unpriced';
+  root.dataset.priceMetric = sort === 'litre' ? 'litre' : 'serving';
 
   const priceButton = document.createElement('button');
   priceButton.type = 'button';
   priceButton.setAttribute('aria-expanded', String(active));
   if (priced) {
-    priceButton.className = `price-marker ${markerTone(venue.price)}${active ? ' active' : ''}`;
-    priceButton.setAttribute('aria-label', `${venue.name}, ${euro(venue.price)}`);
-    if (venue.priceIsFrom) {
+    const amount = markerAmount(venue, sort);
+    const unit = sort === 'litre' ? ' /l' : '';
+    priceButton.className = `price-marker ${markerTone(venue, sort)}${active ? ' active' : ''}`;
+    priceButton.setAttribute('aria-label', `${venue.name}, ${amount === null ? 'tilpums nav norādīts' : `${venue.priceIsFrom ? 'no ' : ''}${euro(amount)}${unit}`}`);
+    if (venue.priceIsFrom && amount !== null) {
       const from = document.createElement('small');
       from.textContent = 'no';
       priceButton.appendChild(from);
     }
-    priceButton.appendChild(document.createTextNode(`${venue.price.toFixed(2).replace('.', ',')} €`));
+    priceButton.appendChild(document.createTextNode(amount === null ? '— €/l' : `${amount.toFixed(2).replace('.', ',')} €${unit}`));
   } else {
     priceButton.className = `candidate-marker${active ? ' active' : ''}`;
     priceButton.setAttribute('aria-label', `${venue.name}, cenas vēl nav pārbaudītas`);
@@ -164,6 +163,34 @@ function createMarkerNode(venue: MapVenue, active: boolean) {
 
   detail.appendChild(header);
   detail.appendChild(list);
+  if (priced) {
+    const footer = document.createElement('div');
+    footer.className = 'marker-detail-footer';
+    const source = document.createElement('a');
+    source.href = venue.sourceUrl;
+    source.target = '_blank';
+    source.rel = 'noreferrer';
+    source.textContent = 'Cenu avots ↗';
+    source.title = `${venue.sourceLabel} · pārbaudīts ${checkedAt}`;
+    const directions = document.createElement('a');
+    directions.href = `https://maps.apple.com/?daddr=${venue.lat},${venue.lng}&dirflg=w`;
+    directions.target = '_blank';
+    directions.rel = 'noreferrer';
+    directions.textContent = 'Maršruts ↗';
+    const share = document.createElement('button');
+    share.type = 'button';
+    share.textContent = 'Kopēt saiti';
+    share.addEventListener('click', () => {
+      const url = new URL(window.location.href);
+      url.search = '';
+      url.searchParams.set('venue', venue.id);
+      void navigator.clipboard.writeText(url.href).then(() => {
+        share.textContent = 'Saite nokopēta';
+      }).catch(() => { share.textContent = 'Neizdevās nokopēt'; });
+    });
+    [source, directions, share].forEach((child) => footer.appendChild(child));
+    detail.appendChild(footer);
+  }
   ['click', 'dblclick', 'mousedown', 'pointerdown', 'touchstart', 'wheel'].forEach((eventName) => {
     detail.addEventListener(eventName, (event) => event.stopPropagation());
   });
@@ -303,6 +330,7 @@ export default function Home() {
     const markers = markerRefs.current;
 
     const maplibre = getMapLibreRuntime(maplibreModule);
+    setWorkerUrl(mapWorkerUrl);
     const map = new maplibre.Map({
       container: mapNodeRef.current,
       style: darkRigaStyle,
@@ -330,7 +358,15 @@ export default function Home() {
       setSelectedId(null);
     });
     void map.once('load', () => {
-      if (!cancelled) setMapReady(true);
+      if (cancelled) return;
+      setMapReady(true);
+      const linkedId = new URLSearchParams(window.location.search).get('venue');
+      const linkedVenue = mapVenues.find((venue) => venue.id === linkedId);
+      if (linkedVenue) {
+        setSelectedId(linkedVenue.id);
+        suppressNextZoomDismissRef.current = true;
+        map.flyTo({ center: [linkedVenue.lng, linkedVenue.lat], zoom: 16, duration: 0 });
+      }
     });
     map.on('error', (event) => console.error('MapLibre:', event.error));
     mapRef.current = map;
@@ -358,9 +394,9 @@ export default function Home() {
     filtered.forEach((venue) => {
       const active = venue.id === selectedId;
       const existing = markerRefs.current.get(venue.id);
-      const signature = JSON.stringify([active, venue.beer, venue.price, venue.volumeMl, venue.packageCount, venue.priceIsFrom, venue.beerPrices]);
+      const signature = JSON.stringify([active, sortMode, venue.beer, venue.price, venue.volumeMl, venue.packageCount, venue.priceIsFrom, venue.beerPrices]);
       if (existing?.getElement().dataset.signature === signature) return;
-      const fresh = createMarkerNode(venue, active);
+      const fresh = createMarkerNode(venue, active, sortMode);
       const element = existing?.getElement() ?? fresh;
       if (existing) {
         const button = element.querySelector('button')!;
@@ -371,6 +407,7 @@ export default function Home() {
         button.replaceChildren(...Array.from(nextButton.childNodes));
         element.classList.toggle('is-open', active);
         element.dataset.tone = fresh.dataset.tone;
+        element.dataset.priceMetric = fresh.dataset.priceMetric;
         element.querySelector('.marker-detail')?.remove();
         const detail = fresh.querySelector('.marker-detail');
         if (detail) element.appendChild(detail);
@@ -411,7 +448,7 @@ export default function Home() {
     return () => {
       if (mobileCenterFrame !== null) window.cancelAnimationFrame(mobileCenterFrame);
     };
-  }, [filtered, mapReady, selectedId]);
+  }, [filtered, mapReady, selectedId, sortMode]);
 
   useEffect(() => {
     if (!mapReady) return;
@@ -477,7 +514,7 @@ export default function Home() {
             </label>
 
             <div className="price-filter" aria-label="Cenas filtrs">
-              <div className="price-filter-caption"><span>Cena</span><strong>{priceBandOptions[priceBandIndex].label}</strong></div>
+              <div className="price-filter-caption"><span>Cena par porciju</span><strong>{priceBandOptions[priceBandIndex].label}</strong></div>
               <Slider
                 value={[priceBandIndex]}
                 min={0}

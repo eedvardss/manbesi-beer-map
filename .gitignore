@@ -40,3 +40,10 @@ next-env.d.ts
 
 /test-results/
 /playwright-report/
+
+# Xcode local state and verification artifacts
+/ios/build*/
+**/xcuserdata/
+*.xcuserstate
+*.xcresult
+/artifacts/

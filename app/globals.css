@@ -168,6 +168,11 @@ button { cursor: pointer; }
 .marker-detail-head > div { min-width: 0; display: grid; gap: 2px; }
 .marker-detail-head strong { overflow: hidden; font-size: 13px; font-weight: 750; letter-spacing: -.015em; text-overflow: ellipsis; white-space: nowrap; }
 .marker-detail-head span { overflow: hidden; color: rgba(21, 35, 25, .62); font-size: 9.5px; text-overflow: ellipsis; white-space: nowrap; }
+.marker-detail-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; padding: 10px 12px; border-top: 1px solid rgba(24, 34, 27, .14); }
+.marker-detail-footer a, .marker-detail-footer button { color: #20362a; font: inherit; font-size: 10px; text-decoration: none; }
+.marker-detail-footer button { cursor: pointer; background: none; border: 0; padding: 0; }
+.marker-detail-footer a:hover, .marker-detail-footer button:hover { text-decoration: underline; }
+.marker-detail-footer a:focus-visible, .marker-detail-footer button:focus-visible { outline: 2px solid #173f2c; outline-offset: 3px; }
 .marker-beer-list { max-height: 235px; overflow-y: auto; overscroll-behavior: contain; padding: 5px 7px 7px; scrollbar-width: thin; scrollbar-color: rgba(21, 35, 25, .35) transparent; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
 .marker-beer-list:focus { outline: none; }
 .marker-beer-list::-webkit-scrollbar { width: 6px; }
