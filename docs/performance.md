@@ -83,6 +83,34 @@ TEST_RUNNER_BEER_MAP_MENU_PERFORMANCE=1 xcodebuild \
 
 The performance test skips during ordinary correctness runs. Measurements use only the isolated UI-test preferences and offline catalog; no product bookmarks or real location are involved. A regular Release simulator build also passes without Swift warnings. Website source/data, deployed routes and the catalog's 4 September research date are unchanged.
 
+## Native map workload and annotation lifecycle — 3 October 2026
+
+Retained map annotations now accept source-coordinate changes through their KVO-observable coordinate. Unchanged coordinates keep their object and emit no coordinate notification. Price/serving/name/sort changes still control label configuration; source-only metadata and distance changes do not trigger price formatting. No map rebuild, new formatter, timer, network/disk operation, or per-frame visible-region scan was added. Trait-change handlers register once per custom view; CALayer border colors resolve when appearance/contrast changes.
+
+The repeatable opt-in Release workload uses the real 165-venue catalog on iPhone 17e / iOS 26.5, hosted by the arm64 Mac / macOS 26.5.1. Each reported iteration zooms by 1.6, pans out/back across 40% of the map width, then zooms back by 0.625. Three iterations are reported before/after. The app is optimized with `ENABLE_TESTABILITY=YES` for the unit target. Product preferences and catalog refresh are isolated by the UI-test/offline arguments. MapKit still loads real geographic content, with uncontrolled system tile/cache state.
+
+| Per zoom/pan/back iteration, mean of three | Before | After |
+| --- | ---: | ---: |
+| Clock time | 11.279 s | 11.033 s |
+| App CPU time | 7.019 s | 6.890 s |
+| Peak physical memory | 173.69 MB | 161.34 MB |
+
+Clock ranges overlap (9.898–12.543 versus 9.836–12.625 s), as do CPU ranges (6.034–7.967 versus 5.973–7.830 s). Peak memory in the after run ranges from 156.29 to 171.22 MB; per-iteration physical-memory deltas in both runs include substantial allocations and releases. System tile/cache state is uncontrolled. The lower mean/peak in this short after run is inconclusive and cannot be attributed to the annotation changes.
+
+These measurements include framework rendering, cache/tile activity and UI automation. They do not establish device frame delivery, startup, battery behavior or an app-wide speed improvement. The new provisional capsule/cluster palette is DEBUG-only and is outside these Release measurements; its native rendered/interactions are checked separately. Both bundles and raw samples are in `artifacts/map-hierarchy/`. Do not promote a favorable mean or a passing map gesture into a smoothness claim.
+
+Reproduce the Release workload:
+
+```sh
+TEST_RUNNER_BEER_MAP_MAP_PERFORMANCE=1 xcodebuild \
+  -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release \
+  -destination 'platform=iOS Simulator,name=iPhone 17e,OS=26.5' \
+  CODE_SIGNING_ALLOWED=NO ENABLE_TESTABILITY=YES \
+  -only-testing:BeerMapUITests/MapInteractionPerformanceTests test
+```
+
+The check skips during ordinary correctness runs. Coordinate-notification and retained-view appearance regressions are covered by `MapAnnotationTests`; rendered navigation uses `testDesignClusterZoomPinAndAppearanceContinuity`. Full physical-device frame/memory traces remain the gate for performance claims. No web source, published data or deployment changed in this pass.
+
 ## Implementation and correctness
 
 - Web prepares normalized venue and beer search text once per immutable catalog; native rebuilds its index only when accepting a catalog. Web index preparation measured 1.04 ms on the reference Mac; native index preparation is not yet separately profiled.

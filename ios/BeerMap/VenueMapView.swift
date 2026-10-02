@@ -19,6 +19,8 @@ struct VenueMapView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     func makeUIView(context: Context) -> MKMapView {
         let map = MKMapView()
+        // Keep annotations and their shadows within the actual map surface.
+        map.clipsToBounds = true
         map.delegate = context.coordinator
         map.preferredConfiguration = MKStandardMapConfiguration(elevationStyle: .flat, emphasisStyle: .muted)
         map.pointOfInterestFilter = .excludingAll
@@ -44,9 +46,7 @@ struct VenueMapView: UIViewRepresentable {
         }
         for result in results {
             if let existing = coordinator.annotations[result.id] {
-                let markerChanged = existing.result.beer != result.beer || existing.sort != sort || existing.result.venue.name != result.venue.name || coordinator.lastCalmStyle != calmStyle
-                existing.result = result
-                existing.sort = sort
+                let markerChanged = existing.update(result: result, sort: sort) || coordinator.lastCalmStyle != calmStyle
                 if markerChanged { (map.view(for: existing) as? PriceAnnotationView)?.configure(existing, calmStyle: calmStyle) }
             } else {
                 let annotation = VenueAnnotation(result: result, sort: sort)
@@ -137,6 +137,7 @@ struct VenueMapView: UIViewRepresentable {
                 view.titleVisibility = .hidden
                 view.subtitleVisibility = .hidden
                 view.displayPriority = .defaultHigh
+                view.accessibilityIdentifier = "map-cluster"
                 view.accessibilityLabel = "\(cluster.memberAnnotations.count) vietas. Pieskaries, lai tuvinātu."
                 return view
             }
@@ -176,11 +177,24 @@ struct VenueMapView: UIViewRepresentable {
         coordinate = CLLocationCoordinate2D(latitude: result.venue.lat, longitude: result.venue.lng)
         super.init()
     }
+
+    @discardableResult func update(result: VenueResult, sort: VenueSort) -> Bool {
+        let appearanceChanged = self.result.beer != result.beer || self.sort != sort || self.result.venue.name != result.venue.name
+        self.result = result
+        self.sort = sort
+        // Publish a coordinate change only when the accepted source moves.
+        // MapKit retains this annotation and observes its KVO coordinate.
+        if coordinate.latitude != result.venue.lat || coordinate.longitude != result.venue.lng {
+            coordinate = CLLocationCoordinate2D(latitude: result.venue.lat, longitude: result.venue.lng)
+        }
+        return appearanceChanged
+    }
 }
 
 @MainActor final class PriceAnnotationView: MKAnnotationView {
     private let label = UILabel()
     private let dot = UIView()
+    private var calmStyle = false
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         clusteringIdentifier = "venue"
@@ -199,9 +213,13 @@ struct VenueMapView: UIViewRepresentable {
         addSubview(dot)
         isAccessibilityElement = true
         accessibilityTraits = .button
+        registerForTraitChanges([UITraitUserInterfaceStyle.self, UITraitAccessibilityContrast.self]) { (view: PriceAnnotationView, _) in
+            view.updateAppearance()
+        }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     func configure(_ annotation: VenueAnnotation, calmStyle: Bool = false) {
+        self.calmStyle = calmStyle
         let beer = annotation.result.beer
         let amount = annotation.sort == .litre ? beer.perLitre : beer.price
         label.text = amount.map { (beer.priceIsFrom == true ? "no " : "") + $0.euros + (annotation.sort == .litre ? "/l" : "") } ?? "— €/l"
@@ -215,6 +233,26 @@ struct VenueMapView: UIViewRepresentable {
         accessibilityLabel = "\(annotation.result.venue.name), \(label.text!), \(beer.volumeLabel)"
         accessibilityIdentifier = "pin-\(annotation.result.id)"
         centerOffset = CGPoint(x: 0, y: -15)
+        updateAppearance()
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        updateAppearance()
+    }
+
+    override func tintColorDidChange() {
+        super.tintColorDidChange()
+        updateAppearance()
+    }
+
+    private func updateAppearance() {
+        backgroundColor = calmStyle ? .label : .systemBackground
+        label.textColor = calmStyle ? .systemBackground : .label
+        layer.borderWidth = calmStyle ? (isSelected ? 2 : 1) : 0
+        let border: UIColor = isSelected ? tintColor : .systemBackground
+        layer.borderColor = border.resolvedColor(with: traitCollection).cgColor
+        layer.shadowOpacity = calmStyle ? 0.1 : 0.14
     }
 }
 
@@ -223,24 +261,36 @@ struct VenueMapView: UIViewRepresentable {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame.size = CGSize(width: 34, height: 34)
-        backgroundColor = .label
+        backgroundColor = .systemBackground
         layer.cornerRadius = 17
-        layer.borderWidth = 2
-        layer.borderColor = UIColor.systemBackground.cgColor
+        layer.borderWidth = 1
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.1
+        layer.shadowOpacity = 0.06
         layer.shadowRadius = 3
         label.frame = bounds
-        label.font = .monospacedDigitSystemFont(ofSize: 12, weight: .semibold)
-        label.textColor = .systemBackground
+        label.font = .monospacedDigitSystemFont(ofSize: 12, weight: .medium)
+        label.textColor = .label
         label.textAlignment = .center
         addSubview(label)
         isAccessibilityElement = true
         accessibilityTraits = .button
+        collisionMode = .circle
+        displayPriority = .defaultHigh
+        accessibilityIdentifier = "map-cluster"
+        registerForTraitChanges([UITraitUserInterfaceStyle.self, UITraitAccessibilityContrast.self]) { (view: QuietClusterView, _) in
+            view.updateBorder()
+        }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     func configure(count: Int) {
         label.text = "\(count)"
         accessibilityLabel = "\(count) vietas. Pieskaries, lai tuvinātu."
+        updateBorder()
+    }
+
+    private func updateBorder() {
+        // CALayer colors do not automatically resolve again on appearance
+        // changes like UIView's semantic background/label colors do.
+        layer.borderColor = UIColor.separator.resolvedColor(with: traitCollection).cgColor
     }
 }

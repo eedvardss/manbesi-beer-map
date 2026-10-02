@@ -111,12 +111,28 @@ Validation completed:
 
 This is locally verified, provisional native work. No website deployment, push, physical-iPhone installation or App Store release occurred. The five-hour continuation keeps its existing cadence and quiet background intent; no prompt change was necessary. Pre-existing `research/` stays outside the scoped commit.
 
+## Native map hierarchy and retained annotations — 3 October 2026
+
+The provisional map now gives individual serving prices stronger contrast and uses neutral readable cluster circles. Selection and retained appearance colors stay coherent; annotations are clipped to the actual map bounds. Fresh published-screen research and Apple's map guidance informed the hierarchy; see `docs/design-direction.md`. A/B/C remain available and unapproved. The Release palette is preserved.
+
+A source-coordinate refresh now moves the existing native annotation instead of leaving its pin at the old location. Repeated unchanged coordinates emit no KVO notifications, and price labels still configure only when displayed inputs change. Source/menu/serving semantics and geographic-area publication remain intact.
+
+Validation completed:
+
+- All 31 Debug native correctness checks pass (23 unit, eight UI), with the two opt-in performance checks skipped during ordinary runs. New checks cover source-coordinate movement/KVO suppression, retained light/dark cluster borders and exact multipack/from/unknown-volume marker labels. Existing search/save/cache/menu/map flows still pass. Result: `artifacts/map-hierarchy/debug-all-verified.xcresult`.
+- Inspected the final loaded light map, clustered-to-zoomed region, a single real venue pin and camera preservation through detail/appearance changes, and the dark accessibility-size-1 overview/place panel on iPhone 17e / iOS 26.5. Proof: `artifacts/map-hierarchy/final-ui-attachments/`. No user design approval is inferred.
+- Regular optimized Release simulator build passes with Swift 6 complete concurrency checking and no warnings. Before/after Release map interactions also pass; production palette and serving labels remain intact. Clock/CPU ranges overlap, and tile/cache/memory variation prevents an app-wide speed or memory improvement claim.
+- The opt-in production-map pan/zoom workload passes before/after with raw CPU, clock and memory samples and repeatable commands in `docs/performance.md`. It includes live MapKit/cache work and automation, and does not measure physical-device frame delivery or the DEBUG-only draft palette.
+- Bundled catalog equality and `git diff --check` pass: 165 venues / 2,550 servings, researched on 4 September. No web source or venue data changed.
+
+This is locally verified, provisional native work. No push, website deployment, physical-iPhone installation or App Store release occurred. The five-hour cadence and quiet background intent remain unchanged; the existing prompt reads these revised priorities, so no schedule revision was necessary. Pre-existing `research/` stays outside the scoped commit.
+
 ## Next work
 
 The first functional milestone is complete; visual design remains provisional. Prioritize the native redesign:
 
-1. Refine draft A's dense pin hierarchy. Detail/menu/source grouping is implemented and locally checked. Visible-area/list coordination and accessible row/keyboard layout are implemented and locally checked. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
-2. Review the original product's denied-location state and remaining large-menu/maximum-text extremes. The study's long-title, exact-price, grouped-menu and source layout now have actual accessibility-size-1 sheet coverage. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
+1. Continue reviewing dense zoom levels and the map-to-place journey. Draft A's price/cluster hierarchy, detail/menu/source grouping, visible-area/list coordination and accessible row/keyboard layout are implemented and locally checked. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
+2. Fix the existing Release overview badge covering Apple Maps attribution, verified in the Release workload capture, and review the original product's denied-location state and remaining large-menu/maximum-text extremes. The study's long-title, exact-price, grouped-menu and source layout now have actual accessibility-size-1 sheet coverage. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
 3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Conditional refresh and off-actor remote preparation are complete; profile remaining synchronous startup decode/index work, marker work, memory and idle costs. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
 4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within the startup and interaction budgets.
 5. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's dense overview with rendered/performance evidence.

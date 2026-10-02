@@ -46,6 +46,74 @@ final class BeerMapUITests: XCTestCase {
         XCTAssertTrue(app.buttons["study-venue-banshee"].waitForExistence(timeout: 5))
     }
 
+
+
+    @MainActor func testDesignClusterZoomPinAndAppearanceContinuity() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-light"]
+        app.launch()
+        let map = app.otherElements["venue-map"]
+        let clusters = app.buttons.matching(identifier: "map-cluster")
+        let summary = app.staticTexts["study-map-summary"]
+        XCTAssertTrue(map.waitForExistence(timeout: 10))
+        XCTAssertTrue(clusters.firstMatch.waitForExistence(timeout: 10))
+        capture(app, name: "Draft price and cluster hierarchy in light appearance")
+        let mapFrame = map.frame
+        func visible(_ element: XCUIElement) -> Bool {
+            let frame = element.frame
+            guard frame.width > 0, frame.height > 0, frame.minY > mapFrame.minY + 60,
+                  frame.maxY < mapFrame.maxY - 12 else { return false }
+            return element.isHittable
+        }
+        let beforeArea = summary.label
+        let cluster = try XCTUnwrap(clusters.allElementsBoundByIndex.filter(visible).min {
+            abs($0.frame.midY - mapFrame.midY) < abs($1.frame.midY - mapFrame.midY)
+        })
+        cluster.tap()
+        let zoomed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            summary.label != beforeArea
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [zoomed], timeout: 10), .completed)
+        capture(app, name: "Draft zoomed place prices and area membership")
+
+        // MapKit can expose clustered child annotations in its AX tree.
+        // Filter to a real single venue before testing an individual pin.
+        let search = app.textFields["study-search"]
+        search.tap()
+        search.typeText("Duvel\n")
+        let pin = app.buttons["pin-duvels"]
+        XCTAssertTrue(pin.waitForExistence(timeout: 5))
+        var priorFrame: CGRect?
+        let settledPin = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            let frame = pin.frame
+            defer { priorFrame = frame }
+            return frame == priorFrame && frame.width > 0 && frame.minY > mapFrame.minY + 60
+                && frame.maxY < mapFrame.maxY - 12
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [settledPin], timeout: 5), .completed)
+        let before = pin.frame
+        pin.tap()
+        XCTAssertTrue(app.staticTexts["study-detail-name"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["study-detail-name"].label, "Duvel’s")
+        app.buttons["study-close-detail"].tap()
+        XCTAssertTrue(pin.waitForExistence(timeout: 5))
+        XCTAssertEqual(pin.frame.midX, before.midX, accuracy: 2)
+        XCTAssertEqual(pin.frame.midY, before.midY, accuracy: 2)
+        app.buttons["Skices izskats un teksta izmērs"].tap()
+        app.buttons["Tumšs izskats"].tap()
+        XCTAssertTrue(pin.isHittable)
+        XCTAssertEqual(pin.frame.midX, before.midX, accuracy: 2)
+        XCTAssertEqual(pin.frame.midY, before.midY, accuracy: 2)
+        capture(app, name: "Retained price marker after dark appearance change")
+
+        app.terminate()
+        app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-dark", "--design-large-text"]
+        app.launch()
+        XCTAssertTrue(clusters.firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(summary.exists)
+        capture(app, name: "Draft dark map and accessible place panel")
+    }
+
     @MainActor func testDesignGroupedMenuAndAccessiblePriceSource() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-light"]
