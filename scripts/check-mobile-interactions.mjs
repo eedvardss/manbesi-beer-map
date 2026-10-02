@@ -76,6 +76,18 @@ try {
       box.y + box.height <= 845,
     'Expanded marker should be visible on mobile',
   );
+  // Reopening at the existing zoom can still produce a flyTo zoom event.
+  // Programmatic camera movement must not dismiss the selected place.
+  await marker.click();
+  await page.locator('.marker-detail').waitFor({ state: 'detached' });
+  await page.locator('.mobile-results').click();
+  await page.getByRole('button', {
+    name: 'Parādīt kartē: Folkklubs ALA Pagrabs', exact: true,
+  }).click();
+  await page.locator('.sidebar.mobile-open').waitFor({ state: 'detached' });
+  await page.locator('.marker-detail').waitFor();
+  await page.waitForTimeout(1100);
+  assert.equal(await marker.getAttribute('aria-expanded'), 'true');
   await page.locator('.mobile-results').click();
   await page.locator('.mobile-scrim').click({ position: { x: 380, y: 20 } });
   await page.locator('.sidebar.mobile-open').waitFor({ state: 'detached' });

@@ -176,13 +176,24 @@ enum VenueSort: String, CaseIterable, Identifiable {
 }
 
 struct Coordinate: Equatable, Sendable { let lat: Double; let lng: Double }
-struct VenueFilter {
+struct VenueFilter: Equatable {
     var query = ""
     var priceBand: PriceBand = .all
     var size: ServingSize = .any
     var sort: VenueSort = .price
     var openOnly = false
     var hasFilters: Bool { priceBand != .all || size != .any || openOnly }
+}
+
+// Immutable per-catalog search data. Rebuilt when the store accepts a catalog,
+// rather than folding every menu name again on each keystroke/view update.
+struct VenueSearchIndex: Sendable {
+    let venues: [String: String]
+    let beers: [String: [String]]
+    init(_ values: [Venue]) {
+        venues = Dictionary(uniqueKeysWithValues: values.map { ($0.id, VenueQuery.normalize("\($0.name) \($0.address) \($0.kind)")) })
+        beers = Dictionary(uniqueKeysWithValues: values.map { ($0.id, $0.beers.map { VenueQuery.normalize($0.name) }) })
+    }
 }
 
 struct VenueResult: Identifiable {
@@ -196,15 +207,19 @@ enum VenueQuery {
     static func normalize(_ value: String) -> String {
         value.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "lv_LV"))
     }
-    static func run(_ venues: [Venue], filter: VenueFilter, location: Coordinate? = nil, now: Date = .now) -> [VenueResult] {
+    static func run(_ venues: [Venue], filter: VenueFilter, location: Coordinate? = nil, now: Date = .now, searchIndex: VenueSearchIndex? = nil) -> [VenueResult] {
         let query = normalize(filter.query.trimmingCharacters(in: .whitespacesAndNewlines))
         return venues.compactMap { venue -> VenueResult? in
             if filter.openOnly && venue.openingHours?.isOpen(at: now) != true { return nil }
-            let venueMatches = query.isEmpty || normalize("\(venue.name) \(venue.address) \(venue.kind)").contains(query)
-            let beers = venue.beers.filter {
-                (venueMatches || normalize($0.name).contains(query)) && filter.priceBand.matches($0) && filter.size.matches($0)
+            let venueMatches = query.isEmpty || (searchIndex?.venues[venue.id] ?? normalize("\(venue.name) \(venue.address) \(venue.kind)")).contains(query)
+            let beerTexts = searchIndex?.beers[venue.id]
+            var best: Serving?
+            for (index, beer) in venue.beers.enumerated() {
+                guard filter.priceBand.matches(beer), filter.size.matches(beer),
+                      venueMatches || (beerTexts?[index] ?? normalize(beer.name)).contains(query) else { continue }
+                if best == nil || precedes(beer, best!, sort: filter.sort) { best = beer }
             }
-            guard let best = beers.sorted(by: { precedes($0, $1, sort: filter.sort) }).first else { return nil }
+            guard let best else { return nil }
             let distance = location.map { metres(from: $0, to: Coordinate(lat: venue.lat, lng: venue.lng)) }
             return VenueResult(venue: venue, beer: best, distanceMetres: distance)
         }.sorted { first, second in

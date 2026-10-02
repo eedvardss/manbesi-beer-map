@@ -32,6 +32,30 @@ export const compareServings = (a: BeerPrice, b: BeerPrice, sort: SortMode) => {
   );
 };
 
+const nameCollator = new Intl.Collator('lv');
+const compareNames = (a: string, b: string) => nameCollator.compare(a, b);
+type SearchEntry = {
+  venue: Venue;
+  beers: BeerPrice[];
+  venueText?: string;
+  beerTexts?: string[];
+};
+
+// The website's catalog is immutable for a page lifetime. Normalize it once,
+// keeping the filtered full menu and winning serving exactly as before.
+export function createVenueQuery(venues: Venue[]) {
+  const entries = venues.map((venue): SearchEntry => {
+    const beers = venueBeerPrices(venue);
+    return {
+      venue, beers,
+      venueText: normalizeSearch([venue.name, venue.address, venue.kind].join(' ')),
+      beerTexts: beers.map((beer) => normalizeSearch(beer.name)),
+    };
+  });
+  return (query = '', band: PriceBand = 'all', sort: SortMode = 'price') =>
+    queryEntries(entries, query, band, sort);
+}
+
 // Choose and display the very same serving used for filtering and ranking.
 export function queryVenues(
   venues: Venue[],
@@ -39,21 +63,27 @@ export function queryVenues(
   band: PriceBand = 'all',
   sort: SortMode = 'price',
 ): Venue[] {
+  return queryEntries(venues.map((venue) => ({ venue, beers: venueBeerPrices(venue) })), query, band, sort);
+}
+
+function queryEntries(entries: SearchEntry[], query: string, band: PriceBand, sort: SortMode): Venue[] {
   const q = normalizeSearch(query.trim());
-  return venues
-    .flatMap((venue) => {
+  return entries
+    .flatMap(({ venue, beers: menu, venueText, beerTexts }) => {
       const venueMatches =
         !q ||
-        normalizeSearch(
+        (venueText ?? normalizeSearch(
           [venue.name, venue.address, venue.kind].join(' '),
-        ).includes(q);
-      const beers = venueBeerPrices(venue).filter(
-        (beer) =>
-          (venueMatches || normalizeSearch(beer.name).includes(q)) &&
-          matchesBand(beer, band),
+        )).includes(q);
+      const beers = venueMatches && band === 'all' ? menu : menu.filter(
+        (beer, index) => matchesBand(beer, band) &&
+          (venueMatches || (beerTexts?.[index] ?? normalizeSearch(beer.name)).includes(q)),
       );
       if (!beers.length) return [];
-      const best = [...beers].sort((a, b) => compareServings(a, b, sort))[0];
+      let best = beers[0];
+      for (let i = 1; i < beers.length; i++) {
+        if (compareServings(beers[i], best, sort) < 0) best = beers[i];
+      }
       return [
         {
           ...venue,
@@ -68,7 +98,7 @@ export function queryVenues(
     })
     .sort((a, b) =>
       sort === 'name'
-        ? a.name.localeCompare(b.name, 'lv')
-        : compareServings(a, b, sort) || a.name.localeCompare(b.name, 'lv'),
+        ? compareNames(a.name, b.name)
+        : compareServings(a, b, sort) || compareNames(a.name, b.name),
     );
 }

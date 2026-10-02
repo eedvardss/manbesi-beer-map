@@ -1,11 +1,8 @@
 'use client';
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- the fixed cursor requires a scroll-driven custom slider */
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
-import * as maplibreModule from 'maplibre-gl';
-import { setWorkerUrl } from 'maplibre-gl';
-import mapWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
 import { ArrowDownWideNarrow, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,7 +23,9 @@ import {
 import { checkedAt, isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
 import { markerAmount, markerTone } from './price-presentation';
 
-import { queryVenues, type PriceBand, type SortMode } from './beer-query';
+import { createVenueQuery, type PriceBand, type SortMode } from './beer-query';
+const queryCatalog = createVenueQuery(mapVenues);
+const venueCameraEvent = { preserveVenueSelection: true };
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
 const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
 const priceBandOptions = [
@@ -47,30 +46,18 @@ type ModelContext = {
   }, options?: { signal?: AbortSignal }) => void | Promise<void>;
 };
 
-const euro = (value: number) => value.toLocaleString('lv-LV', { style: 'currency', currency: 'EUR' });
+const currencyFormatter = new Intl.NumberFormat('lv-LV', { style: 'currency', currency: 'EUR' });
+const euro = (value: number) => currencyFormatter.format(value);
 
 function BeerMark({ className = '' }: { className?: string }) {
   return <Image className={className} src="/beer-mark.svg" width={28} height={28} alt="" aria-hidden="true" />;
 }
 
-type MapLibreRuntime = {
-  Map: typeof import('maplibre-gl').Map;
-  Marker: typeof import('maplibre-gl').Marker;
-  NavigationControl: typeof import('maplibre-gl').NavigationControl;
-};
-
-const getMapLibreRuntime = (module: unknown) => {
-  const globalRuntime = (window as Window & { maplibregl?: MapLibreRuntime }).maplibregl;
-  return globalRuntime
-    ?? (module as { default?: MapLibreRuntime }).default
-    ?? (module as MapLibreRuntime);
-};
-
-function VenueCard({ venue, selected, openState, onSelect }: { venue: MapVenue; selected: boolean; openState: boolean | null; onSelect: () => void }) {
+const VenueCard = memo(function VenueCard({ venue, selected, openState, onSelect }: { venue: MapVenue; selected: boolean; openState: boolean | null; onSelect: (venue: MapVenue) => void }) {
   const priced = isPricedVenue(venue);
   return (
     <article className={`venue-card${selected ? ' is-selected' : ''}${openState === false ? ' is-closed' : ''}`} data-venue-id={venue.id}>
-      <button className="venue-card-target" onClick={onSelect} aria-label={`Parādīt kartē: ${venue.name}`} />
+      <button className="venue-card-target" onClick={() => onSelect(venue)} aria-label={`Parādīt kartē: ${venue.name}`} />
       <div className="venue-card-main">
         <span className="venue-copy">
           <a className="venue-name" href={venue.sourceUrl} target="_blank" rel="noreferrer" title={venue.sourceLabel}>{venue.name}</a>
@@ -86,7 +73,7 @@ function VenueCard({ venue, selected, openState, onSelect }: { venue: MapVenue; 
       </div>
     </article>
   );
-}
+});
 
 function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
   const priced = isPricedVenue(venue);
@@ -201,15 +188,19 @@ function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
 export default function Home() {
   const mapNodeRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
+  const mapRuntimeRef = useRef<typeof import('./map-runtime') | null>(null);
+  const pendingVenueRef = useRef<MapVenue | null>(null);
   const markerRefs = useRef<Map<string, MapLibreMarker>>(new Map());
+  const markerStates = useRef<Map<string, { venue: MapVenue; active: boolean; sort: SortMode }>>(new Map());
   const venueListRef = useRef<HTMLDivElement>(null);
   const venueGliderRef = useRef<HTMLDivElement>(null);
   const hoveredVenueIdRef = useRef<string | null>(null);
-  const suppressNextZoomDismissRef = useRef(false);
   const timeScrollerRef = useRef<HTMLDivElement>(null);
   const ignoreTimelineScrollRef = useRef(false);
   const timelineFrameRef = useRef<number | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
+  const [mapAttempt, setMapAttempt] = useState(0);
   const [query, setQuery] = useState('');
   const [priceBand, setPriceBand] = useState<PriceBand>('all');
   const [sortMode, setSortMode] = useState<SortMode>('price');
@@ -280,7 +271,7 @@ export default function Home() {
     });
   };
 
-  const filtered = useMemo(() => queryVenues(mapVenues, query, priceBand, sortMode), [priceBand, query, sortMode]);
+  const filtered = useMemo(() => queryCatalog(query, priceBand, sortMode), [priceBand, query, sortMode]);
 
   useEffect(() => {
     const context = (document as Document & { modelContext?: ModelContext }).modelContext;
@@ -315,7 +306,7 @@ export default function Home() {
         setQuery(nextQuery);
         setPriceBand(nextBand);
         setSortMode(nextSort);
-        const matches = queryVenues(mapVenues, nextQuery, nextBand, nextSort);
+        const matches = queryCatalog(nextQuery, nextBand, nextSort);
         return { count: matches.length, venues: matches.slice(0, 10).map((venue) => venue.name) };
       },
     }, { signal: lifecycle.signal })).catch(() => undefined);
@@ -328,74 +319,84 @@ export default function Home() {
     let cancelled = false;
     let mapInstance: MapLibreMap | null = null;
     const markers = markerRefs.current;
+    const states = markerStates.current;
 
-    const maplibre = getMapLibreRuntime(maplibreModule);
-    setWorkerUrl(mapWorkerUrl);
-    const map = new maplibre.Map({
-      container: mapNodeRef.current,
-      style: darkRigaStyle,
-      center: [24.116, 56.9515],
-      zoom: 13,
-      minZoom: 10,
-      maxZoom: 19,
-      attributionControl: { compact: true },
-      fadeDuration: 120,
-      pixelRatio: Math.min(window.devicePixelRatio, 1.5),
-      renderWorldCopies: false,
-      refreshExpiredTiles: false,
-      pitchWithRotate: false,
-      dragRotate: false,
-    });
-    mapInstance = map;
-    map.touchZoomRotate.disableRotation();
-    map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'bottom-right');
-    map.on('click', () => setSelectedId(null));
-    map.on('zoomstart', () => {
-      if (suppressNextZoomDismissRef.current) {
-        suppressNextZoomDismissRef.current = false;
-        return;
-      }
-      setSelectedId(null);
-    });
-    void map.once('load', () => {
+    let resizeTimer: number | undefined;
+    void import('./map-runtime').then((runtime) => {
+      if (cancelled || !mapNodeRef.current) return;
+      mapRuntimeRef.current = runtime;
+      const map = new runtime.Map({
+        container: mapNodeRef.current,
+        style: darkRigaStyle,
+        center: [24.116, 56.9515],
+        zoom: 13,
+        minZoom: 10,
+        maxZoom: 19,
+        attributionControl: { compact: true },
+        fadeDuration: 120,
+        pixelRatio: Math.min(window.devicePixelRatio, 1.5),
+        renderWorldCopies: false,
+        refreshExpiredTiles: false,
+        pitchWithRotate: false,
+        dragRotate: false,
+      });
+      mapInstance = map;
+      map.touchZoomRotate.disableRotation();
+      map.addControl(new runtime.NavigationControl({ showCompass: false }), 'bottom-right');
+      map.on('click', () => setSelectedId(null));
+      map.on('zoomstart', (event) => {
+        if (!('preserveVenueSelection' in event && event.preserveVenueSelection === true)) setSelectedId(null);
+      });
+      void map.once('load', () => {
+        if (cancelled) return;
+        setMapReady(true);
+        const linkedId = new URLSearchParams(window.location.search).get('venue');
+        const linkedVenue = pendingVenueRef.current ?? mapVenues.find((venue) => venue.id === linkedId);
+        pendingVenueRef.current = null;
+        if (linkedVenue) {
+          setSelectedId(linkedVenue.id);
+          map.flyTo({ center: [linkedVenue.lng, linkedVenue.lat], zoom: 16, duration: 0 }, venueCameraEvent);
+        }
+      });
+      map.on('error', (event) => console.error('MapLibre:', event.error));
+      mapRef.current = map;
+      resizeTimer = window.setTimeout(() => map.resize(), 100);
+    }).catch((error) => {
       if (cancelled) return;
-      setMapReady(true);
-      const linkedId = new URLSearchParams(window.location.search).get('venue');
-      const linkedVenue = mapVenues.find((venue) => venue.id === linkedId);
-      if (linkedVenue) {
-        setSelectedId(linkedVenue.id);
-        suppressNextZoomDismissRef.current = true;
-        map.flyTo({ center: [linkedVenue.lng, linkedVenue.lat], zoom: 16, duration: 0 });
-      }
+      mapInstance?.remove();
+      mapInstance = null;
+      mapRef.current = null;
+      console.error('MapLibre initialization:', error);
+      setMapFailed(true);
     });
-    map.on('error', (event) => console.error('MapLibre:', event.error));
-    mapRef.current = map;
-    window.setTimeout(() => map.resize(), 100);
 
     return () => {
       cancelled = true;
+      window.clearTimeout(resizeTimer);
       mapInstance?.remove();
       mapRef.current = null;
+      mapRuntimeRef.current = null;
       markers.clear();
+      states.clear();
     };
-  }, []);
+  }, [mapAttempt]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !mapReady) return;
+    const runtime = mapRuntimeRef.current;
+    if (!map || !runtime || !mapReady) return;
 
-    const maplibre = getMapLibreRuntime(maplibreModule);
     let mobileCenterFrame: number | null = null;
     const visibleIds = new Set(filtered.map(venue => venue.id));
     markerRefs.current.forEach((marker, id) => {
-      if (!visibleIds.has(id)) { marker.remove(); markerRefs.current.delete(id); }
+      if (!visibleIds.has(id)) { marker.remove(); markerRefs.current.delete(id); markerStates.current.delete(id); }
     });
 
     filtered.forEach((venue) => {
       const active = venue.id === selectedId;
       const existing = markerRefs.current.get(venue.id);
-      const signature = JSON.stringify([active, sortMode, venue.beer, venue.price, venue.volumeMl, venue.packageCount, venue.priceIsFrom, venue.beerPrices]);
-      if (existing?.getElement().dataset.signature === signature) return;
+      const previous = markerStates.current.get(venue.id);
+      if (existing && previous?.venue === venue && previous.active === active && previous.sort === sortMode) return;
       const fresh = createMarkerNode(venue, active, sortMode);
       const element = existing?.getElement() ?? fresh;
       if (existing) {
@@ -412,7 +413,7 @@ export default function Home() {
         const detail = fresh.querySelector('.marker-detail');
         if (detail) element.appendChild(detail);
       }
-      element.dataset.signature = signature;
+      markerStates.current.set(venue.id, { venue, active, sort: sortMode });
       element.style.zIndex = active ? '2000' : isPricedVenue(venue) ? '1000' : '0';
       if (!existing) element.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -422,10 +423,10 @@ export default function Home() {
         }
         setSelectedId(venue.id);
         if (!window.matchMedia('(max-width: 720px)').matches) {
-          map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true });
+          map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true }, venueCameraEvent);
         }
       });
-      const marker = existing ?? new maplibre.Marker({ element, anchor: 'bottom-left' })
+      const marker = existing ?? new runtime.Marker({ element, anchor: 'bottom-left' })
         .setLngLat([venue.lng, venue.lat])
         .addTo(map);
       markerRefs.current.set(venue.id, marker);
@@ -438,7 +439,7 @@ export default function Home() {
             offset: mobileMarkerOffset(detailHeight),
             duration: 350,
             essential: true,
-          });
+          }, venueCameraEvent);
           if (map.isMoving()) void map.once('moveend', centerExpandedMarker);
           else centerExpandedMarker();
         });
@@ -457,18 +458,13 @@ export default function Home() {
     });
   }, [filtered, mapReady, openStates, selectedId]);
 
-  const chooseVenue = (venue: MapVenue) => {
+  const chooseVenue = useCallback((venue: MapVenue) => {
     const map = mapRef.current;
+    if (!mapReady) pendingVenueRef.current = venue;
     if (window.matchMedia('(max-width: 720px)').matches) setMobileListOpen(false);
-    if (map && map.getZoom() !== 16) {
-      suppressNextZoomDismissRef.current = true;
-      void map.once('moveend', () => {
-        suppressNextZoomDismissRef.current = false;
-      });
-    }
     setSelectedId(venue.id);
-    map?.flyTo({ center: [venue.lng, venue.lat], zoom: 16, duration: 650, essential: true });
-  };
+    map?.flyTo({ center: [venue.lng, venue.lat], zoom: 16, duration: 650, essential: true }, venueCameraEvent);
+  }, [mapReady]);
 
   const clearFilters = () => {
     setQuery('');
@@ -570,7 +566,7 @@ export default function Home() {
           >
             <div ref={venueGliderRef} className="venue-hover-glider" aria-hidden="true" />
             {filtered.length ? filtered.map((venue) => (
-              <VenueCard key={venue.id} venue={venue} selected={selectedId === venue.id} openState={venueOpenState(venue.id)} onSelect={() => chooseVenue(venue)} />
+              <VenueCard key={venue.id} venue={venue} selected={selectedId === venue.id} openState={venueOpenState(venue.id)} onSelect={chooseVenue} />
             )) : (
               <div className="empty-state"><BeerMark className="empty-mark" /><strong>Nekas neatradās</strong><span>Pamēģini citu vārdu vai cenu diapazonu.</span><Button variant="outline" onClick={clearFilters}>Notīrīt filtrus</Button></div>
             )}
@@ -579,6 +575,10 @@ export default function Home() {
 
         <div className="map-wrap">
           <div ref={mapNodeRef} className="map" aria-label="Rīgas alus cenu karte" />
+          {!mapReady && <div className="map-load-state" role={mapFailed ? 'alert' : 'status'}>
+            <span>{mapFailed ? 'Karti neizdevās ielādēt.' : 'Ielādē karti…'}</span>
+            {mapFailed && <Button variant="outline" onClick={() => { setMapFailed(false); setMapAttempt((attempt) => attempt + 1); }}>Mēģināt vēlreiz</Button>}
+          </div>}
           <Button className="mobile-results" onClick={() => setMobileListOpen(true)}><BeerMark className="results-mark" /> {filtered.length} vietas</Button>
           {rigaClock && (
             <section className="mobile-time-dock" aria-label="Kartes laiks">

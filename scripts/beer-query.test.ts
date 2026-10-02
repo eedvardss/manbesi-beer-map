@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { queryVenues, servingPerLitre } from '../app/beer-query';
+import { compareServings, createVenueQuery, normalizeSearch, queryVenues, servingPerLitre, type PriceBand, type SortMode } from '../app/beer-query';
 import {
   dedupeBeerPrices,
   assertNoConflictingPrices,
@@ -89,5 +89,28 @@ await test('every venue litre ranking uses the minimum known unit price', () => 
       prices.length ? Math.min(...prices) : null,
       venue.name,
     );
+  }
+});
+
+await test('indexed linear selection preserves the original full-menu search and stable ranking', () => {
+  const indexed = createVenueQuery(mapVenues);
+  const bands: PriceBand[] = ['all', 'under5', 'fiveToSix', 'over6'];
+  const sorts: SortMode[] = ['price', 'litre', 'name'];
+  for (const query of ['', 'a', 'al', 'ALA', 'IPA', 'Brengulu', 'Peldu', 'no-such-beer']) {
+    for (const band of bands) for (const sort of sorts) {
+      const q = normalizeSearch(query.trim());
+      // Reference the former filter + stable full sort, including tied beers.
+      const expected = mapVenues.flatMap((venue) => {
+        const venueMatch = !q || normalizeSearch(`${venue.name} ${venue.address} ${venue.kind}`).includes(q);
+        const beers = venueBeerPrices(venue).filter((beer) =>
+          (venueMatch || normalizeSearch(beer.name).includes(q)) &&
+          (band === 'all' || (band === 'under5' ? beer.price < 5 : band === 'fiveToSix' ? beer.price >= 5 && beer.price <= 6 : beer.price > 6)),
+        );
+        if (!beers.length) return [];
+        const best = [...beers].sort((a, b) => compareServings(a, b, sort))[0];
+        return [{ ...venue, beer: best.name, price: best.price, volumeMl: best.volumeMl, packageCount: best.packageCount, priceIsFrom: best.priceIsFrom, beerPrices: beers }];
+      }).sort((a, b) => sort === 'name' ? a.name.localeCompare(b.name, 'lv') : compareServings(a, b, sort) || a.name.localeCompare(b.name, 'lv'));
+      assert.deepEqual(indexed(query, band, sort), expected, `${query} / ${band} / ${sort}`);
+    }
   }
 });

@@ -43,15 +43,17 @@ struct VenueMapView: UIViewRepresentable {
         }
         for result in results {
             if let existing = coordinator.annotations[result.id] {
+                let markerChanged = existing.result.beer != result.beer || existing.sort != sort || existing.result.venue.name != result.venue.name || coordinator.lastCalmStyle != calmStyle
                 existing.result = result
                 existing.sort = sort
-                (map.view(for: existing) as? PriceAnnotationView)?.configure(existing, calmStyle: calmStyle)
+                if markerChanged { (map.view(for: existing) as? PriceAnnotationView)?.configure(existing, calmStyle: calmStyle) }
             } else {
                 let annotation = VenueAnnotation(result: result, sort: sort)
                 coordinator.annotations[result.id] = annotation
                 map.addAnnotation(annotation)
             }
         }
+        coordinator.lastCalmStyle = calmStyle
         map.showsUserLocation = location != nil
         if location != coordinator.lastLocation, let location {
             coordinator.lastLocation = location
@@ -79,6 +81,7 @@ struct VenueMapView: UIViewRepresentable {
         var lastSelection: String?
         var lastQuery = ""
         var lastLocation: Coordinate?
+        var lastCalmStyle: Bool?
         init(_ parent: VenueMapView) { self.parent = parent }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

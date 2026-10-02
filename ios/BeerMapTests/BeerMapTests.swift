@@ -48,6 +48,38 @@ final class BeerMapTests: XCTestCase {
         let unknown = OpeningHours(week: [nil, nil, nil, nil, nil, nil, nil], sourceUrl: "https://example.com", checkedAt: "2026-09-04", note: nil)
         XCTAssertNil(unknown.isOpen(day: 1, minutes: 60))
     }
+    @MainActor func testCachedQueriesTrackFiltersLocationBookmarksAndClock() throws {
+        let store = BeerMapStore(ephemeral: true)
+        let index = VenueSearchIndex(store.venues)
+        let point = Coordinate(lat: 56.95, lng: 24.11)
+        for query in ["", "a", "al", "ALA", "IPA", "Brengulu", "Peldu", "no-such-beer"] {
+            for band in PriceBand.allCases {
+                for sort in VenueSort.allCases {
+                    store.filter = VenueFilter(query: query, priceBand: band, size: .halfLitre, sort: sort)
+                    let reference = VenueQuery.run(store.venues, filter: store.filter, location: point, now: store.now)
+                    let indexed = VenueQuery.run(store.venues, filter: store.filter, location: point, now: store.now, searchIndex: index)
+                    for values in [indexed, store.results(location: point), store.results(location: point)] {
+                        XCTAssertEqual(values.map(\.id), reference.map(\.id))
+                        XCTAssertEqual(values.map(\.beer), reference.map(\.beer))
+                        XCTAssertEqual(values.map(\.distanceMetres), reference.map(\.distanceMetres))
+                    }
+                }
+            }
+        }
+        store.resetFilters()
+        _ = store.results(location: nil)
+        XCTAssertNotNil(store.results(location: point).first?.distanceMetres)
+        store.toggleSaved("banshee")
+        XCTAssertEqual(store.results(location: point, savedOnly: true).map(\.id), ["banshee"])
+        store.toggleSaved("banshee")
+        XCTAssertTrue(store.results(location: point, savedOnly: true).isEmpty)
+        store.filter.openOnly = true
+        for clock in ["2026-09-07T10:00:00Z", "2026-09-07T23:00:00Z"] {
+            store.now = try XCTUnwrap(ISO8601DateFormatter().date(from: clock))
+            let reference = VenueQuery.run(store.venues, filter: store.filter, now: store.now)
+            XCTAssertEqual(store.results(location: nil).map(\.id), reference.map(\.id))
+        }
+    }
     func testDistanceAndFromPrices() {
         let point = Coordinate(lat: 56.95, lng: 24.11)
         XCTAssertEqual(VenueQuery.metres(from: point, to: point), 0)
@@ -107,10 +139,16 @@ final class BeerMapTests: XCTestCase {
         let session = URLSession(configuration: configuration)
         defer { session.invalidateAndCancel() }
         CatalogProtocol.status = 200
-        CatalogProtocol.body = try JSONEncoder().encode(try Catalog.bundled())
+        let bundled = try Catalog.bundled()
+        _ = store.results(location: nil) // Populate the previous catalog's cache.
+        let changed = Catalog(schemaVersion: 1, city: bundled.city, currency: "EUR", checkedAt: bundled.checkedAt, venues: [bundled.venues.last!])
+        CatalogProtocol.body = try JSONEncoder().encode(changed)
         await store.refresh(session: session)
         XCTAssertNil(store.errorMessage)
         XCTAssertTrue(FileManager.default.fileExists(atPath: cache.path))
+        XCTAssertEqual(store.results(location: nil).map(\.id), changed.venues.map(\.id))
+        store.filter.query = changed.venues[0].name
+        XCTAssertEqual(store.results(location: nil).first?.id, changed.venues[0].id)
         CatalogProtocol.status = 503
         await store.refresh(session: session)
         XCTAssertTrue(store.usesOfflineCatalog)

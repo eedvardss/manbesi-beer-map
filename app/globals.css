@@ -3,6 +3,9 @@
 @import 'shadcn/tailwind.css';
 @import 'maplibre-gl/dist/maplibre-gl.css';
 
+.map-load-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #a5afa8; font-size: 13px; pointer-events: none; }
+.map-load-state button { pointer-events: auto; }
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

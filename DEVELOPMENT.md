@@ -43,14 +43,33 @@ Ignored proof images are in `artifacts/design-*.jpg`. Xcode results are under `/
 
 Remaining design work: refine visible-map/list coordination, dense pin hierarchy, long names and source/menu grouping. Continue with A unless feedback points elsewhere. Review the original product's denied-location state separately; the draft does not establish that coverage. No new venue-price research, physical-device installation or App Store release occurred in this design pass.
 
+## Performance pass — 2 October 2026
+
+The user now explicitly requires excellent speed on both platforms and authorizes independent revisions to the existing five-hour task. The heartbeat `build-beer-map-for-iphone-and-web` was updated successfully and its saved configuration verified: active, same five-hour cadence, quiet background work, performance and design before feature breadth, representative measurements and budgets, and authority to revise priorities without duplicate schedules. See `docs/performance.md` for requirements, reproducible measurements, limits and profiling priorities.
+
+Implemented: prepared catalog search indexes, one-pass winning-serving selection, a bounded one-input native query cache with correct invalidation, a prepared native catalog-date label, reused web formatters, memoized web rows, and fewer updates to unchanged web/native markers. The website's renderer is now a deferred chunk with its self-contained worker; the search/list page can hydrate first. Pending venue choices and permalinks are retained. A quiet map initialization failure/retry state is available.
+
+Measurements on the arm64 Mac/macOS 26.5.1, using the real catalog: web mixed-query median 0.627 → 0.063 ms, native optimized Swift model/store 1.596 → 0.511 ms, with matching result checksums. These are eight-query batch averages, not device startup or frame-rate evidence. Initial page gzip is 494,579 → 211,103 bytes; the deferred map renderer still adds 277,315 gzip bytes. The new postbuild budget caps initial page JS at 1,000,000 raw / 250,000 gzip bytes. This does not budget total transfer.
+
+Validation completed:
+
+- `npm run build` exits successfully, including lint/types, eleven serving/API tests, existing menu/timeline checks, complete venue audit, bundled snapshot equality, production build and the new size budget. Raw measurements and logs are in ignored `artifacts/performance/`.
+- Twelve native tests (nine unit and three UI) pass on iPhone 17 Pro / iOS 26.5. New coverage exercises cached/indexed query equivalence, bookmarks, location, clock and catalog replacement. Debug and Release simulator builds pass. Result: `/Users/edvards/Library/Developer/XcodeBuildMCP/workspaces/Beer-Map-d07dfe114b1f/result-bundles/test_sim_2026-10-02T00-34-01-821Z_pid6794_626f200a.xcresult`.
+- The rebuilt background production preview renders real map tiles and price markers. Desktop checks cover ALA price/litre selection, retained keyboard focus, full menu, IPA + 5–6 € and unknown-volume presentation. Compact mobile review uses an observed 391 × 845 CSS viewport: permalink/list selection, repeated selection at the current zoom, drawer closure, all 73 ALA menu entries, settled panel bounds within the viewport, user zoom dismissal, empty search and recovery to 165 results. Console error inspection is empty. Temporary device/viewport overrides were reset.
+- Mobile review exposed an existing camera-animation race: selecting a place while already at the target zoom could close its detail. Programmatic venue movements now carry selection-preserving event data; user zoom still dismisses details. The corresponding reopen scenario is added to the browser regression script and exercised through the actual background browser. The standalone headless browser script was not rerun in this pass.
+- Initial production HTML was inspected: it preloads the page chunk and has no map-runtime preload. The runtime loads after hydration. This is evidence of loading order, not a measured improvement to useful startup.
+
+Current work is verified locally; this pass has not been deployed to manbesi.lv or installed on a physical iPhone. The normal native visual direction remains unapproved; draft A is still provisional and the mirror remains available. The local web preview runs at http://localhost:3017/ in terminal session 74171. No catalog prices or source dates changed, and pre-existing `research/` remains outside this pass.
+
 ## Next work
 
 The first functional milestone is complete; visual design remains provisional. Prioritize the native redesign:
 
 1. Refine the map-led draft with strong hierarchy, less chrome, useful place density, exact serving context and coherent details. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
 2. Verify remaining native dark mode, accessibility sizes, smaller-screen, keyboard, long-name, empty/saved and denied-location states. Fix observed defects before expanding scope.
-3. Apply useful, visually coherent website parity: saved places and exact serving-size filters.
-4. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's large bundle/dense overview.
-5. Prepare TestFlight when authorized signing/distribution access is available.
+3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Profile decoding, requests, marker work, memory and idle costs; implement conditional native refresh and off-main work when evidence supports it. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
+4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within the startup and interaction budgets.
+5. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's dense overview with rendered/performance evidence.
+6. Prepare TestFlight when authorized signing/distribution access is available.
 
 Keep the five-hour continuation active. Work quietly while nothing meaningful changes; report verified milestones, concrete failures, or required user action. Preserve unrelated changes and commit completed slices.

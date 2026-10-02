@@ -3,7 +3,8 @@ import Observation
 
 @MainActor @Observable
 final class BeerMapStore {
-    private(set) var catalog: Catalog?
+    private(set) var catalog: Catalog? { didSet { prepareCatalog() } }
+    private(set) var checkedLabel = "Nav datu"
     private(set) var savedIDs: Set<String>
     private(set) var isRefreshing = false
     private(set) var usesOfflineCatalog = false
@@ -14,6 +15,13 @@ final class BeerMapStore {
     private let defaults: UserDefaults
     private let cacheURL: URL?
     private let persistsState: Bool
+    @ObservationIgnored private var searchIndex = VenueSearchIndex([])
+    @ObservationIgnored private var cachedQuery: (key: QueryKey, results: [VenueResult])?
+    private struct QueryKey: Equatable {
+        let filter: VenueFilter
+        let location: Coordinate?
+        let openMinute: Int?
+    }
 
     init(defaults: UserDefaults? = nil, cacheURL: URL? = nil, bundle: Bundle = .main, ephemeral: Bool = false) {
         let testing = ProcessInfo.processInfo.arguments.contains("--uitesting")
@@ -28,26 +36,40 @@ final class BeerMapStore {
            cached.checkedAt >= (bundled?.checkedAt ?? "") {
             catalog = cached
         } else { catalog = bundled }
+        prepareCatalog()
         if catalog == nil { errorMessage = CatalogError.missingBundle.localizedDescription }
     }
 
     var venues: [Venue] { catalog?.venues ?? [] }
-    var checkedLabel: String {
-        guard let checked = catalog?.checkedAt else { return "Nav datu" }
+    private func prepareCatalog() {
+        searchIndex = VenueSearchIndex(venues)
+        cachedQuery = nil
+        guard let checked = catalog?.checkedAt else { checkedLabel = "Nav datu"; return }
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd"
-        guard let date = formatter.date(from: checked) else { return checked }
-        return date.formatted(.dateTime.day().month(.abbreviated).year().locale(Locale(identifier: "lv_LV")))
+        checkedLabel = formatter.date(from: checked).map {
+            $0.formatted(.dateTime.day().month(.abbreviated).year().locale(Locale(identifier: "lv_LV")))
+        } ?? checked
     }
     func results(location: Coordinate?, savedOnly: Bool = false) -> [VenueResult] {
-        VenueQuery.run(savedOnly ? venues.filter { savedIDs.contains($0.id) } : venues, filter: filter, location: location, now: now)
+        // Reading catalog/filter here keeps Observation dependencies explicit.
+        // Cache only one input set; typing cannot grow memory without bound.
+        let values = venues
+        let key = QueryKey(filter: filter, location: location, openMinute: filter.openOnly ? Int(now.timeIntervalSince1970 / 60) : nil)
+        let matches: [VenueResult]
+        if let cachedQuery, cachedQuery.key == key { matches = cachedQuery.results }
+        else {
+            matches = VenueQuery.run(values, filter: filter, location: location, now: now, searchIndex: searchIndex)
+            cachedQuery = (key, matches)
+        }
+        return savedOnly ? matches.filter { savedIDs.contains($0.id) } : matches
     }
     func result(id: String, location: Coordinate?) -> VenueResult? {
         if let match = results(location: location).first(where: { $0.id == id }) { return match }
         var fallback = VenueFilter()
         fallback.sort = filter.sort
-        return VenueQuery.run(venues.filter { $0.id == id }, filter: fallback, location: location, now: now).first
+        return VenueQuery.run(venues.filter { $0.id == id }, filter: fallback, location: location, now: now, searchIndex: searchIndex).first
     }
     func toggleSaved(_ id: String) {
         if savedIDs.contains(id) { savedIDs.remove(id) } else { savedIDs.insert(id) }

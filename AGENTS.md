@@ -8,6 +8,10 @@ The user rejected the first native visual design on 2 October 2026 and explicitl
 
 Apply the same quality bar to website changes. Preserve accepted directions and interaction context, and review real browser states and mobile viewports before declaring polish complete. Current native research and draft decisions are in `docs/design-direction.md`.
 
+The user requires both products to be highly optimized and fast. Treat useful startup time, responsive typing/filtering, smooth scrolling and map pan/zoom, efficient requests/cache behavior, and bounded memory/CPU/battery use as product requirements alongside visual quality. Measure representative production/Release workloads before and after performance changes, keep repeatable checks and budgets, and record the device/runtime and limitations in `docs/performance.md`. Avoid repeated normalization, menu sorting, formatting, decoding or rebuilding unchanged markers on interaction paths. Preserve serving accuracy, provenance, accessibility and accepted design. A synthetic benchmark or successful build alone does not establish device or browser responsiveness.
+
+The user explicitly authorizes updating the existing five-hour scheduled task's prompt and priorities as evidence or project progress warrants, without asking again. Preserve its cadence, background behavior and quiet notification intent, avoid duplicate schedules, and record meaningful revisions.
+
 - Preserve pre-existing user changes and keep commits scoped to completed, verified milestones. Do not include the pre-existing untracked `research/` files by accident.
 - Published venue data must have genuine on-premise evidence. Preserve exact beer names, serving sizes, multipacks, “from” prices, source links, and uncertainty. Use the venue-price-research skill when researching new prices.
 - `app/catalog.ts` is the app/API projection of the existing website data. Run `npm run sync:ios-data` after changing its input. `npm run check` checks that the bundled snapshot matches.
