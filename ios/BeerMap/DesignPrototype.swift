@@ -44,8 +44,11 @@ struct DesignPrototypeRoot: View {
     @State private var selection: StudySelection?
     @State private var selectedMapID: String?
     @State private var showFilters = false
-    @State private var appearance: ColorScheme?
-    @State private var textSize: DynamicTypeSize = .large
+    @State private var appearance: ColorScheme? = {
+        let arguments = ProcessInfo.processInfo.arguments
+        return arguments.contains("--design-dark") ? .dark : (arguments.contains("--design-light") ? .light : nil)
+    }()
+    @State private var textSize: DynamicTypeSize = ProcessInfo.processInfo.arguments.contains("--design-large-text") ? .accessibility1 : .large
     @FocusState private var editingSearch: Bool
 
     var body: some View {
@@ -134,43 +137,73 @@ private struct MapDesignPrototype: View {
     @State private var showingAll = false
     @State private var savedOnly = false
     @State private var clusterIDs: [String]?
+    @State private var visibleIDs: Set<String>?
 
-    private var results: [VenueResult] {
-        let values = store.results(location: nil, savedOnly: savedOnly)
-        guard let clusterIDs else { return values }
-        return values.filter { clusterIDs.contains($0.id) }
+    private func panelResults(_ values: [VenueResult]) -> [VenueResult] {
+        if let clusterIDs {
+            let members = Set(clusterIDs)
+            return values.filter { members.contains($0.id) }
+        }
+        guard !showingAll, !savedOnly, let visibleIDs else { return values }
+        return values.filter { visibleIDs.contains($0.id) }
+    }
+
+    private var panelTitle: String {
+        if savedOnly { return "Tavas vietas" }
+        if clusterIDs != nil { return "Vietas vienuviet" }
+        return showingAll ? "Visas vietas" : "Šajā apgabalā"
+    }
+
+    private var panelHeight: CGFloat {
+        if editingSearch.wrappedValue { return textSize.isAccessibilitySize ? 180 : 106 }
+        return showingAll ? 360 : (textSize.isAccessibilitySize ? 260 : 184)
     }
 
     var body: some View {
+        let allResults = store.results(location: nil, savedOnly: savedOnly)
+        let results = panelResults(allResults)
+        let previewCount = editingSearch.wrappedValue ? 1 : 2
         ZStack(alignment: .top) {
-            VenueMapView(results: store.results(location: nil, savedOnly: savedOnly), sort: store.filter.sort, query: store.filter.query, location: nil, selectedID: $selectedID, onCluster: { clusterIDs = $0; showingAll = true }, calmStyle: true)
+            VenueMapView(results: allResults, sort: store.filter.sort, query: store.filter.query, location: nil, selectedID: $selectedID, onCluster: { clusterIDs = $0; showingAll = true }, calmStyle: true, onVisibleVenueIDsChange: { visibleIDs = $0 })
             StudySearchField(query: $store.filter.query, focus: editingSearch, filterActive: store.filter.hasFilters, showFilters: { showFilters = true }, floating: true)
                 .padding(.horizontal, 20).padding(.top, 9)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .firstTextBaseline) {
+                HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(savedOnly ? "Tavas vietas" : "Rīgas alus").font(.title3.weight(.semibold))
-                        Text("\(results.count) vietas · \(store.filter.size == .halfLitre ? "500 ml" : store.filter.sort.label.lowercased())").font(.caption).foregroundStyle(.secondary)
+                        Text(panelTitle).font(.title3.weight(.semibold))
+                        Text("\(results.count) \(results.count == 1 ? "vieta" : "vietas") · \(store.filter.size.label)").font(.caption).foregroundStyle(.secondary)
+                            .accessibilityIdentifier("study-map-summary")
                     }
                     Spacer(minLength: 8)
-                    Button { savedOnly.toggle() } label: { Image(systemName: savedOnly ? "bookmark.fill" : "bookmark").frame(width: 44, height: 44) }
+                    Button { savedOnly.toggle(); clusterIDs = nil; editingSearch.wrappedValue = false } label: { Image(systemName: savedOnly ? "bookmark.fill" : "bookmark").frame(width: 44, height: 44) }
                         .buttonStyle(.plain).foregroundStyle(savedOnly ? StudyPalette.accent : .primary)
                         .accessibilityLabel(savedOnly ? "Rādīt visas vietas" : "Rādīt saglabātās vietas")
-                    Button { showingAll.toggle(); clusterIDs = nil } label: { Image(systemName: showingAll ? "chevron.down" : "list.bullet").frame(width: 44, height: 44) }
-                        .buttonStyle(.plain).accessibilityLabel(showingAll ? "Sakļaut vietas" : "Visas vietas")
+                    Button { showingAll.toggle(); clusterIDs = nil; editingSearch.wrappedValue = false } label: { Image(systemName: showingAll ? "chevron.down" : "list.bullet").frame(width: 44, height: 44) }
+                        .buttonStyle(.plain).accessibilityLabel(showingAll ? "Sakļaut vietas" : (savedOnly ? "Visas saglabātās vietas" : "Visas vietas"))
+                        .accessibilityIdentifier("study-expand-places")
                 }.padding(.horizontal, 20).padding(.top, 18).padding(.bottom, 8)
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        if results.isEmpty { StudyEmptyState(savedOnly: savedOnly).padding(20) }
-                        ForEach(showingAll ? results : Array(results.prefix(2))) { result in
+                        if results.isEmpty {
+                            if !allResults.isEmpty, !savedOnly, !showingAll {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Šeit vietu nav.").font(.headline)
+                                    Text("Pārvieto karti vai atver visu vietu sarakstu.").font(.subheadline).foregroundStyle(.secondary)
+                                    Button("Visas vietas") { showingAll = true; editingSearch.wrappedValue = false }
+                                        .font(.subheadline.weight(.medium)).buttonStyle(.plain).frame(minHeight: 44)
+                                        .accessibilityIdentifier("study-area-show-all")
+                                }.frame(maxWidth: .infinity, alignment: .leading).padding(20)
+                            } else { StudyEmptyState(savedOnly: savedOnly).padding(20) }
+                        }
+                        ForEach(showingAll ? results : Array(results.prefix(previewCount))) { result in
                             StudyPlaceRow(result: result, store: store, select: select)
                                 .padding(.horizontal, 20).padding(.vertical, 12)
                         }
                     }
                 }
-                .frame(maxHeight: showingAll ? 360 : (textSize.isAccessibilitySize ? 260 : 184))
+                .frame(maxHeight: panelHeight)
                 .scrollIndicators(.hidden)
                 .scrollDismissesKeyboard(.interactively)
             }
@@ -367,6 +400,7 @@ private struct StudySearchField: View {
 }
 
 private struct StudyPlaceRow: View {
+    @Environment(\.dynamicTypeSize) private var textSize
     let result: VenueResult
     let store: BeerMapStore
     let select: (VenueResult) -> Void
@@ -374,15 +408,24 @@ private struct StudyPlaceRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Button { select(result) } label: {
-                HStack(alignment: .top, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 5) {
+                    HStack(alignment: .firstTextBaseline, spacing: 12) {
                         Text(result.venue.name).font(.subheadline.weight(.semibold)).foregroundStyle(.primary)
-                        Text(result.venue.address).font(.caption).foregroundStyle(.secondary).lineLimit(1)
-                        Text(result.beer.name + " · " + result.beer.volumeLabel).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
-                    }.frame(maxWidth: .infinity, alignment: .leading)
-                    Text(store.filter.sort == .litre ? result.beer.litreLabel : result.beer.priceLabel)
-                        .font(.body.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
-                }.contentShape(Rectangle())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Text(store.filter.sort == .litre ? result.beer.litreLabel : result.beer.priceLabel)
+                            .font(.body.weight(.semibold)).monospacedDigit().foregroundStyle(.primary).fixedSize()
+                    }
+                    Text(result.venue.address).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    if textSize.isAccessibilitySize {
+                        Text(result.beer.name + " · " + result.beer.volumeLabel)
+                            .font(.caption2).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                    } else {
+                        HStack(spacing: 4) {
+                            Text(result.beer.name).lineLimit(1)
+                            Text("· " + result.beer.volumeLabel).fixedSize()
+                        }.font(.caption2).foregroundStyle(.secondary)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
             }.buttonStyle(.plain).accessibilityIdentifier("study-venue-\(result.id)")
             SaveButton(venueID: result.id, name: result.venue.name)
         }

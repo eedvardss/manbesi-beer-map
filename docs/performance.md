@@ -54,6 +54,10 @@ The conditional behavior follows [RFC 9110 If-None-Match](https://www.rfc-editor
 
 ## Repeatable checks and budgets
 
+Draft A's visible-area panel (2 October) adds one coordinate/ID scan after a settled map region or data update. Publication is deferred out of `updateUIView`, canceled/coalesced when superseded, suppressed during camera movement, and skipped when membership is unchanged. There is no per-frame visible-region callback. The panel filters the existing cached, ordered query result by ID; it does not normalize search, sort menus, reformat the catalog date, or perform disk/network work. Existing annotation objects are retained. Other map surfaces have no area callback and return before scheduling a task.
+
+This is a bounded implementation cost, not measured frame-delivery evidence. The area panel is DEBUG-only, so a Release build cannot establish its runtime behavior. Its interaction/layout checks use iPhone 17e / iOS 26.5 with the real 165-venue catalog, dark appearance and accessibility text size 1. Physical-device Release profiling remains a gate before moving the provisional design into the product or claiming smooth pan/zoom, memory or battery improvements.
+
 Run `npm run perf:query` for the web CPU workload. Run `npm run build` for lint, types, serving/API tests, menu/timeline/data checks, bundled snapshot consistency and production output. Its postbuild check enforces the initial page JS budget: **1,000,000 raw bytes and 250,000 gzip bytes**. Run `npm run perf:bundle` to inspect an existing build. The budget excludes frameworks, deferred map renderer, worker and tiles; adding routes requires deliberately revisiting the check.
 
 Run the native benchmark from the repository root:

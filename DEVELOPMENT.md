@@ -81,12 +81,27 @@ Validation completed:
 
 This is a scoped local native milestone on `codex/iphone-app`; no push, website deployment, physical-iPhone installation or App Store release occurred. Existing five-hour continuation stays active with its cadence and background intent unchanged; it reads these updated priorities. Draft A remains provisional, and the native mirror stays available. Pre-existing `research/` remains outside commits.
 
+## Native map context and accessible panel — 2 October 2026
+
+Draft A's compact panel now describes places in the visible map area instead of ranking the whole city independently. The full list, saved places and cluster list have explicit, stable membership. An empty map area offers access to all places; empty searches still offer filter recovery. Search editing contracts both the compact and expanded panels. Price labels remain intact, serving sizes remain visible on ordinary rows, and metadata wraps at accessibility sizes. Research/application details are in `docs/design-direction.md`.
+
+Direct pin selection now retains the browse camera rather than entering the programmatic-link centering path. Area membership is published after a settled map/data update and only when its ID set changes. It uses cached ordered results and retained annotations, with no per-frame map callback or new network/disk work. These are implementation constraints; no device frame-rate, startup, memory or battery improvement is claimed.
+
+Validation completed:
+
+- All 22 Debug native checks pass on iPhone 17e / iOS 26.5 (17 unit, five UI). New coverage includes geographic bounds/date-line edges, area versus full-list membership, a saved place outside the map area, empty-area recovery, and expanded search with an on-screen software keyboard in dark appearance at accessibility size 1. Existing serving/litre, catalog/cache and A/B/C navigation checks still pass. Results: `artifacts/ios-map-context-final.xcresult`.
+- Regular Release simulator build passes with strict concurrency and no warnings. A focused optimized Release UI test also passes: opening/closing the Hospitāļu Ezītis pin retains its screen position within two points. This test build uses `ENABLE_TESTABILITY=YES` because the project also compiles its `@testable` unit target. Results: `artifacts/ios-release-pin-context.xcresult`; inspected before/after screenshots are under `artifacts/map-pin-review/`.
+- Rendered review covers the loaded native map, compact/full/saved/empty panels, keyboard, wrapping venue name and serving metadata, light appearance, and dark appearance with large text on the smaller phone. The keyboard capture is under `artifacts/map-context-review/`; the settled light draft is `artifacts/map-area-final.jpg`. Native/browser frames and test attachments supply UI evidence; a passing build alone is not the design gate.
+- `git diff --check` and bundled catalog equality pass: 165 venues / 2,550 servings, still researched on 4 September. No catalog data or website source was changed.
+
+A remains **provisional**, with B/C available. These drafts remain excluded from Release; the Release UI change is camera-context preservation. The background mirror was restored after interruption and is now pinned to iPhone 17e at http://localhost:3201/ in terminal session 45074. The five-hour heartbeat keeps its existing cadence and quiet intent. No website deployment, push, physical-iPhone installation or App Store release occurred. Pre-existing `research/` stays outside the commit.
+
 ## Next work
 
 The first functional milestone is complete; visual design remains provisional. Prioritize the native redesign:
 
-1. Refine the map-led draft with strong hierarchy, less chrome, useful place density, exact serving context and coherent details. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
-2. Verify remaining native dark mode, accessibility sizes, smaller-screen, keyboard, long-name, empty/saved and denied-location states. Fix observed defects before expanding scope.
+1. Refine draft A's dense pin hierarchy and detail/menu/source grouping. Visible-area/list coordination and accessible row/keyboard layout are implemented and locally checked. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
+2. Review remaining long-name/large-menu extremes and the original product's denied-location state. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
 3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Conditional refresh and off-actor remote preparation are complete; profile remaining synchronous startup decode/index work, marker work, memory and idle costs. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
 4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within the startup and interaction budgets.
 5. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's dense overview with rendered/performance evidence.

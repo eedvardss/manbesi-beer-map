@@ -88,6 +88,19 @@ final class BeerMapTests: XCTestCase {
         XCTAssertTrue(beer.priceLabel.hasPrefix("no "))
         XCTAssertTrue(beer.litreLabel.hasPrefix("no "))
     }
+
+    func testMapAreaIncludesEdgesAndHandlesTheDateLine() {
+        let riga = VenueMapBounds(south: 56.94, north: 56.96, west: 24.10, east: 24.13)
+        XCTAssertTrue(riga.contains(lat: 56.95, lng: 24.11))
+        XCTAssertTrue(riga.contains(lat: 56.94, lng: 24.13))
+        XCTAssertFalse(riga.contains(lat: 56.97, lng: 24.11))
+        XCTAssertFalse(riga.contains(lat: 56.95, lng: 24.14))
+        let dateLine = VenueMapBounds(south: -10, north: 10, west: 170, east: -170)
+        XCTAssertTrue(dateLine.contains(lat: 0, lng: 179))
+        XCTAssertTrue(dateLine.contains(lat: 0, lng: -179))
+        XCTAssertFalse(dateLine.contains(lat: 0, lng: 0))
+        XCTAssertFalse(dateLine.contains(lat: 11, lng: 179))
+    }
     @MainActor func testSavedPlacesPersistAndSharedLinksResolve() throws {
         let suite = "BeerMap.Tests.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))

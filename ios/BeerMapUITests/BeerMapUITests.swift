@@ -42,9 +42,92 @@ final class BeerMapUITests: XCTestCase {
         comparisonSearch.typeText("no-such-beer-xyz\n")
         XCTAssertTrue(app.staticTexts["Nekas neatradās."].waitForExistence(timeout: 5))
         app.buttons["Notīrīt filtrus"].tap()
+        app.buttons["study-expand-places"].tap()
         XCTAssertTrue(app.buttons["study-venue-banshee"].waitForExistence(timeout: 5))
     }
+
+    @MainActor func testDesignMapAreaAllPlacesAndSavedContext() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-dark", "--design-large-text"]
+        app.launch()
+        let map = app.otherElements["venue-map"]
+        let summary = app.staticTexts["study-map-summary"]
+        XCTAssertTrue(map.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Šajā apgabalā"].exists)
+        app.buttons["study-expand-places"].tap()
+        XCTAssertTrue(app.staticTexts["Visas vietas"].exists)
+        XCTAssertTrue(summary.label.hasPrefix("131 vietas"))
+        let fullSummary = summary.label
+        let savedVenue = app.buttons["study-venue-1983-bars"]
+        savedVenue.tap()
+        XCTAssertTrue(app.staticTexts["study-detail-name"].waitForExistence(timeout: 5))
+        app.navigationBars.buttons["save-1983-bars"].tap()
+        app.buttons["study-close-detail"].tap()
+        // Panning changes the map, but an explicitly expanded list keeps its
+        // global membership and returning from detail keeps its position.
+        XCTAssertTrue(savedVenue.isHittable)
+        for _ in 0..<3 {
+            let start = map.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5))
+            let end = map.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+        }
+        XCTAssertEqual(summary.label, fullSummary)
+        app.buttons["Rādīt saglabātās vietas"].tap()
+        XCTAssertTrue(app.staticTexts["Tavas vietas"].exists)
+        XCTAssertTrue(summary.label.hasPrefix("1 vieta"))
+        XCTAssertTrue(savedVenue.isHittable)
+        capture(app, name: "Saved place outside map area")
+        app.buttons["Rādīt visas vietas"].tap()
+        app.buttons["study-expand-places"].tap()
+        XCTAssertTrue(app.staticTexts["Šeit vietu nav."].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Nekas neatradās."].exists)
+        capture(app, name: "Empty map area")
+        app.buttons["study-area-show-all"].tap()
+        XCTAssertEqual(summary.label, fullSummary)
+        XCTAssertTrue(savedVenue.isHittable)
+    }
+
+    @MainActor func testDesignExpandedSearchRetainsVisibleMap() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-dark", "--design-large-text"]
+        app.launch()
+        let search = app.textFields["study-search"]
+        XCTAssertTrue(search.waitForExistence(timeout: 10))
+        app.buttons["study-expand-places"].tap()
+        search.tap()
+        let keyboard = app.keyboards.firstMatch
+        XCTAssertTrue(keyboard.waitForExistence(timeout: 5))
+        search.typeText("ALA Pagrabs")
+        XCTAssertTrue(app.buttons["study-venue-folkklubs-ala-pagrabs"].waitForExistence(timeout: 5))
+        XCTAssertTrue(search.isHittable)
+        XCTAssertTrue(keyboard.isHittable)
+        XCTAssertGreaterThan(keyboard.frame.height, 150)
+        XCTAssertLessThanOrEqual(keyboard.frame.maxY, app.frame.maxY + 1)
+        XCTAssertGreaterThan(app.otherElements["venue-map"].frame.height, 100)
+        capture(app, name: "Expanded search and keyboard after typing")
+        search.typeText("\n")
+        XCTAssertTrue(app.staticTexts["study-map-summary"].label.hasPrefix("1 vieta"))
+    }
 #endif
+
+    @MainActor func testPinDetailReturnsToSameMapPosition() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting", "--offline"]
+        app.launch()
+        let pin = app.buttons["pin-hospitalu-ezitis-migla"]
+        XCTAssertTrue(pin.waitForExistence(timeout: 10))
+        XCTAssertTrue(pin.isHittable)
+        let originalFrame = pin.frame
+        capture(app, name: "Map before pin detail")
+        pin.tap()
+        XCTAssertTrue(app.staticTexts["venue-detail-name"].waitForExistence(timeout: 5))
+        capture(app, name: "Pin detail preserves map context")
+        app.buttons["close-detail"].tap()
+        XCTAssertTrue(pin.waitForExistence(timeout: 5))
+        XCTAssertEqual(pin.frame.midX, originalFrame.midX, accuracy: 2)
+        XCTAssertEqual(pin.frame.midY, originalFrame.midY, accuracy: 2)
+        capture(app, name: "Map after pin detail")
+    }
 
     @MainActor func testMapPlacesSavedAndServingFilters() {
         let app = XCUIApplication()

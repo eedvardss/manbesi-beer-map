@@ -41,6 +41,16 @@ npm run design:ios -- A
 
 The command builds the native app, launches the study, and prints a browser mirror URL. It never opens Xcode or the Simulator desktop window. If multiple simulators are booted, set `BEER_MAP_SIMULATOR_ID` explicitly. Stop the command to clean up its simulator-specific mirror. The compact bottom study switcher cycles A/B/C; its menu changes light/dark appearance and text size. Launch arguments `--design-study --design=B` and `manbesi://design?variant=C` also select a draft. The study is excluded from Release builds. Favorites and filters reset after relaunch and never change product bookmarks or disk cache.
 
+## Map and list coordination — 2 October 2026
+
+Draft A's first panel ranked the whole city while the map could show another area. The current refinement makes its compact panel describe **the visible area**, with an explicit full-list action. The expanded list, saved places and a selected cluster retain their own membership while the map moves. Area emptiness has its own recovery action; an empty search still offers filter recovery. Exact servings, full menus and provenance remain available through the place detail.
+
+Research was refreshed against actual [Mapstr App Store screens](https://apps.apple.com/us/app/mapstr-save-follow-places/id917288465), [Apple's map guidance](https://developer.apple.com/design/human-interface-guidelines/maps) and [Apple Maps' nearby-area interaction](https://support.apple.com/guide/iphone/find-nearby-attractions-restaurants-services-iphbaf51b2c0/27/ios/27). The useful principle is connected geographic context: the map and compact results should describe the same area, controls should remain compact, and a place card should preserve the user's browse position. Mapstr's published screens demonstrate a compact Map/List choice and plain place rows; they do not establish hands-on behavior. Apple's guide is a design reference; the implemented app still uses the installed iOS 26.5 SDK.
+
+Direct pin taps now preserve the current camera when opening and dismissing detail. Programmatic venue links can still center a venue. Search editing reduces the panel footprint to keep geographic context available above the keyboard. Area membership publishes after a settled region/data update and only when the ID set changes; it reuses cached, already ordered results.
+
+This remains a refinement of a **provisional DEBUG draft**. B and C stay available for review. The area panel has not replaced the Release app's navigation. For repeatable review, add `--design-dark` or `--design-light`, and `--design-large-text` (accessibility size 1) to the existing design launch arguments. These overrides belong to the study and do not change system settings.
+
 ## Quality gate for future runs
 
 Before calling a UI milestone complete, inspect the actual rendered route/device. Compare the map, useful loaded list, long venue name, detail, saved state, empty state and relevant filter state. Use a smaller iPhone, dark appearance and large text when a change affects layout. Check alignment, information density, tap areas, keyboard behavior, overflow and returning from details without losing context. Wait for map tiles; an empty tile grid is not a finished screenshot. Keep the accent limited to meaningful selection or the dominant action, and prefer quick, restrained transitions.

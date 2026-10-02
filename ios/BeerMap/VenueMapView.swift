@@ -14,6 +14,7 @@ struct VenueMapView: UIViewRepresentable {
     @Binding var selectedID: String?
     var onCluster: ([String]) -> Void
     var calmStyle = false
+    var onVisibleVenueIDsChange: (@MainActor (Set<String>) -> Void)?
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     func makeUIView(context: Context) -> MKMapView {
@@ -73,6 +74,12 @@ struct VenueMapView: UIViewRepresentable {
                 map.showAnnotations(Array(coordinator.annotations.values), animated: true)
             }
         }
+        coordinator.scheduleVisibleVenues(map)
+    }
+
+    static func dismantleUIView(_ map: MKMapView, coordinator: Coordinator) {
+        coordinator.visibleReport?.cancel()
+        map.delegate = nil
     }
 
     @MainActor final class Coordinator: NSObject, MKMapViewDelegate {
@@ -82,7 +89,39 @@ struct VenueMapView: UIViewRepresentable {
         var lastQuery = ""
         var lastLocation: Coordinate?
         var lastCalmStyle: Bool?
+        var lastVisibleIDs: Set<String>?
+        var visibleReport: Task<Void, Never>?
+        var regionIsChanging = false
         init(_ parent: VenueMapView) { self.parent = parent }
+
+        func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+            regionIsChanging = true
+        }
+
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            regionIsChanging = false
+            scheduleVisibleVenues(mapView)
+        }
+
+        func scheduleVisibleVenues(_ map: MKMapView) {
+            guard parent.onVisibleVenueIDsChange != nil else { return }
+            visibleReport?.cancel()
+            // Defer publication out of updateUIView, and coalesce data/region
+            // callbacks. No visible-region-per-frame callback is installed.
+            visibleReport = Task { @MainActor [weak self, weak map] in
+                guard !Task.isCancelled, let self, let map, !regionIsChanging, map.bounds.width > 0, map.bounds.height > 0 else { return }
+                let rect = map.visibleMapRect
+                let topLeft = MKMapPoint(x: rect.minX, y: rect.minY).coordinate
+                let bottomRight = MKMapPoint(x: rect.maxX, y: rect.maxY).coordinate
+                let bounds = VenueMapBounds(south: bottomRight.latitude, north: topLeft.latitude, west: topLeft.longitude, east: bottomRight.longitude)
+                let ids = Set(annotations.compactMap { id, annotation in
+                    bounds.contains(lat: annotation.coordinate.latitude, lng: annotation.coordinate.longitude) ? id : nil
+                })
+                guard ids != lastVisibleIDs else { return }
+                lastVisibleIDs = ids
+                parent.onVisibleVenueIDsChange?(ids)
+            }
+        }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if let cluster = annotation as? MKClusterAnnotation {
@@ -117,6 +156,9 @@ struct VenueMapView: UIViewRepresentable {
                 } else { mapView.showAnnotations(members, animated: true) }
                 mapView.deselectAnnotation(cluster, animated: false)
             } else if let venue = view.annotation as? VenueAnnotation {
+                // A direct pin tap already supplies geographic context. Keep
+                // its camera instead of treating it as a programmatic link.
+                lastSelection = venue.result.id
                 parent.selectedID = venue.result.id
             }
         }

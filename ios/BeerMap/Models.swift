@@ -176,6 +176,18 @@ enum VenueSort: String, CaseIterable, Identifiable {
 }
 
 struct Coordinate: Equatable, Sendable { let lat: Double; let lng: Double }
+
+struct VenueMapBounds: Equatable, Sendable {
+    let south: Double
+    let north: Double
+    let west: Double
+    let east: Double
+
+    func contains(lat: Double, lng: Double) -> Bool {
+        guard (south...north).contains(lat) else { return false }
+        return west <= east ? (west...east).contains(lng) : lng >= west || lng <= east
+    }
+}
 struct VenueFilter: Equatable {
     var query = ""
     var priceBand: PriceBand = .all
