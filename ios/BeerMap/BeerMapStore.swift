@@ -18,6 +18,7 @@ final class BeerMapStore {
     @ObservationIgnored private var etag: String?
     @ObservationIgnored private var searchIndex = VenueSearchIndex([])
     @ObservationIgnored private var cachedQuery: (key: QueryKey, results: [VenueResult])?
+    @ObservationIgnored private var cachedMenu: (venueID: String, sort: VenueSort, source: [Serving], menu: PreparedVenueMenu)?
     private struct QueryKey: Equatable {
         let filter: VenueFilter
         let location: Coordinate?
@@ -46,6 +47,7 @@ final class BeerMapStore {
         searchIndex = prepared.searchIndex
         checkedLabel = prepared.checkedLabel
         cachedQuery = nil
+        cachedMenu = nil
         catalog = prepared.catalog
     }
     func results(location: Coordinate?, savedOnly: Bool = false) -> [VenueResult] {
@@ -66,6 +68,18 @@ final class BeerMapStore {
         var fallback = VenueFilter()
         fallback.sort = filter.sort
         return VenueQuery.run(venues.filter { $0.id == id }, filter: fallback, location: location, now: now, searchIndex: searchIndex).first
+    }
+    func menu(for venue: Venue) -> PreparedVenueMenu {
+        let sort = filter.sort
+        if let cachedMenu, cachedMenu.venueID == venue.id,
+           cachedMenu.sort == sort, cachedMenu.source == venue.beers {
+            return cachedMenu.menu
+        }
+        let menu = PreparedVenueMenu(venue.beers, sort: sort)
+        // Retain only one venue/sort. Compare source data so a frozen sheet
+        // and a newly refreshed venue cannot borrow one another's menu.
+        cachedMenu = (venue.id, sort, venue.beers, menu)
+        return menu
     }
     func toggleSaved(_ id: String) {
         if savedIDs.contains(id) { savedIDs.remove(id) } else { savedIDs.insert(id) }

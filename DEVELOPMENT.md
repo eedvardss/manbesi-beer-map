@@ -96,12 +96,27 @@ Validation completed:
 
 A remains **provisional**, with B/C available. These drafts remain excluded from Release; the Release UI change is camera-context preservation. The background mirror was restored after interruption and is now pinned to iPhone 17e at http://localhost:3201/ in terminal session 45074. The five-hour heartbeat keeps its existing cadence and quiet intent. No website deployment, push, physical-iPhone installation or App Store release occurred. Pre-existing `research/` stays outside the commit.
 
+## Native menu clarity and measured update cost — 2 October 2026
+
+The provisional shared detail now groups exact beer names above their real serving sizes and aligned prices, moves collapsed provenance beside the selected quote, removes the duplicate map/category heading, and preserves one walking action. Every serving, including duplicate entries, unknown sizes, multipacks and starting prices, remains present. Source and hours links retain separate provenance. The reference principle and provisional status are recorded in `docs/design-direction.md`; A/B/C remain available and excluded from Release.
+
+Both production and draft menus reuse one prepared venue/sort presentation with stable source-ordinal row IDs. Catalog acceptance and changed menu content invalidate it; browsing/source updates reuse its prepared labels. This adds no catalog-wide startup preparation. The production detail's visual layout is preserved.
+
+Validation completed:
+
+- All 27 native correctness checks pass (20 unit, seven UI) on iPhone 17e / iOS 26.5; the opt-in Release performance test skips in ordinary runs. Coverage includes the complete catalog/grouping/row identities, cached menu lifecycle, source disclosure, actual large-text scaling, and existing map/search/save/cache flows. Results: `artifacts/menu-refinement/debug-all-verified.xcresult`.
+- The exact source/menu interaction passes in light appearance and in dark appearance with accessibility size 1 on iPhone 17e / iOS 26.5. Actual rendered review exposed a sheet that ignored the study's large-text override; it is now explicit on detail/filter sheets, with a check for actual text scaling. Expanded source captures wait for settled layout. Inspected final images are under `artifacts/menu-refinement/final-test-attachments/`.
+- Optimized Release before/after measurements use the actual 73-row ALA menu and repeated source disclosure updates. Mean CPU/clock changes are small and inconclusive; measured peak process memory rises from 108.44 to 113.71 MB. The optimized model workload confirms lower repeated sorting/formatting work, with identical checksums. These are simulator/Mac observations, not physical-device speed or memory claims. Reproduction and full limitations: `docs/performance.md`.
+- Regular Release simulator build passes with strict Swift concurrency. Catalog snapshot equality and `git diff --check` pass: 165 venues / 2,550 servings, still researched on 4 September.
+
+This is locally verified, provisional native work. No website deployment, push, physical-iPhone installation or App Store release occurred. The five-hour continuation keeps its existing cadence and quiet background intent; no prompt change was necessary. Pre-existing `research/` stays outside the scoped commit.
+
 ## Next work
 
 The first functional milestone is complete; visual design remains provisional. Prioritize the native redesign:
 
-1. Refine draft A's dense pin hierarchy and detail/menu/source grouping. Visible-area/list coordination and accessible row/keyboard layout are implemented and locally checked. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
-2. Review remaining long-name/large-menu extremes and the original product's denied-location state. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
+1. Refine draft A's dense pin hierarchy. Detail/menu/source grouping is implemented and locally checked. Visible-area/list coordination and accessible row/keyboard layout are implemented and locally checked. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
+2. Review the original product's denied-location state and remaining large-menu/maximum-text extremes. The study's long-title, exact-price, grouped-menu and source layout now have actual accessibility-size-1 sheet coverage. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
 3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Conditional refresh and off-actor remote preparation are complete; profile remaining synchronous startup decode/index work, marker work, memory and idle costs. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
 4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within the startup and interaction budgets.
 5. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's dense overview with rendered/performance evidence.

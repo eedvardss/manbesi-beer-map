@@ -65,10 +65,11 @@ struct DesignPrototypeRoot: View {
         .safeAreaInset(edge: .bottom, spacing: 0) { switcher }
         .sheet(item: $selection, onDismiss: { selectedMapID = nil }) { selected in
             NavigationStack { StudyVenueDetail(result: selected.result) }
+                .dynamicTypeSize(textSize)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $showFilters) { NavigationStack { FiltersView() } }
+        .sheet(isPresented: $showFilters) { NavigationStack { FiltersView() }.dynamicTypeSize(textSize) }
         .environment(store)
         .environment(location)
         .tint(StudyPalette.accent)
@@ -470,31 +471,49 @@ private struct StudyEmptyState: View {
     }
 }
 
-// Shared detail is content, not glass. Clear address and real serving first,
-// one dominant directions action, complete menu and provenance below.
+// Provisional detail: address and exact serving first; source beside the
+// quote; one walking action; named beers with their actual serving options.
+// The browse map already supplies geographic context, so no second MKMapView.
 private struct StudyVenueDetail: View {
     @Environment(BeerMapStore.self) private var store
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var textSize
     let result: VenueResult
     @State private var showSources = false
-    @State private var mapSelection: String?
     @ScaledMetric(relativeTo: .title) private var titleSize = 30.0
 
     var body: some View {
+        let menu = store.menu(for: result.venue)
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(result.venue.kind.uppercased()).font(.caption2.weight(.medium)).tracking(1.3).foregroundStyle(.secondary)
-                    Text(result.venue.name).font(.system(size: titleSize, weight: .semibold)).tracking(-0.8).accessibilityIdentifier("study-detail-name")
+                    Text(result.venue.name).font(.system(size: titleSize, weight: .semibold)).tracking(-0.8)
+                        .fixedSize(horizontal: false, vertical: true).accessibilityIdentifier("study-detail-name").accessibilityAddTraits(.isHeader)
                     Text(result.venue.address).font(.subheadline).foregroundStyle(.secondary).textSelection(.enabled)
                 }
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    Text(result.beer.priceLabel).font(.largeTitle.weight(.semibold)).tracking(-1).monospacedDigit()
-                    Text(result.beer.volumeLabel).font(.subheadline).foregroundStyle(.secondary)
-                    Spacer(minLength: 0)
-                    if result.beer.perLitre != nil { Text(result.beer.litreLabel).font(.caption).foregroundStyle(.secondary) }
+                VStack(alignment: .leading, spacing: 8) {
+                    if textSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: 6) { price; servingContext }
+                    } else {
+                        HStack(alignment: .firstTextBaseline, spacing: 12) { price; servingContext }
+                    }
+                    Text(result.beer.name).font(.subheadline).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    DisclosureGroup(isExpanded: $showSources) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Link(result.venue.sourceLabel, destination: URL(string: result.venue.sourceUrl)!).accessibilityIdentifier("study-menu-source-link")
+                            Text("Cenas var būt mainījušās. Aktuālo cenu pārbaudi vietas avotā. Lejupielāde nemaina pārbaudes datumu.")
+                                .foregroundStyle(.secondary)
+                            if let hours = result.venue.openingHours {
+                                Link("Darba laika avots · \(hours.checkedAt)", destination: URL(string: hours.sourceUrl)!).accessibilityIdentifier("study-hours-source-link")
+                                if let note = hours.note { Text(note).foregroundStyle(.secondary) }
+                            }
+                        }.padding(.top, 10).fixedSize(horizontal: false, vertical: true)
+                    } label: {
+                        Text("Avots · \(store.checkedLabel)").foregroundStyle(.secondary)
+                    }
+                    .font(.caption).tint(.primary).accessibilityIdentifier("study-price-source")
                 }
-                Text(result.beer.name).font(.subheadline).foregroundStyle(.secondary).padding(.top, -15)
                 HStack(spacing: 14) {
                     Link(destination: result.venue.directionsURL) {
                         HStack { Image(systemName: "figure.walk"); Text("Doties uz vietu"); Spacer(); Image(systemName: "arrow.up.right").font(.caption) }
@@ -504,36 +523,64 @@ private struct StudyVenueDetail: View {
                     ShareLink(item: result.venue.shareURL) { Image(systemName: "square.and.arrow.up").font(.body).frame(width: 44, height: 48) }
                         .foregroundStyle(.primary).accessibilityLabel("Dalīties ar vietu")
                 }
-                VenueMapView(results: [result], sort: .price, query: "", location: nil, selectedID: $mapSelection, onCluster: { _ in }, calmStyle: true)
-                    .frame(height: 150).clipShape(.rect(cornerRadius: 14)).allowsHitTesting(false)
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Aluskarte").font(.title3.weight(.semibold))
-                    Spacer()
-                    Text("\(result.venue.beers.count) izvēles").font(.caption).foregroundStyle(.secondary)
-                }
-                LazyVStack(spacing: 18) {
-                    ForEach(Array(result.venue.beers.sorted { VenueQuery.precedes($0, $1, sort: store.filter.sort) }.enumerated()), id: \.offset) { _, beer in
-                        HStack(alignment: .firstTextBaseline, spacing: 16) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(beer.name).font(.subheadline)
-                                Text(beer.volumeLabel).font(.caption).foregroundStyle(.secondary)
-                            }.frame(maxWidth: .infinity, alignment: .leading)
-                            Text(beer.priceLabel).font(.subheadline.weight(.medium)).monospacedDigit()
+                VStack(alignment: .leading, spacing: 18) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("Aluskarte").font(.title3.weight(.semibold))
+                        Spacer()
+                        Text("\(menu.servings.count) \(menu.servings.count == 1 ? "porcija" : "porcijas")")
+                            .font(.caption).foregroundStyle(.secondary).accessibilityIdentifier("study-menu-count")
+                    }
+                    LazyVStack(alignment: .leading, spacing: 22) {
+                        ForEach(menu.beers) { beer in
+                            StudyMenuBeer(beer: beer, showLitre: store.filter.sort == .litre)
                         }
                     }
                 }
-                DisclosureGroup("Avots · \(store.checkedLabel)", isExpanded: $showSources) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Link(result.venue.sourceLabel, destination: URL(string: result.venue.sourceUrl)!)
-                        Text("Cenas var būt mainījušās. Aktuālo cenu pārbaudi vietas avotā. Lejupielāde nemaina pārbaudes datumu.").font(.caption).foregroundStyle(.secondary)
-                    }.padding(.top, 12)
-                }.font(.caption).padding(.top, 8)
             }.padding(24)
         }
+        .accessibilityIdentifier("study-detail-scroll")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) { Button("Aizvērt", systemImage: "xmark") { dismiss() }.accessibilityIdentifier("study-close-detail") }
             ToolbarItem(placement: .topBarTrailing) { SaveButton(venueID: result.id, name: result.venue.name) }
+        }
+    }
+
+    private var price: some View {
+        Text(result.beer.priceLabel).font(.largeTitle.weight(.semibold)).tracking(-1).monospacedDigit()
+            .fixedSize(horizontal: true, vertical: false).accessibilityIdentifier("study-selected-price")
+    }
+    private var servingContext: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(result.beer.volumeLabel).font(.subheadline)
+            if result.beer.perLitre != nil { Text(result.beer.litreLabel).font(.caption) }
+        }.foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+private struct StudyMenuBeer: View {
+    let beer: MenuBeer
+    let showLitre: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(beer.id).font(.subheadline.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true).accessibilityAddTraits(.isHeader)
+            ForEach(beer.servings) { row in
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(row.volumeLabel).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(alignment: .trailing, spacing: 3) {
+                        Text(row.priceLabel).fontWeight(.medium).monospacedDigit().fixedSize()
+                        if showLitre, let label = row.litreLabel { Text(label).font(.caption).foregroundStyle(.secondary).fixedSize() }
+                    }
+                }
+                .font(.subheadline)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("\(row.serving.name), \(row.volumeLabel), \(row.priceLabel)\(showLitre ? row.litreLabel.map { ", \($0)" } ?? "" : "")")
+                .accessibilityIdentifier("study-serving-\(row.id)")
+            }
         }
     }
 }

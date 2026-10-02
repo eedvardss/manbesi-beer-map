@@ -8,6 +8,7 @@ struct VenueDetailView: View {
     @State private var showSource = false
 
     var body: some View {
+        let menu = store.menu(for: result.venue)
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -44,15 +45,15 @@ struct VenueDetailView: View {
                         Text("\(result.venue.beers.count) izvēles").font(.caption).foregroundStyle(.secondary)
                     }
                     LazyVStack(spacing: 18) {
-                        ForEach(Array(result.venue.beers.sorted { VenueQuery.precedes($0, $1, sort: store.filter.sort) }.enumerated()), id: \.offset) { _, beer in
+                        ForEach(menu.servings) { row in
                             HStack(alignment: .top, spacing: 16) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(beer.name).font(.subheadline)
-                                    Text(beer.volumeLabel).font(.caption).foregroundStyle(.secondary)
+                                    Text(row.serving.name).font(.subheadline)
+                                    Text(row.volumeLabel).font(.caption).foregroundStyle(.secondary)
                                 }.frame(maxWidth: .infinity, alignment: .leading)
                                 VStack(alignment: .trailing, spacing: 4) {
-                                    Text(beer.priceLabel).font(.subheadline.weight(.medium)).monospacedDigit()
-                                    if beer.perLitre != nil { Text(beer.litreLabel).font(.caption2).foregroundStyle(.secondary) }
+                                    Text(row.priceLabel).font(.subheadline.weight(.medium)).monospacedDigit()
+                                    if let label = row.litreLabel { Text(label).font(.caption2).foregroundStyle(.secondary) }
                                 }
                             }
                         }

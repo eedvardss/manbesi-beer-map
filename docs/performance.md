@@ -44,6 +44,45 @@ The actual native store was also exercised against the live API with URLSession 
 
 The conditional behavior follows [RFC 9110 If-None-Match](https://www.rfc-editor.org/rfc/rfc9110.html#name-if-none-match); preparation uses an explicitly managed [Swift detached task](https://developer.apple.com/documentation/swift/task/detached(name:priority:operation:)-9xki7). No catalog prices, source dates or website behavior changed in this native pass.
 
+## Native menu preparation — 2 October 2026
+
+Both native detail implementations reuse an immutable prepared menu. Sorting and serving-price/volume/litre formatting run when the menu content or ordering changes, rather than again when source disclosure updates the view. The store retains one venue/sort presentation, validates the actual source servings on reuse, and clears it when accepting a catalog. It does not prepare every menu during startup. Each row uses its original source ordinal, preserving identity across sorts; duplicate source entries remain separate. The draft also removes its second MapKit view, but that DEBUG-only change is outside the Release measurements.
+
+This follows Apple's [SwiftUI update and identity guidance](https://developer.apple.com/videos/play/wwdc2023/10160/): move repeatable derived work into the model and give rows stable identities. Full-catalog checks compare all 2,550 servings across every sort with the prior ordering, and verify exact grouping, unknown volumes, multipacks, starting prices, cache invalidation and reuse.
+
+A representative **Release simulator** workload opens ALA, scrolls its complete 73-entry production menu to the source, then expands/collapses that source eight times per reported iteration. There are three reported iterations before and after, on iPhone 17e / iOS 26.5 on the arm64 Mac / macOS 26.5.1. The build is optimized and uses `ENABLE_TESTABILITY=YES` for the project's unit target; the design study is excluded. XCTest CPU/memory metrics cover the entire app, including MapKit and framework work. Clock time includes UI automation and transitions.
+
+| Eight source toggles, mean of three iterations | Before | After |
+| --- | ---: | ---: |
+| Clock time | 3.251 s | 3.226 s |
+| App CPU time | 1.039 s | 1.010 s |
+| Peak physical memory | 108.44 MB | 113.71 MB |
+
+The small CPU/clock change does **not establish a responsiveness improvement**. Peak memory was higher in this run, and whole-process measurements do not isolate the cache's contribution. After-sample physical-memory deltas were 32.8, 16.4 and 0 KB; this short workload cannot establish long-session behavior. Keep physical-device memory and frame profiling as a gate before promoting the draft or making app-wide speed/battery claims. Raw metrics and both result bundles are under `artifacts/menu-refinement/`.
+
+The repeatable optimized Mac model workload also exercises ALA (73 servings), Banshee (66) and Tallink (7), each in price/litre order: five warmup and 40 measured batches of 50 repeated menu reads. It consumes every label in both paths. For ALA price order, median/p95 per read is **0.078/0.080 → 0.009/0.010 ms**, with matching checksums. This isolates avoided sorting/formatting and cached-label reuse; it is not a device or SwiftUI frame benchmark. The absolute baseline is already below a millisecond.
+
+Reproduce the model workload:
+
+```sh
+swiftc -O -module-cache-path /tmp/beer-map-menu-modules \
+  ios/BeerMap/Models.swift ios/BeerMap/CatalogRepository.swift ios/BeerMap/BeerMapStore.swift \
+  scripts/benchmark-menu.swift -o /tmp/beer-map-menu-benchmark
+/tmp/beer-map-menu-benchmark ios/BeerMap/Resources/venues.json
+```
+
+The store cache budget is one venue/sort, with no eager catalog-wide menu preparation or work growing with the number of disclosure updates. Repeat the opt-in UI measurement against the same build/device/workload when investigating a regression:
+
+```sh
+TEST_RUNNER_BEER_MAP_MENU_PERFORMANCE=1 xcodebuild \
+  -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release \
+  -destination 'platform=iOS Simulator,name=iPhone 17e,OS=26.5' \
+  CODE_SIGNING_ALLOWED=NO ENABLE_TESTABILITY=YES \
+  -only-testing:BeerMapUITests/VenueMenuPerformanceTests test
+```
+
+The performance test skips during ordinary correctness runs. Measurements use only the isolated UI-test preferences and offline catalog; no product bookmarks or real location are involved. A regular Release simulator build also passes without Swift warnings. Website source/data, deployed routes and the catalog's 4 September research date are unchanged.
+
 ## Implementation and correctness
 
 - Web prepares normalized venue and beer search text once per immutable catalog; native rebuilds its index only when accepting a catalog. Web index preparation measured 1.04 ms on the reference Mac; native index preparation is not yet separately profiled.

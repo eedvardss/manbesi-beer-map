@@ -46,6 +46,73 @@ final class BeerMapUITests: XCTestCase {
         XCTAssertTrue(app.buttons["study-venue-banshee"].waitForExistence(timeout: 5))
     }
 
+    @MainActor func testDesignGroupedMenuAndAccessiblePriceSource() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-light"]
+        app.launch()
+        var search = app.textFields["study-search"]
+        XCTAssertTrue(search.waitForExistence(timeout: 10))
+        search.tap()
+        search.typeText("ALA Pagrabs\n")
+        app.buttons["study-venue-folkklubs-ala-pagrabs"].tap()
+        XCTAssertTrue(app.staticTexts["study-detail-name"].waitForExistence(timeout: 5))
+        var source = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Avots ·")).firstMatch
+        let count = app.staticTexts["study-menu-count"]
+        let regularPriceHeight = app.staticTexts["study-selected-price"].frame.height
+        XCTAssertTrue(source.isHittable)
+        XCTAssertEqual(count.label, "73 porcijas")
+        XCTAssertLessThan(source.frame.maxY, app.buttons["study-directions"].frame.minY)
+        let largeServing = app.otherElements.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label BEGINSWITH %@", "study-serving-", "Brālis rūgtais, 3000 ml")).firstMatch
+        XCTAssertTrue(largeServing.exists)
+        XCTAssertTrue(largeServing.label.contains("18,90"))
+        XCTAssertEqual(app.otherElements.matching(identifier: "venue-map").count, 1)
+        capture(app, name: "Grouped complete menu with contextual source")
+        source.tap()
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Lejupielāde nemaina")).firstMatch.exists)
+        source.tap()
+        app.buttons["study-close-detail"].tap()
+        XCTAssertTrue(app.buttons["study-venue-folkklubs-ala-pagrabs"].isHittable)
+
+        app.terminate()
+        app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-dark", "--design-large-text"]
+        app.launch()
+        search = app.textFields["study-search"]
+        XCTAssertTrue(search.waitForExistence(timeout: 10))
+        search.tap()
+        search.typeText("Tallink\n")
+        app.buttons["study-venue-tallink-riga-lobby-bar"].tap()
+        let title = app.staticTexts["study-detail-name"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        XCTAssertTrue(title.label.contains("Tallink Hotel Riga"))
+        XCTAssertGreaterThan(title.frame.height, 40)
+        XCTAssertGreaterThan(app.staticTexts["study-selected-price"].frame.height, regularPriceHeight + 8)
+        XCTAssertGreaterThanOrEqual(title.frame.minX, app.frame.minX)
+        XCTAssertLessThanOrEqual(title.frame.maxX, app.frame.maxX)
+        capture(app, name: "Long venue name and exact serving at large text")
+        source = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Avots ·")).firstMatch
+        let scroll = app.scrollViews["study-detail-scroll"]
+        for _ in 0..<4 {
+            if source.isHittable { break }
+            scroll.swipeUp()
+        }
+        XCTAssertTrue(source.isHittable)
+        source.tap()
+        let sourceNote = app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Lejupielāde nemaina")).firstMatch
+        let walking = app.buttons["study-directions"]
+        var previousFrame: CGRect?
+        let stableDisclosure = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            let frame = walking.frame
+            defer { previousFrame = frame }
+            return frame == previousFrame && sourceNote.exists && sourceNote.frame.maxY <= frame.minY
+        }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [stableDisclosure], timeout: 5), .completed)
+        capture(app, name: "Accessible source disclosure")
+        source.tap()
+        scroll.swipeUp()
+        XCTAssertTrue(app.staticTexts["study-menu-count"].exists)
+        capture(app, name: "Grouped menu at large text")
+    }
+
     @MainActor func testDesignMapAreaAllPlacesAndSavedContext() {
         let app = XCUIApplication()
         app.launchArguments = ["--uitesting", "--design-study", "--design=A", "--design-dark", "--design-large-text"]

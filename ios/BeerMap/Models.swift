@@ -70,6 +70,51 @@ struct Serving: Codable, Hashable, Sendable {
     }
 }
 
+// One immutable menu presentation. IDs refer to source ordinals, so sorting
+// never assigns a different serving the former occupant's row identity.
+struct MenuServing: Identifiable, Sendable {
+    let id: Int
+    let serving: Serving
+    let volumeLabel: String
+    let priceLabel: String
+    let litreLabel: String?
+
+    init(id: Int, serving: Serving) {
+        self.id = id
+        self.serving = serving
+        volumeLabel = serving.volumeLabel
+        priceLabel = serving.priceLabel
+        litreLabel = serving.perLitre == nil ? nil : serving.litreLabel
+    }
+}
+
+struct MenuBeer: Identifiable, Sendable {
+    let id: String
+    let servings: [MenuServing]
+}
+
+final class PreparedVenueMenu: Sendable {
+    let servings: [MenuServing]
+    let beers: [MenuBeer]
+
+    init(_ source: [Serving], sort: VenueSort) {
+        servings = source.enumerated().map { MenuServing(id: $0.offset, serving: $0.element) }.sorted {
+            if VenueQuery.precedes($0.serving, $1.serving, sort: sort) { return true }
+            if VenueQuery.precedes($1.serving, $0.serving, sort: sort) { return false }
+            return $0.id < $1.id
+        }
+        // Group only the published name. Keep every source entry, including
+        // duplicates, unknown volumes, multipacks and "from" prices.
+        var order: [String] = []
+        var groups: [String: [MenuServing]] = [:]
+        for row in servings {
+            if groups[row.serving.name] == nil { order.append(row.serving.name) }
+            groups[row.serving.name, default: []].append(row)
+        }
+        beers = order.map { MenuBeer(id: $0, servings: groups[$0]!) }
+    }
+}
+
 struct Venue: Codable, Identifiable, Sendable {
     let id: String
     let name: String
