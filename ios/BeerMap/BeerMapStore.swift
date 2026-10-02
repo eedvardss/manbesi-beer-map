@@ -13,13 +13,15 @@ final class BeerMapStore {
     var now = Date.now
     private let defaults: UserDefaults
     private let cacheURL: URL?
+    private let persistsState: Bool
 
-    init(defaults: UserDefaults? = nil, cacheURL: URL? = nil, bundle: Bundle = .main) {
+    init(defaults: UserDefaults? = nil, cacheURL: URL? = nil, bundle: Bundle = .main, ephemeral: Bool = false) {
         let testing = ProcessInfo.processInfo.arguments.contains("--uitesting")
+        persistsState = !ephemeral
         self.defaults = defaults ?? (testing ? UserDefaults(suiteName: "BeerMap.UITests")! : .standard)
-        if testing { self.defaults.removeObject(forKey: "savedVenueIDs") }
-        savedIDs = Set(self.defaults.stringArray(forKey: "savedVenueIDs") ?? [])
-        self.cacheURL = testing ? nil : (cacheURL ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("BeerMap/catalog.json"))
+        if testing && !ephemeral { self.defaults.removeObject(forKey: "savedVenueIDs") }
+        savedIDs = ephemeral ? [] : Set(self.defaults.stringArray(forKey: "savedVenueIDs") ?? [])
+        self.cacheURL = (testing || ephemeral) ? nil : (cacheURL ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("BeerMap/catalog.json"))
         let bundled = try? Catalog.bundled(in: bundle)
         if let path = self.cacheURL, let data = try? Data(contentsOf: path),
            let cached = try? JSONDecoder().decode(Catalog.self, from: data).validated(),
@@ -49,7 +51,7 @@ final class BeerMapStore {
     }
     func toggleSaved(_ id: String) {
         if savedIDs.contains(id) { savedIDs.remove(id) } else { savedIDs.insert(id) }
-        defaults.set(savedIDs.sorted(), forKey: "savedVenueIDs")
+        if persistsState { defaults.set(savedIDs.sorted(), forKey: "savedVenueIDs") }
     }
     func resetFilters() { filter = VenueFilter() }
 

@@ -2,6 +2,8 @@
 
 A native SwiftUI + MapKit app, with no third-party iOS dependencies. iOS 26.0 and later; currently built using Xcode 26.6 / iOS SDK 26.5. An iOS 27 simulator is not installed, so that OS is not yet verified.
 
+The first visual pass was rejected. Three new, deliberately different native design drafts are available with `npm run design:ios -- A` from the repository root when an iPhone simulator is booted. The command prints a background browser mirror URL; use the bottom draft switcher to compare A/B/C. These drafts use real catalog data and in-memory bookmarks, are excluded from Release, and remain provisional. See [the design direction](../docs/design-direction.md) for research and review status.
+
 Open `BeerMap.xcodeproj` in Xcode, select the BeerMap scheme and an iPhone simulator, and run. The project automatically discovers Swift sources and resources. The bundled catalog works immediately; a normal launch refreshes from `https://manbesi.lv/api/venues`.
 
 ```sh

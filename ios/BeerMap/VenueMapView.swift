@@ -13,6 +13,7 @@ struct VenueMapView: UIViewRepresentable {
     let location: Coordinate?
     @Binding var selectedID: String?
     var onCluster: ([String]) -> Void
+    var calmStyle = false
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     func makeUIView(context: Context) -> MKMapView {
@@ -24,7 +25,11 @@ struct VenueMapView: UIViewRepresentable {
         map.showsCompass = false
         map.register(PriceAnnotationView.self, forAnnotationViewWithReuseIdentifier: "price")
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "cluster")
-        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 56.9507, longitude: 24.116), span: MKCoordinateSpan(latitudeDelta: 0.045, longitudeDelta: 0.075)), animated: false)
+        map.register(QuietClusterView.self, forAnnotationViewWithReuseIdentifier: "quiet-cluster")
+        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 56.9507, longitude: 24.116), span: MKCoordinateSpan(latitudeDelta: calmStyle ? 0.021 : 0.045, longitudeDelta: calmStyle ? 0.035 : 0.075)), animated: false)
+        if calmStyle, results.count == 1, let result = results.first {
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: result.venue.lat, longitude: result.venue.lng), latitudinalMeters: 650, longitudinalMeters: 650), animated: false)
+        }
         map.accessibilityIdentifier = "venue-map"
         return map
     }
@@ -40,7 +45,7 @@ struct VenueMapView: UIViewRepresentable {
             if let existing = coordinator.annotations[result.id] {
                 existing.result = result
                 existing.sort = sort
-                (map.view(for: existing) as? PriceAnnotationView)?.configure(existing)
+                (map.view(for: existing) as? PriceAnnotationView)?.configure(existing, calmStyle: calmStyle)
             } else {
                 let annotation = VenueAnnotation(result: result, sort: sort)
                 coordinator.annotations[result.id] = annotation
@@ -78,6 +83,11 @@ struct VenueMapView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if let cluster = annotation as? MKClusterAnnotation {
+                if parent.calmStyle {
+                    let view = mapView.dequeueReusableAnnotationView(withIdentifier: "quiet-cluster", for: cluster) as! QuietClusterView
+                    view.configure(count: cluster.memberAnnotations.count)
+                    return view
+                }
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "cluster", for: cluster) as! MKMarkerAnnotationView
                 view.markerTintColor = UIColor.label
                 view.glyphTintColor = UIColor.systemBackground
@@ -90,7 +100,7 @@ struct VenueMapView: UIViewRepresentable {
             }
             guard let venue = annotation as? VenueAnnotation else { return nil }
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: "price", for: venue) as! PriceAnnotationView
-            view.configure(venue)
+            view.configure(venue, calmStyle: parent.calmStyle)
             return view
         }
 
@@ -146,18 +156,46 @@ struct VenueMapView: UIViewRepresentable {
         accessibilityTraits = .button
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    func configure(_ annotation: VenueAnnotation) {
+    func configure(_ annotation: VenueAnnotation, calmStyle: Bool = false) {
         let beer = annotation.result.beer
         let amount = annotation.sort == .litre ? beer.perLitre : beer.price
         label.text = amount.map { (beer.priceIsFrom == true ? "no " : "") + $0.euros + (annotation.sort == .litre ? "/l" : "") } ?? "— €/l"
         label.sizeToFit()
-        frame.size = CGSize(width: label.bounds.width + 27, height: 30)
-        label.frame.origin = CGPoint(x: 18, y: (30 - label.bounds.height) / 2)
+        frame.size = CGSize(width: label.bounds.width + (calmStyle ? 20 : 27), height: 30)
+        label.frame.origin = CGPoint(x: calmStyle ? 10 : 18, y: (30 - label.bounds.height) / 2)
+        dot.isHidden = calmStyle
         dot.frame = CGRect(x: 8, y: 12, width: 6, height: 6)
         let comparable = amount.map { annotation.sort == .litre ? $0 / 2 : $0 }
         dot.backgroundColor = comparable.map { $0 < 4 ? .systemGreen : $0 <= 6 ? .systemOrange : .systemRed } ?? .systemGray
         accessibilityLabel = "\(annotation.result.venue.name), \(label.text!), \(beer.volumeLabel)"
         accessibilityIdentifier = "pin-\(annotation.result.id)"
         centerOffset = CGPoint(x: 0, y: -15)
+    }
+}
+
+@MainActor final class QuietClusterView: MKAnnotationView {
+    private let label = UILabel()
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        frame.size = CGSize(width: 34, height: 34)
+        backgroundColor = .label
+        layer.cornerRadius = 17
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.systemBackground.cgColor
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.1
+        layer.shadowRadius = 3
+        label.frame = bounds
+        label.font = .monospacedDigitSystemFont(ofSize: 12, weight: .semibold)
+        label.textColor = .systemBackground
+        label.textAlignment = .center
+        addSubview(label)
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    func configure(count: Int) {
+        label.text = "\(count)"
+        accessibilityLabel = "\(count) vietas. Pieskaries, lai tuvinātu."
     }
 }

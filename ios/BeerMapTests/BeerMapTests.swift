@@ -72,6 +72,27 @@ final class BeerMapTests: XCTestCase {
         XCTAssertEqual(store.selectedID, "folkklubs-ala-pagrabs")
     }
 
+    @MainActor func testDesignStudyCannotChangeProductBookmarksOrCache() throws {
+        let suite = "BeerMap.DesignTests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(["banshee"], forKey: "savedVenueIDs")
+        let cache = FileManager.default.temporaryDirectory.appendingPathComponent("design-cache-\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: cache) }
+        let bundled = try Catalog.bundled()
+        let scratch = Catalog(schemaVersion: 1, city: bundled.city, currency: "EUR", checkedAt: "2099-01-01", venues: [bundled.venues[0]])
+        let originalCache = try JSONEncoder().encode(scratch)
+        try originalCache.write(to: cache)
+        let study = BeerMapStore(defaults: defaults, cacheURL: cache, ephemeral: true)
+        XCTAssertTrue(study.savedIDs.isEmpty)
+        XCTAssertEqual(study.venues.count, bundled.venues.count)
+        study.toggleSaved("piga-avotu")
+        XCTAssertTrue(study.savedIDs.contains("piga-avotu"))
+        XCTAssertEqual(defaults.stringArray(forKey: "savedVenueIDs"), ["banshee"])
+        XCTAssertEqual(try Data(contentsOf: cache), originalCache)
+        XCTAssertTrue(BeerMapStore(defaults: defaults, cacheURL: cache, ephemeral: true).savedIDs.isEmpty)
+    }
+
     @MainActor func testRefreshCachesValidDataAndKeepsItOnFailure() async throws {
         let suite = "BeerMap.RefreshTests.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))

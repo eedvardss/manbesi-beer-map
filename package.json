@@ -16,6 +16,7 @@
     "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
     "sync:ios-data": "tsx scripts/sync-ios-catalog.ts",
     "check:ios-data": "tsx scripts/sync-ios-catalog.ts --check",
+    "design:ios": "bash scripts/preview-ios-design.sh",
     "check": "npm run lint && npm run typecheck && npm test && npm run audit:data && npm run check:ios-data",
     "test:browser": "node scripts/check-mobile-interactions.mjs",
     "prebuild": "npm run check",

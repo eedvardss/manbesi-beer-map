@@ -4,6 +4,10 @@ This is the working repository for the Rīgas alus website and native iPhone app
 
 The user requested independent development, thoughtful useful features, competitor research, complementary website improvements, occasional commits, and a background continuation every five hours. Use `DEVELOPMENT.md` for durable progress and priorities. Ask the user only for necessary decisions or concrete blockers.
 
+The user rejected the first native visual design on 2 October 2026 and explicitly requires continuous improvement toward excellent, clean design. The functional baseline is verified; its visual direction is unapproved. Apply the Edvards UI/UX skill and relevant SwiftUI skills. Study real product screens before a substantial redesign. Favor clear hierarchy, disciplined typography and spacing, useful density, coherent navigation and restrained materials. Remove redundant chrome, repeated warnings and decorative containers. Native defaults and a successful build are not evidence of design quality. Explore structurally distinct directions after a rejection; label proposals as provisional until reviewed. Inspect actual rendered screens and fix visible defects before claiming a design milestone is complete. Prioritize clarity and polish over accumulating features.
+
+Apply the same quality bar to website changes. Preserve accepted directions and interaction context, and review real browser states and mobile viewports before declaring polish complete. Current native research and draft decisions are in `docs/design-direction.md`.
+
 - Preserve pre-existing user changes and keep commits scoped to completed, verified milestones. Do not include the pre-existing untracked `research/` files by accident.
 - Published venue data must have genuine on-premise evidence. Preserve exact beer names, serving sizes, multipacks, “from” prices, source links, and uncertainty. Use the venue-price-research skill when researching new prices.
 - `app/catalog.ts` is the app/API projection of the existing website data. Run `npm run sync:ios-data` after changing its input. `npm run check` checks that the bundled snapshot matches.

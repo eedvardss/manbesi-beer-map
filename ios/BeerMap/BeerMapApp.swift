@@ -7,13 +7,29 @@ struct BeerMapApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(store)
-                .environment(location)
-                .tint(Theme.accent)
-                .task { await store.refresh() }
-                .onOpenURL { store.open($0) }
+            appContent
         }
+    }
+
+    @ViewBuilder private var appContent: some View {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--design-study") {
+            DesignPrototypeRoot()
+        } else {
+            product
+        }
+#else
+        product
+#endif
+    }
+
+    private var product: some View {
+        RootView()
+            .environment(store)
+            .environment(location)
+            .tint(Theme.accent)
+            .task { await store.refresh() }
+            .onOpenURL { store.open($0) }
     }
 }
 

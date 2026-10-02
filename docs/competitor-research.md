@@ -10,7 +10,7 @@ Reviewed 2 October 2026. These are product observations from each competitor's o
 
 ## Design and first milestone
 
-The primary job is to find a suitable Riga place at an understandable price. Use three native tabs: Map, Places, Saved. MapKit clusters keep the overview readable. Neutral system surfaces, a restrained amber accent, native typography, Liquid Glass controls, and a venue sheet keep the hierarchy simple. Full menus and provenance appear in the sheet; the map needs only a price or a cluster count.
+The primary job is to find a suitable Riga place at an understandable price. The first implementation used Map, Places and Saved tabs with MapKit clusters. The user rejected its visual execution on 2 October 2026: standard controls and a restrained color alone did not produce a strong design. Do not treat that first direction as accepted. See [design-direction.md](design-direction.md) for fresh visual research, three structurally distinct native drafts and their explicitly provisional status. Full menus and provenance remain essential; the overview needs clear price/serving context without excessive chrome.
 
 The app ships the exact website catalog for offline browsing, then refreshes through a versioned public API. A fetch date does not imply that menu evidence was rechecked. Location is requested only after tapping the location action and stays on the device.
 
@@ -18,7 +18,7 @@ Installed tools: Xcode 26.6, Swift 6.3.3, iOS SDK 26.5. Deployment target: iOS 2
 
 ## Useful next milestones
 
-1. Extend verified light-mode and offline-refresh coverage to dark mode, large text, smaller iPhones, and denied location access.
+1. Resolve the rejected visual design first, with rendered comparison of distinct layouts; then extend native appearance, large-text, smaller-iPhone and denied-location coverage.
 2. Bring saved places, shareable links, and serving-size filters to the website where appropriate.
 3. Improve source freshness per venue instead of relying on a global research date.
 4. Add evidenced happy-hour intervals and reviewed price correction submissions.
