@@ -17,5 +17,5 @@ The user explicitly authorizes updating the existing five-hour scheduled task's 
 - `app/catalog.ts` is the app/API projection of the existing website data. Run `npm run sync:ios-data` after changing its input. `npm run check` checks that the bundled snapshot matches.
 - Prefer SwiftUI and Apple frameworks for the native app. No embedded website as the app's core interface. Use the installed SDK; don't label an untested OS as verified.
 - Verify native UI with the simulator and web UI in a background browser. Build success alone does not prove layout or interactions.
-- Hosting is the existing Cloudflare Worker and manbesi.lv. Keep the independent `/p2p/` and status service intact. Read the Wrangler skill before deployment commands.
+- Hosting is the existing Cloudflare Worker and manbesi.lv. Keep the independent `/p2p/` and status service intact. Read the [official Wrangler skill](https://raw.githubusercontent.com/cloudflare/skills/main/skills/wrangler/SKILL.md) before deployment commands, using a local copy when available. Use project-local Wrangler and the built configuration; check the existing target/configuration and verify live routes afterward.
 - Record implementation, local verification, production deployment, device installation, and App Store release separately. Never infer one from another.
