@@ -3,7 +3,7 @@ import Observation
 
 @MainActor @Observable
 final class BeerMapStore {
-    private(set) var catalog: Catalog? { didSet { prepareCatalog() } }
+    private(set) var catalog: Catalog?
     private(set) var checkedLabel = "Nav datu"
     private(set) var savedIDs: Set<String>
     private(set) var isRefreshing = false
@@ -15,6 +15,7 @@ final class BeerMapStore {
     private let defaults: UserDefaults
     private let cacheURL: URL?
     private let persistsState: Bool
+    @ObservationIgnored private var etag: String?
     @ObservationIgnored private var searchIndex = VenueSearchIndex([])
     @ObservationIgnored private var cachedQuery: (key: QueryKey, results: [VenueResult])?
     private struct QueryKey: Equatable {
@@ -31,26 +32,21 @@ final class BeerMapStore {
         savedIDs = ephemeral ? [] : Set(self.defaults.stringArray(forKey: "savedVenueIDs") ?? [])
         self.cacheURL = (testing || ephemeral) ? nil : (cacheURL ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("BeerMap/catalog.json"))
         let bundled = try? Catalog.bundled(in: bundle)
-        if let path = self.cacheURL, let data = try? Data(contentsOf: path),
-           let cached = try? JSONDecoder().decode(Catalog.self, from: data).validated(),
-           cached.checkedAt >= (bundled?.checkedAt ?? "") {
-            catalog = cached
+        if let path = self.cacheURL, let cached = try? CatalogCacheRecord.read(from: path),
+           cached.catalog.checkedAt >= (bundled?.checkedAt ?? "") {
+            catalog = cached.catalog
+            etag = cached.etag
         } else { catalog = bundled }
-        prepareCatalog()
+        if let catalog { accept(PreparedCatalog(catalog)) }
         if catalog == nil { errorMessage = CatalogError.missingBundle.localizedDescription }
     }
 
     var venues: [Venue] { catalog?.venues ?? [] }
-    private func prepareCatalog() {
-        searchIndex = VenueSearchIndex(venues)
+    private func accept(_ prepared: PreparedCatalog) {
+        searchIndex = prepared.searchIndex
+        checkedLabel = prepared.checkedLabel
         cachedQuery = nil
-        guard let checked = catalog?.checkedAt else { checkedLabel = "Nav datu"; return }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd"
-        checkedLabel = formatter.date(from: checked).map {
-            $0.formatted(.dateTime.day().month(.abbreviated).year().locale(Locale(identifier: "lv_LV")))
-        } ?? checked
+        catalog = prepared.catalog
     }
     func results(location: Coordinate?, savedOnly: Bool = false) -> [VenueResult] {
         // Reading catalog/filter here keeps Observation dependencies explicit.
@@ -78,26 +74,45 @@ final class BeerMapStore {
     func resetFilters() { filter = VenueFilter() }
 
     func refresh(session: URLSession = .shared) async {
-        guard !isRefreshing else { return }
+        guard !isRefreshing, !Task.isCancelled else { return }
         if ProcessInfo.processInfo.arguments.contains("--offline") { usesOfflineCatalog = true; return }
         isRefreshing = true
         defer { isRefreshing = false }
         do {
-            var request = URLRequest(url: URL(string: "https://manbesi.lv/api/venues")!)
+            // Manage the conditional request ourselves; URLCache must not turn
+            // a network 304 into a cached 200 that repeats decoding and writes.
+            var request = URLRequest(url: URL(string: "https://manbesi.lv/api/venues")!, cachePolicy: .reloadIgnoringLocalCacheData)
             request.timeoutInterval = 15
+            if catalog != nil, let etag { request.setValue(etag, forHTTPHeaderField: "If-None-Match") }
             let (data, response) = try await session.data(for: request)
-            guard (response as? HTTPURLResponse)?.statusCode == 200, data.count < 10_000_000 else { throw CatalogError.unavailable }
-            let remote = try JSONDecoder().decode(Catalog.self, from: data).validated()
-            guard remote.checkedAt >= (catalog?.checkedAt ?? "") else { throw CatalogError.invalidData }
-            // Persist only valid catalogs; a failure never removes the offline copy.
-            if let cacheURL {
-                try FileManager.default.createDirectory(at: cacheURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-                try data.write(to: cacheURL, options: .atomic)
+            try Task.checkCancellation()
+            guard let response = response as? HTTPURLResponse else { throw CatalogError.unavailable }
+            if response.statusCode == 304 {
+                guard catalog != nil, request.value(forHTTPHeaderField: "If-None-Match") != nil else { throw CatalogError.unavailable }
+                // No catalog assignment, index rebuild, query invalidation or
+                // disk write when the server confirms this representation.
+            } else {
+                guard response.statusCode == 200 else { throw CatalogError.unavailable }
+                let nextETag = CatalogCacheRecord.validETag(response.value(forHTTPHeaderField: "ETag"))
+                let minimumDate = catalog?.checkedAt ?? ""
+                let path = cacheURL
+                let preparation = Task.detached(priority: .utility) {
+                    try CatalogRepository.prepare(data, etag: nextETag, minimumDate: minimumDate, cacheURL: path)
+                }
+                let prepared = try await withTaskCancellationHandler {
+                    try await preparation.value
+                } onCancel: {
+                    preparation.cancel()
+                }
+                try Task.checkCancellation()
+                accept(prepared)
+                etag = nextETag
             }
-            catalog = remote
             usesOfflineCatalog = false
             errorMessage = nil
         } catch {
+            // A disappearing screen or canceled request is not an outage.
+            guard !Task.isCancelled, !(error is CancellationError), (error as? URLError)?.code != .cancelled else { return }
             usesOfflineCatalog = catalog != nil
             errorMessage = catalog == nil ? error.localizedDescription : "Jaunāko karti neizdevās ielādēt. Saglabātās cenas joprojām ir pieejamas."
         }

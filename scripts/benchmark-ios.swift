@@ -1,6 +1,6 @@
 import Foundation
 
-// Compile with swiftc -O together with Models.swift and BeerMapStore.swift.
+// Compile with swiftc -O with Models.swift, CatalogRepository.swift and BeerMapStore.swift.
 // Measures the actual model on this Mac; it is not device startup or FPS.
 @main struct QueryBenchmark {
     @MainActor static func main() throws {

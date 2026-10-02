@@ -159,7 +159,7 @@ final class BeerMapTests: XCTestCase {
         CatalogProtocol.body = Data("{\"schemaVersion\":999}".utf8)
         await store.refresh(session: session)
         XCTAssertEqual(store.catalog?.schemaVersion, 1)
-        XCTAssertEqual(try JSONDecoder().decode(Catalog.self, from: Data(contentsOf: cache)).schemaVersion, 1)
+        XCTAssertEqual(try CatalogCacheRecord.read(from: cache).catalog.schemaVersion, 1)
     }
 }
 

@@ -6,6 +6,8 @@ The first visual pass was rejected. Three new, deliberately different native des
 
 Open `BeerMap.xcodeproj` in Xcode, select the BeerMap scheme and an iPhone simulator, and run. The project automatically discovers Swift sources and resources. The bundled catalog works immediately; a normal launch refreshes from `https://manbesi.lv/api/venues`.
 
+Refresh revalidates the saved catalog with its ETag. An unchanged response retains the current catalog, search index and disk cache. Fresh data is validated, indexed and cached away from the main actor before acceptance; legacy raw catalog caches migrate automatically. Invalid or older data and failed writes preserve the usable offline catalog. See [performance evidence and repeatable refresh checks](../docs/performance.md).
+
 ```sh
 # From the repository root, after changing website data:
 npm run sync:ios-data

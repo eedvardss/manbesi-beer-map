@@ -65,13 +65,29 @@ Production verification: `/` 200 with the new page chunk and no initial renderer
 
 Native changes are verified locally; no physical-iPhone installation or App Store release occurred. The normal native visual direction remains unapproved; draft A is still provisional and the mirror remains available. The local web preview runs at http://localhost:3017/ in terminal session 74171. No catalog prices or source dates changed, and pre-existing `research/` remains outside this pass. Neither milestone commit has been pushed.
 
+## Native refresh performance — 2 October 2026
+
+Implemented conditional native refresh using the existing API, retaining its opaque weak ETag. A valid 304 clears transient failure state without replacing catalog/search results or writing the cache. Fresh 200 responses are decoded, validated, indexed, formatted and atomically persisted in a detached utility task before acceptance on the main actor. Cancellation is propagated to preparation and does not generate an outage message. A versioned cache stores the validator with its catalog; legacy caches migrate, and rejected caches never lend their validator to the bundled data. No venue data or website source changed.
+
+Measurements use the actual optimized Swift model/store on the arm64 Mac/macOS 26.5.1 with isolated cache/defaults and deterministic transport. Across 25 unchanged refreshes, payload falls from 5,997,325 bytes to zero and median/p95 completion from 5.675/7.419 ms to 0.182/0.300 ms. For forced full responses, median/p95 rises from 5.600/6.620 ms to 8.399/10.026 ms because the new cache re-encodes validated data and runs with utility scheduling; main-actor pulse p95/maximum gaps fall from 6.127/7.108 ms to 2.107/2.502 ms. These scheduling samples do not measure device frames, startup, memory or battery. Cold startup remains synchronous and unprofiled. Reproduction and limits: `docs/performance.md`.
+
+Validation completed:
+
+- All 19 native tests pass (16 unit and three UI) on iPhone 17 Pro / iOS 26.5. New checks cover paired validator/cache relaunch, legacy migration, unchanged cache bytes/modification time and no catalog Observation invalidation, filters/selection/bookmarks, offline recovery, malformed/older cache/response rejection, missing ETags, cancellation and failed writes. Result: `/Users/edvards/Library/Developer/XcodeBuildMCP/workspaces/Beer-Map-d07dfe114b1f/result-bundles/test_sim_2026-10-02T03-35-12-791Z_pid6794_a5d45eff.xcresult`.
+- Release simulator build passes with strict Swift concurrency and no warnings. The actual Release app renders loaded map tiles, search results, list and venue detail in the existing background mirror. This is local simulator evidence; no physical-device speed claim is made.
+- `scripts/probe-native-refresh.swift` runs the actual store against the live API with URLSession metrics and an isolated cache/defaults suite. It confirms 200 followed by 304, all 165 venues / 2,550 servings, full snapshot equality, unchanged disk bytes/modification time and retained interaction state. The first response transfers 36,946 compressed body bytes (239,892 decoded); the second has zero body bytes. Data remains checked on 4 September 2026.
+- Reproducible CPU/scheduling harness: `scripts/benchmark-refresh.swift`, with unchanged and forced-full-response modes. Raw results and Release screenshots are under ignored `artifacts/performance/`.
+- `npm run check` passes lint, types, all eleven web serving/API tests, existing menu/timeline checks, the complete data audit and bundled snapshot equality.
+
+This is a scoped local native milestone on `codex/iphone-app`; no push, website deployment, physical-iPhone installation or App Store release occurred. Existing five-hour continuation stays active with its cadence and background intent unchanged; it reads these updated priorities. Draft A remains provisional, and the native mirror stays available. Pre-existing `research/` remains outside commits.
+
 ## Next work
 
 The first functional milestone is complete; visual design remains provisional. Prioritize the native redesign:
 
 1. Refine the map-led draft with strong hierarchy, less chrome, useful place density, exact serving context and coherent details. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
 2. Verify remaining native dark mode, accessibility sizes, smaller-screen, keyboard, long-name, empty/saved and denied-location states. Fix observed defects before expanding scope.
-3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Profile decoding, requests, marker work, memory and idle costs; implement conditional native refresh and off-main work when evidence supports it. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
+3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Conditional refresh and off-actor remote preparation are complete; profile remaining synchronous startup decode/index work, marker work, memory and idle costs. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
 4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within the startup and interaction budgets.
 5. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's dense overview with rendered/performance evidence.
 6. Prepare TestFlight when authorized signing/distribution access is available.
