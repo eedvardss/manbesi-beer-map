@@ -48,7 +48,11 @@ struct DesignPrototypeRoot: View {
         let arguments = ProcessInfo.processInfo.arguments
         return arguments.contains("--design-dark") ? .dark : (arguments.contains("--design-light") ? .light : nil)
     }()
-    @State private var textSize: DynamicTypeSize = ProcessInfo.processInfo.arguments.contains("--design-large-text") ? .accessibility1 : .large
+    @State private var textSize: DynamicTypeSize = {
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--design-max-text") { return .accessibility5 }
+        return arguments.contains("--design-large-text") ? .accessibility1 : .large
+    }()
     @FocusState private var editingSearch: Bool
 
     var body: some View {
@@ -113,6 +117,7 @@ struct DesignPrototypeRoot: View {
                 Divider()
                 Button("Parasts teksts") { textSize = .large }
                 Button("Liels teksts") { textSize = .accessibility1 }
+                Button("Maksimāls teksts") { textSize = .accessibility5 }
             } label: { Image(systemName: "slider.horizontal.3").frame(width: 36, height: 44) }
                 .accessibilityLabel("Skices izskats un teksta izmērs")
         }
@@ -510,23 +515,43 @@ private struct StudyVenueDetail: View {
                             }
                         }.padding(.top, 10).fixedSize(horizontal: false, vertical: true)
                     } label: {
-                        Text("Avots · \(store.checkedLabel)").foregroundStyle(.secondary)
+                        Text("Avots · \(store.checkedLabel)").foregroundStyle(.secondary).multilineTextAlignment(.leading)
                     }
                     .font(.caption).tint(.primary).accessibilityIdentifier("study-price-source")
                 }
-                HStack(spacing: 14) {
-                    Link(destination: result.venue.directionsURL) {
-                        HStack { Image(systemName: "figure.walk"); Text("Doties uz vietu"); Spacer(); Image(systemName: "arrow.up.right").font(.caption) }
-                            .font(.subheadline.weight(.semibold)).foregroundStyle(StudyPalette.paper)
-                            .padding(16).background(Color.primary, in: .rect(cornerRadius: 14))
-                    }.accessibilityIdentifier("study-directions")
-                    ShareLink(item: result.venue.shareURL) { Image(systemName: "square.and.arrow.up").font(.body).frame(width: 44, height: 48) }
-                        .foregroundStyle(.primary).accessibilityLabel("Dalīties ar vietu")
+                if textSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Link(destination: result.venue.directionsURL) {
+                            Text("Doties uz vietu")
+                                .font(.subheadline.weight(.semibold))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundStyle(StudyPalette.paper).padding(16)
+                                .background(Color.primary, in: .rect(cornerRadius: 14))
+                        }.accessibilityIdentifier("study-directions")
+                        ShareLink(item: result.venue.shareURL) { Label("Dalīties", systemImage: "square.and.arrow.up") }
+                            .font(.subheadline).foregroundStyle(.primary).frame(minHeight: 44)
+                            .accessibilityLabel("Dalīties ar vietu")
+                    }
+                } else {
+                    HStack(spacing: 14) {
+                        Link(destination: result.venue.directionsURL) {
+                            HStack { Image(systemName: "figure.walk"); Text("Doties uz vietu"); Spacer(); Image(systemName: "arrow.up.right").font(.caption) }
+                                .font(.subheadline.weight(.semibold)).foregroundStyle(StudyPalette.paper)
+                                .padding(16).background(Color.primary, in: .rect(cornerRadius: 14))
+                        }.accessibilityIdentifier("study-directions")
+                        ShareLink(item: result.venue.shareURL) { Image(systemName: "square.and.arrow.up").font(.body).frame(width: 44, height: 48) }
+                            .foregroundStyle(.primary).accessibilityLabel("Dalīties ar vietu")
+                    }
                 }
                 VStack(alignment: .leading, spacing: 18) {
-                    HStack(alignment: .firstTextBaseline) {
+                    let headingLayout = textSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                        : AnyLayout(HStackLayout(alignment: .firstTextBaseline))
+                    headingLayout {
                         Text("Aluskarte").font(.title3.weight(.semibold))
-                        Spacer()
+                            .fixedSize(horizontal: false, vertical: true).accessibilityAddTraits(.isHeader).accessibilityIdentifier("study-menu-heading")
+                        if !textSize.isAccessibilitySize { Spacer() }
                         Text("\(menu.servings.count) \(menu.servings.count == 1 ? "porcija" : "porcijas")")
                             .font(.caption).foregroundStyle(.secondary).accessibilityIdentifier("study-menu-count")
                     }
@@ -548,7 +573,7 @@ private struct StudyVenueDetail: View {
 
     private var price: some View {
         Text(result.beer.priceLabel).font(.largeTitle.weight(.semibold)).tracking(-1).monospacedDigit()
-            .fixedSize(horizontal: true, vertical: false).accessibilityIdentifier("study-selected-price")
+            .fixedSize(horizontal: false, vertical: true).accessibilityIdentifier("study-selected-price")
     }
     private var servingContext: some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -567,19 +592,10 @@ private struct StudyMenuBeer: View {
             Text(beer.id).font(.subheadline.weight(.semibold))
                 .fixedSize(horizontal: false, vertical: true).accessibilityAddTraits(.isHeader)
             ForEach(beer.servings) { row in
-                HStack(alignment: .firstTextBaseline, spacing: 12) {
-                    Text(row.volumeLabel).foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    VStack(alignment: .trailing, spacing: 3) {
-                        Text(row.priceLabel).fontWeight(.medium).monospacedDigit().fixedSize()
-                        if showLitre, let label = row.litreLabel { Text(label).font(.caption).foregroundStyle(.secondary).fixedSize() }
-                    }
-                }
-                .font(.subheadline)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(row.serving.name), \(row.volumeLabel), \(row.priceLabel)\(showLitre ? row.litreLabel.map { ", \($0)" } ?? "" : "")")
-                .accessibilityIdentifier("study-serving-\(row.id)")
+                MenuServingValues(row: row, showLitre: showLitre)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(row.serving.name), \(row.volumeLabel), \(row.priceLabel)\(showLitre ? row.litreLabel.map { ", \($0)" } ?? "" : "")")
+                    .accessibilityIdentifier("study-serving-\(row.id)")
             }
         }
     }

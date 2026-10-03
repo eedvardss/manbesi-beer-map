@@ -143,6 +143,26 @@ xcodebuild -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release
 
 The UI checks reset and deny authorization only for the test app in Simulator and restore its authorization state afterward. They never grant location access or change a physical device's privacy settings. Use the full product checks for map attribution, detail camera continuity and exact serving/save/search semantics.
 
+## Detail typography and serving layout — 3 October 2026
+
+This pass fixes rendered layout at larger text sizes. It reuses the existing bounded prepared-menu cache and lazy menu containers. `MenuServingValues` consumes prepared labels and chooses its layout axis from Dynamic Type; it adds no menu sorting/formatting, network/disk work, marker updates or timer. Product presentation expands for accessibility text while ordinary text retains its compact columns.
+
+The representative optimized Release correctness workload uses the real catalog on iPhone 17e / iOS 26.5 Simulator, on the arm64 Mac / macOS 26.5.1, at 390 × 844 points. It exercises opening/scrolling the 73-serving ALA menu, reading exact values, source disclosure for unknown-volume servings, the six-bottle quote and return to search context. Debug additionally checks the provisional grouped draft and its exact 3000 ml serving. It verifies an actual font-height increase, full-width values, a one-line menu heading, stacked count and full initial accessible sheet. Ordinary light and dark maximum-text screens are inspected.
+
+Captured layout changes at maximum text: the product quote grows from 38.3 to 65.3 points high; the draft's 3000 ml label uses one 58.7-point line instead of two totaling 116.7 points; its menu heading fits one 65.7-point line instead of 130.7 points across two lines. These are UI bounds, not timing measurements. Baseline is Debug; final checks cover Debug and optimized Release. Proof: `artifacts/detail-accessibility/`.
+
+No startup, frame-rate, CPU, memory or battery improvement is claimed. Existing noisy source-toggle/map timings do not measure this layout change. Continue with Release launch/search/scroll traces and physical-device frame delivery before calling the app fast. Repeat the focused correctness gate with:
+
+```sh
+xcodebuild -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release \
+  -destination 'platform=iOS Simulator,name=iPhone 17e,OS=26.5' \
+  CODE_SIGNING_ALLOWED=NO ENABLE_TESTABILITY=YES \
+  -only-testing:BeerMapTests/VenueMenuTests \
+  -only-testing:BeerMapUITests/DetailLayoutUITests test
+```
+
+The draft-specific test and `--design-max-text` are DEBUG-only. The product uses `UICTContentSizeCategoryAccessibilityXXXL` for isolated maximum-text UI launches; normal launches follow the system. Split broad checks into sequential calls as described above.
+
 ## Implementation and correctness
 
 - Web prepares normalized venue and beer search text once per immutable catalog; native rebuilds its index only when accepting a catalog. Web index preparation measured 1.04 ms on the reference Mac; native index preparation is not yet separately profiled.

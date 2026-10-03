@@ -3,6 +3,8 @@ import SwiftUI
 struct VenueDetailView: View {
     @Environment(BeerMapStore.self) private var store
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var textSize
+    @ScaledMetric(relativeTo: .largeTitle) private var priceSize = 32.0
     let result: VenueResult
     let hasCloseButton: Bool
     @State private var showSource = false
@@ -12,49 +14,90 @@ struct VenueDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(result.venue.name).font(.title2.weight(.semibold)).accessibilityIdentifier("venue-detail-name")
+                    Text(result.venue.name).font(.title2.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true).accessibilityAddTraits(.isHeader)
+                        .accessibilityIdentifier("venue-detail-name")
                     Text(result.venue.address).font(.subheadline).foregroundStyle(.secondary).textSelection(.enabled)
-                    HStack(spacing: 8) {
+                    let metadataLayout = textSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                        : AnyLayout(HStackLayout(spacing: 8))
+                    metadataLayout {
                         Text(result.venue.kind)
                         if let isOpen = result.venue.openingHours?.isOpen(at: store.now) {
-                            Text("·")
+                            if !textSize.isAccessibilitySize { Text("·") }
                             Text(isOpen ? "Pēc grafika atvērts" : "Pēc grafika slēgts")
                         }
                     }.font(.caption).foregroundStyle(.secondary)
                 }
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    let quoteLayout = textSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+                        : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: 10))
+                    quoteLayout {
                         Text(store.filter.sort == .litre ? result.beer.litreLabel : result.beer.priceLabel)
-                            .font(.system(size: 32, weight: .semibold, design: .rounded)).monospacedDigit()
+                            .font(.system(size: priceSize, weight: .semibold, design: .rounded)).monospacedDigit()
+                            .fixedSize(horizontal: false, vertical: true).accessibilityIdentifier("venue-selected-price")
                         Text(result.beer.volumeLabel).font(.subheadline).foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true).accessibilityIdentifier("venue-selected-volume")
                     }
                     Text(result.beer.name).font(.subheadline).foregroundStyle(.secondary)
                     Text("Pārbaudīts \(store.checkedLabel)").font(.caption).foregroundStyle(.secondary)
                 }
-                HStack(spacing: 12) {
-                    Link(destination: result.venue.directionsURL) { Label("Kājām uz vietu", systemImage: "figure.walk") }
-                        .buttonStyle(.glassProminent).accessibilityIdentifier("directions")
-                    ShareLink(item: result.venue.shareURL) { Image(systemName: "square.and.arrow.up").frame(minWidth: 20) }
-                        .buttonStyle(.glass).accessibilityLabel("Dalīties ar vietu")
+                if textSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Link(destination: result.venue.directionsURL) {
+                            Text("Kājām uz vietu").font(.subheadline.weight(.semibold))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(.glassProminent).buttonBorderShape(.roundedRectangle(radius: 14))
+                        .accessibilityIdentifier("directions")
+                        ShareLink(item: result.venue.shareURL) { Label("Dalīties", systemImage: "square.and.arrow.up") }
+                            .font(.subheadline).frame(minHeight: 44).accessibilityLabel("Dalīties ar vietu")
+                    }
+                } else {
+                    HStack(spacing: 12) {
+                        Link(destination: result.venue.directionsURL) { Label("Kājām uz vietu", systemImage: "figure.walk") }
+                            .buttonStyle(.glassProminent).accessibilityIdentifier("directions")
+                        ShareLink(item: result.venue.shareURL) { Image(systemName: "square.and.arrow.up").frame(minWidth: 20) }
+                            .buttonStyle(.glass).accessibilityLabel("Dalīties ar vietu")
+                    }
                 }
                 Divider()
                 VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Aluskarte").font(.headline)
-                        Spacer()
-                        Text("\(result.venue.beers.count) izvēles").font(.caption).foregroundStyle(.secondary)
+                    let headingLayout = textSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                        : AnyLayout(HStackLayout())
+                    headingLayout {
+                        Text("Aluskarte").font(.headline).fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader).accessibilityIdentifier("venue-menu-heading")
+                        if !textSize.isAccessibilitySize { Spacer() }
+                        Text("\(menu.servings.count) \(menu.servings.count == 1 ? "porcija" : "porcijas")")
+                            .font(.caption).foregroundStyle(.secondary).accessibilityIdentifier("venue-menu-count")
                     }
                     LazyVStack(spacing: 18) {
                         ForEach(menu.servings) { row in
-                            HStack(alignment: .top, spacing: 16) {
-                                VStack(alignment: .leading, spacing: 4) {
+                            if textSize.isAccessibilitySize {
+                                VStack(alignment: .leading, spacing: 6) {
                                     Text(row.serving.name).font(.subheadline)
-                                    Text(row.volumeLabel).font(.caption).foregroundStyle(.secondary)
-                                }.frame(maxWidth: .infinity, alignment: .leading)
-                                VStack(alignment: .trailing, spacing: 4) {
-                                    Text(row.priceLabel).font(.subheadline.weight(.medium)).monospacedDigit()
-                                    if let label = row.litreLabel { Text(label).font(.caption2).foregroundStyle(.secondary) }
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    MenuServingValues(row: row, showLitre: true, litreFont: .caption2)
                                 }
+                                .accessibilityElement(children: .combine)
+                                .accessibilityIdentifier("venue-serving-\(row.id)")
+                            } else {
+                                HStack(alignment: .top, spacing: 16) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(row.serving.name).font(.subheadline)
+                                        Text(row.volumeLabel).font(.caption).foregroundStyle(.secondary)
+                                    }.frame(maxWidth: .infinity, alignment: .leading)
+                                    VStack(alignment: .trailing, spacing: 4) {
+                                        Text(row.priceLabel).font(.subheadline.weight(.medium)).monospacedDigit()
+                                        if let label = row.litreLabel { Text(label).font(.caption2).foregroundStyle(.secondary) }
+                                    }
+                                }
+                                .accessibilityElement(children: .combine)
+                                .accessibilityIdentifier("venue-serving-\(row.id)")
                             }
                         }
                     }
@@ -74,6 +117,7 @@ struct VenueDetailView: View {
                 .font(.subheadline)
             }.padding(22)
         }
+        .accessibilityIdentifier("venue-detail-scroll")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) { SaveButton(venueID: result.id, name: result.venue.name) }

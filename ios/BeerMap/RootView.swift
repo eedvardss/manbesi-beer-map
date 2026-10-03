@@ -6,6 +6,7 @@ private struct SelectedVenue: Identifiable { let id: String }
 struct RootView: View {
     @Environment(BeerMapStore.self) private var store
     @Environment(LocationProvider.self) private var location
+    @Environment(\.dynamicTypeSize) private var textSize
     @State private var tab = 0
     private let clock = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
 
@@ -18,9 +19,9 @@ struct RootView: View {
         .sheet(item: Binding(get: { store.selectedID.map { SelectedVenue(id: $0) } }, set: { store.selectedID = $0?.id })) { selection in
             if let result = store.result(id: selection.id, location: location.coordinate) {
                 NavigationStack { VenueDetailView(result: result, hasCloseButton: true) }
-                    .presentationDetents([.height(350), .large])
+                    .presentationDetents(textSize.isAccessibilitySize ? [.large] : [.height(350), .large])
                     .presentationDragIndicator(.visible)
-                    .presentationBackgroundInteraction(.enabled(upThrough: .height(350)))
+                    .presentationBackgroundInteraction(textSize.isAccessibilitySize ? .disabled : .enabled(upThrough: .height(350)))
             }
         }
         .onChange(of: location.coordinate) { _, coordinate in
