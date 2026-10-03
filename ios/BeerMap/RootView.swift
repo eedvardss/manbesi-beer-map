@@ -44,7 +44,7 @@ struct MapScreen: View {
                 }
             // Reserve a separate row so status and controls cannot cover
             // MapKit's own attribution, even when text wraps.
-            MapOverviewStatus(count: results.count, offline: store.usesOfflineCatalog, message: location.message)
+            MapOverviewStatus(count: results.count, offline: store.usesOfflineCatalog)
         }
             .safeAreaInset(edge: .top, spacing: 0) {
                 QuickFilters().padding(.horizontal, 16).padding(.vertical, 10)
@@ -71,25 +71,18 @@ struct MapScreen: View {
 private struct MapOverviewStatus: View {
     let count: Int
     let offline: Bool
-    let message: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if let message {
-                Text(message).font(.caption).foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(count) \(count == 1 ? "vieta" : "vietas")")
+                    .font(.subheadline.weight(.semibold))
+                Text(offline ? "Saglabātā karte" : "Rīga · cenas ar avotiem")
+                    .font(.caption).foregroundStyle(.secondary)
             }
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("\(count) \(count == 1 ? "vieta" : "vietas")")
-                        .font(.subheadline.weight(.semibold))
-                    Text(offline ? "Saglabātā karte" : "Rīga · cenas ar avotiem")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                LocateButton()
-            }
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            LocateButton()
         }
         .padding(.horizontal, 20).padding(.vertical, 10)
         .background(.background, ignoresSafeAreaEdges: [])
@@ -138,11 +131,10 @@ private struct FilterChip: View {
 }
 
 struct LocateButton: View {
-    @Environment(LocationProvider.self) private var location
     var body: some View {
-        Button { location.locate() } label: {
+        LocationRequestButton { isLocating in
             Group {
-                if location.isLocating { ProgressView() }
+                if isLocating { ProgressView() }
                 else { Image(systemName: "location").font(.title3.weight(.medium)) }
             }
             .frame(width: 48, height: 48)
@@ -209,7 +201,6 @@ struct PlacesScreen: View {
         .safeAreaInset(edge: .top, spacing: 0) {
             VStack(spacing: 8) {
                 QuickFilters()
-                if let message = location.message { Text(message).font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading) }
                 if store.usesOfflineCatalog { Label("Saglabātā karte · \(store.checkedLabel)", systemImage: "arrow.down.circle").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading) }
             }.padding(.horizontal, 20).padding(.bottom, 8)
         }

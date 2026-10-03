@@ -115,9 +115,33 @@ The check skips during ordinary correctness runs. Coordinate-notification and re
 
 This pass corrects attribution overlap and text clipping, rather than implementing a runtime optimization. It uses normal SwiftUI layout to give the native MapKit canvas and status/control row separate bounds. There is no new geometry-preference loop, per-frame callback, polling, catalog preparation or network request. The appearance override is resolved once for isolated UI-test launches; ordinary launches retain system appearance.
 
-Actual optimized Release correctness workloads use all 165 real venues on iPhone 17e / iOS 26.5, on the arm64 Mac / macOS 26.5.1. The map is 390 × 454 points at ordinary text and 390 × 236.3 points at the largest accessibility category with the offline caption. Loaded light/dark screens, largest-text filter scrolling/selection, detail camera continuity and the existing list/save/serving/litre/empty flows pass. Larger captions or denied-location messages can change these bounds and remain separate coverage. Final results/geometry: `artifacts/map-attribution/release-product-final.xcresult` and `final-release-attachments/` in that folder.
+Actual optimized Release correctness workloads use all 165 real venues on iPhone 17e / iOS 26.5, on the arm64 Mac / macOS 26.5.1. The map is 390 × 454 points at ordinary text and 390 × 236.3 points at the largest accessibility category with the offline caption. Loaded light/dark screens, largest-text filter scrolling/selection, detail camera continuity and the existing list/save/serving/litre/empty flows pass. At that milestone, larger captions and denied-location messages remained separate coverage; the denied flow is addressed below. Final results/geometry: `artifacts/map-attribution/release-product-final.xcresult` and `final-release-attachments/` in that folder.
 
 These are layout and interaction checks, not time-to-content, frame delivery, CPU, memory or battery measurements. The earlier pan/zoom timing table cannot be treated as a before/after measurement of this different canvas. Keep physical-device Release profiling as the performance gate; repeat traces when investigating a measured cost, rather than running noisy timings solely for an interface correction.
+
+## Location request lifecycle and layout — 3 October 2026
+
+The denied-location correction removes a persistent warning from normal map/list layout. On the same iPhone 17e / iOS 26.5 Simulator and arm64 Mac / macOS 26.5.1, an actual system denial and cold relaunch previously left only a 390 × 24-point map at the largest accessibility category. The final optimized Release flow leaves 390 × 236.3 points; ordinary text retains 390 × 454 points. These are rendered layout bounds, not speed measurements. Baseline is Debug; final UI checks cover both Debug and Release. Results and geometry: `artifacts/location-access/`.
+
+The provider still requests one fix at hundred-metre accuracy with `requestLocation()`. An explicit request phase ignores repeated taps and repeated authorization callbacks while a fix is pending. A controlled manager check verifies one position request after authorization, rather than restarting it on every authorization callback. Request feedback is owned by the initiating control, and a stale alert dismissal cannot erase a newer issue. The system manager is excluded from Observation tracking; map/list views no longer observe warning text. The code review adds no polling, continuous GPS updates, location history, decoding, sorting, marker formatting, network or disk work.
+
+Eight request-lifecycle unit checks pass in Debug and optimized Release. Three real Simulator permission-denial UI checks pass in each configuration, including cold launch, light/dark, maximum text, cancellation, exact serving filtering and active-sheet recovery. Settings launch is verified; app-specific Settings routing is not. Retry, restricted access and services-unavailable behavior have controlled-model coverage, with real-device/rendered coverage still pending.
+
+No startup, frame-delivery, CPU, memory or battery improvement is inferred from these checks or from request counts. Continue with physical-device Release traces and production-browser workloads before claiming the products are fast. Earlier map/menu timings do not measure this permission flow.
+
+The complete Debug suite took about 312 seconds and exceeded the MCP response timeout, while its underlying Xcode run completed successfully (45 passed, two opt-in checks skipped, zero failed). The finished result bundle and build log confirmed completion. For future MCP runs, split model/product checks and the five draft UI checks into sequential calls to stay below the 300-second response limit; do not start a second Simulator run while the first is still executing. The scoped final Release run completed in about 203 seconds (31 model and nine product UI checks).
+
+Reproduce the focused Release request/recovery checks:
+
+```sh
+xcodebuild -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release \
+  -destination 'platform=iOS Simulator,name=iPhone 17e,OS=26.5' \
+  CODE_SIGNING_ALLOWED=NO ENABLE_TESTABILITY=YES \
+  -only-testing:BeerMapTests/LocationProviderTests \
+  -only-testing:BeerMapUITests/LocationUITests test
+```
+
+The UI checks reset and deny authorization only for the test app in Simulator and restore its authorization state afterward. They never grant location access or change a physical device's privacy settings. Use the full product checks for map attribution, detail camera continuity and exact serving/save/search semantics.
 
 ## Implementation and correctness
 

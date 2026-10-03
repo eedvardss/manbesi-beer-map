@@ -84,3 +84,18 @@ The native quick-filter strip now grows to its content height. The largest acces
 Before calling a UI milestone complete, inspect the actual rendered route/device. Compare the map, useful loaded list, long venue name, detail, saved state, empty state and relevant filter state. Use a smaller iPhone, dark appearance and large text when a change affects layout. Check alignment, information density, tap areas, keyboard behavior, overflow and returning from details without losing context. Wait for map tiles; an empty tile grid is not a finished screenshot. Keep the accent limited to meaningful selection or the dominant action, and prefer quick, restrained transitions.
 
 Reduce unnecessary interface before adding features. Record specific remaining defects and review status. Automated checks verify behavior; they do not prove excellent design.
+
+
+## Location access without persistent warnings — 3 October 2026
+
+Read Apple's current [privacy guidance](https://developer.apple.com/design/human-interface-guidelines/privacy), [alert guidance](https://developer.apple.com/design/human-interface-guidelines/alerts) and [one-shot location documentation](https://developer.apple.com/documentation/corelocation/cllocationmanager/requestlocation()) in the background browser. The useful principle is context: optional location access belongs to the action that needs it, and an actionable failure should not become permanent browse chrome. Declining permission must leave the map useful.
+
+A real system-prompt denial followed by a fresh launch reproduced the existing unsolicited warning. At the largest accessibility category on iPhone 17e / iOS 26.5, the warning consumed most of the screen and reduced the map to 24 points high. The product now stays quiet after denial and at startup. A subsequent explicit location request offers brief recovery in the initiating map control or filter sheet. Dismissal preserves the map frame and filters. Feedback no longer repeats above places or inside the status row.
+
+The first recovery copy also overflowed the alert's text region at maximum text. Shorter copy now displays the full explanation above both actionable buttons; rendered review and geometry checks verify it in light/dark and the largest category. The denied map retains 454 points of canvas at ordinary text and 236.3 points at the largest category, with visible native attribution. Real exact-500-ml selection still changes 165 places to 131. Proof: `artifacts/location-access/`.
+
+Restricted access has a separate explanation without a misleading permission-settings action. Transient failures offer retry. Those branches and authorization revocation are checked with a controlled system boundary, not by changing a real device's privacy settings. Only the denied branch currently has rendered recovery coverage.
+
+**Settings destination limitation:** [Apple's supported app Settings URL](https://developer.apple.com/documentation/uikit/uiapplication/opensettingsurlstring) launches Settings in this Simulator, but consistently lands at its root. App-specific navigation and re-enabling access are unverified. Direct UIKit opening, ad hoc Simulator signing and a temporary Settings-bundle hypothesis did not change that destination; the unused bundle was removed. Keep the supported API and verify the actual destination on a signed physical-device build when available. Do not equate Settings launching with successful permission recovery.
+
+This is a correction to the functional product, with shared filter behavior in the study. The full design and A/B/C remain provisional and unapproved. Online captions, other maximum-text screens and a physical-device location journey remain separate review work.

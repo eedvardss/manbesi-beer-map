@@ -100,8 +100,13 @@ struct FiltersView: View {
                     .disabled(sort == .distance && location.coordinate == nil)
                 }
                 if location.coordinate == nil {
-                    Button { location.locate() } label: { Label("Noteikt manu atrašanās vietu", systemImage: "location") }
-                    if let message = location.message { Text(message).font(.caption).foregroundStyle(.secondary) }
+                    LocationRequestButton { isLocating in
+                        HStack {
+                            Label("Noteikt manu atrašanās vietu", systemImage: "location")
+                            if isLocating { Spacer(); ProgressView() }
+                        }
+                    }
+                    .accessibilityIdentifier("filter-locate")
                 }
             }
             Section {
