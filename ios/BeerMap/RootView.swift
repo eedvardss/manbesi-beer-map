@@ -168,6 +168,8 @@ struct PlacesScreen: View {
     @Environment(BeerMapStore.self) private var store
     @Environment(LocationProvider.self) private var location
     let savedOnly: Bool
+    @Environment(\.dynamicTypeSize) private var textSize
+    @State private var searchPresented = false
 
     var body: some View {
         @Bindable var store = store
@@ -176,7 +178,7 @@ struct PlacesScreen: View {
             if !results.isEmpty {
                 Section {
                     ForEach(results) { result in
-                        HStack(spacing: 12) {
+                        HStack(alignment: textSize.isAccessibilitySize ? .top : .center, spacing: 12) {
                             Button { store.selectedID = result.id } label: { VenueRow(result: result) }
                                 .buttonStyle(.plain)
                                 .accessibilityIdentifier("venue-\(result.id)")
@@ -185,11 +187,17 @@ struct PlacesScreen: View {
                         .listRowInsets(EdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 16))
                     }
                 } header: {
-                    HStack {
+                    let layout = textSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                        : AnyLayout(HStackLayout())
+                    layout {
                         Text("\(results.count) \(results.count == 1 ? "vieta" : "vietas")")
-                        Spacer()
-                        Text(store.filter.sort.label)
-                    }.textCase(nil)
+                        if !textSize.isAccessibilitySize { Spacer() }
+                        if !textSize.isAccessibilitySize || !searchPresented { Text(store.filter.sort.label) }
+                    }
+                    .font(textSize.isAccessibilitySize ? .caption : .subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textCase(nil)
                 } footer: {
                     Text("Cenas pārbaudītas \(store.checkedLabel). Attālumi ir taisnā līnijā. Aktuālo cenu pārbaudi vietas avotā.").font(.caption)
                 }
@@ -200,13 +208,14 @@ struct PlacesScreen: View {
             if results.isEmpty { EmptyResultsView(savedOnly: savedOnly).padding(24) }
         }
         .safeAreaInset(edge: .top, spacing: 0) {
-            VStack(spacing: 8) {
-                QuickFilters()
-                if store.usesOfflineCatalog { Label("Saglabātā karte · \(store.checkedLabel)", systemImage: "arrow.down.circle").font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading) }
-            }.padding(.horizontal, 20).padding(.bottom, 8)
+            if !textSize.isAccessibilitySize || !searchPresented {
+                QuickFilters().padding(.horizontal, 20).padding(.bottom, 8)
+            }
         }
         .navigationTitle(savedOnly ? "Saglabāts" : "Vietas")
-        .searchable(text: $store.filter.query, prompt: "Vieta, alus vai iela")
+        .navigationBarTitleDisplayMode(textSize.isAccessibilitySize ? .inline : .large)
+        .accessibilityIdentifier("places-list")
+        .searchable(text: $store.filter.query, isPresented: $searchPresented, prompt: "Vieta, alus vai iela")
         .searchPresentationToolbarBehavior(.avoidHidingContent)
         .toolbar { MapToolbar() }
         .refreshable { await store.refresh() }
@@ -215,21 +224,40 @@ struct PlacesScreen: View {
 
 struct VenueRow: View {
     @Environment(BeerMapStore.self) private var store
+    @Environment(\.dynamicTypeSize) private var textSize
     let result: VenueResult
+
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        let layout = textSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 10))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: 12))
+        layout {
             VStack(alignment: .leading, spacing: 5) {
                 Text(result.venue.name).font(.subheadline.weight(.semibold)).foregroundStyle(.primary)
-                Text(result.beer.name).font(.caption).foregroundStyle(.secondary).lineLimit(2)
-                HStack(spacing: 6) {
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("row-name-\(result.id)")
+                Text(result.beer.name).font(.caption).foregroundStyle(.secondary)
+                    .lineLimit(textSize.isAccessibilitySize ? nil : 2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("row-beer-\(result.id)")
+                let metadataLayout = textSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                    : AnyLayout(HStackLayout(spacing: 6))
+                metadataLayout {
                     Text(result.beer.volumeLabel)
-                    if let distance = result.distanceMetres { Text("·"); Text(distance.distanceLabel) }
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("row-volume-\(result.id)")
+                    if let distance = result.distanceMetres {
+                        if !textSize.isAccessibilitySize { Text("·") }
+                        Text(distance.distanceLabel)
+                    }
                 }.font(.caption2).foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            VStack(alignment: .trailing, spacing: 5) {
+            VStack(alignment: textSize.isAccessibilitySize ? .leading : .trailing, spacing: 5) {
                 Text(store.filter.sort == .litre ? result.beer.litreLabel : result.beer.priceLabel)
                     .font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
+                    .accessibilityIdentifier("row-price-\(result.id)")
                 if store.filter.sort == .litre { Text(result.beer.priceLabel + " par porciju").font(.caption2).foregroundStyle(.secondary) }
                 else if result.beer.perLitre != nil { Text(result.beer.litreLabel).font(.caption2).foregroundStyle(.secondary) }
             }
@@ -247,12 +275,14 @@ struct SaveButton: View {
         let saved = store.savedIDs.contains(venueID)
         Button { store.toggleSaved(venueID) } label: {
             Image(systemName: saved ? "bookmark.fill" : "bookmark")
-                .font(.body).frame(width: 32, height: 44)
+                .font(.system(size: 20)).frame(width: 44, height: 44)
+                .contentShape(Rectangle())
                 .foregroundStyle(saved ? Theme.accent : Color.secondary)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(saved ? "Noņemt no saglabātā: \(name)" : "Saglabāt: \(name)")
         .accessibilityIdentifier("save-\(venueID)")
+        .accessibilityShowsLargeContentViewer()
         .sensoryFeedback(.selection, trigger: saved)
     }
 }

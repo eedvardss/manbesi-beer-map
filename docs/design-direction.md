@@ -112,3 +112,22 @@ The draft review menu now includes **Maksimāls teksts**, also available as `--d
 Actual review covers the smaller iPhone 17e / iOS 26.5 Simulator (390 × 844 points): ordinary light product/detail menu, the light grouped draft, dark accessibility-size-1 long-title/menu/source, and dark maximum-text draft/product detail. Exact-value checks cover ALA's 73-serving full menu, its 3000 ml / 18.90 EUR published serving, Cabo's 6 × 330 ml / 22.50 EUR quote, and The Snuggest's unknown-volume servings and expanded original source date. Closing detail returns to the same filtered venue. `DetailLayoutUITests` uses the scroll view's intersection with screen bounds; a hittable element outside the visible sheet is insufficient proof. Final Debug/Release screenshots and geometry are in `artifacts/detail-accessibility/`.
 
 Physical-device rendering, live VoiceOver, the other drafts' maximum-text overview/keyboard extremes and production-browser performance remain separate gates. No website or catalog data changed in this pass.
+
+
+## Maximum-text overview and active search — 3 October 2026
+
+Reviewed [Apple's actual Contacts example in the Dynamic Type walkthrough](https://developer.apple.com/videos/play/wwdc2024/10074/) again. Its useful principle is to change the layout as text grows: stack related information into the available width, keep supporting icons bounded and give functional text priority over decoration. The product's search presentation uses Apple's documented [search activation binding](https://developer.apple.com/documentation/swiftui/managing-search-interface-activation) to reserve room for results while editing.
+
+Rendered baseline on the smaller iPhone 17e / iOS 26.5 at the maximum category showed narrow name/price columns, oversized icons and keyboard-covered results. Draft C had a zero-height result viewport. Accessible result rows now stack exact serving/price information; ordinary text keeps aligned trailing prices. Product quick filters yield space during accessible active search, with the full filter sheet available from the toolbar. The repeated offline banner is removed; the checked date and source uncertainty remain in their relevant footer/detail/source context. Bookmark targets are 44 points even though their symbol remains 20 points.
+
+A's accessible header separates its summary from actions, and its list height preserves map attribution. B removes the editorial feature during search and gives the large-text featured map its own width. Its top safe-area background stops scrolled text entering the status region. C's comparison labels retain their full words in a horizontally scrolling strip; each large-text quote includes its unit. Result content is clipped with clearance beneath that strip, including after switching to litre comparison. The small study switcher yields to the keyboard and returns when editing ends.
+
+| Captured maximum-text layout | Baseline | Corrected |
+| --- | ---: | ---: |
+| A map height with keyboard | 79 pt | 161.7 pt |
+| A Tallink name width / height | 137.7 / 348.7 pt | 283.3 / 174.7 pt |
+| Product Snuggest name width / height | 147.3 / 290.7 pt | 268.3 / 174.7 pt |
+
+Actual review covers A/C maximum dark, B maximum light, all three ordinary-light draft rows, and ordinary-light/maximum-dark product list, keyboard, saved, unknown-size and multipack states. Real interactions verify detail return, full quotes above bottom controls and the original 500 ml / 6.00 EUR serving with its known 12.00 EUR/l value. Final draft proof is `artifacts/overview-accessibility/final-draft-attachments/`; optimized product proof is `release-product-attachments/`. Baseline and earlier passing checks are retained separately. Automated geometry uses the visible app/scroll intersection and active keyboard area, then actual screenshots are inspected.
+
+These draft adjustments remain DEBUG-only and provisional. The product list corrections are verified in optimized Release; the full native direction remains unapproved. A filtered pin can still sit partly under the floating search field at maximum text and needs a separate map/camera composition review. Dense map states, live VoiceOver and physical-device rendering remain open. This layout work does not establish startup, frame-rate or battery performance.

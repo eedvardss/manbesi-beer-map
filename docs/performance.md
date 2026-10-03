@@ -163,6 +163,23 @@ xcodebuild -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release
 
 The draft-specific test and `--design-max-text` are DEBUG-only. The product uses `UICTContentSizeCategoryAccessibilityXXXL` for isolated maximum-text UI launches; normal launches follow the system. Split broad checks into sequential calls as described above.
 
+## Overview and keyboard layout validation — 3 October 2026
+
+This correction changes layout axes, bounded icon targets and active-search composition. It consumes the existing cached query/prepared serving labels and lazy list containers. There is no added catalog normalization, menu sorting, formatting, decoding, timer, network/disk work or annotation rebuilding. Search presentation is local view state. The draft summary consumes the already computed result count.
+
+The real-catalog correctness workload runs on iPhone 17e / iOS 26.5 Simulator, 390 × 844 points, on the arm64 Mac / macOS 26.5.1. Optimized Release exercises typing/search with the keyboard, tapping a visible result, returning to the query, scrolling exact unknown-size/multipack quotes, saving via the full 44-point target, compact ordinary-text prices, detail/source and existing map/filter/camera paths. Debug also checks all three provisional drafts at maximum text and C's per-litre mode. Final counts and screenshot/geometry evidence are recorded in `DEVELOPMENT.md` and `artifacts/overview-accessibility/`.
+
+The increased map/name bounds are layout measurements. No latency, missed-frame, CPU, memory or battery improvement is claimed. Useful startup and synchronous bundle/cache decode/index work are the next bounded profiling priority. Physical-device frame delivery and production-browser workloads remain required before describing either product as fast. Repeat the focused optimized layout gate with:
+
+```sh
+xcodebuild -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release \
+  -destination 'platform=iOS Simulator,name=iPhone 17e,OS=26.5' \
+  CODE_SIGNING_ALLOWED=NO ENABLE_TESTABILITY=YES \
+  -only-testing:BeerMapUITests/OverviewLayoutUITests test
+```
+
+Release runs three product checks; Debug adds the two draft checks. Test flags isolate bookmarks/cache and offline content from user state. This is an interaction/correctness gate, not a timing benchmark.
+
 ## Implementation and correctness
 
 - Web prepares normalized venue and beer search text once per immutable catalog; native rebuilds its index only when accepting a catalog. Web index preparation measured 1.04 ms on the reference Mac; native index preparation is not yet separately profiled.
