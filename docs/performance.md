@@ -111,6 +111,14 @@ TEST_RUNNER_BEER_MAP_MAP_PERFORMANCE=1 xcodebuild \
 
 The check skips during ordinary correctness runs. Coordinate-notification and retained-view appearance regressions are covered by `MapAnnotationTests`; rendered navigation uses `testDesignClusterZoomPinAndAppearanceContinuity`. Full physical-device frame/memory traces remain the gate for performance claims. No web source, published data or deployment changed in this pass.
 
+## Map layout validation — 3 October 2026
+
+This pass corrects attribution overlap and text clipping, rather than implementing a runtime optimization. It uses normal SwiftUI layout to give the native MapKit canvas and status/control row separate bounds. There is no new geometry-preference loop, per-frame callback, polling, catalog preparation or network request. The appearance override is resolved once for isolated UI-test launches; ordinary launches retain system appearance.
+
+Actual optimized Release correctness workloads use all 165 real venues on iPhone 17e / iOS 26.5, on the arm64 Mac / macOS 26.5.1. The map is 390 × 454 points at ordinary text and 390 × 236.3 points at the largest accessibility category with the offline caption. Loaded light/dark screens, largest-text filter scrolling/selection, detail camera continuity and the existing list/save/serving/litre/empty flows pass. Larger captions or denied-location messages can change these bounds and remain separate coverage. Final results/geometry: `artifacts/map-attribution/release-product-final.xcresult` and `final-release-attachments/` in that folder.
+
+These are layout and interaction checks, not time-to-content, frame delivery, CPU, memory or battery measurements. The earlier pan/zoom timing table cannot be treated as a before/after measurement of this different canvas. Keep physical-device Release profiling as the performance gate; repeat traces when investigating a measured cost, rather than running noisy timings solely for an interface correction.
+
 ## Implementation and correctness
 
 - Web prepares normalized venue and beer search text once per immutable catalog; native rebuilds its index only when accepting a catalog. Web index preparation measured 1.04 ms on the reference Mac; native index preparation is not yet separately profiled.

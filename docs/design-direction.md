@@ -71,7 +71,13 @@ Rendered proof and interaction results: `artifacts/map-hierarchy/`. Review cover
 
 This remains a provisional DEBUG study, with A/B/C available. The normal Release palette is preserved. Native map correctness also improves: retained annotations now move when accepted source coordinates change, while unchanged coordinates emit no redundant KVO notifications. Exact quotes, serving labels, source dates and full menus are unchanged.
 
-Remaining observed defect: the existing Release overview badge partly covers Apple Maps attribution. The study keeps attribution above its separate place panel. Correct the Release overlay placement with actual light/dark and smaller-screen review before treating its map layout as polished. Reference: `artifacts/map-hierarchy/release-after-attachments/E237EE00-A6EA-478C-9AE2-F10F9899B4A2.png`.
+The Release attribution overlap observed in this pass is corrected in the following scoped layout work; it does not settle the unapproved overall design.
+
+## Attribution and accessible controls — 3 October 2026
+
+Read [Apple's current map guidance](https://developer.apple.com/design/human-interface-guidelines/maps) again and reproduced the Release badge covering the logo/legal link in an actual native frame. Apple's useful principle is to keep attribution anchored to the map and separate it from custom controls. The product now gives status and location their own flat row below the canvas, with MapKit retaining its native attribution. This removes glass from a passive count and avoids manual positioning of private MapKit subviews.
+
+The native quick-filter strip now grows to its content height. The largest accessibility category keeps the map visible and lets people scroll to and select exact 500 ml. Loaded light/dark and largest-text captures on iPhone 17e / iOS 26.5 verify the layout; source status wraps and legal content has about ten points of clearance above the separate row. The original layout and final proof are in `artifacts/map-attribution/`. The correction affects the existing product; A/B/C and the complete visual direction remain provisional and unapproved. Remaining large-text menu/list/keyboard and denied-location states need their own review.
 
 ## Quality gate for future runs
 

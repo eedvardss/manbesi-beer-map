@@ -127,12 +127,26 @@ Validation completed:
 
 This is locally verified, provisional native work. No push, website deployment, physical-iPhone installation or App Store release occurred. The five-hour cadence and quiet background intent remain unchanged; the existing prompt reads these revised priorities, so no schedule revision was necessary. Pre-existing `research/` stays outside the scoped commit.
 
+## Native map attribution and text layout — 3 October 2026
+
+Corrected the existing product map's overview badge covering Apple Maps attribution. The map now ends above a separate, flat status/location row, with its legal link and logo visible inside the canvas. Passive status no longer has a glass card. Quick filters use their content height rather than a fixed 44-point crop, so larger text remains readable and the horizontally scrolling controls stay usable. This is a scoped correction to the functional baseline; the complete visual direction remains unapproved and A/B/C remain available as provisional DEBUG drafts.
+
+Validation completed:
+
+- Debug build and all 34 native correctness checks pass (23 unit, 11 UI); two opt-in performance checks skip during ordinary runs. Existing exact-serving/search/save/cache/menu flows and pin detail camera continuity still pass. Result: `artifacts/map-attribution/debug-all.xcresult`.
+- Regular optimized Release build passes with strict concurrency and no warnings. Six final Release UI checks pass: map layout in light, dark and the largest accessibility category, plus the existing pin/detail, list/save/filter and litre/empty-search flows. Result: `artifacts/map-attribution/release-product-final.xcresult`.
+- Inspected loaded native light/dark screens on the smaller iPhone 17e / iOS 26.5 (390 × 844 points), including the largest accessibility text and a real horizontal-filter interaction selecting exact 500 ml (165 → 131 places). Status text wraps, location stays clear of the tab bar, and attribution stays above the status row. Font height is verified to increase rather than assuming a launch argument worked. Final images/geometry: `artifacts/map-attribution/final-release-attachments/`.
+- Actual canvas height is 454 points at ordinary text and 236.3 points at the largest category with the offline catalog. This trades some map area for unobscured attribution and legible status. Online captions, denied-location messages, largest-text menus/list rows and keyboard extremes need their own review; this does not establish those states or physical-device performance.
+- Catalog snapshot equality and `git diff --check` pass: 165 venues / 2,550 servings, still researched on 4 September. No venue-price research or web source changed.
+
+Appearance overrides are isolated to UI-test launches and leave normal launches following the system. The correction adds no interaction-time geometry observer, timer, marker rebuilding or network work. No timing, frame-rate, memory or battery improvement is claimed. No push, website deployment, physical-device installation or App Store release occurred. The five-hour continuation keeps its existing cadence and quiet intent; pre-existing `research/` remains outside the commit.
+
 ## Next work
 
 The first functional milestone is complete; visual design remains provisional. Prioritize the native redesign:
 
 1. Continue reviewing dense zoom levels and the map-to-place journey. Draft A's price/cluster hierarchy, detail/menu/source grouping, visible-area/list coordination and accessible row/keyboard layout are implemented and locally checked. Continue independently with the provisional recommendation; don't equate it with user approval. Keep B/C available for comparison until reviewed, then remove losing drafts and implement the reviewed direction properly.
-2. Fix the existing Release overview badge covering Apple Maps attribution, verified in the Release workload capture, and review the original product's denied-location state and remaining large-menu/maximum-text extremes. The study's long-title, exact-price, grouped-menu and source layout now have actual accessibility-size-1 sheet coverage. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
+2. Review the original product's denied-location state, online status caption and remaining large-menu/maximum-text/keyboard extremes. Attribution overlap is corrected, and the map's largest-text filters/status now have rendered and interaction coverage. The study's long-title, exact-price, grouped-menu and source layout now have actual accessibility-size-1 sheet coverage. Keep smaller-screen, dark, accessibility, keyboard and empty/saved checks as layout gates. Fix observed defects before expanding scope.
 3. Measure useful startup and representative scrolling/search/map interactions with production browser and native Release traces. Conditional refresh and off-actor remote preparation are complete; profile remaining synchronous startup decode/index work, marker work, memory and idle costs. See `docs/performance.md`; do not turn microbenchmarks into device speed claims.
 4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within the startup and interaction budgets.
 5. Improve source freshness per venue with actual menu evidence and distinct dates, and investigate the web map's dense overview with rendered/performance evidence.

@@ -37,31 +37,17 @@ struct MapScreen: View {
     var body: some View {
         @Bindable var store = store
         let results = store.results(location: location.coordinate)
-        VenueMapView(results: results, sort: store.filter.sort, query: store.filter.query, location: location.coordinate, selectedID: $store.selectedID) { cluster = MapCluster(ids: $0) }
-            .ignoresSafeArea(edges: .bottom)
+        VStack(spacing: 0) {
+            VenueMapView(results: results, sort: store.filter.sort, query: store.filter.query, location: location.coordinate, selectedID: $store.selectedID) { cluster = MapCluster(ids: $0) }
+                .overlay {
+                    if results.isEmpty { EmptyResultsView(savedOnly: false).padding(24).background(.regularMaterial, in: .rect(cornerRadius: 24)).padding(24) }
+                }
+            // Reserve a separate row so status and controls cannot cover
+            // MapKit's own attribution, even when text wraps.
+            MapOverviewStatus(count: results.count, offline: store.usesOfflineCatalog, message: location.message)
+        }
             .safeAreaInset(edge: .top, spacing: 0) {
                 QuickFilters().padding(.horizontal, 16).padding(.vertical, 10)
-            }
-            .safeAreaInset(edge: .bottom) {
-                VStack(alignment: .leading, spacing: 8) {
-                    if let message = location.message {
-                        Text(message).font(.caption).padding(12).background(.regularMaterial, in: .rect(cornerRadius: 14))
-                    }
-                    HStack(alignment: .bottom) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("\(results.count) \(results.count == 1 ? "vieta" : "vietas")").font(.subheadline.weight(.semibold))
-                        Text(store.usesOfflineCatalog ? "Saglabātā karte" : "Rīga · cenas ar avotiem").font(.caption).foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 16).padding(.vertical, 11)
-                    .glassEffect(in: .rect(cornerRadius: 18))
-                    Spacer()
-                    LocateButton()
-                    }
-                }
-                .padding(.horizontal, 18).padding(.bottom, 12)
-            }
-            .overlay {
-                if results.isEmpty { EmptyResultsView(savedOnly: false).padding(24).background(.regularMaterial, in: .rect(cornerRadius: 24)).padding(24) }
             }
             .navigationTitle("Rīgas alus")
             .navigationBarTitleDisplayMode(.inline)
@@ -82,6 +68,36 @@ struct MapScreen: View {
     }
 }
 
+private struct MapOverviewStatus: View {
+    let count: Int
+    let offline: Bool
+    let message: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let message {
+                Text(message).font(.caption).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(count) \(count == 1 ? "vieta" : "vietas")")
+                        .font(.subheadline.weight(.semibold))
+                    Text(offline ? "Saglabātā karte" : "Rīga · cenas ar avotiem")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                LocateButton()
+            }
+        }
+        .padding(.horizontal, 20).padding(.vertical, 10)
+        .background(.background, ignoresSafeAreaEdges: [])
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("map-overview-status")
+    }
+}
+
 struct QuickFilters: View {
     @Environment(BeerMapStore.self) private var store
     var body: some View {
@@ -95,7 +111,8 @@ struct QuickFilters: View {
             }
             .scrollIndicators(.hidden)
             .scrollClipDisabled()
-            .frame(height: 44)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(minHeight: 44)
         }
     }
 }

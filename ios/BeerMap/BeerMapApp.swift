@@ -4,6 +4,15 @@ import SwiftUI
 struct BeerMapApp: App {
     @State private var store = BeerMapStore()
     @State private var location = LocationProvider()
+    // Review overrides are isolated to UI-test launches; ordinary launches
+    // continue to follow the system appearance.
+    private let testColorScheme: ColorScheme? = {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("--uitesting") else { return nil }
+        if arguments.contains("--test-dark") { return .dark }
+        if arguments.contains("--test-light") { return .light }
+        return nil
+    }()
 
     var body: some Scene {
         WindowGroup {
@@ -28,6 +37,7 @@ struct BeerMapApp: App {
             .environment(store)
             .environment(location)
             .tint(Theme.accent)
+            .preferredColorScheme(testColorScheme)
             .task { await store.refresh() }
             .onOpenURL { store.open($0) }
     }
