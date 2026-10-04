@@ -114,3 +114,36 @@ await test('indexed linear selection preserves the original full-menu search and
     }
   }
 });
+
+await test('unchanged quotes and complete menus retain venue identity across search and sort', () => {
+  const indexed = createVenueQuery(mapVenues);
+  const original = new Map(indexed().map((venue) => [venue.id, venue]));
+  for (const venue of indexed('', 'all', 'name')) assert.equal(venue, original.get(venue.id), venue.name);
+  assert.equal(indexed('Pagrabs')[0], original.get(ala.id));
+  assert.deepEqual(indexed('not-a-real-beer'), []);
+  for (const venue of indexed()) assert.equal(venue, original.get(venue.id), venue.name);
+});
+
+await test('a changed filtered menu invalidates identity even when the winning quote stays equal', () => {
+  const beers = [
+    { name: 'Amber Lager', volumeMl: 500, price: 3 },
+    { name: 'Dark Lager', volumeMl: 500, price: 4 },
+    { name: 'Amber IPA', volumeMl: 500, price: 5 },
+  ];
+  const source = { ...ala, id: 'identity-fixture', name: 'Venue', address: 'Street', beerPrices: beers } as Venue;
+  const indexed = createVenueQuery([source]);
+  const [full] = indexed();
+  const [amber] = indexed('Amber');
+  assert.equal(amber.price, full.price);
+  assert.notEqual(amber, full);
+  assert.deepEqual(amber.beerPrices, [beers[0], beers[2]]);
+  assert.equal(indexed('Amber')[0], amber);
+  const [litre] = indexed('Amber', 'all', 'litre');
+  assert.equal(litre, amber);
+  const [restored] = indexed();
+  assert.deepEqual(restored.beerPrices, beers);
+  assert.notEqual(restored, amber);
+  const [fiveToSix] = indexed('Amber', 'fiveToSix');
+  assert.equal(fiveToSix.price, 5);
+  assert.deepEqual(fiveToSix.beerPrices, [beers[2]]);
+});

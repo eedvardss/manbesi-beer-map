@@ -39,6 +39,7 @@ type SearchEntry = {
   beers: BeerPrice[];
   venueText?: string;
   beerTexts?: string[];
+  projection?: { winner: BeerPrice; beers: BeerPrice[]; venue: Venue };
 };
 
 // The website's catalog is immutable for a page lifetime. Normalize it once,
@@ -69,7 +70,8 @@ export function queryVenues(
 function queryEntries(entries: SearchEntry[], query: string, band: PriceBand, sort: SortMode): Venue[] {
   const q = normalizeSearch(query.trim());
   return entries
-    .flatMap(({ venue, beers: menu, venueText, beerTexts }) => {
+    .flatMap((entry) => {
+      const { venue, beers: menu, venueText, beerTexts } = entry;
       const venueMatches =
         !q ||
         (venueText ?? normalizeSearch(
@@ -84,17 +86,24 @@ function queryEntries(entries: SearchEntry[], query: string, band: PriceBand, so
       for (let i = 1; i < beers.length; i++) {
         if (compareServings(beers[i], best, sort) < 0) best = beers[i];
       }
-      return [
-        {
-          ...venue,
-          beer: best.name,
-          price: best.price,
-          volumeMl: best.volumeMl,
-          packageCount: best.packageCount,
-          priceIsFrom: best.priceIsFrom,
-          beerPrices: beers,
-        },
-      ];
+      // One retained projection per immutable source venue. Keep UI identity when
+      // both the winning quote and every visible menu entry are unchanged.
+      const previous = entry.projection;
+      if (previous?.winner === best && (previous.beers === beers ||
+        (previous.beers.length === beers.length && previous.beers.every((beer, index) => beer === beers[index])))) {
+        return [previous.venue];
+      }
+      const projected = {
+        ...venue,
+        beer: best.name,
+        price: best.price,
+        volumeMl: best.volumeMl,
+        packageCount: best.packageCount,
+        priceIsFrom: best.priceIsFrom,
+        beerPrices: beers,
+      };
+      entry.projection = { winner: best, beers, venue: projected };
+      return [projected];
     })
     .sort((a, b) =>
       sort === 'name'

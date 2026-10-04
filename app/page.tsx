@@ -461,9 +461,15 @@ export default function Home() {
   const chooseVenue = useCallback((venue: MapVenue) => {
     const map = mapRef.current;
     if (!mapReady) pendingVenueRef.current = venue;
-    if (window.matchMedia('(max-width: 720px)').matches) setMobileListOpen(false);
+    const mobile = window.matchMedia('(max-width: 720px)').matches;
+    const detailHeight = mobile ? markerRefs.current.get(venue.id)?.getElement()
+      .querySelector<HTMLElement>('.marker-detail')?.getBoundingClientRect().height : undefined;
+    if (mobile) setMobileListOpen(false);
     setSelectedId(venue.id);
-    map?.flyTo({ center: [venue.lng, venue.lat], zoom: 16, duration: 650, essential: true }, venueCameraEvent);
+    // An already-open panel needs its offset in this camera command: selecting
+    // the same ID does not trigger the marker effect to centre it again.
+    map?.flyTo({ center: [venue.lng, venue.lat], zoom: 16, duration: 650, essential: true,
+      ...(detailHeight ? { offset: mobileMarkerOffset(detailHeight) } : {}) }, venueCameraEvent);
   }, [mapReady]);
 
   const clearFilters = () => {

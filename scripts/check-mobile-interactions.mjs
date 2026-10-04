@@ -88,6 +88,17 @@ try {
   await page.locator('.marker-detail').waitFor();
   await page.waitForTimeout(1100);
   assert.equal(await marker.getAttribute('aria-expanded'), 'true');
+  // Selecting an already-open place must retain space for its source controls.
+  await page.locator('.mobile-results').click();
+  await page.getByRole('button', {
+    name: 'Parādīt kartē: Folkklubs ALA Pagrabs', exact: true,
+  }).click();
+  await page.locator('.sidebar.mobile-open').waitFor({ state: 'detached' });
+  await page.waitForTimeout(1100);
+  const footer = await page.locator('.marker-detail-footer').boundingBox();
+  const results = await page.locator('.mobile-results').boundingBox();
+  assert(footer && results && footer.y + footer.height < results.y - 8,
+    'Repeated selection must keep source links clear of mobile controls');
   await page.locator('.mobile-results').click();
   await page.locator('.mobile-scrim').click({ position: { x: 380, y: 20 } });
   await page.locator('.sidebar.mobile-open').waitFor({ state: 'detached' });
