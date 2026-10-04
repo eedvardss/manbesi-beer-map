@@ -135,8 +135,8 @@ struct DesignPrototypeRoot: View {
     }
 }
 
-// A: the map is the primary content; a compact search floats over it and a useful
-// place list anchors the bottom. No separate title bar or persistent warnings.
+// A: the map is primary content; search floats at ordinary text sizes and gets
+// its own band at accessibility sizes. A useful place list anchors the bottom.
 private struct MapDesignPrototype: View {
     @Environment(\.dynamicTypeSize) private var textSize
     @Bindable var store: BeerMapStore
@@ -168,19 +168,29 @@ private struct MapDesignPrototype: View {
         if editingSearch.wrappedValue { return textSize.isAccessibilitySize ? 180 : 106 }
         // A readable map and its attribution stay available even when the
         // accessible all-places list is expanded. The list remains scrollable.
-        return textSize.isAccessibilitySize ? 260 : (showingAll ? 360 : 184)
+        return textSize.isAccessibilitySize ? 240 : (showingAll ? 360 : 184)
     }
 
     var body: some View {
         let allResults = store.results(location: nil, savedOnly: savedOnly)
         let results = panelResults(allResults)
         let previewCount = editingSearch.wrappedValue ? 1 : 2
-        ZStack(alignment: .top) {
-            VenueMapView(results: allResults, sort: store.filter.sort, query: store.filter.query, location: nil, selectedID: $selectedID, onCluster: { clusterIDs = $0; showingAll = true }, calmStyle: true, onVisibleVenueIDsChange: { visibleIDs = $0 })
-            StudySearchField(query: $store.filter.query, focus: editingSearch, filterActive: store.filter.hasFilters, showFilters: { showFilters = true }, floating: true)
-                .padding(.horizontal, 20).padding(.top, 9)
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+        VStack(spacing: 0) {
+            if textSize.isAccessibilitySize {
+                // Large search text gets its own bounds. The retained MapKit
+                // view can fit prices without guessing an overlay's height.
+                searchField(floating: false)
+                    .padding(.horizontal, 20).padding(.vertical, 8)
+                    .background(StudyPalette.paper)
+            }
+            ZStack(alignment: .top) {
+                VenueMapView(results: allResults, sort: store.filter.sort, query: store.filter.query, location: nil, selectedID: $selectedID, onCluster: { clusterIDs = $0; showingAll = true }, calmStyle: true, onVisibleVenueIDsChange: { visibleIDs = $0 })
+                if !textSize.isAccessibilitySize {
+                    searchField(floating: true)
+                        .padding(.horizontal, 20).padding(.top, 9)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             VStack(alignment: .leading, spacing: 0) {
                 if editingSearch.wrappedValue {
                     summary(count: results.count).padding(.horizontal, 20).padding(.top, 12).padding(.bottom, 6)
@@ -223,7 +233,8 @@ private struct MapDesignPrototype: View {
                         }
                     }
                 }
-                .frame(maxHeight: panelHeight)
+                .frame(height: panelHeight)
+                .clipped()
                 .accessibilityIdentifier("study-map-results")
                 .scrollIndicators(.hidden)
                 .scrollDismissesKeyboard(.interactively)
@@ -236,8 +247,15 @@ private struct MapDesignPrototype: View {
         .onChange(of: store.filter.query) { _, _ in clusterIDs = nil }
     }
 
+    private func searchField(floating: Bool) -> some View {
+        StudySearchField(query: $store.filter.query, focus: editingSearch, filterActive: store.filter.hasFilters, showFilters: { showFilters = true }, floating: floating)
+    }
+
     private func summary(count: Int) -> some View {
-        Text("\(count) \(count == 1 ? "vieta" : "vietas") · \(store.filter.size.label)")
+        let countLabel = "\(count) \(count == 1 ? "vieta" : "vietas")"
+        let sizeLabel = textSize.isAccessibilitySize && store.filter.size == .halfLitre ? "500 ml" : store.filter.size.label
+        return Text("\(countLabel) · \(sizeLabel)")
+            .accessibilityLabel("\(countLabel) · \(store.filter.size.label)")
             .font(.caption).foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)

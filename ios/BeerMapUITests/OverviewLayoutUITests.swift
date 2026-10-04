@@ -196,6 +196,16 @@ final class OverviewLayoutUITests: XCTestCase {
             viewport.origin.y = max(viewport.minY, navigation.frame.maxY)
             viewport.size.height = max(0, bottom - viewport.minY)
         }
+        if scroll.elementType == .collectionView {
+            // A pinned List section heading can cover a row even when its
+            // accessibility frame is inside the collection and isHittable.
+            let heading = scroll.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "^[0-9]+ vieta(s)?$")).firstMatch
+            if heading.exists && heading.frame.intersects(viewport) {
+                let bottom = viewport.maxY
+                viewport.origin.y = max(viewport.minY, heading.frame.maxY)
+                viewport.size.height = max(0, bottom - viewport.minY)
+            }
+        }
         return viewport
     }
 
@@ -220,7 +230,9 @@ final class OverviewLayoutUITests: XCTestCase {
             let origin = app.coordinate(withNormalizedOffset: .zero)
             let start = origin.withOffset(CGVector(dx: viewport.midX, dy: startY))
             let end = origin.withOffset(CGVector(dx: viewport.midX, dy: endY))
-            start.press(forDuration: 0.05, thenDragTo: end)
+            // Pause before releasing so inertial scrolling does not overshoot
+            // the target and make short viewports alternate up and down.
+            start.press(forDuration: 0.05, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.2)
             waitForStableFrame(element)
         }
         let viewport = visibleViewport(scroll, app: app)

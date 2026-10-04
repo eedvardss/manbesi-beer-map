@@ -131,3 +131,21 @@ A's accessible header separates its summary from actions, and its list height pr
 Actual review covers A/C maximum dark, B maximum light, all three ordinary-light draft rows, and ordinary-light/maximum-dark product list, keyboard, saved, unknown-size and multipack states. Real interactions verify detail return, full quotes above bottom controls and the original 500 ml / 6.00 EUR serving with its known 12.00 EUR/l value. Final draft proof is `artifacts/overview-accessibility/final-draft-attachments/`; optimized product proof is `release-product-attachments/`. Baseline and earlier passing checks are retained separately. Automated geometry uses the visible app/scroll intersection and active keyboard area, then actual screenshots are inspected.
 
 These draft adjustments remain DEBUG-only and provisional. The product list corrections are verified in optimized Release; the full native direction remains unapproved. A filtered pin can still sit partly under the floating search field at maximum text and needs a separate map/camera composition review. Dense map states, live VoiceOver and physical-device rendering remain open. This layout work does not establish startup, frame-rate or battery performance.
+
+
+## Search bounds and exposed map prices — 4 October 2026
+
+Refreshed [Apple's layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout) and its actual [Contacts Dynamic Type example](https://developer.apple.com/videos/play/wwdc2024/10074/). The useful principle is structural adaptation: larger controls need real layout space, and meaningful content must remain exposed. This is a scoped correction to A, not a new visual direction; the published Mapstr/Citymapper/Apple Maps references and distinct B/C alternatives remain relevant.
+
+The original maximum-text Tallink search placed part of its real 6.00 EUR pin beneath the floating field: the pin started at 106.3 points with the keyboard and 116 points after submission, while the field ended at 120.3 points. Actual screenshots reproduce the obscured price. At accessibility sizes A now puts search in its own solid band above a retained MapKit view and bounds the scrollable panel below it. Ordinary text retains the floating control. The abbreviated visual “500 ml” summary preserves full exact-serving wording in its accessibility label; filters and quote data are unchanged.
+
+| Maximum-text Tallink state | Original map bounds | Corrected unobscured bounds |
+| --- | --- | --- |
+| Keyboard | y 47 / height 161.7 pt, with search overlay | y 131.3 / height 128.3 pt |
+| Expanded list | y 47 / height 181 pt, with search overlay | y 131.3 / height 167.7 pt |
+
+The smaller nominal map trades the overlay area for an exposed price and attribution. Final pin tops are 172.7 / 192.7 points in those states, with the complete capsule clear of the Legal link. No manual camera padding, refit on focus, geometry observer or replacement map was added. Detail dismissal retains the pin position within two points. The panel scrolls to the complete quote above the study controls.
+
+Rendered review covers maximum light/dark, accessibility-size-1 dark and ordinary-light filtered maps, software keyboard, expanded list, detail return and all three drafts' complete quotes on iPhone 17e / iOS 26.5, 390 × 844 points. Final screenshots and geometry are in `artifacts/map-search-layout/debug-layout-attachments/`; the failing baseline is separate. Existing area/full/saved membership, clusters, source disclosure and appearance continuity checks also pass. Product Release map/search/save/unknown-size/multipack checks are recorded separately; its layout is unchanged.
+
+A/B/C and the full native design remain provisional and unapproved. The previously recorded filtered-price overlap is corrected. Maximum-text geographic context still merits review: the short canvas can produce a broad camera scale. Dense zoom, live VoiceOver and physical-device rendering remain separate gates. The bounds above do not establish startup, frame delivery or battery performance.
