@@ -1,6 +1,6 @@
 # Performance requirements and evidence
 
-Updated 2 October 2026. The user requires both the website and native iPhone app to feel fast while retaining excellent, clean design. Useful startup, responsive search, smooth lists and map movement, efficient network/cache behavior, and bounded memory/CPU/battery use are standing product requirements. The existing five-hour continuation may be revised independently as evidence changes; keep its cadence and quiet background behavior.
+Updated 4 October 2026. The user requires both the website and native iPhone app to feel fast while retaining excellent, clean design. Useful startup, responsive search, smooth lists and map movement, efficient network/cache behavior, and bounded memory/CPU/battery use are standing product requirements. The existing five-hour continuation may be revised independently as evidence changes; keep its cadence and quiet background behavior.
 
 ## Measured query and bundle improvements
 
@@ -180,6 +180,36 @@ xcodebuild -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release
 
 Release runs three product checks; Debug adds the two draft checks. Test flags isolate bookmarks/cache and offline content from user state. This is an interaction/correctness gate, not a timing benchmark.
 
+## Native warm launch baseline — 4 October 2026
+
+The new opt-in `LaunchPerformanceTests` measures two launch endpoints without changing product code. Apple's [launch metric](https://developer.apple.com/documentation/xctest/xctapplicationlaunchmetric) separates first-frame presentation from [a responsive frame](https://developer.apple.com/documentation/xctest/xctapplicationlaunchmetric/init%28waituntilresponsive%3A%29?language=objc). Neither endpoint proves that map tiles or prices have finished painting. Each iteration separately requires the map overview, the real 165-place count and a price annotation; final loaded screenshots were inspected.
+
+Reference: arm64 Mac / macOS 26.5.1, iPhone 17e / iOS 26.5 Simulator, 390 × 844 points. The real 165-venue / 2,550-serving catalog is unchanged from `089937a`, researched on 4 September. Release uses `-O` with `ENABLE_TESTABILITY=YES` for the project's unit target; DEBUG design studies are excluded. `--uitesting --offline` isolates preferences/cache and skips venue API refresh. These repeated launches use warm OS/filesystem caches. MapKit still loads real geographic content with uncontrolled tile/network/cache state. Persistent cached-catalog startup, physical-device cold launch and time to useful painted content are not measured.
+
+| Launch endpoint, five reported samples each | Median | Range |
+| --- | ---: | ---: |
+| First frame | 0.915 s | 0.913–0.922 s |
+| Responsive frame | 1.034 s | 1.002–1.037 s |
+
+These are two different endpoints in the same implementation, **not before/after results**. XCTest launch instrumentation and UI automation remain part of the setup. Provisional investigation thresholds for this same warm Simulator workload are a median below 1.0 s for first frame and 1.2 s for responsive frame; investigate repeated comparable overages. They are not deterministic CI gates or device/field budgets. No app-wide speed improvement, frame-rate, memory or battery claim follows from this baseline.
+
+A temporary optimized Release probe timed the two synchronous app-state initializers over five isolated bundled launches: store construction median **13.585 ms** (13.432–16.065), and location-provider construction median **0.687 ms** (0.616–0.799). The store interval includes bundled loading/validation and index/date preparation; no saved catalog is present. The location interval covers its constructor, not later permission callbacks or position fixes. These monotonic wall-time intervals are not CPU samples, exclude subsequent rendering, and use a separate ordinary Release diagnostic build. Do not subtract them from the XCTest endpoint or attribute the remaining launch duration to a particular subsystem. The probe was removed and the original app source restored before the final standard Release build and rendered launch.
+
+Installed Apple App Launch and Time Profiler capture attempts both stalled before recording began; no usable CPU trace was collected. `DevToolsSecurity -status` reports developer mode disabled. This is an observed configuration limitation, not a proven cause of the stalls. No global security setting changed. Avoid repeating stalled CLI captures on every heartbeat while that limitation persists. The measurements do not justify an asynchronous startup rewrite: preserve immediate offline content and investigate initial-view/system work, the saved-cache path and actual main-thread stacks when tracing access is available. Apple's [launch guidance](https://developer.apple.com/documentation/xcode/reducing-your-app-s-launch-time) favors measuring the relevant launch conditions and deferring work that is not needed for initial interaction.
+
+Repeat the opt-in baseline:
+
+```sh
+TEST_RUNNER_BEER_MAP_LAUNCH_PERFORMANCE=1 xcodebuild \
+  -project ios/BeerMap.xcodeproj -scheme BeerMap -configuration Release \
+  -destination 'platform=iOS Simulator,name=iPhone 17e,OS=26.5' \
+  CODE_SIGNING_ALLOWED=NO ENABLE_TESTABILITY=YES \
+  -only-testing:BeerMapUITests/LaunchPerformanceTests \
+  -parallel-testing-enabled NO test
+```
+
+Extract raw samples with `xcrun xcresulttool get test-results metrics --path <result-bundle>`. Both endpoint checks passed. With the opt-in variable absent, both skip and no launch measurement runs. The regular Release build without testability also passes without Swift warnings and its real price map was inspected after restoring the original source. Local proof, raw samples, the removed probe patch/helper and five phase logs are under `artifacts/launch-performance/`. Native design remains provisional; no web, venue-data, deployment or physical-device change occurred.
+
 ## Implementation and correctness
 
 - Web prepares normalized venue and beer search text once per immutable catalog; native rebuilds its index only when accepting a catalog. Web index preparation measured 1.04 ms on the reference Mac; native index preparation is not yet separately profiled.
@@ -230,7 +260,7 @@ Ignored local raw measurements/build logs are under `artifacts/performance/`. Ke
 
 1. Measure native Release cold/warm startup, time to useful offline content, typing, scrolling, opening a dense venue/menu and map pan/zoom on a physical iPhone. Capture a trace before claiming smooth frame delivery or battery efficiency. A 60 Hz frame has about 16.7 ms available; look at actual missed frames and main-thread work, not just model timing.
 2. Capture a production browser trace with a realistic mobile CPU/network profile. Measure useful content, typing/filter updates, marker/menu rendering and dense overview pan/zoom. Record the actual CSS viewport and runtime, and reset temporary emulation after checks.
-3. Profile synchronous bundle/cache startup and index preparation, plus fresh 200 refresh on a physical device. Conditional refresh and off-actor remote preparation are implemented; investigate remaining work from a trace while preserving immediate offline content and source freshness.
+3. Resume native CPU/SwiftUI tracing when access is available; the warm Release endpoint baseline and temporary initializer wall timings are recorded above. App Launch/Time Profiler currently stall before recording and developer mode reports disabled; do not repeat unchanged attempts every heartbeat. Profile the saved-cache path, initial-view/system work, cold launch and fresh 200 refresh while preserving immediate offline content and source freshness.
 4. Measure browser marker updates and memory before deciding whether to replace DOM markers with clustered/WebGL layers. Native MapKit already clusters. Preserve keyboard focus, full menus and legible selected-place state through any change.
 5. Audit retained map objects, canceled async loads, cache size, repeated network requests and idle work. Re-run a broader performance trace only for new concerns or meaningful changes, avoiding expensive redundant checks every heartbeat.
 
