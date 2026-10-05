@@ -23,3 +23,7 @@ Installed tools: Xcode 26.6, Swift 6.3.3, iOS SDK 26.5. Deployment target: iOS 2
 3. Improve source freshness per venue instead of relying on a global research date.
 4. Add evidenced happy-hour intervals and reviewed price correction submissions.
 5. Prepare TestFlight distribution once signing access is available.
+
+## Published screen refresh — 5 October 2026
+
+Inspected the real first-party [Mapstr App Store map/filter/list screenshots](https://apps.apple.com/us/app/mapstr-save-follow-places/id917288465). Its compact map/list navigation and focused filter disclosure inform the complementary web map-density pass; its crowded colored pins are not copied. This is published-screen research, not a hands-on app or competitor performance test. The implementation and provisional-design boundary are recorded in [design-direction.md](design-direction.md).

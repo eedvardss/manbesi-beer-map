@@ -22,6 +22,9 @@
   const state = () => ({
     count: document.querySelector('.result-tools strong')?.textContent,
     markers: document.querySelectorAll('.price-marker').length,
+    groups: document.querySelectorAll('.cluster-marker').length,
+    represented: document.querySelectorAll('.price-marker,.candidate-marker').length
+      + [...document.querySelectorAll('.cluster-marker')].reduce((count, node) => count + Number(node.dataset.count || 0), 0),
     detail: document.querySelector('.marker-detail-head strong')?.textContent,
   });
   const marked = new Set();
@@ -35,13 +38,14 @@
     if (state().count === '165 vietas' && document.querySelector('input[aria-label="Meklēt vietas"]')) mark('server-content');
     if (document.querySelector('.mobile-time-dock')) mark('client-controls');
     if (state().markers === 165) mark('prices-attached');
+    if (state().represented === 165) mark('venues-represented');
     if (document.querySelector('.marker-detail-footer')) mark('venue-detail');
     // Retain the original all-prices + loading-complete endpoint for comparison.
     if (state().markers === 165 && !document.querySelector('.map-load-state')) mark('price-markers');
   };
   const mutations = new MutationObserver(() => {
     inspect();
-    if (marked.has('price-markers')) mutations.disconnect();
+    if (marked.has('price-markers') || (state().represented === 165 && !document.querySelector('.map-load-state'))) mutations.disconnect();
   });
   mutations.observe(document, { childList: true, subtree: true });
   inspect();
@@ -99,6 +103,22 @@
       url: entry.name, initiator: entry.initiatorType, start: entry.startTime, duration: entry.duration,
       transferSize: entry.transferSize, encodedBodySize: entry.encodedBodySize,
     })),
+  });
+  // Same bounded settle check for production before/after UI workloads. This
+  // observes transform writes, not displayed frames or a guaranteed frame rate.
+  probe.settleMap = () => new Promise(resolve => {
+    const start = performance.now();
+    let quiet;
+    const root = document.querySelector('.map');
+    const finish = (settled) => {
+      observer.disconnect(); clearTimeout(quiet); clearTimeout(deadline);
+      resolve({ settled, elapsed: performance.now() - start });
+    };
+    const arm = () => { clearTimeout(quiet); quiet = setTimeout(() => finish(true), 150); };
+    const observer = new MutationObserver(arm);
+    observer.observe(root, { attributes: true, attributeFilter: ['style'], childList: true, subtree: true });
+    const deadline = setTimeout(() => finish(false), 4000);
+    arm();
   });
   probe.save = async (label, extra = {}) => {
     const response = await fetch('/_beer-map-performance/report', {

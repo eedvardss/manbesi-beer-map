@@ -14,7 +14,7 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "typecheck": "tsc --noEmit --incremental false",
-    "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts scripts/map-retry.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
+    "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts scripts/map-retry.test.ts scripts/marker-layout.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
     "sync:ios-data": "tsx scripts/sync-ios-catalog.ts",
     "check:ios-data": "tsx scripts/sync-ios-catalog.ts --check",
     "design:ios": "bash scripts/preview-ios-design.sh",

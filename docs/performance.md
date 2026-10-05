@@ -1,6 +1,6 @@
 # Performance requirements and evidence
 
-Updated 4 October 2026. The user requires both the website and native iPhone app to feel fast while retaining excellent, clean design. Useful startup, responsive search, smooth lists and map movement, efficient network/cache behavior, and bounded memory/CPU/battery use are standing product requirements. The existing five-hour continuation may be revised independently as evidence changes; keep its cadence and quiet background behavior.
+Updated 5 October 2026. The user requires both the website and native iPhone app to feel fast while retaining excellent, clean design. Useful startup, responsive search, smooth lists and map movement, efficient network/cache behavior, and bounded memory/CPU/battery use are standing product requirements. The existing five-hour continuation may be revised independently as evidence changes; keep its cadence and quiet background behavior.
 
 ## Measured query and bundle improvements
 
@@ -330,6 +330,46 @@ Desktop **1280 × 900** review retains the exact **3000 ml / 18.90 EUR / 6.30 EU
 
 `npm run build` passes lint, types, all **16** unit/API/recovery checks, menu/timeline/data audits, iOS snapshot equality and the production output budget. Final hydration output: **903,470 raw / 211,922 gzip bytes**, up **1,760 / 684** from baseline, below the existing 1,000,000 / 250,000 gates. The extended standalone browser scenario has syntax/lint validation and equivalent recovery/clearance flows through CUA on production builds; the entire standalone CLI browser suite was not run. Temporary emulation, the owned tab and loopback services are cleaned up after review. This is local validation; no deployment, push, physical-device installation or App Store release is inferred.
 
+## Counts instead of overlapping web prices — 5 October 2026
+
+### Production comparison and limits
+
+Baseline is **`646362d`**. Both sides use built Worker output and the same **7,440-byte** opt-in diagnostic probe. Runtime: arm64 Mac, macOS 26.5.1, Node 22.22.3, IAB Chromium 154; **390 × 844 CSS pixels, DPR1, CPU4×, 375,000 B/s down, 125,000 B/s up, 150 ms latency, HTTP cache bypassed**. Host/filesystem/GPU state is warm; external tile/CDN caches and GC are uncontrolled. The wrapper buffers/recompresses HTML and is outside the shipped bundle. Hardware model/RAM were not established. These are production host workloads, not physical-iPhone/Safari, cold-CDN, system memory, battery, field-INP or compositor-frame evidence.
+
+Three navigations per source precede interaction. Each interaction cycle performs trusted **Zoom in → settle → Zoom out → settle → canvas ArrowRight → settle → ArrowLeft → settle**, three cycles per source. Settling uses a bounded observer of marker/container style/child writes: 150 ms quiet, four-second deadline. All measured moves settled. This prevents interrupted camera animations from changing endpoints, but does not measure delivered frames. Chrome `Performance.getMetrics` deltas measure renderer main-thread work, not process CPU or GPU/worker time. Fixed animations, automation and the quiet interval remain in wall time.
+
+| Measured endpoint | Before | After grouping |
+| --- | ---: | ---: |
+| Attached price/count markers, settled overview | 165 | 66 (49 prices, 17 counts) |
+| Labels intersecting the viewport/map rectangle | 102 | 13 |
+| Intersecting label pairs | 662 | 0 |
+| Represented matching venues | 165 | 165 |
+| Median cycle TaskDuration | 1,610 ms | **1,052 ms** |
+| Median cycle ScriptDuration | 705 ms | 508 ms |
+| Median cycle RecalcStyleDuration | 413 ms | 187 ms |
+| Median cycle wall time | 2,368 ms | 2,384 ms |
+| Median navigation FCP | 1,012 ms | 980 ms |
+| Median client-control DOM/second-rAF opportunity | 1,746.4 ms | 1,728.4 ms |
+| Median all venues represented DOM/second-rAF opportunity | 2,714.2 ms | 2,709.1 ms |
+
+About **35% less main-thread task work** accompanies the clearer overview; cycle wall time does not improve. Small navigation shifts do not establish startup improvement. `venues-represented` counts individual price/candidate nodes plus each count's actual membership; legacy `prices-attached`/`price-markers` require 165 individual prices and intentionally do not fire for grouped content. No matching new basemap-completion endpoint was captured, so the earlier loading study remains separate. Geometry includes partial-edge labels and closed venues; contextual selected/focused exceptions are outside the unselected non-overlap result. All matching venue IDs remain represented exactly once.
+
+Rounded cycle samples, ms: before Task **1750 / 1610 / 1481**, Script **823 / 705 / 613**, Style **439 / 413 / 413**, wall **2401 / 2367 / 2368**; after Task **1247 / 1052 / 1027**, Script **645 / 508 / 485**, Style **201 / 183 / 187**, wall **2409 / 2384 / 2377**. After layout deltas round to 1–2 ms. Six bounded rAF windows per side have maximum gaps **18.5 → 17.0 ms**, with no gaps over 50 ms on either side. These are scheduling opportunities, not proof of displayed FPS or smoother device frames.
+
+Overview Chrome Nodes **3510 → 3247**; after three cycles, visited individual buttons bring the after count to **3470**. Overview `JSHeapUsedSize` is **19,595,444 / 20,553,048 / 20,837,328 → 22,573,956 / 22,280,344 / 22,653,880 bytes**. After-cycle samples range **29.65–34.45 MB before / 29.47–36.18 MB after**. GC is uncontrolled and snapshots are neither peak nor retained/system memory. The higher overview heap prevents a memory-benefit claim. Cache bounds are explicit: at most one visited individual button per current-catalog venue, only current group membership keys, and no detached full menus. Long-session/physical-memory and leak checks remain separate work.
+
+Ignored evidence: `artifacts/browser-density/2026-10-05/` contains **`matched-before-overview-{1,2,3}` / `matched-before-map-cycles` / `matched-before-map-end`**, compared with **`final-after-overview-{1,2,3}` / `final-after-map-cycles` / `final-after-map-end`**. This after source includes the focus/blur correction. The later narrow resize-only correction has a separate **`validated-source-overview.json`** sanity: all 165 venues, 66 markers, 13 in view, zero pair overlaps, venue DOM/second-rAF **2693.8 ms**, controls **1716.1 ms**, FCP **968 ms**. It is one sanity sample, not a second three-run performance comparison. Its earlier capture/GC state is not pooled with the matched heap snapshots. Preliminary `before`, `after` and `matched-after` series, interrupted-animation runs and stale-build asset failures are excluded from the comparison.
+
+### Implementation, UI and repeatability
+
+`layoutMarkerGroups` uses the real price/count dimensions and deterministic collision merging with weighted centroids. Each merge reduces the group count, so the real 165-venue input is bounded. Runs occur on settled zoom, resize, query/selection changes and coalesced focus departure; there is no per-pan/per-frame grouping. The map stays north-up/flat. Unchanged buttons/groups are retained, removed results and obsolete memberships released, and expanded menus removed when their venue detaches. Counts express venues only, never a minimum, averaged or inferred price. At maximum zoom, the chooser exposes each matching serving and transfers selection/focus to the real venue.
+
+Actual rendered CUA checks cover 390 × 844, 1280 × 900 and 320 × 568; count zoom, keyboard pan/focus, maximum-zoom 1983/Nurme choice, full exact-source menus, empty results, unknown litre prices and menu scroll. Desktop-to-small resize originally dropped ALA's footer to **593 px** against the control's **441 px** top. A one-time existing-panel camera correction on resize now preserves selected venue, all 73 rows and scrollTop**3937** at x47/y80, footer bottom**423**. This correction does not make a separate speed claim. `validated-phone.jpg` and `resize-proof.jpg` are completed screenshots; earlier moving or overlapping captures are superseded.
+
+Repeat the production wrapper commands above with this probe, baseline/current builds and identical browser emulation. Capture three untouched navigations separately, then all four settled movements per cycle. Use Chrome metric deltas and verify geometry/represented IDs before interpreting costs. This diagnostic observer is bounded and not imported into production. The extended `scripts/check-mobile-interactions.mjs` encodes count/chooser/focus/resize regressions; syntax/lint pass and equivalent CUA flows were inspected, but the complete standalone CLI browser suite was not run.
+
+The final production build passes lint/types, **21** unit/API/recovery/layout checks, data/menu/timeline audits and bundled iOS snapshot equality. Five new tests cover collisions/identity, translation/source-order invariance, selected/focused exceptions, zoom/co-located reachability and all real IDs/non-overlap at zoom 10/13/16/19. Hydration output is **909,123 raw / 213,493 gzip bytes** (rebuilt baseline **903,470 / 211,923**), within the existing **1,000,000 / 250,000** gates. Data/source dates and native UI are unchanged. Local validation only; no push, deployment, physical installation or App Store release is inferred.
+
 ## Repeatable checks and budgets
 
 Draft A's visible-area panel (2 October) adds one coordinate/ID scan after a settled map region or data update. Publication is deferred out of `updateUIView`, canceled/coalesced when superseded, suppressed during camera movement, and skipped when membership is unchanged. There is no per-frame visible-region callback. The panel filters the existing cached, ordered query result by ID; it does not normalize search, sort menus, reformat the catalog date, or perform disk/network work. Existing annotation objects are retained. Other map surfaces have no area callback and return before scheduling a task.
@@ -373,7 +413,7 @@ Ignored local raw measurements/build logs are under `artifacts/performance/`. Ke
 1. Measure native Release cold/warm startup, time to useful offline content, typing, scrolling, opening a dense venue/menu and map pan/zoom on a physical iPhone. Capture a trace before claiming smooth frame delivery or battery efficiency. A 60 Hz frame has about 16.7 ms available; look at actual missed frames and main-thread work, not just model timing.
 2. Profile browser parsing/hydration and early list/control interactivity, then the remaining map-runtime/worker/glyph waterfall. The 5 October production workload attaches prices/linked menus around 2.70 s, while basemap completion remains 4.27–4.30 s and the control endpoint is about 132–147 ms later than baseline. Isolate those costs before more optimization. Repeat comparable production measurements and actual screens; physical-mobile/Safari and cold-CDN behavior remain gates.
 3. Resume native CPU/SwiftUI tracing when access is available; the warm Release endpoint baseline and temporary initializer wall timings are recorded above. App Launch/Time Profiler currently stall before recording and developer mode reports disabled; do not repeat unchanged attempts every heartbeat. Profile the saved-cache path, initial-view/system work, cold launch and fresh 200 refresh while preserving immediate offline content and source freshness.
-4. Review the web dense overview: the 165 price pins still overlap heavily. Unchanged query projections now skip marker/list work, but there is no device memory or delivered-frame proof. Measure marker lifecycle and render/memory costs before choosing collision handling or clustered/WebGL layers. Native MapKit already clusters. Preserve exact price meaning, keyboard focus, full menus, source links and selected-place context.
+4. Continue the web density workload at intermediate zoom and in long sessions, and measure physical-mobile/Safari frame/memory behavior. The unselected settled overview now groups 165 venues into 66 markers without pair overlaps and has lower renderer main-thread work in the matched host workload. Overview JS heap samples are higher; audit retained objects/GC before claiming a memory benefit. Preserve count meaning, exact serving prices, keyboard focus, full menus, provenance and selected-place context. Native MapKit already clusters.
 5. Audit retained map objects, canceled async loads, cache size, repeated network requests and idle work. Re-run a broader performance trace only for new concerns or meaningful changes, avoiding expensive redundant checks every heartbeat.
 
 Design remains provisional: draft A is the current working direction, not user-approved. Faster queries do not establish visual quality. Review real native screens and web interactions as part of each meaningful interface milestone.

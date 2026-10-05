@@ -23,6 +23,7 @@ import {
 } from './time-slider.mjs';
 import { checkedAt, isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
 import { markerAmount, markerTone } from './price-presentation';
+import { layoutMarkerGroups } from './marker-layout';
 
 import { createVenueQuery, type PriceBand, type SortMode } from './beer-query';
 const queryCatalog = createVenueQuery(mapVenues);
@@ -88,6 +89,7 @@ function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
   root.className = `marker-node${active ? ' is-open' : ''}`;
   root.dataset.tone = priced ? markerTone(venue, sort) : 'unpriced';
   root.dataset.priceMetric = sort === 'litre' ? 'litre' : 'serving';
+  root.dataset.venueId = venue.id;
 
   const priceButton = document.createElement('button');
   priceButton.type = 'button';
@@ -192,6 +194,81 @@ function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
   return root;
 }
 
+type ClusterState = { venues: MapVenue[]; sort: SortMode; coordinate: [number, number] };
+type ClusterEntry = { marker: MapLibreMarker; state: ClusterState };
+const closeCluster = (root: HTMLElement) => {
+  const detail = root.querySelector('.cluster-detail');
+  if (detail?.contains(document.activeElement)) root.querySelector<HTMLButtonElement>('.cluster-marker')?.focus({ preventScroll: true });
+  detail?.remove();
+  root.classList.remove('is-open');
+  root.querySelector('button')?.setAttribute('aria-expanded', 'false');
+};
+
+function createClusterNode(state: ClusterState, map: MapLibreMap, onSelect: (venue: MapVenue) => void) {
+  const root = document.createElement('div');
+  root.className = 'cluster-node';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'cluster-marker';
+  button.setAttribute('aria-expanded', 'false');
+  button.appendChild(document.createTextNode(String(state.venues.length)));
+  const caption = document.createElement('small');
+  caption.textContent = 'vietas';
+  button.appendChild(caption);
+  root.appendChild(button);
+  button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (root.classList.contains('is-open')) { closeCluster(root); return; }
+    if (map.getZoom() < map.getMaxZoom() - 0.01) {
+      map.easeTo({ center: state.coordinate, zoom: Math.min(map.getMaxZoom(), map.getZoom() + 2), duration: 450 });
+      return;
+    }
+    // Co-located venues cannot be separated by more zoom. Keep every venue
+    // reachable, with its actual matching serving, in a small chooser.
+    const detail = document.createElement('section');
+    detail.className = 'marker-detail cluster-detail';
+    detail.setAttribute('aria-label', `${state.venues.length} vietas šeit`);
+    const header = document.createElement('div');
+    header.className = 'marker-detail-head';
+    const heading = document.createElement('strong');
+    heading.textContent = `${state.venues.length} vietas šeit`;
+    header.appendChild(heading);
+    detail.appendChild(header);
+    const list = document.createElement('div');
+    list.className = 'marker-beer-list';
+    for (const venue of state.venues) {
+      const choice = document.createElement('button');
+      choice.type = 'button';
+      choice.className = 'cluster-venue';
+      const name = document.createElement('strong');
+      name.textContent = venue.name;
+      const serving = document.createElement('span');
+      const amount = isPricedVenue(venue) ? markerAmount(venue, state.sort) : null;
+      serving.textContent = isPricedVenue(venue)
+        ? `${venue.beer}${venue.volumeMl ? ` · ${venue.packageCount ? `${venue.packageCount} × ` : ''}${venue.volumeMl} ml` : ' · tilpums nav norādīts'} · ${amount === null ? '— €/l' : `${venue.priceIsFrom ? 'no ' : ''}${euro(amount)}${state.sort === 'litre' ? ' /l' : ''}`}`
+        : 'Cenas vēl nav pārbaudītas';
+      choice.appendChild(name);
+      choice.appendChild(serving);
+      choice.addEventListener('click', () => { closeCluster(root); onSelect(venue); });
+      list.appendChild(choice);
+    }
+    detail.appendChild(list);
+    ['click', 'dblclick', 'mousedown', 'pointerdown', 'touchstart', 'wheel'].forEach((name) => {
+      detail.addEventListener(name, event => event.stopPropagation());
+    });
+    root.appendChild(detail);
+    root.classList.add('is-open');
+    button.setAttribute('aria-expanded', 'true');
+    if (window.matchMedia('(max-width: 720px)').matches) {
+      map.easeTo({ center: state.coordinate, offset: mobileMarkerOffset(detail.getBoundingClientRect().height, map), duration: 350 }, venueCameraEvent);
+    }
+  });
+  root.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && root.classList.contains('is-open')) { event.stopPropagation(); closeCluster(root); button.focus(); }
+  });
+  return root;
+}
+
 export default function Home() {
   const mapNodeRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -199,6 +276,8 @@ export default function Home() {
   const pendingVenueRef = useRef<MapVenue | null>(null);
   const markerRefs = useRef<Map<string, MapLibreMarker>>(new Map());
   const markerStates = useRef<Map<string, { venue: MapVenue; active: boolean; sort: SortMode }>>(new Map());
+  const clusterRefs = useRef<Map<string, ClusterEntry>>(new Map());
+  const markerOpenStates = useRef<Map<string, boolean | null>>(new Map());
   const venueListRef = useRef<HTMLDivElement>(null);
   const venueGliderRef = useRef<HTMLDivElement>(null);
   const hoveredVenueIdRef = useRef<string | null>(null);
@@ -365,6 +444,7 @@ export default function Home() {
     let mapInstance: MapLibreMap | null = null;
     const markers = markerRefs.current;
     const states = markerStates.current;
+    const clusters = clusterRefs.current;
 
     let resizeTimer: number | undefined;
     void import('./map-runtime').then((runtime) => {
@@ -378,6 +458,7 @@ export default function Home() {
         center: linkedVenue ? [linkedVenue.lng, linkedVenue.lat] : [24.116, 56.9515],
         zoom: linkedVenue ? 16 : 13,
         minZoom: 10,
+        maxPitch: 0,
         maxZoom: 19,
         attributionControl: { compact: true },
         fadeDuration: 120,
@@ -389,9 +470,14 @@ export default function Home() {
       });
       mapInstance = map;
       map.touchZoomRotate.disableRotation();
+      map.keyboard.disableRotation();
       map.addControl(new runtime.NavigationControl({ showCompass: false }), 'bottom-right');
-      map.on('click', () => setSelectedId(null));
+      map.on('click', () => {
+        setSelectedId(null);
+        clusterRefs.current.forEach(entry => closeCluster(entry.marker.getElement()));
+      });
       map.on('zoomstart', (event) => {
+        clusterRefs.current.forEach(entry => closeCluster(entry.marker.getElement()));
         if (!('preserveVenueSelection' in event && event.preserveVenueSelection === true)) setSelectedId(null);
       });
       void map.once('load', () => {
@@ -423,6 +509,7 @@ export default function Home() {
       mapRuntimeRef.current = null;
       markers.clear();
       states.clear();
+      clusters.clear();
     };
   }, []);
 
@@ -432,74 +519,155 @@ export default function Home() {
     if (!map || !runtime || !mapReady) return;
 
     let mobileCenterFrame: number | null = null;
-    const visibleIds = new Set(filtered.map(venue => venue.id));
-    markerRefs.current.forEach((marker, id) => {
-      if (!visibleIds.has(id)) { marker.remove(); markerRefs.current.delete(id); markerStates.current.delete(id); }
-    });
-
-    filtered.forEach((venue) => {
-      const active = venue.id === selectedId;
-      const existing = markerRefs.current.get(venue.id);
-      const previous = markerStates.current.get(venue.id);
-      if (existing && previous?.venue === venue && previous.active === active && previous.sort === sortMode) return;
-      const fresh = createMarkerNode(venue, active, sortMode);
-      const element = existing?.getElement() ?? fresh;
-      if (existing) {
-        const button = element.querySelector('button')!;
-        const nextButton = fresh.querySelector('button')!;
-        button.className = nextButton.className;
-        button.setAttribute('aria-label', nextButton.getAttribute('aria-label')!);
-        button.setAttribute('aria-expanded', String(active));
-        button.replaceChildren(...Array.from(nextButton.childNodes));
-        element.classList.toggle('is-open', active);
-        element.dataset.tone = fresh.dataset.tone;
-        element.dataset.priceMetric = fresh.dataset.priceMetric;
-        element.querySelector('.marker-detail')?.remove();
-        const detail = fresh.querySelector('.marker-detail');
-        if (detail) element.appendChild(detail);
-      }
-      markerStates.current.set(venue.id, { venue, active, sort: sortMode });
-      element.style.zIndex = active ? '2000' : isPricedVenue(venue) ? '1000' : '0';
-      if (!existing) element.addEventListener('click', (event) => {
-        event.stopPropagation();
-        if (element.classList.contains('is-open')) {
-          setSelectedId(null);
-          return;
+    let focusLayoutFrame: number | null = null;
+    const venuesById = new Map(filtered.map(venue => [venue.id, venue]));
+    const refreshLayout = (event?: { type: string }) => {
+      const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const focusedVenue = focused?.closest<HTMLElement>('.marker-node')?.dataset.venueId;
+      const focusedCluster = focused?.closest<HTMLElement>('.cluster-node')?.dataset.groupKey;
+      const focusSuccessorId = focusedCluster ? selectedId ?? clusterRefs.current.get(focusedCluster)?.state.venues[0]?.id : undefined;
+      const retained = new Set([selectedId, focusedVenue].filter((id): id is string => !!id));
+      const groups = layoutMarkerGroups(filtered.map(venue => {
+        const point = map.project([venue.lng, venue.lat]);
+        return { id: venue.id, x: point.x, y: point.y };
+      }), retained);
+      const singleIds = new Set(groups.filter(g => g.ids.length === 1).map(g => g.ids[0]));
+      const groupKeys = new Set<string>();
+      const memberElements = new Map<string, HTMLElement>();
+      markerRefs.current.forEach((marker, id) => {
+        if (singleIds.has(id)) return;
+        const element = marker.getElement();
+        if (element.isConnected) marker.remove();
+        // Keep one cheap button per visited venue, never detached full menus.
+        if (markerStates.current.get(id)?.active) {
+          element.querySelector('.marker-detail')?.remove();
+          element.classList.remove('is-open');
+          markerStates.current.delete(id);
         }
-        setSelectedId(venue.id);
-        if (!window.matchMedia('(max-width: 720px)').matches) {
-          map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true }, venueCameraEvent);
-        }
+        if (!venuesById.has(id)) { markerRefs.current.delete(id); markerStates.current.delete(id); }
       });
-      const marker = existing ?? new runtime.Marker({ element, anchor: 'bottom-left' })
-        .setLngLat([venue.lng, venue.lat])
-        .addTo(map);
-      markerRefs.current.set(venue.id, marker);
 
-      if (active && window.matchMedia('(max-width: 720px)').matches) {
-        mobileCenterFrame = window.requestAnimationFrame(() => {
-          const detailHeight = element.querySelector<HTMLElement>('.marker-detail')?.getBoundingClientRect().height ?? 34;
-          const centerExpandedMarker = () => map.easeTo({
-            center: [venue.lng, venue.lat],
-            offset: mobileMarkerOffset(detailHeight, map!),
-            duration: 350,
-            essential: true,
-          }, venueCameraEvent);
-          if (map.isMoving()) void map.once('moveend', centerExpandedMarker);
-          else centerExpandedMarker();
-        });
+      for (const group of groups) {
+        if (group.ids.length > 1) {
+          const key = group.ids.join('|');
+          groupKeys.add(key);
+          const members = group.ids.map(id => venuesById.get(id)!);
+          const coordinate = map.unproject([group.x, group.y]).toArray();
+          let entry = clusterRefs.current.get(key);
+          if (!entry) {
+            const state: ClusterState = { venues: members, sort: sortMode, coordinate };
+            const element = createClusterNode(state, map, venue => {
+              setSelectedId(venue.id);
+              map.easeTo({ center: [venue.lng, venue.lat], duration: 350 }, venueCameraEvent);
+            });
+            element.dataset.groupKey = key;
+            const marker = new runtime.Marker({ element, anchor: 'bottom-left' }).setLngLat(coordinate).addTo(map);
+            entry = { marker, state };
+            clusterRefs.current.set(key, entry);
+          } else {
+            const previousState = entry.state;
+            const changed = previousState.sort !== sortMode || members.some((venue, i) => venue !== previousState.venues[i]);
+            if (changed) closeCluster(entry.marker.getElement());
+            Object.assign(entry.state, { venues: members, sort: sortMode, coordinate });
+          }
+          const element = entry.marker.getElement();
+          const button = element.querySelector<HTMLButtonElement>('.cluster-marker')!;
+          button.dataset.count = String(members.length);
+          const action = map.getZoom() < map.getMaxZoom() - 0.01 ? 'Tuvināt karti' : 'Parādīt vietas';
+          button.setAttribute('aria-label', `${members.length} vietas. ${action}.`);
+          element.style.zIndex = '1000';
+          element.classList.toggle('is-closed', members.every(v => markerOpenStates.current.get(v.id) === false));
+          members.forEach(v => memberElements.set(v.id, button));
+          continue;
+        }
+
+        const venue = venuesById.get(group.ids[0])!;
+        const active = venue.id === selectedId;
+        const existing = markerRefs.current.get(venue.id);
+        const previous = markerStates.current.get(venue.id);
+        const attached = existing?.getElement().isConnected === true;
+        const changed = !existing || previous?.venue !== venue || previous.active !== active || previous.sort !== sortMode;
+        if (changed) {
+          const fresh = createMarkerNode(venue, active, sortMode);
+          const element = existing?.getElement() ?? fresh;
+          if (existing) {
+            const button = element.querySelector('button')!;
+            const nextButton = fresh.querySelector('button')!;
+            button.className = nextButton.className;
+            button.setAttribute('aria-label', nextButton.getAttribute('aria-label')!);
+            button.setAttribute('aria-expanded', String(active));
+            button.replaceChildren(...Array.from(nextButton.childNodes));
+            element.classList.toggle('is-open', active);
+            element.dataset.tone = fresh.dataset.tone;
+            element.dataset.priceMetric = fresh.dataset.priceMetric;
+            element.querySelector('.marker-detail')?.remove();
+            const detail = fresh.querySelector('.marker-detail');
+            if (detail) element.appendChild(detail);
+          }
+          markerStates.current.set(venue.id, { venue, active, sort: sortMode });
+          element.style.zIndex = active ? '2000' : isPricedVenue(venue) ? '1000' : '0';
+          if (!existing) element.addEventListener('click', (event) => {
+            event.stopPropagation();
+            if (element.classList.contains('is-open')) { setSelectedId(null); return; }
+            setSelectedId(venue.id);
+            if (!window.matchMedia('(max-width: 720px)').matches) {
+              map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true }, venueCameraEvent);
+            }
+          });
+          if (!existing) markerRefs.current.set(venue.id, new runtime.Marker({ element, anchor: 'bottom-left' }).setLngLat([venue.lng, venue.lat]));
+        }
+        const marker = markerRefs.current.get(venue.id)!;
+        if (!attached) marker.addTo(map);
+        const element = marker.getElement();
+        element.classList.toggle('is-closed', markerOpenStates.current.get(venue.id) === false);
+        memberElements.set(venue.id, element.querySelector('button')!);
+        if (active && (changed || !attached || event?.type === 'resize') && window.matchMedia('(max-width: 720px)').matches) {
+          mobileCenterFrame = window.requestAnimationFrame(() => {
+            const height = element.querySelector<HTMLElement>('.marker-detail')?.getBoundingClientRect().height ?? 34;
+            const center = () => map.easeTo({ center: [venue.lng, venue.lat], offset: mobileMarkerOffset(height, map), duration: 350, essential: true }, venueCameraEvent);
+            if (map.isMoving()) void map.once('moveend', center);
+            else center();
+          });
+        }
       }
-    });
-
+      clusterRefs.current.forEach((entry, key) => {
+        if (!groupKeys.has(key)) { entry.marker.remove(); clusterRefs.current.delete(key); }
+      });
+      // A zoomed cluster may become several prices. Continue keyboard focus at
+      // its first actual member instead of losing it to the document body.
+      if (focused && !focused.isConnected && focusSuccessorId) memberElements.get(focusSuccessorId)?.focus({ preventScroll: true });
+    };
+    const onMarkerBlur = (event: FocusEvent) => {
+      const root = event.target instanceof Element ? event.target.closest<HTMLElement>('.marker-node') : null;
+      if (!root || root.dataset.venueId === selectedId) return;
+      if (focusLayoutFrame !== null) window.cancelAnimationFrame(focusLayoutFrame);
+      focusLayoutFrame = window.requestAnimationFrame(() => {
+        focusLayoutFrame = null;
+        if (!root.contains(document.activeElement)) refreshLayout();
+      });
+    };
+    const container = map.getContainer();
+    container.addEventListener('focusout', onMarkerBlur);
+    refreshLayout();
+    map.on('zoomend', refreshLayout);
+    map.on('resize', refreshLayout);
     return () => {
+      map.off('zoomend', refreshLayout);
+      map.off('resize', refreshLayout);
+      container.removeEventListener('focusout', onMarkerBlur);
+      if (focusLayoutFrame !== null) window.cancelAnimationFrame(focusLayoutFrame);
       if (mobileCenterFrame !== null) window.cancelAnimationFrame(mobileCenterFrame);
     };
   }, [filtered, mapReady, selectedId, sortMode]);
 
   useEffect(() => {
     if (!mapReady) return;
+    markerOpenStates.current = openStates;
     markerRefs.current.forEach((marker, venueId) => {
       marker.getElement().classList.toggle('is-closed', openStates.get(venueId) === false);
+    });
+    clusterRefs.current.forEach(({ marker, state }) => {
+      marker.getElement().classList.toggle('is-closed', state.venues.every(v => openStates.get(v.id) === false));
     });
   }, [filtered, mapReady, openStates, selectedId]);
 

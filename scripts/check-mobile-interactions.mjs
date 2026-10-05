@@ -10,6 +10,41 @@ try {
   await page.goto(process.env.BEER_MAP_TEST_URL ?? 'http://localhost:3000/');
   await page.locator('.price-marker').first().waitFor();
   const search = page.getByRole('textbox', { name: 'Meklēt vietas' });
+  await page.locator('.cluster-marker').first().waitFor();
+  const represented = await page.evaluate(() =>
+    document.querySelectorAll('.price-marker,.candidate-marker').length
+      + [...document.querySelectorAll('.cluster-marker')].reduce((sum, node) => sum + Number(node.dataset.count), 0));
+  assert.equal(represented, 165, 'Grouping must represent every matching venue exactly once');
+  const overlaps = await page.evaluate(() => {
+    const labels = [...document.querySelectorAll('.price-marker,.cluster-marker')].map(n => n.getBoundingClientRect());
+    let count = 0;
+    labels.forEach((a, i) => labels.slice(i + 1).forEach(b => {
+      if (a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top) count++;
+    }));
+    return count;
+  });
+  assert.equal(overlaps, 0, 'Settled overview labels must not overlap');
+  await search.fill('Vagonu iela 21');
+  for (let i = 0; i < 3; i++) {
+    await page.getByRole('button', { name: '2 vietas. Tuvināt karti.', exact: true }).press('Enter');
+    await page.waitForTimeout(600);
+  }
+  await page.getByRole('button', { name: '2 vietas. Parādīt vietas.', exact: true }).press('Enter');
+  const chooser = page.locator('.cluster-detail');
+  await chooser.waitFor();
+  assert.match(await chooser.innerText(), /1983/);
+  assert.match(await chooser.innerText(), /330 ml.*2,20/);
+  assert.match(await chooser.innerText(), /Nurme Brewery & Taproom/);
+  assert.match(await chooser.innerText(), /300 ml.*3,90/);
+  await chooser.getByRole('button', { name: /Nurme Brewery & Taproom/ }).press('Enter');
+  await page.locator('.marker-detail-head strong').filter({ hasText: 'Nurme Brewery & Taproom' }).waitFor();
+  assert(await page.evaluate(() => document.activeElement?.closest('.marker-node')?.dataset.venueId === 'nurme'),
+    'Choosing a co-located venue must keep keyboard focus on that actual venue');
+  await page.locator('.price-marker[aria-expanded="true"]').press('Enter');
+  await search.focus();
+  await page.getByRole('button', { name: '2 vietas. Parādīt vietas.', exact: true }).waitFor();
+  assert.equal(await page.locator('.price-marker').count(), 0,
+    'Leaving a collapsed price must restore the nearby group');
   await search.fill('ALA Pagrabs');
   await page.getByRole('combobox', { name: 'Kārtot vietas' }).click();
   await page.getByRole('option', { name: 'Lētākais litrs' }).click();
@@ -54,6 +89,15 @@ try {
   await page.getByText('Tilpums nav norādīts', { exact: true }).waitFor();
   assert(!(await page.locator('body').innerText()).includes('∞'));
 
+  await search.fill('ALA Pagrabs');
+  await page.getByRole('button', { name: 'Parādīt kartē: Folkklubs ALA Pagrabs', exact: true }).click();
+  await page.waitForTimeout(1100);
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.waitForTimeout(700);
+  const resizedFooter = await page.locator('.marker-detail-footer').boundingBox();
+  const resizedControls = await page.locator('.mobile-results').boundingBox();
+  assert(resizedFooter && resizedControls && resizedFooter.y + resizedFooter.height < resizedControls.y - 8,
+    'An already-open menu must stay clear of controls after a smaller resize');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('.mobile-results').click();
   await search.fill('ALA Pagrabs');
