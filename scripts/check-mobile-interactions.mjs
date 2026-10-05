@@ -126,8 +126,50 @@ try {
     );
   });
   assert(delta < 3, `Timeline cursor misaligned by ${delta}px`);
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.locator('.mobile-results').click();
+  await page.getByRole('button', { name: 'Parādīt kartē: Folkklubs ALA Pagrabs', exact: true }).click();
+  await page.waitForTimeout(1100);
+  const smallFooter = await page.locator('.marker-detail-footer').boundingBox();
+  const smallResults = await page.locator('.mobile-results').boundingBox();
+  assert(smallFooter && smallResults && smallFooter.y + smallFooter.height <= smallResults.y - 16,
+    'Source links must stay clear of controls on a smaller phone');
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  // A fresh document must recover a cached failed dynamic import, keeping
+  // the newest choice rather than returning to the original venue permalink.
+  const runtimeRequest = /\/(?:map-runtime-[^/?]+\.js|map-runtime\.ts)(?:\?|$)/;
+  await page.route(runtimeRequest, (route) => route.abort('failed'));
+  const retryUrl = new URL(page.url());
+  retryUrl.search = '?venue=folkklubs-ala-pagrabs';
+  await page.goto(retryUrl.href);
+  await page.getByRole('alert').waitFor();
+  await page.getByRole('slider', { name: 'Izvēlēties laiku' }).press('ArrowRight');
+  await page.getByRole('button', { name: '165 vietas', exact: true }).click();
+  await search.fill('Swings Golf');
+  await page.getByRole('button', { name: 'zem 5 €', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Kārtot vietas' }).click();
+  await page.getByRole('option', { name: 'Lētākais litrs', exact: true }).click();
+  await page.getByRole('button', { name: 'Parādīt kartē: Swings Golf Rīga', exact: true }).click();
+  const retryTime = await slider.getAttribute('aria-valuenow');
+  await page.unroute(runtimeRequest);
+  await Promise.all([
+    page.waitForURL((url) => url.searchParams.get('venue') === 'swings-golf-riga'),
+    page.getByRole('button', { name: 'Mēģināt vēlreiz', exact: true }).click(),
+  ]);
+  await page.locator('.marker-detail').waitFor();
+  await page.locator('.map-load-state').waitFor({ state: 'detached' });
+  assert.equal(await search.inputValue(), 'Swings Golf');
+  assert.equal(await page.getByRole('button', { name: 'zem 5 €', exact: true }).getAttribute('aria-pressed'), 'true');
+  assert.match(await page.getByRole('combobox', { name: 'Kārtot vietas' }).innerText(), /Lētākais litrs/);
+  assert.equal(await page.locator('.marker-detail-head strong').innerText(), 'Swings Golf Rīga');
+  assert.equal(await slider.getAttribute('aria-valuenow'), retryTime);
+  assert.equal(await page.locator('.price-marker').count(), 1);
+  assert.equal(await page.locator('.price-marker').innerText(), '— €/l');
+  assert.equal(await page.evaluate(() => sessionStorage.getItem('beer-map:map-retry')), null);
+
   console.log(
-    'Browser checks passed: price filters, litre comparison, unknown size, stable marker focus, mobile drawer, marker positioning, and timeline.',
+    'Browser checks passed: price filters, litre comparison, unknown size, stable marker focus, mobile drawer, marker positioning, timeline, and failed-runtime recovery.',
   );
 } finally {
   await browser.close();

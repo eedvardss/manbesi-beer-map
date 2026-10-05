@@ -33,6 +33,10 @@
   };
   const inspect = () => {
     if (state().count === '165 vietas' && document.querySelector('input[aria-label="Meklēt vietas"]')) mark('server-content');
+    if (document.querySelector('.mobile-time-dock')) mark('client-controls');
+    if (state().markers === 165) mark('prices-attached');
+    if (document.querySelector('.marker-detail-footer')) mark('venue-detail');
+    // Retain the original all-prices + loading-complete endpoint for comparison.
     if (state().markers === 165 && !document.querySelector('.map-load-state')) mark('price-markers');
   };
   const mutations = new MutationObserver(() => {

@@ -4,7 +4,9 @@
 @import 'maplibre-gl/dist/maplibre-gl.css';
 
 .map-load-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #a5afa8; font-size: 13px; pointer-events: none; }
-.map-load-state button { pointer-events: auto; }
+.map-load-state button { pointer-events: auto; color: #e5ece7; background: #18201c; border-color: #46554b; }
+.map-load-state button:hover { background: #26332b; }
+.map-load-state.is-background-loading { inset: 16px 12px auto; font-size: 12px; }
 
 @custom-variant dark (&:is(.dark *));
 

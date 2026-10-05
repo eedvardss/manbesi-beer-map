@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { darkRigaStyle } from './map-style';
+import { consumeMapRetry, saveMapRetry } from './map-retry';
 import { formatClockTime, getRigaClock, isVenueOpenAt, type RigaClock } from './opening-hours';
 import {
   timelineContentWidth,
@@ -34,7 +35,13 @@ const priceBandOptions = [
   { value: 'fiveToSix', label: '5–6 €' },
   { value: 'over6', label: 'virs 6 €' },
 ] as const;
-const mobileMarkerOffset = (detailHeight: number): [number, number] => [-37, 34 - detailHeight / 2];
+const mobileMarkerOffset = (detailHeight: number, map: MapLibreMap): [number, number] => {
+  const bounds = map.getContainer().getBoundingClientRect();
+  const controlsTop = document.querySelector('.mobile-results')?.getBoundingClientRect().top ?? window.innerHeight;
+  const centeredBottom = bounds.top + bounds.height / 2 + detailHeight / 2;
+  const clearance = Math.min(0, controlsTop - 16 - centeredBottom);
+  return [-37, 34 - detailHeight / 2 + clearance];
+};
 type ModelContext = {
   registerTool: (tool: {
     name: string;
@@ -198,9 +205,10 @@ export default function Home() {
   const timeScrollerRef = useRef<HTMLDivElement>(null);
   const ignoreTimelineScrollRef = useRef(false);
   const timelineFrameRef = useRef<number | null>(null);
+  const restoredTimelineRef = useRef<number | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [basemapReady, setBasemapReady] = useState(false);
   const [mapFailed, setMapFailed] = useState(false);
-  const [mapAttempt, setMapAttempt] = useState(0);
   const [query, setQuery] = useState('');
   const [priceBand, setPriceBand] = useState<PriceBand>('all');
   const [sortMode, setSortMode] = useState<SortMode>('price');
@@ -221,6 +229,40 @@ export default function Home() {
     return () => window.clearInterval(interval);
   }, [timeIsLive]);
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('mapRetry') !== '1') return;
+    url.searchParams.delete('mapRetry');
+    window.history.replaceState(window.history.state, '', url);
+    try {
+      const context = consumeMapRetry(window.sessionStorage);
+      if (!context) return;
+      // oxlint-disable-next-line react/react-compiler -- One-shot external recovery must follow the server's empty initial state.
+      setQuery(context.query);
+      setPriceBand(context.priceBand);
+      setSortMode(context.sortMode);
+      pendingVenueRef.current = mapVenues.find((venue) => venue.id === context.venueId) ?? null;
+      setMobileListOpen(context.mobileListOpen);
+      if (!context.timeIsLive) {
+        restoredTimelineRef.current = context.selectedMinutes;
+        setTimeIsLive(false);
+        setSelectedMinutes(context.selectedMinutes);
+      }
+    } catch { /* Storage can be unavailable; the venue URL still recovers. */ }
+  }, []);
+
+  const retryMap = () => {
+    const url = new URL(window.location.href);
+    const venueId = pendingVenueRef.current?.id ?? selectedId ?? url.searchParams.get('venue');
+    if (venueId) url.searchParams.set('venue', venueId);
+    url.searchParams.set('mapRetry', '1');
+    try {
+      saveMapRetry(window.sessionStorage, { query, priceBand, sortMode, venueId, selectedMinutes, timeIsLive, mobileListOpen });
+    } catch { /* Keep explicit retry usable when session storage is disabled. */ }
+    window.history.replaceState(window.history.state, '', url);
+    window.location.reload();
+  };
+
   const selectedDayOffset = Math.floor(selectedMinutes / (24 * 60));
   const selectedMinuteOfDay = selectedMinutes % (24 * 60);
   const selectedDayIndex = rigaClock ? (rigaClock.dayIndex + selectedDayOffset) % 7 : null;
@@ -231,10 +273,13 @@ export default function Home() {
   const venueOpenState = (venueId: string) => openStates.get(venueId) ?? null;
 
   useEffect(() => {
-    if (!timeIsLive || !rigaClock || !timeScrollerRef.current) return;
+    if (!rigaClock || !timeScrollerRef.current) return;
+    const minutes = timeIsLive ? rigaClock.minutes : restoredTimelineRef.current;
+    if (minutes === null) return;
+    restoredTimelineRef.current = null;
     ignoreTimelineScrollRef.current = true;
     timeScrollerRef.current.scrollTo({
-      left: (rigaClock.minutes / timelineStepMinutes) * timelineStepPixels,
+      left: (minutes / timelineStepMinutes) * timelineStepPixels,
       behavior: 'auto',
     });
     const release = window.setTimeout(() => {
@@ -325,11 +370,13 @@ export default function Home() {
     void import('./map-runtime').then((runtime) => {
       if (cancelled || !mapNodeRef.current) return;
       mapRuntimeRef.current = runtime;
+      const linkedId = new URLSearchParams(window.location.search).get('venue');
+      const linkedVenue = pendingVenueRef.current ?? mapVenues.find((venue) => venue.id === linkedId);
       const map = new runtime.Map({
         container: mapNodeRef.current,
         style: darkRigaStyle,
-        center: [24.116, 56.9515],
-        zoom: 13,
+        center: linkedVenue ? [linkedVenue.lng, linkedVenue.lat] : [24.116, 56.9515],
+        zoom: linkedVenue ? 16 : 13,
         minZoom: 10,
         maxZoom: 19,
         attributionControl: { compact: true },
@@ -348,18 +395,14 @@ export default function Home() {
         if (!('preserveVenueSelection' in event && event.preserveVenueSelection === true)) setSelectedId(null);
       });
       void map.once('load', () => {
-        if (cancelled) return;
-        setMapReady(true);
-        const linkedId = new URLSearchParams(window.location.search).get('venue');
-        const linkedVenue = pendingVenueRef.current ?? mapVenues.find((venue) => venue.id === linkedId);
-        pendingVenueRef.current = null;
-        if (linkedVenue) {
-          setSelectedId(linkedVenue.id);
-          map.flyTo({ center: [linkedVenue.lng, linkedVenue.lat], zoom: 16, duration: 0 }, venueCameraEvent);
-        }
+        if (!cancelled) setBasemapReady(true);
       });
       map.on('error', (event) => console.error('MapLibre:', event.error));
       mapRef.current = map;
+      pendingVenueRef.current = null;
+      if (linkedVenue) setSelectedId(linkedVenue.id);
+      // DOM prices and menus need the map transform, not downloaded tiles/glyphs.
+      setMapReady(true);
       resizeTimer = window.setTimeout(() => map.resize(), 100);
     }).catch((error) => {
       if (cancelled) return;
@@ -367,6 +410,8 @@ export default function Home() {
       mapInstance = null;
       mapRef.current = null;
       console.error('MapLibre initialization:', error);
+      setMapReady(false);
+      setBasemapReady(false);
       setMapFailed(true);
     });
 
@@ -379,7 +424,7 @@ export default function Home() {
       markers.clear();
       states.clear();
     };
-  }, [mapAttempt]);
+  }, []);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -436,7 +481,7 @@ export default function Home() {
           const detailHeight = element.querySelector<HTMLElement>('.marker-detail')?.getBoundingClientRect().height ?? 34;
           const centerExpandedMarker = () => map.easeTo({
             center: [venue.lng, venue.lat],
-            offset: mobileMarkerOffset(detailHeight),
+            offset: mobileMarkerOffset(detailHeight, map!),
             duration: 350,
             essential: true,
           }, venueCameraEvent);
@@ -469,7 +514,7 @@ export default function Home() {
     // An already-open panel needs its offset in this camera command: selecting
     // the same ID does not trigger the marker effect to centre it again.
     map?.flyTo({ center: [venue.lng, venue.lat], zoom: 16, duration: 650, essential: true,
-      ...(detailHeight ? { offset: mobileMarkerOffset(detailHeight) } : {}) }, venueCameraEvent);
+      ...(detailHeight ? { offset: mobileMarkerOffset(detailHeight, map!) } : {}) }, venueCameraEvent);
   }, [mapReady]);
 
   const clearFilters = () => {
@@ -581,9 +626,9 @@ export default function Home() {
 
         <div className="map-wrap">
           <div ref={mapNodeRef} className="map" aria-label="Rīgas alus cenu karte" />
-          {!mapReady && <div className="map-load-state" role={mapFailed ? 'alert' : 'status'}>
-            <span>{mapFailed ? 'Karti neizdevās ielādēt.' : 'Ielādē karti…'}</span>
-            {mapFailed && <Button variant="outline" onClick={() => { setMapFailed(false); setMapAttempt((attempt) => attempt + 1); }}>Mēģināt vēlreiz</Button>}
+          {!basemapReady && <div className={`map-load-state${mapReady ? ' is-background-loading' : ''}`} role={mapFailed ? 'alert' : 'status'}>
+            <span>{mapFailed ? 'Karti neizdevās ielādēt.' : mapReady ? 'Ielādē kartes fonu…' : 'Ielādē karti…'}</span>
+            {mapFailed && <Button variant="outline" onClick={retryMap}>Mēģināt vēlreiz</Button>}
           </div>}
           <Button className="mobile-results" onClick={() => setMobileListOpen(true)}><BeerMark className="results-mark" /> {filtered.length} vietas</Button>
           {rigaClock && (
