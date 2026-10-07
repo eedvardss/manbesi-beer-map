@@ -2,7 +2,13 @@
 
 ## Direction
 
-Build a clean native iPhone companion to aluskarte.lv and improve both products. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
+Keep the native iPhone and web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
+
+## Aluskarte taken offline — 7 October 2026
+
+The user requested removing Beer Map from Aluskarte and leaving nothing there. The public apex and www hostname now return an empty HTML document for every path, including the API and static assets. `run_worker_first` ensures assets cannot bypass that response. Responses are non-cacheable and marked noindex/nofollow/noarchive. Domain registration and the separate legacy manbesi.lv Workers remain intact; source and localhost development are preserved. Do not republish the app on Aluskarte without a new explicit user request.
+
+Production build and checks pass; built configuration confirms Worker `aluskarte`, both custom domains, previews disabled and worker-first assets. Deployed version `e7db742c-21e8-40ed-9b66-c7dcf15d1e76`. Live curl checks confirm HTTP 200 with zero bytes for apex, www, `/api/venues` and the previously published JS asset URL. Browser confirms a completely blank page; proof is `artifacts/aluskarte-blank.png`.
 
 ## Individual web markers restored — 7 October 2026
 
