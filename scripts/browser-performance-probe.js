@@ -22,9 +22,7 @@
   const state = () => ({
     count: document.querySelector('.result-tools strong')?.textContent,
     markers: document.querySelectorAll('.price-marker').length,
-    groups: document.querySelectorAll('.cluster-marker').length,
-    represented: document.querySelectorAll('.price-marker,.candidate-marker').length
-      + [...document.querySelectorAll('.cluster-marker')].reduce((count, node) => count + Number(node.dataset.count || 0), 0),
+    represented: document.querySelectorAll('.price-marker,.candidate-marker').length,
     detail: document.querySelector('.marker-detail-head strong')?.textContent,
   });
   const marked = new Set();

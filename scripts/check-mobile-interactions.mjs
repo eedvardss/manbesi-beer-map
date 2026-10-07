@@ -10,41 +10,14 @@ try {
   await page.goto(process.env.BEER_MAP_TEST_URL ?? 'http://localhost:3000/');
   await page.locator('.price-marker').first().waitFor();
   const search = page.getByRole('textbox', { name: 'Meklēt vietas' });
-  await page.locator('.cluster-marker').first().waitFor();
-  const represented = await page.evaluate(() =>
-    document.querySelectorAll('.price-marker,.candidate-marker').length
-      + [...document.querySelectorAll('.cluster-marker')].reduce((sum, node) => sum + Number(node.dataset.count), 0));
-  assert.equal(represented, 165, 'Grouping must represent every matching venue exactly once');
-  const overlaps = await page.evaluate(() => {
-    const labels = [...document.querySelectorAll('.price-marker,.cluster-marker')].map(n => n.getBoundingClientRect());
-    let count = 0;
-    labels.forEach((a, i) => labels.slice(i + 1).forEach(b => {
-      if (a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top) count++;
-    }));
-    return count;
-  });
-  assert.equal(overlaps, 0, 'Settled overview labels must not overlap');
+  assert.equal(await page.locator('.marker-node').count(), 165, 'Every venue must have its own marker');
+  assert.equal(await page.locator('.cluster-marker').count(), 0, 'Venue grouping is disabled');
+  await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
+  await page.waitForTimeout(500);
+  assert.equal(await page.locator('.marker-node').count(), 165, 'Zoom must retain individual markers');
   await search.fill('Vagonu iela 21');
-  for (let i = 0; i < 3; i++) {
-    await page.getByRole('button', { name: '2 vietas. Tuvināt karti.', exact: true }).press('Enter');
-    await page.waitForTimeout(600);
-  }
-  await page.getByRole('button', { name: '2 vietas. Parādīt vietas.', exact: true }).press('Enter');
-  const chooser = page.locator('.cluster-detail');
-  await chooser.waitFor();
-  assert.match(await chooser.innerText(), /1983/);
-  assert.match(await chooser.innerText(), /330 ml.*2,20/);
-  assert.match(await chooser.innerText(), /Nurme Brewery & Taproom/);
-  assert.match(await chooser.innerText(), /300 ml.*3,90/);
-  await chooser.getByRole('button', { name: /Nurme Brewery & Taproom/ }).press('Enter');
-  await page.locator('.marker-detail-head strong').filter({ hasText: 'Nurme Brewery & Taproom' }).waitFor();
-  assert(await page.evaluate(() => document.activeElement?.closest('.marker-node')?.dataset.venueId === 'nurme'),
-    'Choosing a co-located venue must keep keyboard focus on that actual venue');
-  await page.locator('.price-marker[aria-expanded="true"]').press('Enter');
-  await search.focus();
-  await page.getByRole('button', { name: '2 vietas. Parādīt vietas.', exact: true }).waitFor();
-  assert.equal(await page.locator('.price-marker').count(), 0,
-    'Leaving a collapsed price must restore the nearby group');
+  await page.waitForFunction(() => document.querySelectorAll('.marker-node').length === 2);
+  assert.equal(await page.locator('.cluster-marker').count(), 0, 'Co-located venues remain separate');
   await search.fill('ALA Pagrabs');
   await page.getByRole('combobox', { name: 'Kārtot vietas' }).click();
   await page.getByRole('option', { name: 'Lētākais litrs' }).click();
@@ -79,7 +52,7 @@ try {
   await page.keyboard.press('Home');
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowRight');
-  const alaCard = page.locator('[data-venue-id="folkklubs-ala-pagrabs"]');
+  const alaCard = page.locator('.venue-card[data-venue-id="folkklubs-ala-pagrabs"]');
   await alaCard.waitFor();
   assert.match(await alaCard.innerText(), /5,50/);
   assert.match(await alaCard.innerText(), /IPA/);

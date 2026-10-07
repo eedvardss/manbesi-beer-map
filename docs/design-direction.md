@@ -150,6 +150,10 @@ Rendered review covers maximum light/dark, accessibility-size-1 dark and ordinar
 
 A/B/C and the full native design remain provisional and unapproved. The previously recorded filtered-price overlap is corrected. Maximum-text geographic context still merits review: the short canvas can produce a broad camera scale. Dense zoom, live VoiceOver and physical-device rendering remain separate gates. The bounds above do not establish startup, frame delivery or battery performance.
 
+## Web grouping rejected — 7 October 2026
+
+The user explicitly rejected venue grouping. Restore individual price markers at every zoom, including co-located venues. Preserve complete menus, filters, keyboard focus, selected-place context and the mobile resize fix. Do not reintroduce count markers without a new user request. The following grouping research and results are historical, superseded by this decision.
+
 ## Complementary web map density — 5 October 2026
 
 Refreshed actual first-party [Mapstr App Store map/filter/list screenshots](https://apps.apple.com/us/app/mapstr-save-follow-places/id917288465) in the background browser. Its map stays dominant, with a compact Map/List switch and purposeful filter disclosure. Its busy colored pin cloud is not adopted as a readability reference. The useful principle for the existing web direction is to preserve geographic context and useful controls while simplifying annotation density.

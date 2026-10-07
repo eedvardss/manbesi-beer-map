@@ -140,22 +140,6 @@ button { cursor: pointer; }
 
 .maplibregl-marker.marker-node { position: absolute; width: 74px; height: 34px; transition: opacity .24s ease, filter .24s ease; }
 .maplibregl-marker.marker-node.is-closed:not(.is-open) { opacity: .08; filter: grayscale(1) saturate(0) brightness(.62); }
-/* Neutral counts denote venues, so they cannot be mistaken for a serving price. */
-.maplibregl-marker.cluster-node { width: 74px; height: 34px; --marker-fill: #e8eee7; }
-.cluster-marker { position: absolute; left: 5px; top: -5px; width: 64px; height: 44px; display: grid; align-content: center; justify-items: center; gap: 1px; border: 2px solid #b7c6b8; border-radius: 14px; color: #1c3627; background: #e8eee7; box-shadow: 0 2px 8px rgba(0,0,0,.2); font-size: 16px; font-weight: 750; line-height: 17px; cursor: pointer; }
-.cluster-marker small { font-size: 9px; font-weight: 600; line-height: 10px; }
-.cluster-marker:hover { border-color: #fff; background: #fff; }
-.cluster-marker:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-.cluster-node.is-closed:not(.is-open) .cluster-marker { color: #9aa69d; background: #25312a; border-color: #59675e; }
-.cluster-node.is-open { z-index: 2000 !important; }
-.cluster-node.is-open .cluster-marker { opacity: 0; }
-.cluster-detail .marker-detail-head { text-align: left; justify-content: flex-start; }
-.cluster-venue { display: grid; gap: 3px; width: 100%; min-height: 44px; padding: 9px 7px; border: 0; border-radius: 6px; color: #1c3627; background: transparent; text-align: left; cursor: pointer; }
-.cluster-venue + .cluster-venue { border-top: 1px solid rgba(24,34,27,.14); }
-.cluster-venue:hover, .cluster-venue:focus-visible { background: rgba(24,34,27,.08); outline: 2px solid #173f2c; outline-offset: -2px; }
-.cluster-venue strong { font-size: 12px; }
-.cluster-venue span { font-size: 10px; line-height: 1.4; }
-
 .marker-node[data-tone='cheap'] { --marker-fill: #b8dfaa; }
 .marker-node[data-tone='mid'] { --marker-fill: #e4dc76; }
 .marker-node[data-tone='warm'] { --marker-fill: #f2bd64; }
