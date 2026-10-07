@@ -178,7 +178,7 @@ struct AboutView: View {
                 Text("Atrodi vietu, salīdzini cenas, dodies kājām.").foregroundStyle(.secondary)
                 LabeledContent("Vietas", value: "\(store.venues.count)")
                 LabeledContent("Cenas pārbaudītas", value: store.checkedLabel)
-                Link("Atvērt manbesi.lv", destination: URL(string: "https://manbesi.lv")!)
+                Link("Atvērt aluskarte.lv", destination: URL(string: "https://aluskarte.lv")!)
             }
             Section("Dati tavā kabatā") {
                 Text("Karte un saglabātās vietas darbojas arī bez interneta. Kartes pamatnei un jaunāko datu ielādei vajadzīgs savienojums.")

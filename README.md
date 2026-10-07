@@ -29,10 +29,10 @@ MapLibre 6 requires a bundled worker URL. The map uses Vite's `?worker&url` entr
 ## Hosting
 
 Source: https://github.com/eedvardss/manbesi-beer-map (private repository).
-Production: https://manbesi.lv/.
+Primary domain: https://aluskarte.lv/ (with https://www.aluskarte.lv/ also attached).
 
-`npm run deploy` builds and publishes directly to the `manbesi-beer-map` Cloudflare Worker in the owner's account. Authenticate with `npx wrangler login` first. There is no ChatGPT Sites plugin, source repository, token, or deployment dependency.
+`npm run deploy` builds and publishes directly to the dedicated `aluskarte` Cloudflare Worker. The built Wrangler configuration attaches both custom domains. Account-named `workers.dev` and version preview URLs are disabled, and public client source maps are not emitted. Use the existing authorized Wrangler session; authenticate with project-local Wrangler only when needed. There is no ChatGPT Sites deployment dependency.
 
-The domain's existing `manbesi-p2p` Worker routes the map through a private Cloudflare service binding named `BEER_MAP`. This preserves the independent protected `/p2p/` and status API routes. Its source is in the `eedvardss/edvards.lv` repository. Both `/` and the existing `/alus` map entry work.
+The legacy manbesi.lv installation remains separate: `manbesi-p2p` routes its map through the private `BEER_MAP` service binding to `manbesi-beer-map`. Do not alter those Workers or the independent protected `/p2p/` and status API routes when deploying Aluskarte. See `DEVELOPMENT.md` for live validation and DNS activation status.
 
 GitHub Actions runs build and data checks on pushes and pull requests. Deployment is currently via `npm run deploy`; automatic publishing is not configured.

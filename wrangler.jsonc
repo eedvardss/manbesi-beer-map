@@ -1,10 +1,15 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "manbesi-beer-map",
+  "name": "aluskarte",
   "account_id": "875a2a8f6b98ba89fed45195f385e738",
-  "main": "vinext/server/fetch-handler",
+  "main": "worker.ts",
   "compatibility_date": "2026-09-04",
   "compatibility_flags": ["nodejs_compat"],
-  "workers_dev": true,
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "aluskarte.lv", "custom_domain": true },
+    { "pattern": "www.aluskarte.lv", "custom_domain": true }
+  ],
   "observability": { "enabled": true }
 }

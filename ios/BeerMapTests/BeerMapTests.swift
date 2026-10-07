@@ -113,6 +113,10 @@ final class BeerMapTests: XCTestCase {
         XCTAssertEqual(store.selectedID, "banshee")
         store.open(URL(string: "https://manbesi.lv/?venue=folkklubs-ala-pagrabs")!)
         XCTAssertEqual(store.selectedID, "folkklubs-ala-pagrabs")
+        store.open(URL(string: "https://aluskarte.lv/?venue=banshee")!)
+        XCTAssertEqual(store.selectedID, "banshee")
+        store.open(URL(string: "https://www.aluskarte.lv/?venue=folkklubs-ala-pagrabs")!)
+        XCTAssertEqual(store.selectedID, "folkklubs-ala-pagrabs")
         store.open(URL(string: "https://example.com/?venue=banshee")!)
         XCTAssertEqual(store.selectedID, "folkklubs-ala-pagrabs")
     }

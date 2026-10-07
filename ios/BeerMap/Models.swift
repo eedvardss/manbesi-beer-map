@@ -129,7 +129,7 @@ struct Venue: Codable, Identifiable, Sendable {
     let openingHours: OpeningHours?
 
     var shareURL: URL {
-        var components = URLComponents(string: "https://manbesi.lv/")!
+        var components = URLComponents(string: "https://aluskarte.lv/")!
         components.queryItems = [URLQueryItem(name: "venue", value: id)]
         return components.url!
     }

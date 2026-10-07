@@ -95,7 +95,7 @@ final class BeerMapStore {
         do {
             // Manage the conditional request ourselves; URLCache must not turn
             // a network 304 into a cached 200 that repeats decoding and writes.
-            var request = URLRequest(url: URL(string: "https://manbesi.lv/api/venues")!, cachePolicy: .reloadIgnoringLocalCacheData)
+            var request = URLRequest(url: URL(string: "https://aluskarte.lv/api/venues")!, cachePolicy: .reloadIgnoringLocalCacheData)
             request.timeoutInterval = 15
             if catalog != nil, let etag { request.setValue(etag, forHTTPHeaderField: "If-None-Match") }
             let (data, response) = try await session.data(for: request)
@@ -135,7 +135,7 @@ final class BeerMapStore {
     func open(_ url: URL) {
         let id: String?
         if url.scheme == "manbesi", url.host == "venue" { id = url.pathComponents.dropFirst().first }
-        else if url.host == "manbesi.lv" { id = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "venue" }?.value }
+        else if ["aluskarte.lv", "www.aluskarte.lv", "manbesi.lv"].contains(url.host ?? "") { id = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "venue" }?.value }
         else { id = nil }
         if let id, venues.contains(where: { $0.id == id }) { selectedID = id }
     }

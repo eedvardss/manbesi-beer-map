@@ -4,7 +4,7 @@ A native SwiftUI + MapKit app, with no third-party iOS dependencies. iOS 26.0 an
 
 The first visual pass was rejected. Three new, deliberately different native design drafts are available with `npm run design:ios -- A` from the repository root when an iPhone simulator is booted. The command prints a background browser mirror URL; use the bottom draft switcher to compare A/B/C. These drafts use real catalog data and in-memory bookmarks, are excluded from Release, and remain provisional. See [the design direction](../docs/design-direction.md) for research and review status.
 
-Open `BeerMap.xcodeproj` in Xcode, select the BeerMap scheme and an iPhone simulator, and run. The project automatically discovers Swift sources and resources. The bundled catalog works immediately; a normal launch refreshes from `https://manbesi.lv/api/venues`.
+Open `BeerMap.xcodeproj` in Xcode, select the BeerMap scheme and an iPhone simulator, and run. The project automatically discovers Swift sources and resources. The bundled catalog works immediately; a normal launch refreshes from `https://aluskarte.lv/api/venues`. New shared links use aluskarte.lv; legacy manbesi.lv venue links remain readable for compatibility.
 
 Refresh revalidates the saved catalog with its ETag. An unchanged response retains the current catalog, search index and disk cache. Fresh data is validated, indexed and cached away from the main actor before acceptance; legacy raw catalog caches migrate automatically. Invalid or older data and failed writes preserve the usable offline catalog. See [performance evidence and repeatable refresh checks](../docs/performance.md).
 

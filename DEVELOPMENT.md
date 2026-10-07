@@ -2,9 +2,23 @@
 
 ## Direction
 
-Build a clean native iPhone companion to manbesi.lv and improve both products independently. Preserve sourced prices and clear serving comparisons. A five-hour continuation named “Build Beer Map for iPhone and web” is active in this chat.
+Build a clean native iPhone companion to aluskarte.lv and improve both products. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
 
-## Current milestone — 2 October 2026
+## Domain launch — 7 October 2026
+
+Published the current Beer Map to **https://aluskarte.lv/** and **https://www.aluskarte.lv/** using the dedicated Cloudflare Worker `aluskarte`, final version `1fc2d939-10fe-4a1b-83c8-0ae0ab52b2f9`. NIC registration remains in place; its nameservers are `dahlia.ns.cloudflare.com` and `jason.ns.cloudflare.com`. Cloudflare uses the free zone plan, managed certificates and HTTP-to-HTTPS redirects. The domain is paid until 7 October 2027. No new paid hosting, account or automation was created.
+
+Public metadata and native API/share/about links now use Aluskarte. Native parsing retains old venue links for compatibility. The separate legacy Workers and their service binding were left intact: manbesi.lv `/` and `/alus` return 200, `/p2p/` 302, `/api/status` 200. These independent services are not exposed on Aluskarte; its `/p2p/` normalizes to a 404 and `/api/status` returns 404.
+
+Privacy: account-named workers.dev and version-preview URLs are disabled and verified through the API. Client source maps are disabled. The final live HTML, catalog, and all 14 served build assets have no matches for the owner's identifying names/handles, local filesystem paths, source-map directives or legacy personal-domain links. Assets match the local build byte-for-byte; the generated `_headers` control file is correctly inaccessible. `.git/config`, `.env`, README and AGENTS all return 404. Public WHOIS after delegation shows natural-person status and NIC's contact form, without name, email, phone or street address. Registrar/provider records and historical correlations still exist: this is verified public-exposure reduction, not an anonymity guarantee.
+
+The Worker preserves no-referrer, CSP, permissions, nosniff and frame-protection response headers. Headers are applied after rendering because the installed framework's config-only headers did not reach cached page responses in the local check. Final page, API and error responses were verified. No venue data or source dates changed.
+
+Validation: production build, lint/types, 21 web unit/API/recovery/layout checks, data audits and native snapshot equality pass; hydration budget remains 909,123 raw / 213,492 gzip bytes. Wrangler types and final dry run pass. All 31 native unit tests pass on iPhone 17 Pro / iOS 26.5. This changes native source only; no physical-phone installation or App Store release occurred, and native design remains provisional.
+
+Live HTTPS returns 200 on apex and www; HTTP redirects retain venue queries. The live catalog exactly matches the native snapshot (165 venues / 2,550 servings), and its ETag returns 304 with zero body bytes. The actual browser loads map tiles, grouped markers and ALA's full menu with source/direction links and copying confirmation; no console errors were observed. A 390 × 844 emulation reports the correct CSS viewport, but capture scaling/cropping is inconsistent, so it does not establish a fresh mobile visual pass. Desktop proof and raw public checks are in ignored `artifacts/domain-migration/`. Temporary browser emulation is cleared. DNS initially lagged in this Mac's negative cache; normal apex and www lookups now work. No new performance or design-quality claim is made.
+
+## Functional baseline — 2 October 2026
 
 **Design status:** the user rejected the first native visual pass on 2 October. Treat the implementation below as a functional baseline, not an approved design. The quality bar and five-hour automation now prioritize clarity, deliberate visual design and rendered review before additional feature breadth. See `docs/design-direction.md` for current research, distinct native drafts and the provisional recommendation.
 
@@ -272,4 +286,4 @@ The functional baseline is verified; visual design remains provisional. Prioriti
 5. Improve source freshness per venue with genuine menu evidence and distinct dates; retained counts and full menus must reflect the same current projection on web and native.
 6. Prepare TestFlight when authorized signing/distribution access is available.
 
-Keep the five-hour continuation active. Work quietly while nothing meaningful changes; report verified milestones, concrete failures, or required user action. Preserve unrelated changes and commit completed slices.
+The five-hour continuation was removed at the user's request. Do not recreate it. Preserve unrelated changes and commit completed, verified slices when working on a new request.
