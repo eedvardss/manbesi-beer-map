@@ -1,6 +1,10 @@
 # Rīgas alus karte
 
-A file-based Riga beer-price map. Research is in `app/data/` and the verified venue TypeScript modules; `app/venues.ts` assembles published venues. No database is used.
+A Riga beer-price map with optional PostgreSQL catalog storage. Research is in `app/data/` and the verified venue TypeScript modules; `app/venues.ts` assembles published venues. See [Docker and PostgreSQL setup](docs/docker-postgres.md).
+
+The website loads its catalog through `/api/venues`, including opening hours.
+Docker runs the complete frontend → REST API → PostgreSQL flow; refresh updates
+the displayed database data without rebuilding the app.
 
 The native iPhone companion lives in `ios/BeerMap.xcodeproj`. See [iPhone setup and verification](ios/README.md), [competitor research](docs/competitor-research.md), and [current progress](DEVELOPMENT.md). It uses SwiftUI, MapKit, local saved places, and a bundled catalog for browsing without a successful API connection.
 

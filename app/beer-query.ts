@@ -1,4 +1,4 @@
-import { type BeerPrice, type Venue, venueBeerPrices } from './venues';
+import { type BeerPrice, type Venue, venueBeerPrices } from './venue-model';
 
 export type PriceBand = 'all' | 'under5' | 'fiveToSix' | 'over6';
 export type SortMode = 'price' | 'litre' | 'name';
@@ -42,7 +42,7 @@ type SearchEntry = {
   projection?: { winner: BeerPrice; beers: BeerPrice[]; venue: Venue };
 };
 
-// The website's catalog is immutable for a page lifetime. Normalize it once,
+// Each catalog snapshot is immutable. Normalize it once when it changes,
 // keeping the filtered full menu and winning serving exactly as before.
 export function createVenueQuery(venues: Venue[]) {
   const entries = venues.map((venue): SearchEntry => {

@@ -17,45 +17,9 @@ import { popularVenueData } from './popular-venues';
 import { verifiedVenueData150 } from './verified-venues-150';
 import { verifiedVenueDataPost150 } from './verified-venues-post-150';
 
-export type BeerPrice = {
-  name: string;
-  volumeMl: number | null;
-  price: number;
-  priceIsFrom?: boolean;
-  packageCount?: number;
-};
-
-export type Venue = {
-  id: string;
-  name: string;
-  kind: string;
-  address: string;
-  lat: number;
-  lng: number;
-  beer: string;
-  volumeMl: number | null;
-  price: number;
-  priceIsFrom?: boolean;
-  packageCount?: number;
-  beerPrices?: BeerPrice[];
-  sourceUrl: string;
-  sourceLabel: string;
-  sourceType: 'Oficiālā ēdienkarte' | 'Verificēta aktuālā alus karte';
-};
-
-export type VenuePoint = {
-  id: string;
-  name: string;
-  kind: string;
-  address: string;
-  lat: number;
-  lng: number;
-  sourceUrl: string;
-  sourceLabel: string;
-  category: string;
-};
-
-export type MapVenue = Venue | VenuePoint;
+import { isPricedVenue, type BeerPrice, type Venue, type VenuePoint, type MapVenue } from './venue-model';
+export { pricePerLitre, venueBeerPrices, isPricedVenue } from './venue-model';
+export type { BeerPrice, Venue, VenuePoint, MapVenue } from './venue-model';
 
 export const checkedAt = '04.09.2026';
 
@@ -259,20 +223,6 @@ export const venues: Venue[] = baseVenues.filter((venue) => !unverifiedPriceVenu
     beerPrices,
   };
 });
-
-export const pricePerLitre = (venue: Venue) => venue.volumeMl
-  ? venue.price / (venue.volumeMl * (venue.packageCount ?? 1) / 1000)
-  : null;
-
-export const venueBeerPrices = (venue: Venue): BeerPrice[] => venue.beerPrices ?? [{
-  name: venue.beer,
-  volumeMl: venue.volumeMl,
-  price: venue.price,
-  priceIsFrom: venue.priceIsFrom,
-  packageCount: venue.packageCount,
-}];
-
-export const isPricedVenue = (venue: MapVenue): venue is Venue => 'price' in venue;
 
 const categoryLabels: Record<string, string> = {
   restaurant: 'restorāns',

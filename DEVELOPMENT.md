@@ -4,6 +4,83 @@
 
 Keep the native iPhone and web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
 
+## API frontend and Docker optimization — 8 October 2026
+
+Connected the website to `/api/venues` for all venues, servings, source data
+and opening hours. The Docker flow is now frontend → REST API → PostgreSQL.
+Initial loading/error/retry and refresh status are explicit. Refresh retains
+filters, selection and map instance; 304 retains indexes and marker DOM.
+Venue data is absent from the client bundle. Added a direct-update revision
+trigger and bounded server snapshot cache; health checks no longer fetch the
+document. Docker uses production dependencies and compiled database scripts,
+and serves precompressed assets. Research files remain the seed source.
+
+Measured image size 1.42 GB → 0.90 GB and page hydration JS 903,832 → 230,097
+raw bytes / 211,999 → 77,714 gzip bytes. Actual Chrome receives a 73,770-byte
+Brotli page chunk plus the compressed API catalog. Detailed workload and limits
+are in `docs/performance.md`. Tightened the page budget to 300 KB raw / 100 KB
+gzip. Added browser checks to Docker CI; remote CI has not run yet.
+
+Verified 19 tests, lint/types, audits and native snapshot equality; Node/Docker
+and Cloudflare builds; real PostgreSQL tests; healthy actual containers and
+compressed asset/API checks; loading/503/retry and refresh preservation; and
+the full existing desktop/mobile interaction regression through Playwright CLI.
+Its expanded-marker toggle now uses keyboard activation because the detail
+header can cover that price button on mobile. Rendered review includes mobile
+error state and actual map/details with tiles loaded.
+
+A temporary direct database change to venue name, price and
+opening hours appears in the frontend on refresh without a build. The original
+catalog was restored exactly. Stack remains at http://localhost:3000, branch
+`feature/docker-postgres`. No public deployment, push or native installation.
+
+## Docker container startup verified — 8 October 2026
+
+Docker Desktop is now installed and running. Actual `docker compose up
+--build -d --wait` passes on Engine 29.8.2 / Compose 5.5.1, Linux amd64 with
+Node 22.23.3 and PostgreSQL 17.11. In-image checks/build pass, app and database
+are healthy, and setup exits 0. SQL verifies all 165 venues / 2,550 servings
+are persisted. The repeatable `scripts/check-container.mjs` verifies HTTP 200
+for the page/JS asset, PostgreSQL health, full API equality with the native
+catalog snapshot, and conditional 304 responses.
+
+Recreated containers and network while retaining `beer-map_postgres_data`:
+catalog checksum and update timestamp are unchanged, the migration is not
+reapplied, and setup preserves the existing catalog. App runs as uid 1000.
+The stack remains running at http://localhost:3000 with a generated password
+in ignored `.env`. This supersedes the missing-Engine limitation below. No
+public or Kubernetes deployment, push, or native installation occurred.
+
+## Docker and PostgreSQL support — 8 October 2026
+
+Created `feature/docker-postgres` from `main` at the user's request. Added a
+multi-stage Node Dockerfile, Compose app/database/setup services, persistent
+PostgreSQL 17 storage, transactional versioned migrations, explicit catalog
+seeding and health checks. `DATABASE_URL` enables PostgreSQL for the shared
+catalog API; the web client's venue data remains bundled. Startup preserves an
+existing database catalog. Missing/unreachable database data returns uncached
+503 responses. Setup and scope are documented in `docs/docker-postgres.md`.
+
+Dependency verification initially found an extraneous Sharp WASM package and
+missing WASM helper entries in the npm lock graph. A clean install and pinned
+EMNAPI helpers now reproduce successfully: `npm ci` and `npm ls --all` pass
+with no missing or extraneous packages. The pre-existing local lockfile edit
+was preserved; its starting contents are backed up in ignored artifacts.
+The existing iPhone snapshot was semantically identical but had CRLF on
+Windows; its check now normalizes line endings without changing catalog data.
+
+Verified on Windows with Node 24.11.0/npm 11.6.1: lint/types, all 16 existing
+tests, catalog audits and native snapshot check; Docker-target and Cloudflare
+production builds; hydration budget; two integration tests against a temporary
+real PostgreSQL 17.10 server; actual production Node HTTP checks for the page,
+JS asset, seeded API data, conditional 304 and a live database update. Compose
+v5.6.0 validates `compose.yaml`. Added a CI job for PostgreSQL tests and actual
+container build/start/API smoke checks.
+
+Docker Engine is absent here, so the container build and startup have not been
+executed locally; the added CI job has not been run remotely. No deployment,
+push, native installation or App Store release was performed.
+
 ## Aluskarte taken offline — 7 October 2026
 
 The user requested removing Beer Map from Aluskarte and leaving nothing there. The public apex and www hostname now return an empty HTML document for every path, including the API and static assets. `run_worker_first` ensures assets cannot bypass that response. Responses are non-cacheable and marked noindex/nofollow/noarchive. Domain registration and the separate legacy manbesi.lv Workers remain intact; source and localhost development are preserved. Do not republish the app on Aluskarte without a new explicit user request.
@@ -301,3 +378,9 @@ The functional baseline is verified; visual design remains provisional. Prioriti
 6. Prepare TestFlight when authorized signing/distribution access is available.
 
 The five-hour continuation was removed at the user's request. Do not recreate it. Preserve unrelated changes and commit completed, verified slices when working on a new request.
+
+## PR #1 review follow-up — 8 October 2026
+
+Simplified the app port mapping to `${APP_PORT:-3000}:3000` and documented host-interface access. Moved the one-shot migration/seed command into `scripts/setup-database.sh`, included it in the runtime image, and enforced LF shell-script endings for Windows checkouts. Retained the separate setup service so versioned migrations also run on existing volumes; retained CI PostgreSQL for destructive integration tests, isolated from the Compose/browser catalog. Documented both decisions.
+
+Verified the Docker rebuild (including lint, types, 19 tests, audit and snapshot checks), healthy startup, repeat setup preserving the existing catalog, and container/API/Brotli/304 checks for all 165 venues and 2,550 servings. GitHub CI must pass on the review-fix commit before merging. No public deployment performed.

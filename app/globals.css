@@ -311,3 +311,13 @@ button { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+.catalog-state { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 24px; text-align: center; background: #0b0e0d; color: #e5ece7; }
+.catalog-state p { color: #a5afa8; margin: 0; }
+.catalog-state button { color: #e5ece7; background: #18201c; border-color: #46554b; }
+.catalog-state button:hover { background: #26332b; }
+.catalog-refresh { margin-left: auto; padding: 6px; color: #aaa; background: transparent; border: 0; border-radius: 6px; cursor: pointer; }
+.catalog-refresh:hover { color: #fff; }
+.catalog-refresh:focus-visible { outline: 2px solid #ffd51f; outline-offset: 2px; }
+.catalog-refresh:disabled { opacity: .4; cursor: default; }
+.catalog-refresh-error { margin: 8px 0 0; color: #d9bd79; font-size: 12px; }
