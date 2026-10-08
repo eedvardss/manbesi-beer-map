@@ -3,8 +3,8 @@ import vinext from 'vinext';
 import { defineConfig } from 'vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   build: { sourcemap: false },
   css: { postcss: { plugins: [tailwindcss()] } },
-  plugins: [vinext(), cloudflare({ viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] } })],
-});
+  plugins: [vinext(), ...(mode === 'docker' ? [] : [cloudflare({ viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] } })])],
+}));

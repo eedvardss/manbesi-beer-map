@@ -4,14 +4,16 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
-import { ArrowDownWideNarrow, Search, X } from 'lucide-react';
+import { ArrowDownWideNarrow, RefreshCw, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { darkRigaStyle } from './map-style';
 import { consumeMapRetry, saveMapRetry } from './map-retry';
-import { formatClockTime, getRigaClock, isVenueOpenAt, type RigaClock } from './opening-hours';
+import { formatClockTime, getRigaClock, isScheduleOpenAt, type RigaClock } from './opening-time';
+import { useCatalog } from './use-catalog';
+import type { PreparedCatalog } from './catalog-client';
 import {
   timelineContentWidth,
   timelineMaxMinutes,
@@ -21,11 +23,10 @@ import {
   timelineTickPosition,
   timelineTicks,
 } from './time-slider.mjs';
-import { checkedAt, isPricedVenue, mapVenues, pricePerLitre, venueBeerPrices, type MapVenue } from './venues';
+import { isPricedVenue, pricePerLitre, venueBeerPrices, type MapVenue } from './venue-model';
 import { markerAmount, markerTone } from './price-presentation';
 
-import { createVenueQuery, type PriceBand, type SortMode } from './beer-query';
-const queryCatalog = createVenueQuery(mapVenues);
+import { type PriceBand, type SortMode } from './beer-query';
 const venueCameraEvent = { preserveVenueSelection: true };
 type FilterToolInput = { query?: string; priceBand?: PriceBand; sortMode?: SortMode };
 const sortLabels: Record<SortMode, string> = { price: 'Lētākā glāze', litre: 'Lētākais litrs', name: 'Nosaukums A–Z' };
@@ -82,7 +83,7 @@ const VenueCard = memo(function VenueCard({ venue, selected, openState, onSelect
   );
 });
 
-function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
+function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode, checkedAt: string) {
   const priced = isPricedVenue(venue);
   const root = document.createElement('div');
   root.className = `marker-node${active ? ' is-open' : ''}`;
@@ -194,6 +195,25 @@ function createMarkerNode(venue: MapVenue, active: boolean, sort: SortMode) {
 }
 
 export default function Home() {
+  const { catalog, loading, failed, refresh } = useCatalog();
+  if (!catalog) return (
+    <main className="app-shell catalog-state">
+      <BeerMark className="brand-mark" />
+      <strong>Rīgas alus</strong>
+      <p role={failed ? 'alert' : 'status'}>{failed ? 'Vietu sarakstu neizdevās ielādēt.' : 'Ielādē vietas un alus cenas…'}</p>
+      {failed && <Button variant="outline" disabled={loading} onClick={() => void refresh()}>{loading ? 'Ielādē…' : 'Mēģināt vēlreiz'}</Button>}
+    </main>
+  );
+  return <BeerMap catalog={catalog} refreshing={loading} refreshFailed={failed} onRefresh={refresh} />;
+}
+
+function BeerMap({ catalog, refreshing, refreshFailed, onRefresh }: {
+  catalog: PreparedCatalog; refreshing: boolean; refreshFailed: boolean; onRefresh: () => Promise<void>;
+}) {
+  const mapVenues = catalog.venues;
+  const queryCatalog = catalog.query;
+  const catalogVenuesRef = useRef(mapVenues);
+  useEffect(() => { catalogVenuesRef.current = mapVenues; }, [mapVenues]);
   const mapNodeRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const mapRuntimeRef = useRef<typeof import('./map-runtime') | null>(null);
@@ -250,7 +270,7 @@ export default function Home() {
         setSelectedMinutes(context.selectedMinutes);
       }
     } catch { /* Storage can be unavailable; the venue URL still recovers. */ }
-  }, []);
+  }, [mapVenues]);
 
   const retryMap = () => {
     const url = new URL(window.location.href);
@@ -269,8 +289,8 @@ export default function Home() {
   const selectedDayIndex = rigaClock ? (rigaClock.dayIndex + selectedDayOffset) % 7 : null;
   const openStates = useMemo(() => new Map(mapVenues.map((venue) => [
     venue.id,
-    selectedDayIndex === null ? null : isVenueOpenAt(venue.id, { dayIndex: selectedDayIndex, minutes: selectedMinuteOfDay }),
-  ])), [selectedDayIndex, selectedMinuteOfDay]);
+    selectedDayIndex === null ? null : isScheduleOpenAt(catalog.hours.get(venue.id), { dayIndex: selectedDayIndex, minutes: selectedMinuteOfDay }),
+  ])), [catalog, mapVenues, selectedDayIndex, selectedMinuteOfDay]);
   const venueOpenState = (venueId: string) => openStates.get(venueId) ?? null;
 
   useEffect(() => {
@@ -317,7 +337,7 @@ export default function Home() {
     });
   };
 
-  const filtered = useMemo(() => queryCatalog(query, priceBand, sortMode), [priceBand, query, sortMode]);
+  const filtered = useMemo(() => queryCatalog(query, priceBand, sortMode), [queryCatalog, priceBand, query, sortMode]);
 
   useEffect(() => {
     const context = (document as Document & { modelContext?: ModelContext }).modelContext;
@@ -358,7 +378,7 @@ export default function Home() {
     }, { signal: lifecycle.signal })).catch(() => undefined);
 
     return () => lifecycle.abort();
-  }, []);
+  }, [queryCatalog]);
 
   useEffect(() => {
     if (!mapNodeRef.current || mapRef.current) return;
@@ -372,7 +392,7 @@ export default function Home() {
       if (cancelled || !mapNodeRef.current) return;
       mapRuntimeRef.current = runtime;
       const linkedId = new URLSearchParams(window.location.search).get('venue');
-      const linkedVenue = pendingVenueRef.current ?? mapVenues.find((venue) => venue.id === linkedId);
+      const linkedVenue = pendingVenueRef.current ?? catalogVenuesRef.current.find((venue) => venue.id === linkedId);
       const map = new runtime.Map({
         container: mapNodeRef.current,
         style: darkRigaStyle,
@@ -447,7 +467,7 @@ export default function Home() {
       const existing = markerRefs.current.get(venue.id);
       const previous = markerStates.current.get(venue.id);
       if (existing && previous?.venue === venue && previous.active === active && previous.sort === sortMode) return;
-      const fresh = createMarkerNode(venue, active, sortMode);
+      const fresh = createMarkerNode(venue, active, sortMode, catalog.checkedAt);
       const element = existing?.getElement() ?? fresh;
       if (existing) {
         const button = element.querySelector('button')!;
@@ -471,14 +491,19 @@ export default function Home() {
           setSelectedId(null);
           return;
         }
-        setSelectedId(venue.id);
+        const currentVenue = markerStates.current.get(venue.id)?.venue;
+        if (!currentVenue) return;
+        setSelectedId(currentVenue.id);
         if (!window.matchMedia('(max-width: 720px)').matches) {
-          map.easeTo({ center: [venue.lng, venue.lat], duration: 350, essential: true }, venueCameraEvent);
+          map.easeTo({ center: [currentVenue.lng, currentVenue.lat], duration: 350, essential: true }, venueCameraEvent);
         }
       });
       const marker = existing ?? new runtime.Marker({ element, anchor: 'bottom-left' })
         .setLngLat([venue.lng, venue.lat])
         .addTo(map);
+      if (existing && (previous?.venue.lat !== venue.lat || previous?.venue.lng !== venue.lng)) {
+        marker.setLngLat([venue.lng, venue.lat]);
+      }
       markerRefs.current.set(venue.id, marker);
 
       if (active && window.matchMedia('(max-width: 720px)').matches) {
@@ -508,7 +533,7 @@ export default function Home() {
       map.off('resize', recenterOnResize);
       if (mobileCenterFrame !== null) window.cancelAnimationFrame(mobileCenterFrame);
     };
-  }, [filtered, mapReady, selectedId, sortMode]);
+  }, [catalog.checkedAt, filtered, mapReady, selectedId, sortMode]);
 
   useEffect(() => {
     if (!mapReady) return;
@@ -565,8 +590,10 @@ export default function Home() {
           <div className="sidebar-head">
             <div className="panel-title">
               <div className="brand-lockup"><BeerMark className="brand-mark" /><strong>Rīgas alus</strong></div>
+              <button className="catalog-refresh" aria-label="Atjaunot vietas" disabled={refreshing} onClick={() => void onRefresh()}><RefreshCw size={16} /></button>
               <button className="mobile-close" onClick={() => setMobileListOpen(false)} aria-label="Aizvērt vietu sarakstu"><X size={18} /></button>
             </div>
+            {refreshFailed && <p className="catalog-refresh-error" role="status">Neizdevās atjaunināt. Redzamas pēdējās ielādētās cenas.</p>}
 
             <label className="search-box">
               <Search size={17} />

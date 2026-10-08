@@ -7,7 +7,7 @@ import { queryVenues } from '../app/beer-query';
 import { markerAmount, markerTone } from '../app/price-presentation';
 
 await test('native API preserves every published serving and source', async () => {
-  const response = GET(new Request('https://manbesi.lv/api/venues'));
+  const response = await GET(new Request('https://manbesi.lv/api/venues'));
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), JSON.parse(JSON.stringify(catalog)));
   assert.equal(catalog.venues.length, mapVenues.length);
@@ -18,18 +18,18 @@ await test('native API preserves every published serving and source', async () =
     assert.equal(exported.sourceUrl, venue.sourceUrl);
   }
   const etag = response.headers.get('ETag')!;
-  const unchanged = GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': etag } }));
+  const unchanged = await GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': etag } }));
   assert.equal(unchanged.status, 304);
   assert.equal(await unchanged.text(), '');
 });
 
-await test('catalog revalidation handles compressed ETags and tag lists', () => {
-  const etag = GET(new Request('https://manbesi.lv/api/venues')).headers.get('ETag')!;
+await test('catalog revalidation handles compressed ETags and tag lists', async () => {
+  const etag = (await GET(new Request('https://manbesi.lv/api/venues'))).headers.get('ETag')!;
   for (const validator of [`W/${etag}`, `"unrelated,opaque", W/${etag}`, '*']) {
-    const response = GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': validator } }));
+    const response = await GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': validator } }));
     assert.equal(response.status, 304);
   }
-  const changed = GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': 'W/"older-catalog"' } }));
+  const changed = await GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': 'W/"older-catalog"' } }));
   assert.equal(changed.status, 200);
 });
 

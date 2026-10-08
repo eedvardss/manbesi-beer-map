@@ -1,9 +1,25 @@
-import { catalogJson } from '../../catalog';
+import { readCatalogJson } from '../../../lib/catalog-store';
 
-const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(catalogJson));
-const etag = `"${Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('')}"`;
+export const dynamic = 'force-dynamic';
+let previousJson: string | undefined;
+let previousEtag: string | undefined;
 
-export function GET(request: Request) {
+export async function GET(request: Request) {
+  let catalogJson: string;
+  try {
+    catalogJson = await readCatalogJson();
+  } catch {
+    return Response.json({ error: 'Catalog temporarily unavailable' }, {
+      status: 503, headers: { 'Cache-Control': 'no-store', 'Retry-After': '5' },
+    });
+  }
+  let etag = previousEtag;
+  if (catalogJson !== previousJson || !etag) {
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(catalogJson));
+    etag = `"${Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('')}"`;
+    previousJson = catalogJson;
+    previousEtag = etag;
+  }
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',

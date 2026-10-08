@@ -95,7 +95,10 @@ try {
   );
   // Reopening at the existing zoom can still produce a flyTo zoom event.
   // Programmatic camera movement must not dismiss the selected place.
-  await marker.click();
+  // The expanded detail can cover the price button on a small viewport.
+  // Exercise its keyboard toggle without clicking through the menu header.
+  await marker.focus();
+  await page.keyboard.press('Enter');
   await page.locator('.marker-detail').waitFor({ state: 'detached' });
   await page.locator('.mobile-results').click();
   await page.getByRole('button', {

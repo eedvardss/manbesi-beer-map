@@ -1,5 +1,5 @@
 import { servingPerLitre, type SortMode } from './beer-query';
-import type { BeerPrice } from './venues';
+import type { BeerPrice } from './venue-model';
 
 export const markerAmount = (beer: BeerPrice, sort: SortMode) =>
   sort === 'litre' ? servingPerLitre(beer) : beer.price;

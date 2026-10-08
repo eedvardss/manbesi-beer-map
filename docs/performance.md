@@ -1,6 +1,57 @@
 # Performance requirements and evidence
 
-Updated 5 October 2026. The user requires both the website and native iPhone app to feel fast while retaining excellent, clean design. Useful startup, responsive search, smooth lists and map movement, efficient network/cache behavior, and bounded memory/CPU/battery use are standing product requirements. The existing five-hour continuation may be revised independently as evidence changes; keep its cadence and quiet background behavior.
+Updated 8 October 2026. The user requires both the website and native iPhone app to feel fast while retaining excellent, clean design. Useful startup, responsive search, smooth lists and map movement, efficient network/cache behavior, and bounded memory/CPU/battery use are standing product requirements. The scheduled continuation was removed at the user's request; earlier schedule references are historical.
+
+## API frontend and Docker optimization — 8 October 2026
+
+The browser now loads the complete catalog through the REST API backed by
+PostgreSQL in Docker. Removed venue research and opening-hour data from client
+imports by splitting pure model/time helpers from source data. Validate each
+received snapshot once, prepare its search index and numeric opening intervals
+once, and retain the same snapshot/index/DOM on 304. No network requests occur
+on typing or filtering. A failed refresh retains the current view with an
+explicit notice. The refresh action and visible-page/focus revalidation after
+30 seconds preserve filters, selected place, and map instance.
+
+API requests retain one immutable document. A database trigger assigns a new
+revision on every SQL update; unchanged queries return the revision without
+transferring the payload. Health checks fetch only row existence. The runtime
+uses production dependencies, built assets and compiled migration/seed scripts.
+Precomputed Brotli/gzip variants avoid static compression work on requests.
+
+Measured production builds on Windows / Docker Desktop 4.94.0, Engine 29.8.2,
+Linux amd64, Node 22.23.3 and PostgreSQL 17.11:
+
+| Measurement | Before | After |
+| --- | ---: | ---: |
+| Docker image bytes (uncompressed image metadata) | 1,418,487,088 | 904,065,937 |
+| Page hydration JavaScript bytes | 903,832 | 230,097 |
+| Page hydration gzip bytes (build budget) | 211,999 | 77,714 |
+
+The hydration budget is now 300,000 raw / 100,000 gzip bytes. A real background
+Chrome session received 73,770 bytes for the Brotli page chunk and 37,380 bytes
+for the compressed catalog. This is not the full transfer: framework, styles,
+deferred map renderer, worker and map tiles are separate resources. The prior
+browser received the original page chunk uncompressed at 903,832 bytes.
+
+With browser cache disabled via routing, three local navigations took
+101/82/86 ms from automation navigation to first visible venue row. Six search
+fills through the next animation frame took 25/60/17/18/16/43 ms including
+automation overhead. These small local samples are descriptive; there is no
+comparable pre-change startup/typing series and no claim of improved device
+frame rate, p95 latency, memory or battery use.
+
+Validation: 19 unit/API/projection/recovery tests, data audit, bundled native
+snapshot equality, both production build targets, real PostgreSQL integration
+tests, actual Docker start, page/assets/health/API/304 checks, initial loading
+and 503/retry, failed refresh preservation and 304 marker identity, and the full
+existing desktop/mobile browser regression executed through Playwright CLI.
+Actual browser review covered desktop plus 390×844/320×568 mobile menu and
+timeline interactions. A direct SQL change to name, price and
+opening hours appeared after frontend refresh without rebuild; original data
+was restored byte-for-byte. Proof is in ignored `output/playwright/` and
+`artifacts/`. CI has additional container compression and browser checks;
+the updated CI job has not yet run remotely. No public deployment occurred.
 
 ## Measured query and bundle improvements
 
