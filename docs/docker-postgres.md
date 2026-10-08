@@ -24,6 +24,8 @@ docker compose up --build -d --wait
 ```
 
 Open http://localhost:3000. Change `APP_PORT` in `.env` if that port is occupied.
+The app port is published on all host interfaces, allowing access from other
+devices. For local-only access, use `127.0.0.1:${APP_PORT:-3000}:3000` instead.
 Run `node scripts/check-container.mjs` from the host to verify the page, a
 JavaScript asset, PostgreSQL health, complete catalog equality and ETag 304s.
 The database stays on the internal Compose network. `/api/health` returns 200
@@ -34,6 +36,13 @@ Compose waits for PostgreSQL's health check, runs versioned migrations and
 seeds an empty database, then starts the app. The named `postgres_data` volume
 survives container replacement and `docker compose down`. Startup preserves
 an existing catalog. The app runs as the unprivileged Node user.
+
+`db-setup` runs `scripts/setup-database.sh` with the built app image. Keeping
+this as a one-shot service ensures versioned migrations run against existing
+volumes as well as new databases. PostgreSQL initialization scripts run only
+when its data directory is empty; the PostgreSQL image also lacks the Node
+runtime used by the migration and seed commands. A setup failure prevents
+the app from starting. This service can become a migration Job in Kubernetes.
 
 ```powershell
 docker compose logs -f app db-setup
@@ -92,6 +101,12 @@ delete its published catalog row:
 $env:BEER_MAP_TEST_DATABASE_URL = 'postgresql://user:password@localhost:5432/beer_map_test'
 npm run test:postgres
 ```
+
+CI starts a disposable PostgreSQL service for the integration tests. Those
+tests exercise real transactions, constraints, revision triggers, repeatable
+migrations and failure handling. They intentionally modify and delete catalog
+data, so their dedicated test database is separate from the Compose database
+used for container and browser checks. Neither service connects to production.
 
 The WebAssembly helper dependencies `@emnapi/core` and `@emnapi/runtime` are
 pinned explicitly because npm 11 omitted their entries from this project's

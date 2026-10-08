@@ -20,7 +20,7 @@ COPY --from=production-dependencies --chown=node:node /app/node_modules ./node_m
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/package.json /app/package-lock.json ./
-COPY --from=build --chown=node:node /app/scripts/start-server.mjs ./scripts/
+COPY --from=build --chown=node:node /app/scripts/start-server.mjs /app/scripts/setup-database.sh ./scripts/
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \

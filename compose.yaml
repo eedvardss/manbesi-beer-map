@@ -25,7 +25,7 @@ services:
 
   db-setup:
     <<: *app
-    command: [npm, run, db:setup:docker]
+    command: [sh, scripts/setup-database.sh]
     healthcheck:
       disable: true
     depends_on:
@@ -35,7 +35,7 @@ services:
   app:
     <<: *app
     ports:
-      - '127.0.0.1:${APP_PORT:-3000}:3000'
+      - '${APP_PORT:-3000}:3000'
     depends_on:
       db-setup:
         condition: service_completed_successfully

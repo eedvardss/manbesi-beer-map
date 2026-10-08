@@ -1,0 +1,2 @@
+# Shell entrypoints must also work in Docker from Windows checkouts.
+*.sh text eol=lf

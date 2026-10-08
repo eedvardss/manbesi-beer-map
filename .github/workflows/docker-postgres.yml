@@ -6,6 +6,8 @@ permissions:
 jobs:
   integration:
     runs-on: ubuntu-latest
+    # Disposable database for destructive migration/API integration tests.
+    # Compose uses a separate database for container and browser verification.
     services:
       postgres:
         image: postgres:17-bookworm
