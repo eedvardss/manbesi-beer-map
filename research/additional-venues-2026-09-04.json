@@ -1,0 +1,94 @@
+{
+  "checkedAt": "2026-09-04",
+  "baseline": {"threadId":"01a06383-fc48-7a03-9021-e3e6cdf38139","title":"Reverse engineer Ölkartan data","mapVenueCount":161,"existingRejectionCount":249},
+  "scope":"Research only. No production dataset changes or publication. Riga bars and bar-like nightlife; exact on-premise beer prices; no delivery or retail prices.",
+  "venues": [
+    {
+      "name":"Objekts x BBQ",
+      "address":"Sporta iela 2 k-3, Rīga, LV-1013",
+      "category":"Bar, BBQ and live-music venue",
+      "status":"verified_official_menu",
+      "website":"https://objektsbbq.lv/",
+      "menuUrl":"https://objektsbbq.lv/bars-kafejnica/dzerienkarte",
+      "sourceUrl":"https://objektsbbq.lv/assets/drinks-menu-lv-2-DQOeE7dr.jpg",
+      "sourceType":"Official menu image, visually inspected",
+      "sourceDate":null,
+      "recency":"Undated menu currently linked by the live official website; accessed 2026-09-04. No visit or owner confirmation.",
+      "currency":"EUR",
+      "hours":"Mo-Tu closed; We-Th 16:00-00:00; Fr 16:00-01:00; Sa 14:00-01:00; Su 14:00-00:00. Private events can change hours.",
+      "coordinateSource":"https://www.google.com/maps/place/?q=place_id:ChIJoVMrclbD7kYRYjUwkLRxC50",
+      "coordinates":null,
+      "beerPrices":[
+        {"beer":"POOKA LAGER","volumeMl":300,"price":4,"serving":"draft"},
+        {"beer":"POOKA LAGER","volumeMl":500,"price":5,"serving":"draft"},
+        {"beer":"POOKA LAGER","volumeMl":1500,"price":13,"serving":"pitcher"},
+        {"beer":"MĪTAVA GAIŠAIS","volumeMl":300,"price":3.5,"serving":"draft"},
+        {"beer":"MĪTAVA GAIŠAIS","volumeMl":500,"price":4,"serving":"draft"},
+        {"beer":"MĪTAVA GAIŠAIS","volumeMl":1500,"price":10,"serving":"pitcher"},
+        {"beer":"PIEBALGAS GAIŠAIS","volumeMl":300,"price":4.5,"serving":"draft"},
+        {"beer":"PIEBALGAS GAIŠAIS","volumeMl":500,"price":5,"serving":"draft"},
+        {"beer":"PIEBALGAS GAIŠAIS","volumeMl":1500,"price":13,"serving":"pitcher"},
+        {"beer":"VALMIERMUIŽA","volumeMl":300,"price":5,"serving":"draft"},
+        {"beer":"VALMIERMUIŽA","volumeMl":500,"price":6,"serving":"draft"},
+        {"beer":"VALMIERMUIŽA","volumeMl":1500,"price":16,"serving":"pitcher"},
+        {"beer":"LEFFE BLONDE","volumeMl":300,"price":5,"serving":"draft"},
+        {"beer":"LEFFE BLONDE","volumeMl":500,"price":6,"serving":"draft"},
+        {"beer":"LEFFE BLONDE","volumeMl":1500,"price":16,"serving":"pitcher"},
+        {"beer":"CORONA EXTRA","volumeMl":330,"price":4,"serving":"bottle"},
+        {"beer":"VALMIERMUIŽAS FRIŠS","volumeMl":500,"price":4,"serving":"bottle","note":"500 ml is the section heading; retain the original product name, which may denote a beer cocktail."}
+      ],
+      "notes":"Distinct business from Zefīrs, despite shared Sporta 2 quarter. Generic non-alcoholic beer at EUR 4 on page 1 excluded because no brand or serving size is printed. Ciders excluded. Coordinates still need resolution before map integration."
+    },
+    {
+      "name":"When Coffee Meets Whisky (WCMW)",
+      "address":"Baznīcas iela 20/22, Rīga",
+      "category":"Listening bar",
+      "status":"provisional_currency_and_size",
+      "sourceUrl":"https://wcmw.bar/",
+      "sourceType":"Live official HTML drinks menu",
+      "sourceDate":null,
+      "recency":"Undated live menu accessed 2026-09-04; official identity corroborated by Riga This Week listing.",
+      "identitySource":"https://rigathisweek.lv/object/nightlife/listening-bar/when-coffee-meets-whisky-wcmw/1641",
+      "hours":"Mo-Tu closed; We 12:00-22:00; Th 12:00-23:00; Fr-Sa 12:00-02:00; Su closed",
+      "currency":null,
+      "beerPrices":[
+        {"beer":"Asahi 5.2%","volumeMl":null,"price":6},
+        {"beer":"Sapporo 4.7%","volumeMl":null,"price":5.5},
+        {"beer":"Kirin Ichiban 5%","volumeMl":null,"price":5.5}
+      ],
+      "notes":"Beer section prints numeric amounts without currency or volume. The same page explicitly says '2 euros' for a coffee promotion, supporting EUR context, but does not explicitly label the beer prices. Hold under the existing strict currency standard. Do not invent bottle sizes."
+    },
+    {
+      "name":"Popcorn Dinner & Show — bar",
+      "address":"Eksporta iela 1A, ExPorto, Rīga",
+      "category":"Dinner-show entertainment venue with bar",
+      "status":"verified_prices_hold_access_and_hours",
+      "website":"https://popcorn-riga.lv/bar/",
+      "identitySource":"https://popcorn-riga.lv/contact-us/",
+      "sourceUrl":"https://popcorn-riga.lv/wp-content/uploads/Popcorn-drink-menu.pdf",
+      "sourceType":"Official drinks PDF, page 1, BEER section, visually inspected",
+      "sourceDate":null,
+      "recency":"Undated menu currently linked from the official bar page; official site advertises September 2026 shows. Accessed 2026-09-04.",
+      "currency":"EUR",
+      "hours":null,
+      "beerPrices":[
+        {"beer":"Bauska","volumeMl":500,"price":6},
+        {"beer":"Birra Moretti","volumeMl":330,"price":5},
+        {"beer":"Birra Moretti B/A","volumeMl":330,"price":5,"nonAlcoholic":true}
+      ],
+      "accessSource":"https://popcorn.tablein.com/en",
+      "notes":"Official reservations sell dinner-show tickets with separate admission and food/drink allowances (e.g. EUR 130 for TINA: EUR 80 admission plus EUR 50 food/drink allowance). Do not advertise a EUR 5 walk-in visit. Regular weekly hours and bar access without a ticket remain unverified; hold under the existing map rule."
+    }
+  ],
+  "additionalUnpricedLeads":[
+    {"name":"Nurme Bar — Avotu","address":"Avotu iela 53, Rīga","sourceUrl":"https://nurmebeer.com/","reason":"Official brewery site explicitly confirms this separate bar still operates. Existing map has only the Vagonu 21 taproom. No current qualifying Avotu-branch beer tariff found; never copy Vagonu prices."},
+    {"name":"RŪM Cocktail Bar","address":"Aristida Briāna iela 9A, Rīga","sourceUrl":"https://festimo.lv/rum/","reason":"Official operator and tourism listing identify the cocktail bar. No current exact beer tariff found."},
+    {"name":"Clayton McNamaras Drinking Emporium","address":"Vaļņu iela 41, Rīga","sourceUrl":"https://restaurantguru.com/Clayton-McNamaras-Drinking-Emporium-Riga/menu","reason":"Separate bar omitted from baseline; available menu photos are at least a year old, so price verification remains open."},
+    {"name":"Jackie Bar","address":"Ausekļa iela 22, Rīga","sourceUrl":"https://en.johnrestaurant.com/jackiebar","reason":"Official bar menu exposes cocktails but no beer tariff; not eligible for beer map yet."},
+    {"name":"Monika Centrum Hotels lobby bar","address":"Elizabetes iela 21, Rīga","sourceUrl":"https://monika.centrumhotels.com/restorans/?lang=lv","reason":"Official bar identity/hours available, but its drinks-menu link resolves to a lunch menu dated 2026-05-28, containing no beer prices."}
+  ],
+  "otherRejectedChecks":[
+    {"name":"The Oak Lounge","sourceUrl":"https://theoaklounge.com/","reason":"The discovered official domain currently identifies Tallinn, Estonia. Cannot transfer its menu to the Riga listing."},
+    {"name":"Flauta","sourceUrl":"https://meetriga.com/lv/7887-zefirs-and-flauta","reason":"Same Sporta 2 hospitality complex as existing Zefīrs; no independently verified beer menu. Do not copy Zefīrs prices."}
+  ]
+}
