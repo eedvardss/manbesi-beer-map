@@ -1,0 +1,8 @@
+project_id                 = "beermap-devops"
+region                     = "europe-north1"
+zone                       = "europe-north1-a"
+billing_account_id         = "REPLACE_WITH_BILLING_ACCOUNT_ID"
+github_repository_id       = "REPLACE_WITH_NUMERIC_ID"
+github_repository_owner_id = "REPLACE_WITH_NUMERIC_ID"
+budget_sek                 = 500
+deletion_protection        = true

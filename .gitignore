@@ -10,6 +10,7 @@
 
 # testing
 /coverage
+/.scannerwork/
 
 # next.js
 /.next/
@@ -50,3 +51,14 @@ next-env.d.ts
 /artifacts/
 /.playwright-cli/
 /output/playwright/
+
+# Local infrastructure state, credentials and plans
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example
+crash.log
+**/kubeconfig*
+/infra/bootstrap/backend.tf

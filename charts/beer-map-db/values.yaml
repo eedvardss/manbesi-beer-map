@@ -1,0 +1,17 @@
+image: postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
+database: beer_map
+adminUser: beer_map
+adminSecret: beer-map-db-admin
+storage:
+  size: 5Gi
+  className: ''
+resources:
+  requests: {cpu: 100m, memory: 256Mi}
+  limits: {cpu: '1', memory: 1Gi}
+networkPolicy: true
+backup:
+  enabled: false
+  schedule: '15 2 * * *'
+  bucket: ''
+  serviceAccount: ''
+  uploaderImage: google/cloud-sdk:slim@sha256:c70885ba9f0450ea9987b1c5dc1ab80acc768bac2fe783962dc98a64ea74c806

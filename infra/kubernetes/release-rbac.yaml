@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: {name: beer-map-release, namespace: beer-map}
+rules:
+  - apiGroups: ['']
+    resources: [configmaps]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: ['']
+    resources: [pods, pods/log, events, services, serviceaccounts]
+    verbs: [get, list, watch]
+  - apiGroups: [apps]
+    resources: [deployments, replicasets]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [batch]
+    resources: [jobs]
+    verbs: [get, list, watch, create, update, patch, delete]
+  - apiGroups: [networking.k8s.io]
+    resources: [networkpolicies, ingresses]
+    verbs: [get, list, watch]
+  - apiGroups: [autoscaling]
+    resources: [horizontalpodautoscalers]
+    verbs: [get, list, watch, create, update, patch, delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: {name: beer-map-release, namespace: beer-map}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: beer-map-release}
+subjects:
+  - {apiGroup: rbac.authorization.k8s.io, kind: User, name: beer-map-deploy@beermap-devops.iam.gserviceaccount.com}

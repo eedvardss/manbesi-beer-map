@@ -1,0 +1,6 @@
+apiVersion: v2
+name: beer-map
+description: Stateless frontend and REST API with a gated migration job
+type: application
+version: 0.1.0
+appVersion: '0.1.0'

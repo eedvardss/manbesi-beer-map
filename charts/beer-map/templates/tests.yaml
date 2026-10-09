@@ -1,0 +1,92 @@
+{{- range $test := list "network" "role" }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: beer-map-{{ $test }}-test
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 30
+  ttlSecondsAfterFinished: 600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: beer-map-{{ $test }}-test
+        {{- if eq $test "role" }}
+        beer-map/database-client: 'true'
+        {{- end }}
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: verify
+          image: {{ include "beer-map.image" $ | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command: [node, --input-type=module, -e]
+          args:
+            - |
+              {{- if eq $test "network" }}
+              import net from 'node:net';
+              const health = async () => {
+                const response = await fetch('http://beer-map/api/health', {signal: AbortSignal.timeout(5000)});
+                if (!response.ok) throw new Error('Database positive control failed');
+              };
+              await health();
+              await new Promise((resolve, reject) => {
+                const socket = net.createConnection({host: process.env.DATABASE_HOST, port: 5432});
+                socket.setTimeout(1500);
+                socket.once('connect', () => {socket.destroy(); reject(new Error('Unauthorized pod reached PostgreSQL'));});
+                socket.once('error', reject);
+                socket.once('timeout', () => {socket.destroy(); resolve();});
+              });
+              await health();
+              console.log('PostgreSQL is healthy and unauthorized pod traffic is blocked');
+              {{- else }}
+              import pg from 'pg';
+              import {loadDatabaseConfiguration} from './scripts/runtime-config.mjs';
+              loadDatabaseConfiguration();
+              const client = new pg.Client({connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 5000});
+              await client.connect();
+              try {
+                const {rows} = await client.query('SELECT count(*)::int AS count FROM beer_map_catalog');
+                if (rows[0].count !== 1) throw new Error('Published catalog is missing');
+                await client.query('BEGIN');
+                try {
+                  await client.query('UPDATE beer_map_catalog SET payload=payload');
+                  throw new Error('Application role unexpectedly permits writes');
+                } catch (error) {if (error.code !== '42501') throw error;}
+                finally {await client.query('ROLLBACK');}
+                console.log('Application role reads the catalog and rejects writes');
+              } finally {await client.end();}
+              {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          env:
+            - {name: DATABASE_HOST, value: {{ $.Values.database.host | quote }}}
+            {{- if eq $test "role" }}
+            - {name: DATABASE_USER, value: {{ $.Values.database.appUser | quote }}}
+            - {name: DATABASE_NAME, value: {{ $.Values.database.name | quote }}}
+            - {name: DATABASE_PASSWORD_FILE, value: /credentials/password}
+          volumeMounts:
+            - {name: credentials, mountPath: /credentials, readOnly: true}
+            {{- end }}
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {cpu: 200m, memory: 128Mi}
+      {{- if eq $test "role" }}
+      volumes:
+        - name: credentials
+          secret: {secretName: {{ $.Values.database.appSecret }}, defaultMode: 0440}
+      {{- end }}
+{{- end }}
