@@ -1,0 +1,42 @@
+name: Infrastructure and secrets
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: infra-check-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - run: sh scripts/install-ci-tools.sh
+      - run: actionlint -shellcheck= -pyflakes=
+      - name: Scan source and commit history for credentials
+        run: |
+          gitleaks dir . --redact --no-banner
+          gitleaks git . --redact --no-banner
+      - run: terraform fmt -check -recursive infra
+      - run: terraform -chdir=infra/bootstrap init -backend=false -lockfile=readonly
+      - run: terraform -chdir=infra/bootstrap validate
+      - run: terraform -chdir=infra/environments/demo init -backend=false -lockfile=readonly
+      - run: terraform -chdir=infra/environments/demo validate
+      - run: terraform -chdir=infra/environments/demo test
+      - run: tflint --chdir infra --recursive
+      - name: Scan infrastructure and rendered Kubernetes workloads
+        run: |
+          trivy config infra --severity HIGH,CRITICAL --exit-code 1
+          helm lint charts/beer-map charts/beer-map-db charts/observability --strict
+          helm template beer-map charts/beer-map > "$RUNNER_TEMP/app.yaml"
+          helm template beer-map-db charts/beer-map-db --set backup.enabled=true --set backup.bucket=scan-only --set backup.serviceAccount=beer-map-backup@beermap-devops.iam.gserviceaccount.com > "$RUNNER_TEMP/db.yaml"
+          trivy config "$RUNNER_TEMP/app.yaml" --severity HIGH,CRITICAL --exit-code 1
+          trivy config "$RUNNER_TEMP/db.yaml" --severity HIGH,CRITICAL --exit-code 1
+          helm template observability charts/observability --set holmes.enabled=true > "$RUNNER_TEMP/observability.yaml"
+          trivy config "$RUNNER_TEMP/observability.yaml" --severity HIGH,CRITICAL --exit-code 1
