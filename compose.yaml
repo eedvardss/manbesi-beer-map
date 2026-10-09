@@ -2,14 +2,18 @@ name: beer-map
 
 x-app: &app
   image: beer-map:local
-  build: .
+  build:
+    context: .
+    args:
+      VCS_REF: ${BEER_MAP_VERSION:-development}
   environment:
     DATABASE_URL: postgresql://beer_map:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/beer_map
     NODE_ENV: production
+    BEER_MAP_REQUIRE_DATABASE: 'true'
 
 services:
   db:
-    image: postgres:17-bookworm
+    image: postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
     environment:
       POSTGRES_USER: beer_map
       POSTGRES_DB: beer_map

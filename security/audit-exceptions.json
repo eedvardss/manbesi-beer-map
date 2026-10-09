@@ -1,0 +1,9 @@
+[
+  {
+    "advisory": "GHSA-vfj7-8cjw-p6xm",
+    "package": "braces",
+    "version": "3.0.3",
+    "expires": "2026-11-08",
+    "reason": "No patched braces release exists as of 2026-10-09. Used by Vinext build globbing and the shadcn development CLI with repository-controlled patterns; no application route accepts glob patterns. Upgrade the upstream chain when a fix is published."
+  }
+]

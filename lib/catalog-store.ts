@@ -1,9 +1,10 @@
 import { catalogJson } from '../app/catalog';
-import { database, databaseConfigured } from './database';
+import { assertDatabaseConfiguration, database, databaseConfigured } from './database';
 
 // Keep the complete versioned API document, including serving identity and
 // provenance. TEXT preserves the same bytes and ETag as the file catalog.
 export async function readCatalogJson(): Promise<string> {
+  assertDatabaseConfiguration();
   if (!databaseConfigured()) return catalogJson;
   const previous = cached;
   const result = await database().query<{ payload: string | null; version: string }>(
@@ -24,6 +25,8 @@ export async function readCatalogJson(): Promise<string> {
 let cached: { version: string; payload: string } | undefined;
 
 export async function catalogReady() {
+  assertDatabaseConfiguration();
+  if ((globalThis as typeof globalThis & { __beerMapDraining?: boolean }).__beerMapDraining) return false;
   if (!databaseConfigured()) return true;
   const result = await database().query("SELECT 1 FROM beer_map_catalog WHERE id = 'published'");
   return result.rowCount === 1;

@@ -8,7 +8,8 @@ const normalize = (value: string) => value
   .toLocaleLowerCase('lv')
   .replace(/[^a-z0-9]+/g, '');
 
-const pairKey = (first: string, second: string) => [first, second].sort().join('|');
+const pairKey = (first: string, second: string) => [first, second]
+  .sort((left, right) => left.localeCompare(right, 'en')).join('|');
 
 const reviewedNearbyPairs = new Set([
   pairKey('nurme', '1983-bars'),
@@ -62,7 +63,7 @@ for (const venue of mapVenues) {
     failures.push(`Coordinates outside Riga bounds: ${venue.id} (${venue.lat}, ${venue.lng})`);
   }
   if (!/^https?:\/\//.test(venue.sourceUrl)) failures.push(`Invalid source URL: ${venue.id}`);
-  if (!beers.length) failures.push(`Empty beer list: ${venue.id}`);
+  if (!beers.length) { failures.push(`Empty beer list: ${venue.id}`); continue; }
   if (!venueOpeningHours[venue.id]) failures.push(`Missing weekly hours record: ${venue.id}`);
 
   const beerKeys = new Set<string>();
@@ -78,7 +79,7 @@ for (const venue of mapVenues) {
     beerKeys.add(beerKey);
   }
 
-  const cheapest = beers.reduce((best, beer) => beer.price < best.price ? beer : best);
+  const cheapest = beers.reduce((best, beer) => beer.price < best.price ? beer : best, beers[0]);
   if (venue.price !== cheapest.price || venue.beer !== cheapest.name || venue.volumeMl !== cheapest.volumeMl) {
     failures.push(`Marker does not use cheapest serving: ${venue.id}`);
   }

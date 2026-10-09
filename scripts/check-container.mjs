@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const base = process.env.BEER_MAP_TEST_URL ?? 'http://127.0.0.1:3000';
+const address = process.env.BEER_MAP_TEST_URL ?? 'http://127.0.0.1:3000';
+let end = address.length;
+while (address[end - 1] === '/') end--;
+const base = address.slice(0, end);
 const health = await fetch(`${base}/api/health`);
 assert.equal(health.status, 200);
 assert.equal((await health.json()).catalog, 'postgres');
