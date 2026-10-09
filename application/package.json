@@ -27,6 +27,7 @@
     "perf:bundle": "node scripts/check-performance-budget.mjs",
     "check": "npm run lint && npm run typecheck && npm test && npm run audit:data",
     "test:browser": "node scripts/check-mobile-interactions.mjs",
+    "test:browser:show": "node scripts/check-mobile-interactions.mjs --headed",
     "prebuild": "npm run check",
     "check:all": "npm run check && npm run test:browser",
     "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",

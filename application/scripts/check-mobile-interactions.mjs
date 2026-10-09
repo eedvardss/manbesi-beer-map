@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
 
-const browser = await chromium.launch({ headless: true });
+const headed = process.argv.includes('--headed');
+const browser = await chromium.launch({ headless: !headed, slowMo: headed ? 350 : 0 });
 try {
   const context = await browser.newContext({
     viewport: { width: 1280, height: 900 },
   });
   const page = await context.newPage();
-  await page.goto(process.env.BEER_MAP_TEST_URL ?? 'http://localhost:3000/');
+  await page.goto(process.env.BEER_MAP_TEST_URL ?? (headed ? 'http://127.0.0.1:3010/' : 'http://localhost:3000/'));
   await page.locator('.price-marker').first().waitFor();
   const search = page.getByRole('textbox', { name: 'Meklēt vietas' });
   assert.equal(await page.locator('.marker-node').count(), 165, 'Every venue must have its own marker');

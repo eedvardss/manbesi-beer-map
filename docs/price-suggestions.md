@@ -109,6 +109,19 @@ from `application/`.
 
 No CI wiring was added. Local commands from `application/`:
 
+To watch the robot run the existing map checks in a visible browser:
+
+```sh
+npm run test:browser:show
+```
+
+This opens Chromium, slows the actions for watching, and automatically clicks,
+searches, filters, opens bar menus and checks mobile interactions. It targets the
+local preview on port 3010; set `BEER_MAP_TEST_URL` to use another running app.
+The browser closes when the checks finish. It does not change database prices.
+
+Other verification commands:
+
 ```sh
 npm run check
 npm run build
