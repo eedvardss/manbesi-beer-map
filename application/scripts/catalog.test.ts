@@ -6,7 +6,7 @@ import { mapVenues, venueBeerPrices } from '../app/venues';
 import { queryVenues } from '../app/beer-query';
 import { markerAmount, markerTone } from '../app/price-presentation';
 
-await test('native API preserves every published serving and source', async () => {
+await test('catalog API preserves every published serving and source', async () => {
   const response = await GET(new Request('https://manbesi.lv/api/venues'));
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), JSON.parse(JSON.stringify(catalog)));
@@ -14,28 +14,50 @@ await test('native API preserves every published serving and source', async () =
   assert.equal(catalog.checkedAt, '2026-09-04');
   for (const venue of mapVenues) {
     const exported = catalog.venues.find((record) => record.id === venue.id)!;
-    assert.deepEqual(exported.beers, venueBeerPrices(venue));
+    assert.deepEqual(
+      exported.beers.map(({ id: _id, revision: _revision, ...beer }) => beer),
+      venueBeerPrices(venue),
+    );
     assert.equal(exported.sourceUrl, venue.sourceUrl);
   }
   const etag = response.headers.get('ETag')!;
-  const unchanged = await GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': etag } }));
+  const unchanged = await GET(
+    new Request('https://manbesi.lv/api/venues', {
+      headers: { 'If-None-Match': etag },
+    }),
+  );
   assert.equal(unchanged.status, 304);
   assert.equal(await unchanged.text(), '');
 });
 
 await test('catalog revalidation handles compressed ETags and tag lists', async () => {
-  const etag = (await GET(new Request('https://manbesi.lv/api/venues'))).headers.get('ETag')!;
+  const etag = (
+    await GET(new Request('https://manbesi.lv/api/venues'))
+  ).headers.get('ETag')!;
   for (const validator of [`W/${etag}`, `"unrelated,opaque", W/${etag}`, '*']) {
-    const response = await GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': validator } }));
+    const response = await GET(
+      new Request('https://manbesi.lv/api/venues', {
+        headers: { 'If-None-Match': validator },
+      }),
+    );
     assert.equal(response.status, 304);
   }
-  const changed = await GET(new Request('https://manbesi.lv/api/venues', { headers: { 'If-None-Match': 'W/"older-catalog"' } }));
+  const changed = await GET(
+    new Request('https://manbesi.lv/api/venues', {
+      headers: { 'If-None-Match': 'W/"older-catalog"' },
+    }),
+  );
   assert.equal(changed.status, 200);
 });
 
 await test('litre markers show and color the winning unit price', () => {
   const [ala] = queryVenues(mapVenues, 'ALA Pagrabs', 'all', 'litre');
-  const beer = { name: ala.beer, price: ala.price, volumeMl: ala.volumeMl, packageCount: ala.packageCount };
+  const beer = {
+    name: ala.beer,
+    price: ala.price,
+    volumeMl: ala.volumeMl,
+    packageCount: ala.packageCount,
+  };
   assert.equal(markerAmount(beer, 'litre'), 6.3);
   assert.equal(markerTone(beer, 'litre'), 'cheap');
   assert.equal(markerAmount(beer, 'price'), 18.9);

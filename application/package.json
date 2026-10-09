@@ -22,14 +22,19 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "typecheck": "tsc --noEmit --incremental false",
-    "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts scripts/catalog-client.test.ts scripts/map-retry.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
+    "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts scripts/catalog-client.test.ts scripts/map-retry.test.ts scripts/price-input.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
     "perf:query": "node --import tsx scripts/benchmark-query.ts",
     "perf:bundle": "node scripts/check-performance-budget.mjs",
     "check": "npm run lint && npm run typecheck && npm test && npm run audit:data",
     "test:browser": "node scripts/check-mobile-interactions.mjs",
+    "test:browser:show": "node scripts/check-mobile-interactions.mjs --headed",
     "prebuild": "npm run check",
     "check:all": "npm run check && npm run test:browser",
-    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json"
+    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "test:prices:postgres": "tsx --test scripts/prices-postgres.test.ts",
+    "test:browser:prices": "node scripts/check-price-interactions.mjs",
+    "test:browser:ui": "playwright test --ui",
+    "test:browser:suite": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

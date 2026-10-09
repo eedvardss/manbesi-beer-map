@@ -2,7 +2,7 @@ import { build } from 'esbuild';
 import { cp } from 'node:fs/promises';
 
 await build({
-  entryPoints: ['scripts/db-migrate.ts', 'scripts/db-seed.ts'],
+  entryPoints: ['scripts/db-migrate.ts', 'scripts/db-seed.ts', 'scripts/db-price-roles.ts'],
   outdir: 'dist/db', bundle: true, platform: 'node', format: 'esm',
   target: 'node22', external: ['pg'],
 });
