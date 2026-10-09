@@ -16,10 +16,20 @@ local check is distinct from a completed GitHub release or a public deployment.
 | Telemetry | Queried real HTTP/SQL traces, request metrics and exported logs; provisioned five-panel Grafana dashboard and Prometheus/Loki/Tempo data sources |
 | Security/quality | Source and 63-commit history credential scans; fixed image vulnerability gate; Sonar overall reliability/security gate; auth/size/concurrency/deduplication bridge test |
 | Internal TLS | GKE bridge and Holmes health checks using the mounted CA both 200; unauthenticated alert rejected 401; authenticated alert accepted 202; final TLS Helm upgrade healthy |
+| GitHub CI | All three workflows passed for implementation commit `892b09b`: application, Docker/PostgreSQL/browser/kind/Sonar, and infrastructure/secrets |
+| Exercise cleanup | Helm releases and six demo PVCs removed after restore proof; cluster/node pool/NAT/router/subnet/network destroyed; no clusters, instances, disks, addresses, forwarding rules or routers remain |
 
 The unmodified dump is retained privately in
 the demonstration backup bucket; restore-check DB and temporary in-pod files
 were removed after comparison.
+
+The cloud demo is now stopped. Private state, the tested dump, registry images,
+secret versions, identities and budget alerts remain; retained storage is not
+free. The complete post-cleanup Terraform plan reports exactly six creations,
+zero changes and zero deletions, matching the intentionally removed compute
+and network. Applying it recreates chargeable infrastructure; follow the
+runbook's restore order before releasing. Actual billing totals and trial
+expiry must be checked in Billing.
 
 The image scan gates published fixes, not zero vulnerabilities. The narrowly
 versioned `braces` advisory exception expires **8 November 2026**. Terraform's

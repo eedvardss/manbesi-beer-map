@@ -390,6 +390,14 @@ complete AI diagnosis (Vertex HTTP 429), a separate operator/project reproductio
 and public TLS ingress remain distinct verification gates. Existing Aluskarte
 hosting, venue data, native source and the removed background schedule are preserved.
 
+All three GitHub CI workflows passed on implementation commit `892b09b`.
+Draft PR #2 contains the work. After backup verification, all demo Helm releases,
+PVCs, GKE compute and network/NAT resources were removed. Inventory confirms no
+remaining clusters, instances, disks, addresses, forwarding rules or routers.
+Private state, backup, registry, secrets, identities and budget alerts remain.
+A complete Terraform plan proposes only the six expected recreation resources.
+Do not recreate paid demo compute while owner protections remain unresolved.
+
 ## Next work
 
 The functional baseline is verified; visual design remains provisional. Prioritize measured responsiveness and the remaining rendered review:

@@ -4,7 +4,8 @@ The course proposal is https://github.com/KTH/devops-course/pull/3027.
 Source, charts, infrastructure and workflows share one GitHub repository.
 Images/charts live in Artifact Registry; private versioned Terraform state in
 GCS; application data and backups live outside Git. Existing public Aluskarte
-hostnames remain blank. Cloud exercises use a separate demonstration endpoint.
+hosting is unchanged. The demo ingress hostname is unset; cloud exercises
+currently use authenticated port forwarding.
 
 ## Deployment boundaries
 
@@ -30,7 +31,7 @@ or chart values; use mounted secrets for database passwords.
 | CI | Real isolated PostgreSQL tests, unit/type/data checks, browser tests, conditional requests; one SQL server |
 | Quality/security | Dependency gate with narrowly scoped expiring exceptions; secret, image and config scans; Sonar gate |
 | Terraform | fmt/validate/TFLint/config scan; reviewed saved plan; repeat apply without unexpected drift |
-| Helm | lint/render/schema checks; real fresh install, upgrade, failed migration and rollback |
+| Helm | lint/render and Kubernetes API validation; real fresh install, upgrade, failed migration and rollback |
 | Release | Protected tagged release; keyless access; tested image digest and versioned OCI chart; smoke tests |
 | Database | Runtime SELECT-only role; persistent storage; repeat migration; backup restored into separate DB |
 | Observability | A controlled failure produces metrics, correlated logs/traces and an actionable alert |

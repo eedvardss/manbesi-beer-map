@@ -212,8 +212,11 @@ This retains the node identity and its registry permissions. Targeting is
 an exceptional exercise-cleanup operation, not the normal deployment path.
 After applying it, check Compute disks, addresses, forwarding rules and GKE
 again, then inspect a complete Terraform plan to document the intentionally
-absent environment. A subsequent full apply recreates the platform; initialize
-secrets, restore the backup, and reinstall Helm releases before releasing.
+absent environment. A subsequent full apply recreates the platform. Synchronize
+secrets and install the database chart first, restore the verified backup into
+the new demonstration database, then install the application and observability
+charts and run their checks before releasing. Restore before the application's
+initial seed job; do not overwrite a live catalog as a smoke test.
 
 Production readiness still needs a separately selected hostname, TLS/ingress,
 availability/RPO targets, durable AI quotas, backup-age alerts and an actual
