@@ -109,7 +109,7 @@ $env:BEER_MAP_TEST_DATABASE_URL = 'postgresql://user:password@localhost:5432/bee
 npm run test:postgres
 ```
 
-CI does not run the PostgreSQL integration tests; run them locally. Those
+CI starts a disposable PostgreSQL service for the integration tests. Those
 tests exercise real transactions, constraints, revision triggers, repeatable
 migrations and failure handling. They intentionally modify and delete catalog
 data, so their dedicated test database is separate from the Compose database

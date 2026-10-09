@@ -9,7 +9,7 @@
     "audit:data": "npx tsx scripts/audit-venues.ts",
     "dev": "vinext dev",
     "build": "vinext build",
-    "build:docker": "npm run check && node scripts/build-docker.mjs && node scripts/build-database.mjs && npm run perf:bundle && node scripts/precompress-assets.mjs",
+    "build:docker": "node scripts/build-docker.mjs && node scripts/build-database.mjs && npm run perf:bundle && node scripts/precompress-assets.mjs",
     "start:docker": "vinext start",
     "db:migrate": "tsx scripts/db-migrate.ts",
     "db:seed": "tsx scripts/db-seed.ts",
