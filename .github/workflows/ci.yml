@@ -1,0 +1,222 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  IMAGE: ghcr.io/eedvardss/manbesi-beer-map
+
+defaults:
+  run:
+    working-directory: application
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: application/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: application/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run audit:data
+
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 22
+      - run: npm run audit:deps
+
+  # build:ci skips the prebuild hook, which would repeat the lint and test jobs.
+  build:
+    needs: [lint, test, audit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: application/package-lock.json
+      - run: npm ci
+      - run: npm run build:ci
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: docker/setup-buildx-action@v4.4.1
+        with:
+          # Google's Docker Hub mirror: avoids anonymous Docker Hub rate limits on shared runners.
+          driver-opts: image=mirror.gcr.io/moby/buildkit:buildx-stable-1
+      - uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: infrastructure/Dockerfile
+          load: true
+          tags: beer-map:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Find Trivy ignore file
+        id: trivyignore
+        working-directory: .
+        run: |
+          if [ -f infrastructure/.trivyignore ]; then
+            echo "path=infrastructure/.trivyignore" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: beer-map:ci
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+          trivyignores: ${{ steps.trivyignore.outputs.path }}
+          # Pinned deliberately: Trivy 0.69.4-0.69.6 were compromised releases.
+          version: v0.70.0
+
+  integration:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    # Disposable database for destructive migration/API integration tests.
+    # Compose uses a separate database for container and browser verification.
+    services:
+      postgres:
+        # Google's Docker Hub mirror: avoids anonymous Docker Hub rate limits on shared runners.
+        image: mirror.gcr.io/library/postgres:17-bookworm
+        env:
+          POSTGRES_USER: beer_map
+          POSTGRES_PASSWORD: integration_test_only
+          POSTGRES_DB: beer_map_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U beer_map -d beer_map_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    # Not job-level: the Playwright fixture passes its own --env-file, and a
+    # shell POSTGRES_PASSWORD would override it.
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: application/package-lock.json
+      - run: npm ci
+      - run: npm run test:postgres
+        env:
+          BEER_MAP_TEST_DATABASE_URL: postgresql://beer_map:integration_test_only@localhost:5432/beer_map_test
+      # Price suggestion SQL suite: requires its own database ending in _prices_test.
+      - run: docker exec ${{ job.services.postgres.id }} createdb -U beer_map beer_map_prices_test
+      - run: npm run test:prices:postgres
+        env:
+          BEER_MAP_TEST_DATABASE_URL: postgresql://beer_map:integration_test_only@localhost:5432/beer_map_prices_test
+          APP_DATABASE_PASSWORD: app_integration_test_only_0123456789
+          REVIEW_DATABASE_PASSWORD: review_integration_test_only_0123456789
+      - run: docker compose -f ../infrastructure/compose.yaml config --quiet
+        env:
+          POSTGRES_PASSWORD: compose_test_only
+      - run: docker compose -f ../infrastructure/compose.yaml up --build --wait --wait-timeout 180
+        env:
+          POSTGRES_PASSWORD: compose_test_only
+      - name: Verify container API and conditional requests
+        run: npx tsx scripts/check-container.ts
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+        env:
+          BEER_MAP_TEST_URL: http://127.0.0.1:3000/
+      # Playwright Test suite (playwright/*.spec.mjs): its fixture builds and runs
+      # a separate price-enabled Compose project (beer-map-playwright) on
+      # 127.0.0.1:3011 with generated credentials in artifacts/playwright.env.
+      - run: npm run test:browser:suite
+      - name: Container logs
+        if: failure()
+        run: docker compose -f ../infrastructure/compose.yaml logs
+        env:
+          POSTGRES_PASSWORD: compose_test_only
+      - name: Stop containers
+        if: always()
+        run: |
+          docker compose -f ../infrastructure/compose.yaml down --volumes
+          # The fixture stops its own stack but keeps the volume for local reruns.
+          if [ -f artifacts/playwright.env ]; then
+            docker compose --env-file artifacts/playwright.env -p beer-map-playwright \
+              -f ../infrastructure/compose.yaml -f ../infrastructure/compose.prices.yaml \
+              -f ../playwright/compose.yaml down --volumes
+          fi
+        env:
+          POSTGRES_PASSWORD: compose_test_only
+
+  # Rebuilds from the docker job's layer cache and pushes. Never runs for pull requests.
+  publish:
+    needs: [docker, integration]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: docker/setup-buildx-action@v4.4.1
+        with:
+          # Google's Docker Hub mirror: avoids anonymous Docker Hub rate limits on shared runners.
+          driver-opts: image=mirror.gcr.io/moby/buildkit:buildx-stable-1
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          # latest=auto adds "latest" only for semver tags.
+          tags: |
+            type=sha
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+      - uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: infrastructure/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha

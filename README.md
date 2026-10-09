@@ -11,7 +11,7 @@ See [competitor research](docs/competitor-research.md) and [current progress](do
 ## Repository layout
 
 - `application/`: the web app (Vinext source, API routes, database scripts, tests, `package.json`, Wrangler configuration).
-- `infrastructure/`: `Dockerfile`, `Dockerfile.dockerignore` and `compose.yaml`. The Docker build context is `../application`.
+- `infrastructure/`: `Dockerfile`, `Dockerfile.dockerignore` and `compose.yaml`. The Docker build context is the repository root; the dockerignore admits only `application/`.
 - `playwright/`: reserved for end-to-end tests; empty for now. The current browser test is `application/scripts/check-mobile-interactions.mjs`.
 - `docs/`: design, performance, competitor research, Docker notes and `DEVELOPMENT.md`.
 - `.github/`: CI workflows, which run npm commands in `application/`.

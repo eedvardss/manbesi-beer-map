@@ -1,21 +1,24 @@
 # Docker reads <Dockerfile>.dockerignore next to the Dockerfile. Patterns are
-# relative to the build context, ../application.
-node_modules
-dist
-.git
-.github
-.next
-.vinext
-.wrangler
-wrangler.jsonc
-worker.ts
-.env*
-!.env.example
-artifacts
-outputs
-work
-research
-test-results
-playwright-report
-*.log
-*.tsbuildinfo
+# relative to the build context, the repository root. Only application/ is sent.
+*
+!application
+application/node_modules
+application/dist
+application/.git
+application/.github
+application/.next
+application/.vinext
+application/.wrangler
+application/wrangler.jsonc
+application/worker.ts
+application/.env*
+!application/.env.example
+application/artifacts
+application/output
+application/outputs
+application/work
+application/research
+application/test-results
+application/playwright-report
+application/*.log
+application/*.tsbuildinfo

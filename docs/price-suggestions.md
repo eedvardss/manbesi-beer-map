@@ -66,7 +66,8 @@ Login persists across reloads for one hour. Logout removes the admin session;
 expired sessions clear the panel and return to login.
 
 The baseline Compose command still works with the feature disabled. The added
-Compose file is opt-in; no workflow or pipeline configuration was modified.
+Compose file is opt-in. CI's `integration` job runs the SQL suite and the
+Playwright Test suite below (see `docs/docker-postgres.md`).
 
 For an existing Node deployment, run the migration and seed scripts with the
 owner connection, then `tsx scripts/db-price-roles.ts` with both role passwords.
@@ -146,7 +147,7 @@ For a standalone visible browser, run `npx playwright test --headed` from
 `application/`. For headless execution, use `npx playwright test`.
 Runner traces/results are saved in `application/output/playwright/test-results/`.
 These traces include the isolated test admin login; keep them local.
-No pipeline configuration was changed.
+CI runs the same suite with `npm run test:browser:suite` in the `integration` job.
 
 Other verification commands:
 

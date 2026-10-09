@@ -16,7 +16,7 @@ filters and selection, and changed coordinates update existing markers.
 ## Run the stack
 
 Install Docker with Compose v2. The Docker files live in `infrastructure/`; the
-image builds from the `../application` context and uses
+image builds from the repository-root context and uses
 `infrastructure/Dockerfile.dockerignore`. Compose reads `.env` from the compose
 file's directory, so the file goes in `infrastructure/.env`. From the repository
 root:
@@ -33,7 +33,8 @@ The remaining `docker compose` examples assume `-f infrastructure/compose.yaml`
 Open http://localhost:3000. Change `APP_PORT` in `infrastructure/.env` if that port is occupied.
 The app port is published on all host interfaces, allowing access from other
 devices. For local-only access, use `127.0.0.1:${APP_PORT:-3000}:3000` instead.
-Run `npx tsx scripts/check-container.ts` from `application/` on the host to verify the page, a
+Run `npx tsx scripts/check-container.ts` from `application/` on the host (set
+`BEER_MAP_TEST_URL`, e.g. `http://127.0.0.1:3300`, if `APP_PORT` is not 3000) to verify the page, a
 JavaScript asset, PostgreSQL health, complete catalog equality and ETag 304s.
 The database stays on the internal Compose network. `/api/health` returns 200
 only when the configured catalog can be read, and identifies `postgres` or
@@ -42,9 +43,34 @@ only when the configured catalog can be read, and identifies `postgres` or
 Compose waits for PostgreSQL's health check, runs versioned migrations and
 seeds an empty database, then starts the app. The named `postgres_data` volume
 survives container replacement and `docker compose down`. Startup preserves
-an existing catalog. The app runs as the unprivileged Node user.
+an existing catalog.
 
-`db-setup` runs `scripts/setup-database.sh` (source: `application/scripts/`) with the built app image. Keeping
+## Image
+
+`infrastructure/Dockerfile` builds on `node:22.x-trixie-slim` and runs on
+`gcr.io/distroless/nodejs22-debian13:nonroot`, both pinned by digest. The
+runtime has no shell, package manager, npm, corepack or perl. After the Docker
+build, vinext's standalone emitter copies only the packages the server bundle
+leaves external (`pg`, `react`, `react-dom`, `ipaddr.js`) plus vinext's own
+runtime chain; `sharp` is dropped because `next/og` is unused. App files are
+root-owned and read-only; the process runs as uid 65532. Compose additionally
+sets `read_only`, `cap_drop: [ALL]` and `no-new-privileges` for the app and
+setup containers. The image `HEALTHCHECK` calls `/api/health` on `$PORT`.
+The entrypoint is `node`, so a Compose `command` is a script path. For a shell
+while debugging, temporarily swap in the `:debug-nonroot` distroless tag.
+Docker Hub images (the Node build stage, PostgreSQL, the Dockerfile frontend and
+CI's BuildKit) are pulled through Google's mirror `mirror.gcr.io` with the same
+tags and digests, avoiding anonymous Docker Hub rate limits on shared runners.
+
+Scan with Trivy (no fixable HIGH/CRITICAL findings on 9 October 2026):
+
+```powershell
+docker run --rm -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.70.0 image --severity HIGH,CRITICAL --ignore-unfixed beer-map:local
+```
+
+`db-setup` runs `scripts/setup-database.mjs` (source: `application/scripts/`) with the built app image.
+It applies migrations, seeds an empty database and, when `PRICE_SUGGESTIONS_ENABLED=true`
+(`compose.prices.yaml`), configures the restricted price roles. Keeping
 this as a one-shot service ensures versioned migrations run against existing
 volumes as well as new databases. PostgreSQL initialization scripts run only
 when its data directory is empty; the PostgreSQL image also lacks the Node
@@ -69,11 +95,11 @@ replace the existing PostgreSQL catalog:
 
 ```powershell
 docker compose build
-docker compose run --rm db-setup npm run db:seed:docker
+docker compose run --rm db-setup dist/db/db-seed.js
 docker compose up -d --wait
 ```
 
-`db:seed` / `db:seed:docker` replace the published document; setup only seeds
+`db:seed` / `db:seed:docker` (`dist/db/db-seed.js` in the image) replace the published document; setup only seeds
 if it is absent. Docker runs compiled migration and seed JavaScript, with
 production dependencies and built assets rather than the full source tree.
 With `DATABASE_URL` configured, missing data or database errors produce an
@@ -114,6 +140,10 @@ tests exercise real transactions, constraints, revision triggers, repeatable
 migrations and failure handling. They intentionally modify and delete catalog
 data, so their dedicated test database is separate from the Compose database
 used for container and browser checks. Neither service connects to production.
+The same job runs `test:prices:postgres` against a second disposable database
+(`beer_map_prices_test`), `test:browser` against the Compose app, and the
+Playwright Test suite (`npm run test:browser:suite`), whose fixture starts its
+own price-enabled Compose project (`beer-map-playwright`, port 3011).
 
 The WebAssembly helper dependencies `@emnapi/core` and `@emnapi/runtime` are
 pinned explicitly because npm 11 omitted their entries from this project's
@@ -144,6 +174,16 @@ Recreated the stack with `docker compose down` followed by `docker compose up
 -d --wait` while retaining its named volume. The catalog checksum and update
 timestamp remained identical, migrations were not repeated, and startup
 reported `Existing catalog preserved`. The app runs as uid 1000 (`node`).
-The stack is left running locally at http://localhost:3000. Credentials are
-in the ignored `.env` file. This verification does not deploy to GKE or public
+At that time the stack was left running locally; credentials are in the ignored
+`.env` file. This verification does not deploy to GKE or public
 hosting and does not establish browser interaction or performance results.
+
+## Hardened image — 9 October 2026
+
+The distroless/standalone image is 203,315,947 bytes (previously 590,981,350).
+Trivy 0.69.3 HIGH/CRITICAL with `--ignore-unfixed` went from 21 (7 Debian
+`perl-base`, 10 in the base image's bundled npm, 4 app dependencies) to 0;
+`trivy config` reports no Dockerfile misconfigurations. An isolated Compose
+project (`-p beer-map-e2e`, `APP_PORT=3300`) built, migrated, seeded 165
+venues, became healthy, passed `check-container.ts`, and was removed with
+`down -v`. Not deployed.
