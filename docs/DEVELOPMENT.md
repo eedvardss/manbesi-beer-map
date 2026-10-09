@@ -2,7 +2,15 @@
 
 ## Direction
 
-Keep the native iPhone and web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
+Keep the web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
+
+## Monorepo layout — 9 October 2026
+
+Restructured the repository at the user's request. The web app (source, scripts, package files, Vite/Next/TypeScript/Wrangler configuration and `.env.example`) moved to `application/` with `git mv`. `Dockerfile`, `compose.yaml` and `Dockerfile.dockerignore` moved to `infrastructure/`; Compose builds from `../application` and reads `infrastructure/.env`. `playwright/` is an empty placeholder; the browser test stays in `application/scripts/`. This log moved to `docs/DEVELOPMENT.md`. CI runs npm in `application/` and Compose with `-f ../infrastructure/compose.yaml`. Run npm commands from `application/`; paths in the dated entries below are relative to it. No deployment occurred.
+
+## Native iPhone app removed — 9 October 2026
+
+Removed the native iPhone app (`ios/`), its Swift benchmarks, project/icon generators, design preview and bundled-snapshot sync at the user's request. The container check now compares `/api/venues` with `app/catalog.ts`. Native references in the dated entries below are historical. No deployment occurred.
 
 ## API frontend and Docker optimization — 8 October 2026
 
@@ -368,14 +376,12 @@ This is validated local web work, with a scoped commit. No push, deployment, nat
 
 ## Next work
 
-The functional baseline is verified; visual design remains provisional. Prioritize measured responsiveness and the remaining rendered review:
+Prioritize measured responsiveness and rendered review:
 
 1. Keep individual venue price markers at every zoom per the 7 October user request. Do not reintroduce grouping. Preserve serving/source semantics, keyboard focus and selected context; profile future changes on representative browsers before making performance claims.
-2. Continue dense zoom and map-to-place review, including maximum-text geographic context. Draft A's filtered search/price overlap is corrected; preserve its retained camera, visible-area/all-places coordination and attribution. Keep A/B/C available and clearly provisional until user review; then implement the reviewed direction and remove losing drafts. Native warm Release launch endpoints are recorded, but CPU tracing stalls before recording while developer mode reports disabled. Resume tracing when access is available without repeating unchanged attempts. Investigate saved-cache/cold startup, initial-view/main-thread work, search/scroll and physical-device frames before optimizing; preserve immediate offline content and exact source semantics.
-3. Verify app-specific Settings navigation and permission recovery on a signed physical-device build when available; the supported URL currently lands at Simulator Settings root. Denied startup/recovery has rendered light/dark/maximum-text coverage. Review restricted/services-unavailable/retry UI and the original product's online status caption. Product map, lists, exact serving detail/menu, keyboard, saved and empty paths have scoped rendered checks; physical-device accessibility and live VoiceOver remain gates.
-4. Apply useful, visually coherent website parity: saved places and exact serving-size filters, within startup and interaction budgets.
-5. Improve source freshness per venue with genuine menu evidence and distinct dates; retained counts and full menus must reflect the same current projection on web and native.
-6. Prepare TestFlight when authorized signing/distribution access is available.
+2. Continue dense zoom and map-to-place review on the website.
+3. Apply useful, visually coherent website improvements: saved places and exact serving-size filters, within startup and interaction budgets.
+4. Improve source freshness per venue with genuine menu evidence and distinct dates; retained counts and full menus must reflect the same current projection.
 
 The five-hour continuation was removed at the user's request. Do not recreate it. Preserve unrelated changes and commit completed, verified slices when working on a new request.
 

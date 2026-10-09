@@ -15,18 +15,25 @@ filters and selection, and changed coordinates update existing markers.
 
 ## Run the stack
 
-Install Docker with Compose v2. From the repository directory:
+Install Docker with Compose v2. The Docker files live in `infrastructure/`; the
+image builds from the `../application` context and uses
+`infrastructure/Dockerfile.dockerignore`. Compose reads `.env` from the compose
+file's directory, so the file goes in `infrastructure/.env`. From the repository
+root:
 
 ```powershell
-Copy-Item .env.example .env
-# Edit .env and set POSTGRES_PASSWORD to a long random URL-safe password.
-docker compose up --build -d --wait
+Copy-Item application/.env.example infrastructure/.env
+# Edit infrastructure/.env and set POSTGRES_PASSWORD to a long random URL-safe password.
+docker compose -f infrastructure/compose.yaml up --build -d --wait
 ```
 
-Open http://localhost:3000. Change `APP_PORT` in `.env` if that port is occupied.
+The remaining `docker compose` examples assume `-f infrastructure/compose.yaml`
+(or running them from `infrastructure/`).
+
+Open http://localhost:3000. Change `APP_PORT` in `infrastructure/.env` if that port is occupied.
 The app port is published on all host interfaces, allowing access from other
 devices. For local-only access, use `127.0.0.1:${APP_PORT:-3000}:3000` instead.
-Run `node scripts/check-container.mjs` from the host to verify the page, a
+Run `npx tsx scripts/check-container.ts` from `application/` on the host to verify the page, a
 JavaScript asset, PostgreSQL health, complete catalog equality and ETag 304s.
 The database stays on the internal Compose network. `/api/health` returns 200
 only when the configured catalog can be read, and identifies `postgres` or
@@ -37,7 +44,7 @@ seeds an empty database, then starts the app. The named `postgres_data` volume
 survives container replacement and `docker compose down`. Startup preserves
 an existing catalog. The app runs as the unprivileged Node user.
 
-`db-setup` runs `scripts/setup-database.sh` with the built app image. Keeping
+`db-setup` runs `scripts/setup-database.sh` (source: `application/scripts/`) with the built app image. Keeping
 this as a one-shot service ensures versioned migrations run against existing
 volumes as well as new databases. PostgreSQL initialization scripts run only
 when its data directory is empty; the PostgreSQL image also lacks the Node
@@ -57,11 +64,10 @@ research dates together preserves the API contract and exact ETag bytes.
 Numbered SQL migrations are transactional and serialized with a PostgreSQL
 advisory lock. Applied migrations are recorded in `beer_map_migrations`.
 
-After editing the sourced venue files, sync the native snapshot and rebuild
-the image. Explicitly seed to replace the existing PostgreSQL catalog:
+After editing the sourced venue files, rebuild the image. Explicitly seed to
+replace the existing PostgreSQL catalog:
 
 ```powershell
-npm run sync:ios-data
 docker compose build
 docker compose run --rm db-setup npm run db:seed:docker
 docker compose up -d --wait
@@ -77,6 +83,7 @@ Conditional API requests retain weak/list ETag matching and 304 responses.
 ## Local Node verification
 
 ```powershell
+cd application
 npm ci
 npm ls --all
 npm run build:docker
@@ -88,10 +95,10 @@ To use a reachable external database, set `DATABASE_URL` in the process
 environment (the tsx commands do not automatically load `.env`), then run
 `npm run db:setup`. TLS parameters can be supplied in the PostgreSQL URL.
 
-Vinext 1.0 treats a root `wrangler.jsonc` as a Cloudflare build. The Docker
+Vinext 1.0 treats `application/wrangler.jsonc` as a Cloudflare build. The Docker
 context excludes it. For local Node builds, `build-docker.mjs` copies the same
-source inputs into a temporary directory under ignored `artifacts/`, builds,
-copies the output back to `dist/`, and removes the temporary directory.
+source inputs into a temporary directory under ignored `application/artifacts/`, builds,
+copies the output back to `application/dist/`, and removes the temporary directory.
 `npm run build` remains the Cloudflare build; both targets replace `dist/`.
 
 Use a dedicated test database for the integration tests; the tests change and

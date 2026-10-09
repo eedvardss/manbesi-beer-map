@@ -1,6 +1,6 @@
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -9,12 +9,12 @@
 !.yarn/versions
 
 # testing
-/coverage
+/application/coverage/
 
-# next.js
-/.next/
-/.vinext/
-/out/
+# next.js / vinext
+.next/
+.vinext/
+/application/out/
 
 # misc
 .DS_Store
@@ -27,26 +27,22 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local environment
+# local environment (Compose reads infrastructure/.env)
 .env*
 !.env.example
 
 # deployment and generated files
 .vercel
 next-env.d.ts
-/dist/
-/.wrangler/
-/outputs/
-/work/
+/application/dist/
+.wrangler/
+/application/outputs/
+/application/work/
 
-/test-results/
-/playwright-report/
+test-results/
+playwright-report/
 
-# Xcode local state and verification artifacts
-/ios/build*/
-**/xcuserdata/
-*.xcuserstate
-*.xcresult
-/artifacts/
-/.playwright-cli/
-/output/playwright/
+# Local verification artifacts
+/application/artifacts/
+.playwright-cli/
+/application/output/playwright/

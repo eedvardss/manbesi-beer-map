@@ -1,3 +1,5 @@
+# Docker reads <Dockerfile>.dockerignore next to the Dockerfile. Patterns are
+# relative to the build context, ../application.
 node_modules
 dist
 .git
@@ -15,7 +17,5 @@ work
 research
 test-results
 playwright-report
-ios/build*
-**/xcuserdata
 *.log
 *.tsbuildinfo
