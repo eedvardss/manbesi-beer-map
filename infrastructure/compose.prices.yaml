@@ -1,0 +1,16 @@
+# Opt-in local price feature. The existing Compose and pipeline commands stay unchanged.
+services:
+  db-setup:
+    image: beer-map:prices
+    environment:
+      PRICE_SUGGESTIONS_ENABLED: 'true'
+      APP_DATABASE_PASSWORD: ${APP_DATABASE_PASSWORD:?Set a separate app password}
+      REVIEW_DATABASE_PASSWORD: ${REVIEW_DATABASE_PASSWORD:?Set a separate reviewer database password}
+  app:
+    image: beer-map:prices
+    environment:
+      DATABASE_URL: postgresql://beer_map_app:${APP_DATABASE_PASSWORD:?Set a separate app password}@db:5432/beer_map
+      DATABASE_REVIEW_URL: postgresql://beer_map_reviewer:${REVIEW_DATABASE_PASSWORD:?Set a separate reviewer database password}@db:5432/beer_map
+      PRICE_SUGGESTIONS_ENABLED: 'true'
+      PRICE_REVIEW_PASSWORD: ${PRICE_REVIEW_PASSWORD:?Set a strong reviewer login password}
+      PRICE_SESSION_SECRET: ${PRICE_SESSION_SECRET:?Set a strong session secret}

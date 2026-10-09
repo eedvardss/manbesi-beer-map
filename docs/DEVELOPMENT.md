@@ -4,6 +4,39 @@
 
 Keep the web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
 
+## Administrator panel — 9 October 2026
+
+Made the existing protected reviewer workflow discoverable through the map's
+Admin link and a dedicated `/admin` route. The previous `/price-review` route
+redirects there. Added a focused password login, separate pending/history views,
+queue counts, server-side search and cursor pagination. Report panels show the
+exact serving, previous/proposed/current prices, evidence and publication controls.
+Expired sessions return to login; failed refresh keeps the loaded queue available.
+Public visitors retain submission access, while approval/rejection/reversal remain
+protected by server authentication and the restricted reviewer database role.
+
+Validation includes the extended real-browser price/admin flow, a real PostgreSQL
+pagination test with equal microsecond timestamps, mobile/desktop visual review,
+existing app regressions and both build targets. No pipeline changes or deployment.
+
+## User price suggestions — 9 October 2026
+
+Implemented on `feature/price-reports` from the restructured `main`. Users submit
+price suggestions for identified beer servings; PostgreSQL stores pending reports,
+approved overrides, append-only approval/reversal history and shared quotas.
+An authenticated reviewer checks the source before publishing. Accepted prices
+flow through the API to map markers, filters and litre comparisons without a
+rebuild. Repeated setup preserves reports and overrides. Runtime connections use
+restricted app/reviewer roles; setup alone uses the database owner.
+
+Added the opt-in `infrastructure/compose.prices.yaml` and browser scenarios in
+`playwright/price-suggestions.mjs`. Setup and limits are documented in
+[price-suggestions.md](price-suggestions.md). Verified real SQL transactions,
+competing approvals, retries, chained reversals and role restrictions; real
+desktop/mobile submission/review flows; existing browser regression; lint/types,
+data audit and both build targets. Local preview uses a separate project on port
+3010 and a disposable database. No pipeline edits or public/cloud deployment.
+
 ## Monorepo layout — 9 October 2026
 
 Restructured the repository at the user's request. The web app (source, scripts, package files, Vite/Next/TypeScript/Wrangler configuration and `.env.example`) moved to `application/` with `git mv`. `Dockerfile`, `compose.yaml` and `Dockerfile.dockerignore` moved to `infrastructure/`; Compose builds from `../application` and reads `infrastructure/.env`. `playwright/` is an empty placeholder; the browser test stays in `application/scripts/`. This log moved to `docs/DEVELOPMENT.md`. CI runs npm in `application/` and Compose with `-f ../infrastructure/compose.yaml`. Run npm commands from `application/`; paths in the dated entries below are relative to it. No deployment occurred.

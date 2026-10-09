@@ -15,7 +15,10 @@ export function useCatalog() {
     const controller = new AbortController();
     request.current = controller;
     setLoading(true);
-    const timeout = window.setTimeout(() => controller.abort(new Error('Catalog request timed out')), 15000);
+    const timeout = window.setTimeout(
+      () => controller.abort(new Error('Catalog request timed out')),
+      15000,
+    );
     try {
       const next = await fetchCatalog(current.current, controller.signal);
       if (request.current !== controller) return;
@@ -37,16 +40,22 @@ export function useCatalog() {
   useEffect(() => {
     void refresh();
     const onVisible = () => {
-      if (document.visibilityState === 'visible' && Date.now() - lastRefresh.current > 30000) void refresh();
+      if (
+        document.visibilityState === 'visible' &&
+        Date.now() - lastRefresh.current > 30000
+      )
+        void refresh();
     };
     window.addEventListener('focus', onVisible);
     document.addEventListener('visibilitychange', onVisible);
+    const interval = window.setInterval(onVisible, 30000);
     return () => {
       const active = request.current;
       request.current = null;
       active?.abort();
       window.removeEventListener('focus', onVisible);
       document.removeEventListener('visibilitychange', onVisible);
+      window.clearInterval(interval);
     };
   }, [refresh]);
   return { catalog: snapshot?.catalog ?? null, loading, failed, refresh };

@@ -321,3 +321,250 @@ button { cursor: pointer; }
 .catalog-refresh:focus-visible { outline: 2px solid #ffd51f; outline-offset: 2px; }
 .catalog-refresh:disabled { opacity: .4; cursor: default; }
 .catalog-refresh-error { margin: 8px 0 0; color: #d9bd79; font-size: 12px; }
+
+.card-suggest {
+  pointer-events: auto;
+  position: relative;
+  z-index: 3;
+  width: fit-content;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: #a7c5af;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+.serving-suggest,
+.serving-source {
+  width: fit-content;
+  border: 0;
+  background: transparent;
+  padding: 3px 0;
+  color: #244c36;
+  font: inherit;
+  font-size: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+.card-suggest:hover,
+.serving-suggest:hover,
+.serving-source:hover {
+  text-decoration: underline;
+}
+.card-suggest:focus-visible,
+.serving-suggest:focus-visible {
+  outline: 2px solid #63806a;
+  outline-offset: 2px;
+}
+.price-dialog {
+  width: min(440px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 24px;
+  overflow: auto;
+  border: 1px solid #415047;
+  border-radius: 16px;
+  background: #151c18;
+  color: #edf2ee;
+  box-shadow: 0 20px 80px #0008;
+}
+.price-dialog::backdrop {
+  background: #07110ccc;
+}
+.price-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.price-dialog h2 {
+  margin: 0;
+  font-size: 21px;
+}
+.price-close {
+  background: transparent;
+  color: #bcc9bf;
+  border: 0;
+  padding: 0 8px;
+  font-size: 28px;
+  cursor: pointer;
+}
+.price-target {
+  display: grid;
+  gap: 4px;
+  margin: 18px 0;
+}
+.price-target span,
+.price-current {
+  font-size: 13px;
+  color: #bfcbc2;
+}
+.price-dialog form {
+  display: grid;
+  gap: 10px;
+}
+.price-dialog label,
+.admin-shell label {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.price-dialog label small {
+  color: #a1b0a6;
+  font-weight: 400;
+}
+.price-dialog input,
+.price-dialog textarea,
+.admin-shell input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #506057;
+  border-radius: 8px;
+  background: #0d1510;
+  color: #edf2ee;
+  font: inherit;
+  font-size: 16px;
+}
+.price-dialog input:focus-visible,
+.price-dialog textarea:focus-visible,
+.admin-shell input:focus-visible {
+  outline: 2px solid #a6cbb0;
+  outline-offset: 2px;
+}
+.price-help {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #aebdb3;
+}
+.price-error {
+  color: #ffb9a8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.price-dialog button,
+.admin-shell button {
+  cursor: pointer;
+}
+.price-primary {
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #c3dfca;
+  color: #15241a;
+  font-weight: 700;
+}
+.price-primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.price-dialog button:focus-visible,
+.admin-shell button:focus-visible {
+  outline: 2px solid #c3dfca;
+  outline-offset: 3px;
+}
+.price-success {
+  line-height: 1.6;
+}
+.price-success .price-primary {
+  width: 100%;
+}
+
+.admin-entry { margin-left: auto; padding: 6px 8px; border-radius: 6px; color: #aebdb3; font-size: 11px; text-decoration: none; }
+.admin-entry:hover { color: #edf2ee; background: #ffffff0b; }
+.admin-entry:focus-visible { outline: 2px solid #ffd51f; outline-offset: 2px; }
+.admin-entry + .catalog-refresh { margin-left: 6px; }
+.admin-shell { position: fixed; inset: 0; overflow-y: auto; background: #0c120e; color: #edf2ee; padding: 0 24px 48px; }
+.admin-container { width: min(1080px,100%); margin: 0 auto; }
+.admin-navigation { min-height: 80px; display: flex; align-items: center; gap: 24px; border-bottom: 1px solid #ffffff12; font-size: 13px; }
+.admin-navigation a, .admin-navigation > span { display: inline-flex; align-items: center; gap: 8px; }
+.admin-navigation a { color: #d5e2d9; text-decoration: none; }
+.admin-navigation > span { color: #8ea596; padding-left: 24px; border-left: 1px solid #ffffff1a; }
+.admin-navigation > button { margin-left: auto; }
+.admin-shell a:focus-visible { outline: 2px solid #c3dfca; outline-offset: 4px; border-radius: 4px; }
+.admin-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #3b4e40; padding: 10px 14px; border-radius: 8px; color: #d5e2d9; background: transparent; font-size: 13px; }
+.admin-secondary:hover { background: #ffffff06; border-color: #647669; }
+.admin-secondary:disabled { opacity: .5; cursor: default; }
+.admin-loading { display: block; padding: 80px 0; text-align: center; color: #aebdb3; }
+.admin-login { width: min(400px,100%); margin: clamp(48px,12vh,120px) auto 0; }
+.admin-login-mark { display: grid; place-items: center; width: 56px; height: 56px; background: #c3dfca12; border: 1px solid #c3dfca24; border-radius: 14px; color: #c3dfca; margin-bottom: 28px; }
+.admin-eyebrow { margin: 0 0 10px; color: #9ab1a2; font-size: 10px; font-weight: 600; letter-spacing: .12em; }
+.admin-login h1 { margin: 0 0 14px; font-size: 28px; line-height: 1.25; font-weight: 650; letter-spacing: -.04em; }
+.admin-login > p:not(.admin-eyebrow) { color: #aebdb3; font-size: 14px; line-height: 1.7; }
+.admin-login form { display: grid; gap: 12px; margin-top: 32px; }
+.admin-password-field { position: relative; }
+.admin-password-field input { padding-right: 48px; }
+.admin-password-field button { position: absolute; right: 4px; top: 4px; width: 40px; height: calc(100% - 8px); display: grid; place-items: center; border: 0; border-radius: 6px; background: transparent; color: #aebdb3; }
+.admin-login .price-primary { margin-top: 8px; }
+.admin-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin: 40px 0 28px; }
+.admin-heading h1 { margin: 0; font-size: 36px; line-height: 1.2; font-weight: 650; letter-spacing: -.04em; }
+.admin-heading p:not(.admin-eyebrow) { margin: 12px 0 0; color: #9fb1a5; font-size: 14px; }
+.admin-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-bottom: 18px; }
+.admin-view-buttons { display: flex; gap: 4px; padding: 4px; margin: 0; min-width: 0; border: 1px solid #2a3a2f; border-radius: 10px; }
+.admin-view-buttons button { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 0; border-radius: 6px; font-size: 13px; background: transparent; color: #a3b5a8; }
+.admin-view-buttons button[aria-pressed=true] { background: #23382a; color: #e2eee5; }
+.admin-view-buttons button span { min-width: 22px; padding: 2px 6px; border-radius: 4px; background: #ffffff0b; font-size: 11px; }
+.admin-search { display: flex; align-items: center; gap: 8px; border: 1px solid #3b4e40; border-radius: 8px; padding: 0 10px; color: #8ea596; }
+.admin-search input { width: 180px; border: 0; background: transparent; padding: 10px 0; font-size: 13px; }
+.admin-search input:focus-visible { outline: none; }
+.admin-search:focus-within { outline: 2px solid #a6cbb0; outline-offset: 2px; }
+.admin-search button { border: 0; background: transparent; padding: 8px 0 8px 8px; color: #c3dfca; font-size: 12px; }
+.admin-queue { border: 1px solid #2e3f33; border-radius: 12px; overflow: hidden; }
+.admin-report { display: grid; grid-template-columns: minmax(0,1fr) minmax(300px,.8fr); background: #131c16; border-bottom: 1px solid #2e3f33; }
+.admin-report:last-child { border-bottom: 0; }
+.admin-report-summary { padding: 28px; }
+.admin-report-title { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.admin-status { font-size: 10px; font-weight: 600; padding: 5px 8px; border-radius: 4px; background: #d1b57a15; color: #d3bd90; }
+.admin-status.is-approved { background: #98cba515; color: #a9cdb3; }
+.admin-status.is-rejected { background: #b5c1b315; color: #a6b4a9; }
+.admin-report time { color: #7e9786; font-size: 11px; }
+.admin-report h2 { margin: 0 0 8px; font-size: 20px; font-weight: 600; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.admin-serving { margin: 0; color: #aabfb0; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.admin-price-comparison { display: flex; align-items: center; gap: 24px; margin: 26px 0; }
+.admin-price-comparison div { display: grid; gap: 8px; }
+.admin-price-comparison div span { font-size: 10px; color: #8ea596; }
+.admin-price-comparison strong { font-size: 28px; font-weight: 600; letter-spacing: -.045em; }
+.admin-price-comparison > span { color: #5e7968; }
+.admin-price-comparison div:last-child strong { color: #c3dfca; }
+.admin-current { color: #aabfb0; font-size: 12px; }
+.admin-note { margin: 18px 0 14px; padding-left: 14px; border-left: 2px solid #3b5142; color: #b4c6b9; font-size: 13px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+.admin-source { color: #b6d5bf; font-size: 12px; text-decoration: none; }
+.admin-source:hover { text-decoration: underline; }
+.admin-report-decision { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 28px; border-left: 1px solid #2e3f33; background: #ffffff02; }
+.admin-report-decision h3 { margin: 0 0 12px; font-size: 13px; font-weight: 600; }
+.admin-shell label { font-size: 12px; font-weight: 500; margin-top: 4px; }
+.admin-shell input[type=date] { color-scheme: dark; }
+.admin-decision-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: auto; }
+.admin-decision-actions .price-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; padding: 11px 14px; }
+.admin-history-description { margin: 0 0 16px; color: #aabfb0; font-size: 13px; line-height: 1.7; }
+.admin-report-decision > .admin-secondary { align-self: flex-start; }
+.admin-notice { display: flex; align-items: center; gap: 10px; padding: 12px 14px; margin-bottom: 20px; border: 1px solid #98cba52b; border-radius: 8px; background: #98cba50b; color: #b5d9bf; font-size: 13px; line-height: 1.5; }
+.admin-empty { display: grid; justify-items: center; gap: 12px; padding: 72px 24px; background: #131c16; text-align: center; }
+.admin-empty > svg { color: #6a9177; }
+.admin-empty h2 { margin: 8px 0 0; font-size: 20px; font-weight: 500; }
+.admin-empty p { margin: 0; color: #91aa9b; font-size: 13px; line-height: 1.6; }
+.admin-pagination { display: flex; align-items: center; justify-content: center; gap: 24px; margin: 24px 0 0; }
+.admin-pagination > span { color: #91aa9b; font-size: 12px; }
+.admin-shell button:focus-visible { outline: 2px solid #c3dfca; outline-offset: 3px; }
+@media(max-width:640px) {
+  .admin-shell { padding: 0 16px 32px; }
+  .admin-navigation { min-height: 64px; gap: 12px; }
+  .admin-navigation > span { display: none; }
+  .admin-heading { margin: 28px 0 24px; gap: 12px; align-items: flex-start; }
+  .admin-heading h1 { font-size: 28px; }
+  .admin-heading .admin-secondary { padding: 10px; font-size: 0; gap: 0; }
+  .admin-heading .admin-secondary svg { width: 16px; height: 16px; }
+  .admin-toolbar { align-items: stretch; flex-direction: column; }
+  .admin-view-buttons { align-self: flex-start; }
+  .admin-search input { flex: 1; width: 0; min-width: 0; }
+  .admin-report { grid-template-columns: minmax(0,1fr); }
+  .admin-report-summary { padding: 22px; }
+  .admin-report-decision { border-left: 0; border-top: 1px solid #2e3f33; padding: 22px; }
+  .admin-price-comparison { gap: 22px; margin: 22px 0; }
+  .admin-empty { padding: 48px 20px; }
+  .admin-pagination { gap: 12px; }
+  .admin-pagination button { font-size: 12px; padding: 10px; }
+  .admin-login { margin-top: 48px; }
+}
+@media(max-width:480px) { .price-dialog { padding: 20px; } }
