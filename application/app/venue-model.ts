@@ -1,4 +1,7 @@
 export type BeerPrice = {
+  id?: string;
+  revision?: number;
+  priceUpdate?: { observedOn: string; publishedAt: string; sourceUrl: string };
   name: string;
   volumeMl: number | null;
   price: number;
@@ -38,16 +41,21 @@ export type VenuePoint = {
 
 export type MapVenue = Venue | VenuePoint;
 
-export const pricePerLitre = (venue: Venue) => venue.volumeMl
-  ? venue.price / (venue.volumeMl * (venue.packageCount ?? 1) / 1000)
-  : null;
+export const pricePerLitre = (venue: Venue) =>
+  venue.volumeMl
+    ? venue.price / ((venue.volumeMl * (venue.packageCount ?? 1)) / 1000)
+    : null;
 
-export const venueBeerPrices = (venue: Venue): BeerPrice[] => venue.beerPrices ?? [{
-  name: venue.beer,
-  volumeMl: venue.volumeMl,
-  price: venue.price,
-  priceIsFrom: venue.priceIsFrom,
-  packageCount: venue.packageCount,
-}];
+export const venueBeerPrices = (venue: Venue): BeerPrice[] =>
+  venue.beerPrices ?? [
+    {
+      name: venue.beer,
+      volumeMl: venue.volumeMl,
+      price: venue.price,
+      priceIsFrom: venue.priceIsFrom,
+      packageCount: venue.packageCount,
+    },
+  ];
 
-export const isPricedVenue = (venue: MapVenue): venue is Venue => 'price' in venue;
+export const isPricedVenue = (venue: MapVenue): venue is Venue =>
+  'price' in venue;

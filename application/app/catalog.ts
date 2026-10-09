@@ -1,5 +1,6 @@
 import { checkedAt, mapVenues, venueBeerPrices } from './venues';
 import { venueOpeningHours } from './opening-hours';
+import { servingId } from '../lib/serving-id';
 
 const [day, month, year] = checkedAt.split('.');
 const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
@@ -22,13 +23,19 @@ export const catalog = {
       sourceUrl: venue.sourceUrl,
       sourceLabel: venue.sourceLabel,
       sourceType: venue.sourceType,
-      beers: venueBeerPrices(venue),
-      openingHours: hours ? {
-        week: days.map((key) => hours[key]),
-        sourceUrl: hours.sourceUrl,
-        checkedAt: hours.checkedAt,
-        note: hours.note,
-      } : null,
+      beers: venueBeerPrices(venue).map((beer) => ({
+        ...beer,
+        id: servingId(venue.id, beer),
+        revision: 0,
+      })),
+      openingHours: hours
+        ? {
+            week: days.map((key) => hours[key]),
+            sourceUrl: hours.sourceUrl,
+            checkedAt: hours.checkedAt,
+            note: hours.note,
+          }
+        : null,
     };
   }),
 };
