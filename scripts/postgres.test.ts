@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { catalog, catalogJson } from '../app/catalog';
 import { GET } from '../app/api/venues/route';
 import { GET as health } from '../app/api/health/route';
+import { GET as live } from '../app/api/live/route';
 import { database, closeDatabase } from '../lib/database';
 
 // Use a dedicated empty test database. This suite changes its catalog row.
@@ -51,11 +52,18 @@ try {
     assert.equal(missing.status, 503);
     assert.equal(missing.headers.get('Cache-Control'), 'no-store');
     assert.equal((await health()).status, 503);
+    assert.equal(live().status, 200, 'Missing data must not cause a liveness restart loop');
     run('scripts/db-seed.ts');
     await closeDatabase();
     process.env.DATABASE_URL = 'postgresql://test:test@127.0.0.1:1/test';
     assert.equal((await GET(new Request('http://localhost/api/venues'))).status, 503);
     assert.equal((await health()).status, 503);
+    assert.equal(live().status, 200, 'An unreachable database must not fail liveness');
+    delete process.env.DATABASE_URL;
+    process.env.BEER_MAP_REQUIRE_DATABASE = 'true';
+    assert.equal((await health()).status, 503);
+    assert.equal((await GET(new Request('http://localhost/api/venues'))).status, 503);
+    delete process.env.BEER_MAP_REQUIRE_DATABASE;
   });
 } finally {
   await closeDatabase();

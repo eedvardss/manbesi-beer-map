@@ -55,7 +55,7 @@ export function prepareCatalog(value: unknown): PreparedCatalog {
     ids.add(id);
     if (!Array.isArray(item.beers) || !item.beers.length) throw new Error('Missing servings');
     const beers = item.beers.map(beer);
-    const best = beers.reduce((best, next) => compareServings(next, best, 'price') < 0 ? next : best);
+    const best = beers.reduce((best, next) => compareServings(next, best, 'price') < 0 ? next : best, beers[0]);
     if (item.sourceType !== 'Oficiālā ēdienkarte' && item.sourceType !== 'Verificēta aktuālā alus karte') throw new Error('Invalid source type');
     if (item.openingHours !== null) {
       const opening = record(item.openingHours);

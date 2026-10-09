@@ -1,0 +1,116 @@
+{{- range $name, $component := .Values.components }}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: {{ $name }}}
+spec:
+  selector: {app.kubernetes.io/name: {{ $name }}}
+  ports:
+    {{- range $component.ports }}
+    - {name: {{ .name }}, port: {{ .port }}, targetPort: {{ .name }}}
+    {{- end }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: {name: {{ $name }}}
+spec:
+  serviceName: {{ $name }}
+  replicas: 1
+  selector:
+    matchLabels: {app.kubernetes.io/name: {{ $name }}}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") $ | sha256sum }}
+        {{- if eq $name "grafana" }}
+        checksum/dashboard: {{ include (print $.Template.BasePath "/dashboard.yaml") $ | sha256sum }}
+        {{- end }}
+      labels: {app.kubernetes.io/name: {{ $name }}}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: {{ $component.uid }}
+        runAsGroup: {{ $component.uid }}
+        fsGroup: {{ $component.uid }}
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: {{ $name }}
+          image: {{ $component.image }}
+          args: {{ $component.args | toJson }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          ports:
+            {{- range $component.ports }}
+            - {name: {{ .name }}, containerPort: {{ .port }}}
+            {{- end }}
+          {{- if eq $name "grafana" }}
+          env:
+            - {name: GF_SECURITY_ADMIN_PASSWORD__FILE, value: /credentials/password}
+            - {name: GF_PATHS_DATA, value: /data}
+            - {name: GF_PATHS_PLUGINS, value: /data/plugins}
+            - {name: GF_PATHS_LOGS, value: /tmp}
+            - {name: GF_ANALYTICS_REPORTING_ENABLED, value: 'false'}
+            - {name: GF_ANALYTICS_CHECK_FOR_UPDATES, value: 'false'}
+            - {name: GF_PLUGINS_PREINSTALL_AUTO_UPDATE, value: 'false'}
+            - {name: GF_LOG_MODE, value: console}
+          {{- end }}
+          startupProbe:
+            httpGet: {path: {{ $component.probe }}, port: {{ $component.probePort }}}
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            httpGet: {path: {{ $component.probe }}, port: {{ $component.probePort }}}
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 100m, memory: 192Mi}
+            limits: {cpu: '1', memory: 768Mi}
+          volumeMounts:
+            - {name: temp, mountPath: /tmp}
+            {{- if $component.persistent }}
+            - {name: data, mountPath: /data}
+            {{- end }}
+            {{- if eq $name "grafana" }}
+            - {name: config, mountPath: /etc/grafana/provisioning/datasources/config.yaml, subPath: config.yaml, readOnly: true}
+            - {name: credentials, mountPath: /credentials, readOnly: true}
+            - {name: dashboard, mountPath: /etc/grafana/provisioning/dashboards/provider.yaml, subPath: provider.yaml, readOnly: true}
+            - {name: dashboard, mountPath: /etc/beer-map-dashboards/beer-map.json, subPath: beer-map.json, readOnly: true}
+            {{- else }}
+            - {name: config, mountPath: /etc/beer-map, readOnly: true}
+            {{- end }}
+            {{- if and (eq $name "alertmanager") $.Values.holmes.enabled }}
+            - {name: credentials, mountPath: /credentials, readOnly: true}
+            - {name: tls, mountPath: /tls, readOnly: true}
+            {{- end }}
+      volumes:
+        - {name: temp, emptyDir: {}}
+        - name: config
+          configMap: {name: {{ $name }}}
+        {{- if eq $name "grafana" }}
+        - name: credentials
+          secret: {secretName: {{ $.Values.grafanaAdminSecret }}, defaultMode: 0440}
+        - name: dashboard
+          configMap: {name: beer-map-grafana-dashboard}
+        {{- end }}
+        {{- if and (eq $name "alertmanager") $.Values.holmes.enabled }}
+        - name: credentials
+          secret: {secretName: {{ $.Values.holmes.apiSecret }}, defaultMode: 0440}
+        - name: tls
+          secret: {secretName: {{ $.Values.holmes.tlsSecret }}, defaultMode: 0440}
+        {{- end }}
+  {{- if $component.persistent }}
+  persistentVolumeClaimRetentionPolicy: {whenDeleted: Retain, whenScaled: Retain}
+  volumeClaimTemplates:
+    - metadata: {name: data}
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- if $.Values.storage.className }}
+        storageClassName: {{ $.Values.storage.className | quote }}
+        {{- end }}
+        resources:
+          requests: {storage: {{ $.Values.storage.size }}}
+  {{- end }}
+{{- end }}
+

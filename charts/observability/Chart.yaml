@@ -1,0 +1,6 @@
+apiVersion: v2
+name: beer-map-observability
+version: 0.1.0
+description: Bounded single-instance metrics, logs and traces for the course demo
+type: application
+

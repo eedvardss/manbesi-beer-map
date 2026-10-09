@@ -1,0 +1,17 @@
+route:
+  receiver: recorded
+  group_by: [alertname]
+  group_wait: 10s
+  repeat_interval: 1h
+receivers:
+  - name: recorded
+    {{- if .Values.holmes.enabled }}
+    webhook_configs:
+      - url: https://alert-investigation:8080/alerts
+        send_resolved: false
+        http_config:
+          authorization:
+            credentials_file: /credentials/api-key
+          tls_config: {ca_file: /tls/ca.crt}
+    {{- end }}
+

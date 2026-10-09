@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Generated dependencies and local artifacts are outside source control"
+paths = ['''(^|[/\\])(node_modules|artifacts|\.git)([/\\]|$)''']

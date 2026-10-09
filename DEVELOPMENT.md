@@ -366,6 +366,38 @@ Validation completed:
 
 This is validated local web work, with a scoped commit. No push, deployment, native device installation or App Store release occurred. Native visual direction remains user-unapproved. Owned diagnostic services, tabs and temporary emulation are cleaned up after review; pre-existing `research/` remains excluded. The five-hour schedule and quiet notification intent are unchanged; its prompt already reads these revised priorities.
 
+## GCP DevOps foundation — 9 October 2026
+
+Implementation is on `feature/gke-foundation`. Terraform defines a bounded private
+GKE demo, gross 500 SEK budget alerts, registry, keyless GitHub identities, private
+state/backup storage and secret metadata. Own Helm charts provide PostgreSQL,
+read-only application SQL access, migration hooks, isolation tests, telemetry,
+Grafana and authenticated TLS investigation endpoints. Release workflows promote
+the exact CI-tested image; rollback requires explicit human review.
+
+Real Docker, PostgreSQL, kind and GKE checks passed, including unchanged
+165 venues / 2,550 servings, desktop/mobile browser behavior, failed-migration
+rollback, a four-minute DB outage without application restarts, and restoring
+an actual backup with an identical catalog checksum. The final Sonar overall
+reliability/security gate and source/history credential scans passed.
+See `docs/devops-verification.md` for scope and outstanding acceptance gates.
+
+The personal repository owner must configure protected `main`, the `gcp-demo`
+environment with only `v*` tags, and release-tag rules. Collaborator admin access
+is unavailable for personal repositories. Automated cloud release fails before
+requesting cloud credentials until protection checks pass. GitHub execution,
+complete AI diagnosis (Vertex HTTP 429), a separate operator/project reproduction
+and public TLS ingress remain distinct verification gates. Existing Aluskarte
+hosting, venue data, native source and the removed background schedule are preserved.
+
+All three GitHub CI workflows passed on implementation commit `892b09b`.
+Draft PR #2 contains the work. After backup verification, all demo Helm releases,
+PVCs, GKE compute and network/NAT resources were removed. Inventory confirms no
+remaining clusters, instances, disks, addresses, forwarding rules or routers.
+Private state, backup, registry, secrets, identities and budget alerts remain.
+A complete Terraform plan proposes only the six expected recreation resources.
+Do not recreate paid demo compute while owner protections remain unresolved.
+
 ## Next work
 
 The functional baseline is verified; visual design remains provisional. Prioritize measured responsiveness and the remaining rendered review:

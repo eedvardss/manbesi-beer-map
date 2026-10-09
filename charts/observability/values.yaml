@@ -1,0 +1,64 @@
+storage:
+  size: 5Gi
+  className: ''
+grafanaAdminSecret: beer-map-grafana-admin
+holmes:
+  enabled: false
+  image: robustadev/holmes:0.43.0@sha256:3947719d76db419d672dd78f81f0e8cb2afca10fa3634e36238f630482b70dc7
+  apiSecret: beer-map-holmes-api
+  tlsSecret: beer-map-internal-tls
+  gcpServiceAccount: beer-map-holmes@beermap-devops.iam.gserviceaccount.com
+  project: beermap-devops
+  location: global
+  model: vertex_ai/gemini-3.1-flash-lite
+  bridgeImage: beer-map:local
+components:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib@sha256:39923a8e431bd1f57be82411999d389fcfe40857492e4365456d97a4c1f74be6
+    uid: 10001
+    persistent: false
+    args: ['--config=/etc/beer-map/config.yaml']
+    ports: [{name: otlp, port: 4318}, {name: metrics, port: 8889}, {name: health, port: 13133}]
+    probe: /health
+    probePort: health
+  prometheus:
+    image: prom/prometheus@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e
+    uid: 65534
+    persistent: true
+    args: ['--config.file=/etc/beer-map/config.yaml', '--storage.tsdb.path=/data', '--storage.tsdb.retention.time=24h', '--storage.tsdb.retention.size=2GB']
+    ports: [{name: http, port: 9090}]
+    probe: /-/ready
+    probePort: http
+  alertmanager:
+    image: prom/alertmanager@sha256:e9733bafb1bdef9b00e25a21f8f99dc26a22224bf16641ad754d1649f4c3357a
+    uid: 65534
+    persistent: true
+    args: ['--config.file=/etc/beer-map/config.yaml', '--storage.path=/data']
+    ports: [{name: http, port: 9093}]
+    probe: /-/ready
+    probePort: http
+  loki:
+    image: grafana/loki@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193
+    uid: 10001
+    persistent: true
+    args: ['-config.file=/etc/beer-map/config.yaml']
+    ports: [{name: http, port: 3100}]
+    probe: /ready
+    probePort: http
+  tempo:
+    image: grafana/tempo:2.10.8@sha256:f0561deb1c68ec44d6e6e7e4487f30106c4e5e768642077695b37958b105812a
+    uid: 10001
+    persistent: true
+    args: ['-config.file=/etc/beer-map/config.yaml']
+    ports: [{name: http, port: 3200}, {name: otlp, port: 4318}]
+    probe: /ready
+    probePort: http
+  grafana:
+    image: grafana/grafana@sha256:b28bae15e219c998fb0e0424ed724930cc61b1f61fb404d47c862f9a23f9e572
+    uid: 472
+    persistent: true
+    args: []
+    ports: [{name: http, port: 3000}]
+    probe: /api/health
+    probePort: http
+

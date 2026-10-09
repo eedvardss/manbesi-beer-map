@@ -102,11 +102,11 @@ $env:BEER_MAP_TEST_DATABASE_URL = 'postgresql://user:password@localhost:5432/bee
 npm run test:postgres
 ```
 
-CI starts a disposable PostgreSQL service for the integration tests. Those
+CI uses one disposable PostgreSQL server for the integration tests. Those
 tests exercise real transactions, constraints, revision triggers, repeatable
 migrations and failure handling. They intentionally modify and delete catalog
-data, so their dedicated test database is separate from the Compose database
-used for container and browser checks. Neither service connects to production.
+data, so their dedicated test database is separate from the database
+used for container and browser checks on that server. Neither connects to production.
 
 The WebAssembly helper dependencies `@emnapi/core` and `@emnapi/runtime` are
 pinned explicitly because npm 11 omitted their entries from this project's

@@ -11,7 +11,8 @@ try {
       name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )`);
     const directory = new URL('../db/migrations/', import.meta.url);
-    for (const name of (await readdir(directory)).filter((name) => /^\d+.*\.sql$/.test(name)).sort()) {
+    for (const name of (await readdir(directory)).filter((name) => /^\d/.test(name) && name.endsWith('.sql'))
+      .sort((first, second) => first.localeCompare(second, 'en'))) {
       const applied = await client.query('SELECT 1 FROM beer_map_migrations WHERE name = $1', [name]);
       if (applied.rowCount) continue;
       await client.query(await readFile(new URL(name, directory), 'utf8'));

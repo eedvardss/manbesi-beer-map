@@ -1,0 +1,6 @@
+apiVersion: v2
+name: beer-map-db
+description: PostgreSQL storage with a release lifecycle independent of application updates
+type: application
+version: 0.1.0
+appVersion: '17'

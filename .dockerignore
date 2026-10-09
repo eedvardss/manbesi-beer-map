@@ -10,6 +10,14 @@ worker.ts
 .env*
 !.env.example
 artifacts
+infra
+charts
+coverage
+.scannerwork
+**/.terraform
+*.tfstate*
+*.tfvars
+*.tfplan
 outputs
 work
 research

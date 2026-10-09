@@ -1,0 +1,28 @@
+{{- range $name, $_ := .Values.components }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: {{ $name }}}
+data:
+  config.yaml: |
+    {{- tpl ($.Files.Get (printf "config/%s.yaml" $name)) $ | nindent 4 }}
+  {{- if eq $name "prometheus" }}
+  alerts.yaml: |
+    groups:
+      - name: beer-map
+        rules:
+          - alert: BeerMapDatabaseUnavailable
+            expr: sum(increase(beer_map_http_requests_total{route="/api/health",status="503"}[2m])) > 3
+            for: 1m
+            labels: {severity: critical}
+            annotations:
+              summary: PostgreSQL readiness is failing
+              description: Inspect PostgreSQL and the migration job before proposing recovery.
+          - alert: BeerMapServerErrors
+            expr: sum(rate(beer_map_http_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(beer_map_http_requests_total[5m])), 0.001) > 0.1
+            for: 2m
+            labels: {severity: warning}
+            annotations: {summary: More than ten percent of requests are failing}
+  {{- end }}
+{{- end }}
+

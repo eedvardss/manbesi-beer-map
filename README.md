@@ -2,6 +2,11 @@
 
 A Riga beer-price map with optional PostgreSQL catalog storage. Research is in `app/data/` and the verified venue TypeScript modules; `app/venues.ts` assembles published venues. See [Docker and PostgreSQL setup](docs/docker-postgres.md).
 
+The course deployment uses required PostgreSQL, a private GKE cluster and
+keyless tagged releases. See the [architecture](docs/architecture.md),
+[GCP deployment and recovery runbook](docs/gcp-runbook.md), and
+[verification evidence](docs/devops-verification.md).
+
 The website loads its catalog through `/api/venues`, including opening hours.
 Docker runs the complete frontend → REST API → PostgreSQL flow; refresh updates
 the displayed database data without rebuilding the app.

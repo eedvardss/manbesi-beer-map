@@ -1,0 +1,31 @@
+{{- if .Values.holmes.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: holmes}
+data:
+  config.yaml: |
+    model: beer-map
+    max_steps: 8
+    cluster_name: beer-map-demo
+    toolsets:
+      kubernetes/core: {enabled: true}
+      kubernetes/logs: {enabled: true}
+      prometheus/metrics:
+        enabled: true
+        config: {prometheus_url: 'http://prometheus:9090'}
+      grafana/loki:
+        enabled: true
+        config: {api_url: 'http://loki:3100'}
+      bash: {enabled: false}
+      internet: {enabled: false}
+      connectivity_check: {enabled: false}
+      robusta: {enabled: false}
+      skills: {enabled: false}
+  model_list.yaml: |
+    beer-map:
+      model: {{ .Values.holmes.model }}
+      vertex_project: {{ .Values.holmes.project }}
+      vertex_location: {{ .Values.holmes.location }}
+      temperature: 1
+      max_tokens: 2048
+{{- end }}

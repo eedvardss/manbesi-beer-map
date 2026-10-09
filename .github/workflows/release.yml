@@ -1,0 +1,93 @@
+name: Release to GKE
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+concurrency:
+  group: gcp-release
+  cancel-in-progress: false
+jobs:
+  protection:
+    permissions: {contents: read, actions: read}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: {node-version: 22}
+      - run: node scripts/check-release-protection.mjs
+        env: {GITHUB_TOKEN: '${{ github.token }}'}
+  application:
+    uses: ./.github/workflows/check.yml
+  integration:
+    uses: ./.github/workflows/docker-postgres.yml
+  infrastructure:
+    uses: ./.github/workflows/infrastructure.yml
+  deploy:
+    needs: [protection, application, integration, infrastructure]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: gcp-demo
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      HELM_DRIVER: configmap
+      PROJECT: ${{ vars.GCP_PROJECT_ID || 'beermap-devops' }}
+      REGION: ${{ vars.GCP_REGION || 'europe-north1' }}
+      ZONE: ${{ vars.GCP_ZONE || 'europe-north1-a' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: {fetch-depth: 0}
+      - name: Validate the version and production ancestry
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]]
+          if [[ "$version" != *-rc.* ]]; then git merge-base --is-ancestor "$GITHUB_SHA" origin/main; fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: verified-image-${{ github.sha }}
+          path: ${{ runner.temp }}/verified-image
+      - name: Load the image that passed integration and security checks
+        run: |
+          docker load -i "$RUNNER_TEMP/verified-image/beer-map.tar"
+          test "$(docker image inspect beer-map:local --format '{{.Id}}')" = "$(cat "$RUNNER_TEMP/verified-image/image-id.txt")"
+      - run: sh scripts/install-ci-tools.sh
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          project_id: ${{ env.PROJECT }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: beer-map-deploy@${{ env.PROJECT }}.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3
+        with: {version: '588.0.0', install_components: gke-gcloud-auth-plugin}
+      - name: Publish immutable image and chart versions
+        run: |
+          REGISTRY="$REGION-docker.pkg.dev/$PROJECT/beer-map"
+          echo "REGISTRY=$REGISTRY" >> "$GITHUB_ENV"
+          gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
+          docker tag beer-map:local "$REGISTRY/app:$GITHUB_SHA"
+          docker push "$REGISTRY/app:$GITHUB_SHA"
+          digest="$(docker image inspect "$REGISTRY/app:$GITHUB_SHA" --format '{{index .RepoDigests 0}}' | cut -d@ -f2)"
+          echo "IMAGE_DIGEST=$digest" >> "$GITHUB_ENV"
+          gcloud auth print-access-token | helm registry login "$REGION-docker.pkg.dev" --username oauth2accesstoken --password-stdin
+          mkdir -p "$RUNNER_TEMP/charts"
+          for chart in beer-map beer-map-db observability; do
+            helm package "charts/$chart" --version "$VERSION" --app-version "$GITHUB_SHA" --destination "$RUNNER_TEMP/charts"
+          done
+          for chart in "$RUNNER_TEMP"/charts/*.tgz; do helm push "$chart" "oci://$REGISTRY/charts"; done
+      - name: Apply the verified application release
+        run: |
+          gcloud container clusters get-credentials beer-map-demo --dns-endpoint --zone "$ZONE" --project "$PROJECT"
+          previous="$(helm history beer-map -n beer-map -o json | jq -er 'map(select(.status=="deployed")) | last | .revision')"
+          helm upgrade beer-map "oci://$REGISTRY/charts/beer-map" --version "$VERSION" -n beer-map -f infra/kubernetes/demo-values.yaml \
+            --set image.repository="$REGISTRY/app" --set image.digest="$IMAGE_DIGEST" --set image.tag="$GITHUB_SHA" \
+            --wait --rollback-on-failure --timeout 3m
+          kubectl -n beer-map rollout status deployment/beer-map --timeout=60s
+          if ! helm test beer-map -n beer-map --timeout 1m; then
+            helm rollback beer-map "$previous" -n beer-map --wait --timeout 3m
+            exit 1
+          fi
+          echo "Released $GITHUB_REF_NAME: $IMAGE_DIGEST" >> "$GITHUB_STEP_SUMMARY"
