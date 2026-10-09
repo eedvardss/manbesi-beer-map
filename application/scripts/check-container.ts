@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { catalog, catalogJson } from '../app/catalog';
 
 const base = process.env.BEER_MAP_TEST_URL ?? 'http://127.0.0.1:3000';
 const health = await fetch(`${base}/api/health`);
 assert.equal(health.status, 200);
-assert.equal((await health.json()).catalog, 'postgres');
+assert.equal(((await health.json()) as { catalog: string }).catalog, 'postgres');
 
-const expected = JSON.parse(await readFile(new URL('../ios/BeerMap/Resources/venues.json', import.meta.url), 'utf8'));
+const expected = JSON.parse(catalogJson);
 const response = await fetch(`${base}/api/venues`);
 assert.equal(response.status, 200);
 assert.deepEqual(await response.json(), expected);
@@ -24,4 +24,4 @@ assert(asset, 'Page must include its JavaScript assets');
 const javascript = await fetch(new URL(asset[1], base), { headers: { 'Accept-Encoding': 'br' } });
 assert.equal(javascript.status, 200);
 assert.equal(javascript.headers.get('Content-Encoding'), 'br', 'Serve a precompressed JavaScript variant');
-console.log(`Container checks pass: page, JS asset, PostgreSQL health, ${expected.venues.length} venues, ${expected.venues.reduce((count, venue) => count + venue.beers.length, 0)} servings, and conditional 304.`);
+console.log(`Container checks pass: page, JS asset, PostgreSQL health, ${catalog.venues.length} venues, ${catalog.venues.reduce((count, venue) => count + venue.beers.length, 0)} servings, and conditional 304.`);
