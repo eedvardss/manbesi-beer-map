@@ -15,7 +15,8 @@ x-app: &app
 
 services:
   db:
-    image: postgres:17-bookworm
+    # Google's Docker Hub mirror: avoids anonymous Docker Hub rate limits on shared runners.
+    image: mirror.gcr.io/library/postgres:17-bookworm
     environment:
       POSTGRES_USER: beer_map
       POSTGRES_DB: beer_map

@@ -58,14 +58,19 @@ sets `read_only`, `cap_drop: [ALL]` and `no-new-privileges` for the app and
 setup containers. The image `HEALTHCHECK` calls `/api/health` on `$PORT`.
 The entrypoint is `node`, so a Compose `command` is a script path. For a shell
 while debugging, temporarily swap in the `:debug-nonroot` distroless tag.
+Docker Hub images (the Node build stage, PostgreSQL, the Dockerfile frontend and
+CI's BuildKit) are pulled through Google's mirror `mirror.gcr.io` with the same
+tags and digests, avoiding anonymous Docker Hub rate limits on shared runners.
 
 Scan with Trivy (no fixable HIGH/CRITICAL findings on 9 October 2026):
 
 ```powershell
-docker run --rm -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.69.3 image --severity HIGH,CRITICAL --ignore-unfixed beer-map:local
+docker run --rm -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.70.0 image --severity HIGH,CRITICAL --ignore-unfixed beer-map:local
 ```
 
-`db-setup` runs `scripts/setup-database.mjs` (source: `application/scripts/`) with the built app image. Keeping
+`db-setup` runs `scripts/setup-database.mjs` (source: `application/scripts/`) with the built app image.
+It applies migrations, seeds an empty database and, when `PRICE_SUGGESTIONS_ENABLED=true`
+(`compose.prices.yaml`), configures the restricted price roles. Keeping
 this as a one-shot service ensures versioned migrations run against existing
 volumes as well as new databases. PostgreSQL initialization scripts run only
 when its data directory is empty; the PostgreSQL image also lacks the Node
@@ -135,6 +140,10 @@ tests exercise real transactions, constraints, revision triggers, repeatable
 migrations and failure handling. They intentionally modify and delete catalog
 data, so their dedicated test database is separate from the Compose database
 used for container and browser checks. Neither service connects to production.
+The same job runs `test:prices:postgres` against a second disposable database
+(`beer_map_prices_test`), `test:browser` against the Compose app, and the
+Playwright Test suite (`npm run test:browser:suite`), whose fixture starts its
+own price-enabled Compose project (`beer-map-playwright`, port 3011).
 
 The WebAssembly helper dependencies `@emnapi/core` and `@emnapi/runtime` are
 pinned explicitly because npm 11 omitted their entries from this project's

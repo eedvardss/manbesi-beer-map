@@ -12,6 +12,7 @@ worker.ts
 .env*
 !.env.example
 artifacts
+output
 outputs
 work
 research
