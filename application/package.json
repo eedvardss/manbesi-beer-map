@@ -7,8 +7,10 @@
   },
   "scripts": {
     "audit:data": "npx tsx scripts/audit-venues.ts",
+    "audit:deps": "node scripts/audit-dependencies.mjs",
     "dev": "vinext dev",
     "build": "vinext build",
+    "build:ci": "vinext build && npm run perf:bundle",
     "build:docker": "node scripts/build-docker.mjs && node scripts/build-database.mjs && npm run perf:bundle && node scripts/precompress-assets.mjs",
     "start:docker": "vinext start",
     "db:migrate": "tsx scripts/db-migrate.ts",
@@ -78,7 +80,9 @@
     "wrangler": "4.146.0"
   },
   "overrides": {
-    "fflate": "0.8.3"
+    "fflate": "0.8.3",
+    "sharp": "0.35.5",
+    "tinypool": "2.2.0"
   },
   "type": "module"
 }
