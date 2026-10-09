@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const body = await readBody(request, 1024);
     await reviewDatabase().query('SELECT beer_map_price_login_limit()');
     if (!correctPassword(body.password))
-      throw new PriceError(401, 'Nepareiza pārbaudītāja parole.');
+      throw new PriceError(401, 'Nepareiza administratora parole.');
     return Response.json(
       { authenticated: true },
       {

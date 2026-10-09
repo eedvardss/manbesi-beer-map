@@ -87,15 +87,71 @@ export async function reviewPrice(body: Record<string, unknown>) {
     actor,
   ]);
 }
-export async function reviewList() {
-  const { rows } = await reviewDatabase()
-    .query(`SELECT p.id,p.serving_id AS "servingId",s.venue_name AS "venueName",s.beer_name AS "beerName",
+export async function reviewList(
+  view = 'pending',
+  cursor: string | null = null,
+  search = '',
+) {
+  if (!['pending', 'history'].includes(view) || search.length > 100)
+    throw new PriceError(400, 'Nederīgs ieteikumu filtrs.');
+  let beforeDate: string | null = null;
+  let beforeId: string | null = null;
+  if (cursor) {
+    try {
+      if (cursor.length > 200) throw new Error();
+      const decoded = JSON.parse(
+        Buffer.from(cursor, 'base64url').toString(),
+      ) as unknown;
+      if (
+        !Array.isArray(decoded) ||
+        decoded.length !== 2 ||
+        typeof decoded[0] !== 'string' ||
+        typeof decoded[1] !== 'string' ||
+        !/^\d{4}-\d{2}-\d{2}T/.test(decoded[0]) ||
+        !Number.isFinite(Date.parse(decoded[0]))
+      )
+        throw new Error();
+      beforeDate = decoded[0];
+      beforeId = id(decoded[1]);
+    } catch {
+      throw new PriceError(400, 'Nederīga saraksta lapa.');
+    }
+  }
+  const { rows } = await reviewDatabase().query(
+    `WITH selected AS (
+    SELECT p.id,p.serving_id AS "servingId",s.venue_name AS "venueName",s.beer_name AS "beerName",
     s.volume_ml AS "volumeMl",s.package_count AS "packageCount",p.old_cents AS "oldCents",p.proposed_cents AS "proposedCents",
+    s.price_is_from AS "priceIsFrom",
     p.note,p.evidence_url AS "evidenceUrl",p.status,p.created_at AS "createdAt",s.version AS revision,
+    coalesce(c.price_cents,s.baseline_cents) AS "currentCents",
     (s.active AND p.expected_version=s.version) AS actionable,
     (c.suggestion_id=p.id) AS "canRevert"
     FROM beer_map_price_suggestions p JOIN beer_map_servings s ON s.id=p.serving_id
     LEFT JOIN beer_map_current_prices c ON c.serving_id=s.id
-    ORDER BY (p.status='pending') DESC,p.created_at DESC,p.id LIMIT 100`);
-  return rows;
+    WHERE CASE WHEN $1='pending' THEN p.status='pending' ELSE p.status<>'pending' END
+      AND ($2::timestamptz IS NULL OR (p.created_at,p.id)<($2::timestamptz,$3::uuid))
+      AND (strpos(lower(s.venue_name),lower($4))>0 OR strpos(lower(s.beer_name),lower($4))>0)
+    ORDER BY p.created_at DESC,p.id DESC LIMIT 26
+    ) SELECT coalesce((SELECT json_agg(selected ORDER BY "createdAt" DESC,id DESC) FROM selected),'[]'::json) AS suggestions,
+      (SELECT json_build_object('pending',count(*) FILTER(WHERE status='pending'),
+       'approved',count(*) FILTER(WHERE status='approved'),'rejected',count(*) FILTER(WHERE status='rejected')) FROM beer_map_price_suggestions) AS counts`,
+    [view, beforeDate, beforeId, search],
+  );
+  const result = rows[0] as {
+    suggestions: { id: string; createdAt: string }[];
+    counts: { pending: number; approved: number; rejected: number };
+  };
+  const more = result.suggestions.length > 25;
+  const suggestions = result.suggestions.slice(0, 25);
+  const last = suggestions.at(-1);
+  return {
+    suggestions,
+    counts: result.counts,
+    nextCursor:
+      more && last
+        ? Buffer.from(JSON.stringify([last.createdAt, last.id])).toString(
+            'base64url',
+          )
+        : null,
+  };
 }

@@ -6,6 +6,7 @@ import pg from 'pg';
 import { catalog } from '../app/catalog';
 import { database, closeDatabase } from '../lib/database';
 import { readCatalogJson } from '../lib/catalog-store';
+import { reviewList, closeReviewDatabase } from '../lib/price-store';
 
 // This suite deliberately writes and removes data only in a named disposable DB.
 const connection = process.env.BEER_MAP_TEST_DATABASE_URL;
@@ -285,6 +286,53 @@ try {
       { code: 'P0404' },
     );
   });
+  await test('admin queue pages every report with equal microsecond timestamps and separates history', async () => {
+    const reviewUrl = new URL(connection);
+    reviewUrl.username = 'beer_map_reviewer';
+    reviewUrl.password = process.env.REVIEW_DATABASE_PASSWORD!;
+    process.env.DATABASE_REVIEW_URL = reviewUrl.href;
+    await database().query(
+      `INSERT INTO beer_map_price_suggestions(serving_id,reporter,request_id,expected_version,old_cents,proposed_cents,note,created_at)
+      SELECT $1,repeat('1',64),gen_random_uuid(),6,1890,400+i,'Admin page test',date_trunc('day',now())-interval '1 day'+interval '12 hours 0.123456 seconds'
+      FROM generate_series(1,28) i`,
+      [selected.id],
+    );
+    const all = new Set<string>();
+    let cursor: string | null = null;
+    let pendingTotal = 0;
+    do {
+      const result = await reviewList('pending', cursor);
+      assert(result.suggestions.length <= 25);
+      pendingTotal = result.counts.pending;
+      for (const suggestion of result.suggestions) {
+        assert(!all.has(suggestion.id));
+        assert(!('reporter' in suggestion));
+        all.add(suggestion.id);
+      }
+      cursor = result.nextCursor;
+    } while (cursor);
+    assert.equal(
+      all.size,
+      pendingTotal,
+      'Cursor must neither skip nor repeat equal-timestamp reports',
+    );
+    const history = await reviewList('history');
+    assert(history.suggestions.length > 0);
+    assert(history.suggestions.every((item) => !all.has(item.id)));
+    assert.equal(
+      (await reviewList('pending', null, 'ALA')).counts.pending,
+      pendingTotal,
+    );
+    assert.equal(
+      (await reviewList('pending', null, "' OR 1=1--")).suggestions.length,
+      0,
+    );
+    await assert.rejects(reviewList('invalid'), { status: 400 });
+    await assert.rejects(reviewList('pending', 'not-a-cursor'), {
+      status: 400,
+    });
+  });
 } finally {
+  await closeReviewDatabase();
   await closeDatabase();
 }

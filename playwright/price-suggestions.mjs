@@ -120,23 +120,35 @@ export async function priceSuggestions({
       ).status(),
       401,
     );
-    assert.equal(
-      (
-        await reviewContext.request.post(`${base}/api/price-review/action`, {
-          headers: { Origin: new URL(base).origin },
-          data: { action: 'approve', id: report.id },
-        })
-      ).status(),
-      401,
-    );
+    for (const decision of ['approve', 'reject', 'revert'])
+      assert.equal(
+        (
+          await context.request.post(`${base}/api/price-review/action`, {
+            headers: { Origin: new URL(base).origin },
+            data: {
+              action: decision,
+              id: report.id,
+              servingId: jug.id,
+              revision: 0,
+            },
+          })
+        ).status(),
+        401,
+        'A regular visitor cannot administer prices',
+      );
+    await expect(
+      page.getByRole('link', { name: 'Admin', exact: true }),
+    ).toHaveAttribute('href', '/admin');
     await reviewer.goto(`${base}/price-review`);
-    await reviewer.getByLabel('Pārbaudītāja parole').fill('invalid-password');
+    await expect(reviewer).toHaveURL(`${base}/admin`);
+    await reviewer.screenshot({ path: `${artifacts}/admin-login-mobile.png` });
+    await reviewer.getByLabel('Administratora parole').fill('invalid-password');
     await reviewer
       .getByRole('button', { name: 'Pieslēgties', exact: true })
       .click();
     await expect(reviewer.getByRole('alert')).toContainText('Nepareiza');
     // Review context is deliberately not traced: it submits a login credential.
-    await reviewer.getByLabel('Pārbaudītāja parole').fill(password);
+    await reviewer.getByLabel('Administratora parole').fill(password);
     await reviewer
       .getByRole('button', { name: 'Pieslēgties', exact: true })
       .click();
@@ -144,6 +156,29 @@ export async function priceSuggestions({
     await expect(card).toContainText('18,90');
     await expect(card).toContainText('4,50');
     await reviewer.screenshot({ path: `${artifacts}/review-mobile.png` });
+    await reviewer.setViewportSize({ width: 320, height: 568 });
+    await card
+      .getByRole('button', { name: 'Apstiprināt', exact: true })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      card.getByRole('button', { name: 'Apstiprināt', exact: true }),
+    ).toBeInViewport();
+    assert.equal(
+      await reviewer
+        .locator('.admin-shell')
+        .evaluate((element) => element.scrollWidth > element.clientWidth),
+      false,
+      'Small-screen admin layout must not overflow horizontally',
+    );
+    await reviewer.screenshot({
+      path: `${artifacts}/admin-decision-small.png`,
+    });
+    await reviewer.setViewportSize({ width: 1280, height: 900 });
+    await reviewer.locator('.admin-shell').evaluate((element) => {
+      element.scrollTop = 0;
+    });
+    await reviewer.screenshot({ path: `${artifacts}/admin-desktop.png` });
+    await reviewer.setViewportSize({ width: 390, height: 844 });
     const crossSite = await reviewContext.request.post(
       `${base}/api/price-review/action`,
       {
@@ -155,6 +190,11 @@ export async function priceSuggestions({
     await card
       .getByRole('button', { name: 'Apstiprināt', exact: true })
       .click();
+    await expect(
+      reviewer.getByText('Cena apstiprināta un publicēta kartē.'),
+    ).toBeVisible();
+    await expect(reviewer.getByText('Visi ieteikumi izskatīti')).toBeVisible();
+    await reviewer.getByRole('button', { name: /^Vēsture/ }).click();
     await expect(card).toContainText('Apstiprināts');
     const changed = await context.request.get(`${base}/api/venues`);
     assert.notEqual(changed.headers().etag, response.headers().etag);
@@ -255,13 +295,17 @@ export async function priceSuggestions({
     await form.getByRole('button', { name: 'Nosūtīt ieteikumu' }).click();
     const secondReport = await (await second).json();
     reports.push(secondReport.id);
-    await reviewer.getByRole('button', { name: 'Atjaunot ieteikumus' }).click();
+    await reviewer.getByRole('button', { name: /^Gaida pārbaudi/ }).click();
     const rejection = reviewer.locator(
       `[data-suggestion-id="${secondReport.id}"]`,
     );
     await rejection
       .getByRole('button', { name: 'Noraidīt', exact: true })
       .click();
+    await expect(
+      reviewer.getByText('Ieteikums noraidīts.', { exact: true }),
+    ).toBeVisible();
+    await reviewer.getByRole('button', { name: /^Vēsture/ }).click();
     await expect(rejection).toContainText('Noraidīts');
     assert.equal(
       (
@@ -300,11 +344,98 @@ export async function priceSuggestions({
       ).rows[0].count,
       2,
     );
+    await reviewer
+      .getByRole('textbox', { name: 'Meklēt ieteikumus' })
+      .fill('zz-no-matching-report');
+    await reviewer.getByRole('button', { name: 'Meklēt', exact: true }).click();
+    await expect(reviewer.getByText('Nekas netika atrasts')).toBeVisible();
+    await reviewer.getByRole('button', { name: 'Notīrīt meklēšanu' }).click();
+    await expect(card).toBeVisible();
+    const fixtures = await db.query(
+      `INSERT INTO beer_map_price_suggestions(serving_id,reporter,request_id,expected_version,old_cents,proposed_cents,note,created_at)
+      SELECT $1,repeat('f',64),gen_random_uuid(),2,1890,400+i,'Temporary admin pagination fixture',date_trunc('day',now())-interval '1 day'+interval '12 hours 0.123456 seconds'
+      FROM generate_series(1,26) i RETURNING id`,
+      [jug.id],
+    );
+    try {
+      await reviewer.getByRole('button', { name: /^Gaida pārbaudi/ }).click();
+      await expect(reviewer.locator('.admin-report')).toHaveCount(25);
+      const firstPage = await reviewer
+        .locator('.admin-report')
+        .evaluateAll((items) => items.map((item) => item.dataset.suggestionId));
+      await reviewer
+        .getByRole('button', { name: 'Nākamā', exact: true })
+        .click();
+      await expect(reviewer.locator('.admin-report')).toHaveCount(1);
+      const nextId = await reviewer
+        .locator('.admin-report')
+        .getAttribute('data-suggestion-id');
+      assert(
+        !firstPage.includes(nextId),
+        'Pagination must not repeat equal-timestamp rows',
+      );
+      await reviewer
+        .getByRole('button', { name: 'Iepriekšējā', exact: true })
+        .click();
+      await expect(reviewer.locator('.admin-report')).toHaveCount(25);
+      // A failed refresh retains the loaded queue and offers an explicit retry.
+      await reviewer.route('**/api/price-review/suggestions?**', (route) =>
+        route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'Sarakstu neizdevās ielādēt.' }),
+        }),
+      );
+      await reviewer
+        .getByRole('button', { name: 'Atjaunot ieteikumus' })
+        .click();
+      await expect(reviewer.getByRole('alert')).toContainText('neizdevās');
+      await expect(reviewer.locator('.admin-report')).toHaveCount(25);
+      await reviewer.unroute('**/api/price-review/suggestions?**');
+    } finally {
+      await db.query(
+        'DELETE FROM beer_map_price_suggestions WHERE id=ANY($1::uuid[])',
+        [fixtures.rows.map((row) => row.id)],
+      );
+    }
+    await reviewContext.clearCookies();
+    await reviewer.getByRole('button', { name: 'Atjaunot ieteikumus' }).click();
+    await expect(
+      reviewer.getByRole('heading', { name: 'Administratora pieslēgšanās' }),
+    ).toBeVisible();
+    await expect(reviewer.locator('.admin-report')).toHaveCount(0);
+    await expect(
+      reviewer.getByRole('button', { name: 'Pieslēgties', exact: true }),
+    ).toBeEnabled();
+    await reviewer.getByLabel('Administratora parole').fill(password);
+    await reviewer
+      .getByRole('button', { name: 'Pieslēgties', exact: true })
+      .click();
+    await expect(
+      reviewer.getByRole('heading', { name: 'Cenu ieteikumi', exact: true }),
+    ).toBeVisible();
+    await reviewer.reload();
+    await expect(
+      reviewer.getByRole('heading', { name: 'Cenu ieteikumi', exact: true }),
+    ).toBeVisible();
+    await reviewer.getByRole('button', { name: 'Iziet', exact: true }).click();
+    await expect(
+      reviewer.getByRole('heading', { name: 'Administratora pieslēgšanās' }),
+    ).toBeVisible();
+    assert.equal(
+      (
+        await reviewContext.request.get(`${base}/api/price-review/suggestions`)
+      ).status(),
+      401,
+    );
     assert.deepEqual(faults, [], 'Uncaught browser errors');
     console.log(
-      'Price browser checks pass: real submission, persistence, idempotency, approval, source, ETag, litre/filter updates, two clients, rejection, stale edit, reversal, mobile and failure recovery.',
+      'Price/admin browser checks pass: visitor permissions, login/logout, expiry, review, history/search/pagination, persistence, idempotency, ETags, litre/filter updates, two clients, mobile and failure recovery.',
     );
   } catch (error) {
+    await reviewer
+      .screenshot({ path: `${artifacts}/admin-failure.png` })
+      .catch(() => {});
     await page
       .screenshot({ path: `${artifacts}/price-failure.png` })
       .catch(() => {});

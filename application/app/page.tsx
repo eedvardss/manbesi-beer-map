@@ -3,6 +3,7 @@
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl';
 import { ArrowDownWideNarrow, RefreshCw, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -1014,6 +1015,9 @@ function BeerMap({
                 <BeerMark className="brand-mark" />
                 <strong>Rīgas alus</strong>
               </div>
+              {catalog.priceSuggestionsEnabled && (
+                <Link href="/admin" className="admin-entry">Admin</Link>
+              )}
               <button
                 className="catalog-refresh"
                 aria-label="Atjaunot vietas"

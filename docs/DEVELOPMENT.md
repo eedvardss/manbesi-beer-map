@@ -4,6 +4,21 @@
 
 Keep the web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
 
+## Administrator panel — 9 October 2026
+
+Made the existing protected reviewer workflow discoverable through the map's
+Admin link and a dedicated `/admin` route. The previous `/price-review` route
+redirects there. Added a focused password login, separate pending/history views,
+queue counts, server-side search and cursor pagination. Report panels show the
+exact serving, previous/proposed/current prices, evidence and publication controls.
+Expired sessions return to login; failed refresh keeps the loaded queue available.
+Public visitors retain submission access, while approval/rejection/reversal remain
+protected by server authentication and the restricted reviewer database role.
+
+Validation includes the extended real-browser price/admin flow, a real PostgreSQL
+pagination test with equal microsecond timestamps, mobile/desktop visual review,
+existing app regressions and both build targets. No pipeline changes or deployment.
+
 ## User price suggestions — 9 October 2026
 
 Implemented on `feature/price-reports` from the restructured `main`. Users submit

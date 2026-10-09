@@ -3,7 +3,9 @@
 Users can select an existing beer/serving in the map menu or venue list, choose
 **Ieteikt cenu**, and submit a proposed price, optional source URL and note.
 PostgreSQL saves the suggestion immediately as **pending**. A reviewer checks
-the serving and source at `/price-review`, then approves or rejects it.
+the serving and source at `/admin`, then approves or rejects it. The map's
+**Admin** link opens the protected administrator login. Regular visitors can
+submit suggestions; only an authenticated administrator can publish prices.
 
 Approval updates the public catalog without rebuilding: serving price, map
 marker, price filters and price-per-litre sorting all use the accepted value.
@@ -46,7 +48,18 @@ in an env file does not change an already initialized PostgreSQL volume's owner
 password; update it explicitly before restarting with new credentials.
 
 Open `http://localhost:3000` (or the configured port), submit a suggestion, then
-visit `/price-review` and log in with the local `PRICE_REVIEW_PASSWORD`.
+visit `/admin` and log in with the local `PRICE_REVIEW_PASSWORD`. There is one
+operator login; the password is kept in the private local environment file.
+The old `/price-review` URL redirects to `/admin`.
+
+The admin panel separates **Gaida pārbaudi** (pending) from **Vēsture** (history),
+shows global queue counts and current prices, and searches by venue or beer.
+Lists are fetched in pages of 25; older reports remain reachable. Approving a
+report publishes the price; rejecting it leaves prices unchanged. History shows
+accepted/rejected reports and allows reverting a currently published override.
+Login persists across reloads for one hour. Logout removes the admin session;
+expired sessions clear the panel and return to login.
+
 The baseline Compose command still works with the feature disabled. The added
 Compose file is opt-in; no workflow or pipeline configuration was modified.
 
@@ -82,10 +95,10 @@ from `application/`.
   arbitrary forwarded headers are not trusted. Changing the signing secret
   invalidates sessions. Compose can pass that variable as an additional override.
 - This demo has one operator credential and actor name (`PRICE_REVIEWER_NAME`,
-  default `operator`), not individual reviewer accounts. The reviewer shows the
-  latest 100 suggestions, pending first; SQL retains the full history. Larger
-  production use needs individual identities, pagination and an explicit
-  retention/backup policy before rollout.
+  default `operator`), not individual admin accounts. SQL retains the full
+  history, with paginated access from the admin panel. Larger production use
+  needs individual identities and an explicit retention/backup policy before
+  rollout.
 
 ## Verification
 
@@ -117,7 +130,9 @@ never point it at a real catalog database.
 It exercises invalid input, retry after a network failure, durable pending
 submission, duplicate retry, authentication, Origin rejection, approval, ETags,
 price/litre/filter updates in another browser context, reload persistence,
-stale edits, several bars, mobile submission, rejection and reversal. Screenshots
+stale edits, several bars, mobile submission, rejection and reversal. Admin checks
+also cover legacy-route redirection, queue/history views, search, equal-timestamp
+pagination, failed refresh, session expiry, reload and logout. Screenshots
 are saved under `application/output/playwright/prices/`; failure traces exclude
 the reviewer login context. The existing browser regression separately covers
 map interaction, mobile geometry, time filters and failed-runtime recovery.

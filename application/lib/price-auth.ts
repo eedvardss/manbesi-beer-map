@@ -81,7 +81,7 @@ export function reporterKey(id: string) {
 export function requireReviewer(request: Request) {
   requirePrices();
   if (!validToken(cookie(request, 'bm_price_review'), 'review', 3600))
-    throw new PriceError(401, 'Nepieciešama pārbaudītāja pieslēgšanās.');
+    throw new PriceError(401, 'Nepieciešama administratora pieslēgšanās.');
 }
 function origin(request: Request) {
   const value = new URL(

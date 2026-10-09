@@ -4,12 +4,12 @@ import { gzipSync } from 'node:zlib';
 
 const directory = 'dist/client/_next/static/chunks';
 const pages = readdirSync(directory).filter((file) =>
-  /^page-.*\.js$/.test(file),
+  /^(?:page|panel)-.*\.js$/.test(file),
 );
 assert.equal(
   pages.length,
   2,
-  'Map and reviewer route budgets must cover both pages',
+  'Map and admin client entry budgets must cover both routes',
 );
 for (const pageName of pages) {
   const page = readFileSync(`${directory}/${pageName}`);
