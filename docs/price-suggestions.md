@@ -120,6 +120,34 @@ searches, filters, opens bar menus and checks mobile interactions. It targets th
 local preview on port 3010; set `BEER_MAP_TEST_URL` to use another running app.
 The browser closes when the checks finish. It does not change database prices.
 
+### Playwright Test dashboard (recommended)
+
+Start Docker Desktop, then run these commands from the repository root:
+
+```powershell
+cd application
+npx playwright test --ui
+```
+
+The sidebar lists `map.spec.mjs` and `prices.spec.mjs`. Click the green **Run all**
+button (or press F5), or run one test. Select a test to see its browser actions,
+snapshots and source; the playback controls replay those actions.
+
+The test fixture automatically builds and starts a separate local Compose project,
+`beer-map-playwright`, with the test app at `127.0.0.1:3011` and its own PostgreSQL
+database/volume. The first run can take longer while Docker builds the image.
+It generates private database credentials in ignored
+`application/artifacts/playwright.env`; the isolated test admin password is `admin`.
+It verifies that the app uses the test database before resetting test reports.
+Your preview on port 3010 and its reports are untouched. Containers stop after the
+run; the test volume and matching credentials remain for subsequent runs.
+
+For a standalone visible browser, run `npx playwright test --headed` from
+`application/`. For headless execution, use `npx playwright test`.
+Runner traces/results are saved in `application/output/playwright/test-results/`.
+These traces include the isolated test admin login; keep them local.
+No pipeline configuration was changed.
+
 Other verification commands:
 
 ```sh

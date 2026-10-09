@@ -32,7 +32,9 @@
     "check:all": "npm run check && npm run test:browser",
     "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
     "test:prices:postgres": "tsx --test scripts/prices-postgres.test.ts",
-    "test:browser:prices": "node scripts/check-price-interactions.mjs"
+    "test:browser:prices": "node scripts/check-price-interactions.mjs",
+    "test:browser:ui": "playwright test --ui",
+    "test:browser:suite": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

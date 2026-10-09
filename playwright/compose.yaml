@@ -1,0 +1,17 @@
+# Dedicated local test stack: never uses the preview application's database.
+services:
+  db:
+    environment:
+      POSTGRES_DB: beer_map_prices_e2e
+    ports:
+      - '127.0.0.1:55434:5432'
+  db-setup:
+    environment:
+      DATABASE_URL: postgresql://beer_map:${POSTGRES_PASSWORD}@db:5432/beer_map_prices_e2e
+  app:
+    ports: !override
+      - '127.0.0.1:3011:3000'
+    environment:
+      DATABASE_URL: postgresql://beer_map_app:${APP_DATABASE_PASSWORD}@db:5432/beer_map_prices_e2e
+      DATABASE_REVIEW_URL: postgresql://beer_map_reviewer:${REVIEW_DATABASE_PASSWORD}@db:5432/beer_map_prices_e2e
+      PRICE_LOCAL_ADMIN_LOGIN: 'true'

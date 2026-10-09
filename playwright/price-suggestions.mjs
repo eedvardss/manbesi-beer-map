@@ -9,11 +9,12 @@ export async function priceSuggestions({
   password,
   expect,
   artifacts,
+  trace = true,
 }) {
   const context = await browser.newContext({
     viewport: { width: 1280, height: 900 },
   });
-  await context.tracing.start({ screenshots: true, snapshots: true });
+  if (trace) await context.tracing.start({ screenshots: true, snapshots: true });
   const reviewContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
   });
@@ -439,7 +440,7 @@ export async function priceSuggestions({
     await page
       .screenshot({ path: `${artifacts}/price-failure.png` })
       .catch(() => {});
-    await context.tracing.stop({ path: `${artifacts}/price-failure.zip` });
+    if (trace) await context.tracing.stop({ path: `${artifacts}/price-failure.zip` });
     throw error;
   } finally {
     await context.close();
