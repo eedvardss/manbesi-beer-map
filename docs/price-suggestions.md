@@ -52,6 +52,11 @@ visit `/admin` and log in with the local `PRICE_REVIEW_PASSWORD`. There is one
 operator login; the password is kept in the private local environment file.
 The old `/price-review` URL redirects to `/admin`.
 
+The current local preview uses password `admin`, as requested. This requires
+the explicit local-only `PRICE_LOCAL_ADMIN_LOGIN=true` runtime flag; demo login
+is restricted to loopback hostnames. The default configuration still requires
+a password of at least 24 characters.
+
 The admin panel separates **Gaida pārbaudi** (pending) from **Vēsture** (history),
 shows global queue counts and current prices, and searches by venue or beer.
 Lists are fetched in pages of 25; older reports remain reachable. Approving a

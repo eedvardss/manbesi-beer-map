@@ -7,12 +7,19 @@ import {
 import { databaseConfigured } from './database';
 import { PriceError } from './price-input';
 
+function localAdminLogin() {
+  return (
+    process.env.PRICE_LOCAL_ADMIN_LOGIN === 'true' &&
+    process.env.PRICE_REVIEW_PASSWORD === 'admin'
+  );
+}
 export function pricesEnabled() {
   return (
     process.env.PRICE_SUGGESTIONS_ENABLED === 'true' &&
     databaseConfigured() &&
     Boolean(process.env.DATABASE_REVIEW_URL) &&
-    (process.env.PRICE_REVIEW_PASSWORD?.length ?? 0) >= 24 &&
+    ((process.env.PRICE_REVIEW_PASSWORD?.length ?? 0) >= 24 ||
+      localAdminLogin()) &&
     (process.env.PRICE_SESSION_SECRET?.length ?? 0) >= 32
   );
 }
@@ -80,6 +87,7 @@ export function reporterKey(id: string) {
 }
 export function requireReviewer(request: Request) {
   requirePrices();
+  if (localAdminLogin()) origin(request);
   if (!validToken(cookie(request, 'bm_price_review'), 'review', 3600))
     throw new PriceError(401, 'Nepieciešama administratora pieslēgšanās.');
 }
@@ -87,6 +95,13 @@ function origin(request: Request) {
   const value = new URL(
     process.env.PRICE_ALLOWED_ORIGIN ?? new URL(request.url).origin,
   );
+  if (
+    localAdminLogin() &&
+    ![value.hostname, new URL(request.url).hostname].every((host) =>
+      ['localhost', '127.0.0.1', '[::1]'].includes(host),
+    )
+  )
+    throw new PriceError(503, 'Demo pieslēgšanās pieejama tikai lokāli.');
   if (
     value.protocol !== 'https:' &&
     !(

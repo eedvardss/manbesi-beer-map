@@ -10,6 +10,7 @@ import {
   sameOrigin,
   visitor,
   correctPassword,
+  pricesEnabled,
 } from '../lib/price-auth';
 
 await test('prices are exact cents; invalid and ambiguous input is rejected', () => {
@@ -123,6 +124,25 @@ await test('review sessions cannot be forged; writes require same origin', () =>
     );
     assert(correctPassword('p'.repeat(32)));
     assert(!correctPassword('wrong'));
+    process.env.PRICE_REVIEW_PASSWORD = 'admin';
+    delete process.env.PRICE_LOCAL_ADMIN_LOGIN;
+    assert(!pricesEnabled());
+    process.env.PRICE_LOCAL_ADMIN_LOGIN = 'true';
+    assert(pricesEnabled());
+    assert(correctPassword('admin'));
+    assert.throws(() => sessionCookie(request, 'bm_price_review', token, 3600));
+    assert.throws(() => requireReviewer(request));
+    const localRequest = new Request(
+      'http://127.0.0.1:3010/api/price-review/action',
+      {
+        headers: {
+          cookie: `bm_price_review=${token}`,
+          origin: 'http://127.0.0.1:3010',
+        },
+      },
+    );
+    requireReviewer(localRequest);
+    sameOrigin(localRequest);
     const visitorToken = sessionToken('visitor', 'visitor-id');
     assert.equal(
       visitor(
