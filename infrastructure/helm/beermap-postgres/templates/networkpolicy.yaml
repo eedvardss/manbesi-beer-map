@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: beermap-postgres
+  labels:
+    {{- include "beermap-postgres.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "beermap-postgres.selectorLabels" . | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{ .Values.clientLabel.key }}: {{ .Values.clientLabel.value | quote }}
+      ports:
+        - port: 5432
+          protocol: TCP

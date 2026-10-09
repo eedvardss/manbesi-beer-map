@@ -1,0 +1,129 @@
+name: Deploy
+
+# workflow_run keeps ci.yml free of cloud credentials and deploys exactly the
+# commit whose image CI just published; workflow_dispatch redeploys or rolls
+# back to any published tag. Both wait for the production environment's reviewers.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: Image tag to deploy (default sha-<7-char commit> of the selected ref)
+        required: false
+        type: string
+
+# Never cancel a running Helm upgrade; a newer run waits and replaces older pending ones.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  HELM_VERSION: v4.3.0
+  CLUSTER: beermap
+  LOCATION: europe-north1
+  NAMESPACE: beermap
+
+jobs:
+  deploy:
+    # Automatic deploys only after a successful CI push to main, and only once
+    # the platform is configured (repository variable set).
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (vars.GCP_WORKLOAD_IDENTITY_PROVIDER != ''
+          && github.event.workflow_run.conclusion == 'success'
+          && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      # workflow_run's github.sha is the current main head, not the CI run's commit.
+      COMMIT: ${{ github.event.workflow_run.head_sha || github.sha }}
+      PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ env.COMMIT }}
+
+      # Matches docker/metadata-action `type=sha` in ci.yml (sha- + 7 characters).
+      - name: Resolve image tag
+        id: image
+        env:
+          INPUT_TAG: ${{ inputs.image_tag }}
+        run: |
+          tag="${INPUT_TAG:-sha-${COMMIT::7}}"
+          if ! [[ "$tag" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
+            echo "::error::Invalid image tag: $tag"; exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - uses: google-github-actions/auth@v3.0.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+      - uses: google-github-actions/get-gke-credentials@v3.0.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          cluster_name: ${{ env.CLUSTER }}
+          location: ${{ env.LOCATION }}
+      - uses: azure/setup-helm@v5.0.1
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Apply namespace and Secrets
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          APP_DATABASE_PASSWORD: ${{ secrets.APP_DATABASE_PASSWORD }}
+          REVIEW_DATABASE_PASSWORD: ${{ secrets.REVIEW_DATABASE_PASSWORD }}
+          PRICE_REVIEW_PASSWORD: ${{ secrets.PRICE_REVIEW_PASSWORD }}
+          PRICE_SESSION_SECRET: ${{ secrets.PRICE_SESSION_SECRET }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GHCR_USERNAME: ${{ github.repository_owner }}
+        run: |
+          for name in POSTGRES_PASSWORD APP_DATABASE_PASSWORD REVIEW_DATABASE_PASSWORD \
+                      PRICE_REVIEW_PASSWORD PRICE_SESSION_SECRET GHCR_PULL_TOKEN; do
+            if [ -z "${!name}" ]; then echo "::error::Missing production secret $name"; exit 1; fi
+          done
+          kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+          apply() { kubectl -n "$NAMESPACE" create secret "$@" --dry-run=client -o yaml | kubectl apply -f -; }
+          apply generic beermap-postgres-auth \
+            --from-literal=POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
+          apply generic beermap-app-secrets \
+            --from-literal=APP_DATABASE_PASSWORD="$APP_DATABASE_PASSWORD" \
+            --from-literal=REVIEW_DATABASE_PASSWORD="$REVIEW_DATABASE_PASSWORD" \
+            --from-literal=PRICE_REVIEW_PASSWORD="$PRICE_REVIEW_PASSWORD" \
+            --from-literal=PRICE_SESSION_SECRET="$PRICE_SESSION_SECRET"
+          apply docker-registry ghcr-pull --docker-server=ghcr.io \
+            --docker-username="$GHCR_USERNAME" --docker-password="$GHCR_PULL_TOKEN"
+
+      # Helm 4 renamed --atomic to --rollback-on-failure (same behaviour; it implies --wait).
+      - name: Deploy PostgreSQL
+        run: |
+          helm upgrade --install beermap-postgres infrastructure/helm/beermap-postgres \
+            --namespace "$NAMESPACE" --rollback-on-failure --wait --timeout 10m \
+            --set-string backup.bucket="${PROJECT_ID}-beermap-backups" \
+            --set-string backup.gcpServiceAccount="beermap-backup@${PROJECT_ID}.iam.gserviceaccount.com"
+      - name: Deploy app
+        env:
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        run: |
+          helm upgrade --install beermap-app infrastructure/helm/beermap-app \
+            --namespace "$NAMESPACE" --rollback-on-failure --wait --timeout 10m \
+            --set-string image.tag="$IMAGE_TAG"
+
+      # In-cluster health is already proven: --wait requires the readiness probes
+      # to pass. This checks the public path (DNS, Ingress, managed certificate),
+      # which can take an hour on the first deploy, so it runs only once
+      # SMOKE_TEST_URL is set (e.g. https://aluskarte.lv/api/health).
+      - name: Smoke test
+        if: vars.SMOKE_TEST_URL != ''
+        env:
+          SMOKE_TEST_URL: ${{ vars.SMOKE_TEST_URL }}
+        run: curl -fsS --retry 10 --retry-delay 6 --retry-all-errors --max-time 10 "$SMOKE_TEST_URL"

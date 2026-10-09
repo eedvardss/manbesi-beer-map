@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beermap-app
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+spec:
+  # No replicas field: the HPA owns the count, so upgrades do not reset it.
+  revisionHistoryLimit: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      {{- include "beermap-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "beermap-app.labels" . | nindent 8 }}
+        {{ .Values.postgres.clientLabel.key }}: {{ .Values.postgres.clientLabel.value | quote }}
+    spec:
+      serviceAccountName: beermap-app
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "beermap-app.podSecurity" . | nindent 8 }}
+      containers:
+        - name: app
+          image: {{ include "beermap-app.image" . }}
+          imagePullPolicy: IfNotPresent
+          # Same env as compose.yaml + compose.prices.yaml. $(VAR) only expands
+          # variables defined earlier in this list, so passwords come first.
+          # Passwords must be URL-safe, as with compose.
+          env:
+            - name: APP_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.app }}
+                  key: APP_DATABASE_PASSWORD
+            - name: REVIEW_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.app }}
+                  key: REVIEW_DATABASE_PASSWORD
+            - name: PRICE_REVIEW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.app }}
+                  key: PRICE_REVIEW_PASSWORD
+            - name: PRICE_SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.app }}
+                  key: PRICE_SESSION_SECRET
+            - name: DATABASE_URL
+              value: postgresql://beer_map_app:$(APP_DATABASE_PASSWORD)@{{ .Values.postgres.host }}:5432/{{ .Values.postgres.database }}
+            - name: DATABASE_REVIEW_URL
+              value: postgresql://beer_map_reviewer:$(REVIEW_DATABASE_PASSWORD)@{{ .Values.postgres.host }}:5432/{{ .Values.postgres.database }}
+            - name: PRICE_SUGGESTIONS_ENABLED
+              value: "true"
+            - name: PRICE_ALLOWED_ORIGIN
+              value: {{ .Values.priceAllowedOrigin | quote }}
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+          ports:
+            - name: http
+              containerPort: 3000
+          # GKE derives the load balancer health check from this probe.
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+          # /api/health fails while the database is down; restarting the pod
+          # would not fix that, so liveness only checks the process listens.
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- include "beermap-app.containerSecurity" . | nindent 12 }}

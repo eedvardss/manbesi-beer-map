@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beermap-postgres
+  labels:
+    {{- include "beermap-postgres.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "beermap-postgres.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

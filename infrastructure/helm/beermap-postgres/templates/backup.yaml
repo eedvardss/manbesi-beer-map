@@ -1,0 +1,104 @@
+{{- if .Values.backup.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: beermap-backup
+  labels:
+    {{- include "beermap-postgres.labels" . | nindent 4 }}
+  annotations:
+    iam.gke.io/gcp-service-account: {{ required "backup.gcpServiceAccount is required" .Values.backup.gcpServiceAccount }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: beermap-postgres-backup
+  labels:
+    {{- include "beermap-postgres.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  timeZone: {{ .Values.backup.timeZone }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 3600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: beermap-postgres-backup
+            app.kubernetes.io/instance: {{ .Release.Name }}
+            {{ .Values.clientLabel.key }}: {{ .Values.clientLabel.value | quote }}
+        spec:
+          serviceAccountName: beermap-backup
+          restartPolicy: Never
+          securityContext:
+            {{- include "beermap-postgres.podSecurity" . | nindent 12 }}
+          # Two stock images rather than a custom one: pg_dump comes from the
+          # server's own postgres image (same major version) and the upload
+          # uses a small curl image. The init container finishes the dump before
+          # the upload container starts; an emptyDir carries the file between them.
+          initContainers:
+            - name: dump
+              image: {{ .Values.image }}
+              command:
+                - bash
+                - -ceu
+                - |
+                  set -o pipefail
+                  pg_dump --no-owner -h beermap-postgres -U "$PGUSER" -d "$PGDATABASE" \
+                    | gzip > "/backup/$PGDATABASE-$(date -u +%Y%m%dT%H%M%SZ).sql.gz"
+                  ls -l /backup
+              env:
+                - name: PGUSER
+                  value: {{ .Values.user | quote }}
+                - name: PGDATABASE
+                  value: {{ .Values.database | quote }}
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.authSecret }}
+                      key: POSTGRES_PASSWORD
+              resources:
+                {{- toYaml .Values.backup.resources | nindent 16 }}
+              securityContext:
+                {{- include "beermap-postgres.containerSecurity" . | nindent 16 }}
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+          containers:
+            - name: upload
+              image: {{ .Values.backup.uploadImage }}
+              # The Workload Identity account only has storage.objectCreator, so
+              # this is a single create-only JSON API upload with no list or get
+              # first (gcloud/gsutil may probe the destination). ifGenerationMatch=0
+              # refuses to overwrite; the timestamped name is unique per run.
+              command:
+                - sh
+                - -ceu
+                - |
+                  # Two steps so set -e catches a failed metadata request.
+                  response=$(curl -sS --fail -H 'Metadata-Flavor: Google' \
+                    http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token)
+                  token=$(printf '%s' "$response" | sed -E 's/.*"access_token" *: *"([^"]+)".*/\1/')
+                  for file in /backup/*.sql.gz; do
+                    curl -sS --fail-with-body -X POST --data-binary "@$file" \
+                      -H "Authorization: Bearer $token" -H 'Content-Type: application/gzip' \
+                      "https://storage.googleapis.com/upload/storage/v1/b/$BUCKET/o?uploadType=media&ifGenerationMatch=0&name=postgres%2F${file##*/}"
+                  done
+              env:
+                - name: BUCKET
+                  value: {{ required "backup.bucket is required" .Values.backup.bucket | quote }}
+              resources:
+                {{- toYaml .Values.backup.resources | nindent 16 }}
+              securityContext:
+                {{- include "beermap-postgres.containerSecurity" . | nindent 16 }}
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+                  readOnly: true
+          volumes:
+            - name: backup
+              emptyDir: {}
+{{- end }}

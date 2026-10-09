@@ -1,0 +1,185 @@
+name: Infrastructure
+
+# Separate from ci.yml: these jobs share nothing with the npm/image pipeline
+# (whose defaults run in application/), and they need different permissions.
+# No paths filter, so the checks always report and can be made required.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  TERRAFORM_VERSION: 1.16.4
+  TFLINT_VERSION: v0.64.0
+  HELM_VERSION: v4.3.0
+  KUBECONFORM_VERSION: v0.8.0
+  KUBECONFORM_SHA256: 9bc2bffbf71f261128533edaf912153948b7ff238f9a531ae6d34466ec287883
+  # GKE Autopilot REGULAR channel.
+  KUBERNETES_VERSION: 1.34.0
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: infrastructure/terraform
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: hashicorp/setup-terraform@v4.0.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+      - run: terraform fmt -check -recursive -diff
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate -no-color
+      - uses: terraform-linters/setup-tflint@v6.3.2
+        with:
+          tflint_version: ${{ env.TFLINT_VERSION }}
+      # The google ruleset downloads from GitHub; a token avoids anonymous rate limits.
+      - run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - run: tflint --format compact
+
+  helm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - chart: beermap-app
+            namespace: beermap
+            # The chart requires an immutable image tag.
+            set: image.tag=sha-0000000
+          - chart: beermap-postgres
+            namespace: beermap
+            # Backups require a bucket and GSA; the deploy job derives them from GCP_PROJECT_ID.
+            set: backup.bucket=example-beermap-backups,backup.gcpServiceAccount=beermap-backup@example.iam.gserviceaccount.com
+          - chart: beermap-observability
+            namespace: monitoring
+            set: ''
+    env:
+      CHART: infrastructure/helm/${{ matrix.chart }}
+      RELEASE: ${{ matrix.chart }}
+      NAMESPACE: ${{ matrix.namespace }}
+      SET: ${{ matrix.set }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: azure/setup-helm@v5.0.1
+        with:
+          version: ${{ env.HELM_VERSION }}
+      - name: Install kubeconform
+        run: |
+          curl -fsSLo kubeconform.tar.gz "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz"
+          echo "${KUBECONFORM_SHA256}  kubeconform.tar.gz" | sha256sum -c -
+          sudo tar -xzf kubeconform.tar.gz -C /usr/local/bin kubeconform
+          rm kubeconform.tar.gz
+      # dependency build needs a repo entry for every URL in Chart.lock.
+      - name: Build chart dependencies
+        run: |
+          yq '(.dependencies // [])[].repository' "$CHART/Chart.yaml" | sort -u | while read -r url; do
+            helm repo add "$(echo "$url" | sha1sum | cut -c1-8)" "$url"
+          done
+          helm dependency build "$CHART"
+      - run: helm lint "$CHART" --namespace "$NAMESPACE" ${SET:+--set "$SET"}
+      # GKE (ManagedCertificate, BackendConfig) and Prometheus Operator kinds
+      # validate against the community CRD catalog; any other CRD is skipped.
+      - name: Render and validate manifests
+        run: |
+          helm template "$RELEASE" "$CHART" --namespace "$NAMESPACE" ${SET:+--set "$SET"} \
+            | kubeconform -strict -summary \
+                -kubernetes-version "$KUBERNETES_VERSION" \
+                -schema-location default \
+                -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+                -ignore-missing-schemas
+
+  trivy-config:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: infrastructure
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          trivyignores: infrastructure/.trivyignore
+          # Vendored upstream subcharts (present only after a local dependency build).
+          skip-dirs: infrastructure/helm/beermap-observability/charts
+          # Pinned deliberately: Trivy 0.69.4-0.69.6 were compromised releases.
+          version: v0.70.0
+
+  # Posts `terraform plan` to the PR. Opt-in: skipped until both repository
+  # variables are set, and for fork PRs, which get no OIDC token. The deployer
+  # SA then also needs read access to the project, billing account and state.
+  terraform-plan:
+    needs: terraform
+    if: >-
+      github.event_name == 'pull_request'
+      && vars.GCP_WORKLOAD_IDENTITY_PROVIDER != ''
+      && vars.GCP_BILLING_ACCOUNT_ID != ''
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: infrastructure/terraform
+    env:
+      TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+      TF_VAR_billing_account_id: ${{ vars.GCP_BILLING_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: google-github-actions/auth@v3.0.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+      - uses: hashicorp/setup-terraform@v4.0.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+      - run: terraform init -input=false -backend-config="bucket=${TF_VAR_project_id}-tfstate"
+      # Read-only: -lock=false so the plan identity needs no write access to state.
+      - name: Plan
+        id: plan
+        run: |
+          set +e
+          terraform plan -input=false -no-color -lock=false > plan.txt 2>&1
+          code=$?
+          cat plan.txt
+          echo "exitcode=$code" >> "$GITHUB_OUTPUT"
+      - name: Comment plan on the PR
+        uses: actions/github-script@v9.0.0
+        env:
+          EXIT_CODE: ${{ steps.plan.outputs.exitcode }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const marker = '<!-- terraform-plan -->';
+            let plan = fs.readFileSync('infrastructure/terraform/plan.txt', 'utf8');
+            // GitHub rejects comments over 65536 characters.
+            if (plan.length > 60000) plan = '...(truncated, see the job log)\n' + plan.slice(-60000);
+            const status = process.env.EXIT_CODE === '0' ? 'succeeded' : 'failed';
+            const body = `${marker}\n### Terraform plan ${status} for ${context.payload.pull_request.head.sha.slice(0, 7)}\n\n<details><summary>Show plan</summary>\n\n\`\`\`\n${plan}\n\`\`\`\n</details>`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find((c) => c.user.type === 'Bot' && c.body.startsWith(marker));
+            if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });
+      - if: steps.plan.outputs.exitcode != '0'
+        run: exit 1

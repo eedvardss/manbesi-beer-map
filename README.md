@@ -11,10 +11,12 @@ See [competitor research](docs/competitor-research.md) and [current progress](do
 ## Repository layout
 
 - `application/`: the web app (Vinext source, API routes, database scripts, tests, `package.json`, Wrangler configuration).
-- `infrastructure/`: `Dockerfile`, `Dockerfile.dockerignore` and `compose.yaml`. The Docker build context is the repository root; the dockerignore admits only `application/`.
+- `infrastructure/docker/`: `Dockerfile`, `Dockerfile.dockerignore`, `compose.yaml` and `compose.prices.yaml`. The Docker build context is the repository root; the dockerignore admits only `application/`.
+- `infrastructure/terraform/`: the GKE platform (cluster, network, static IP, backups, keyless GitHub auth, budget).
+- `infrastructure/helm/`: the `beermap-app`, `beermap-postgres` and `beermap-observability` charts.
 - `playwright/`: reserved for end-to-end tests; empty for now. The current browser test is `application/scripts/check-mobile-interactions.mjs`.
 - `docs/`: design, performance, competitor research, Docker notes and `DEVELOPMENT.md`.
-- `.github/`: CI workflows, which run npm commands in `application/`.
+- `.github/`: workflows. `ci.yml` checks the app and publishes the image (and, on `v*` tags, the Helm charts); `infra.yml` checks Terraform and the charts; `deploy.yml` and `deploy-observability.yml` deploy to GKE.
 
 ## Shared catalog
 
@@ -52,4 +54,21 @@ Primary domain: https://aluskarte.lv/ (with https://www.aluskarte.lv/ also attac
 
 The legacy manbesi.lv installation remains separate: `manbesi-p2p` routes its map through the private `BEER_MAP` service binding to `manbesi-beer-map`. Do not alter those Workers or the independent protected `/p2p/` and status API routes when deploying Aluskarte. See `docs/DEVELOPMENT.md` for live validation and DNS activation status.
 
-GitHub Actions runs build and data checks on pushes and pull requests. Deployment is currently via `npm run deploy`; automatic publishing is not configured.
+GitHub Actions runs build and data checks on pushes and pull requests and publishes the image `ghcr.io/eedvardss/manbesi-beer-map` from `main` (`sha-<7-char commit>` and `main` tags) and from `v*` tags. The Cloudflare Worker is still deployed with `npm run deploy`.
+
+## Deploying to GKE
+
+The Kubernetes deployment is production-only and runs on GKE Autopilot (`beermap`, `europe-north1`). Order for a fresh GCP project:
+
+1. **Terraform.** Bootstrap the state bucket, then `terraform apply`, as described in [infrastructure/terraform/README.md](infrastructure/terraform/README.md). Then run the one-time `kubectl create clusterrolebinding github-deployer-admin ...` from that README: the deployer's `roles/container.developer` cannot create the charts' Roles, RoleBindings and cluster-wide RBAC by itself.
+2. **GitHub settings.** Create the `production` environment (Settings → Environments) with required reviewers, and add:
+   - Repository variables (Settings → Secrets and variables → Actions → Variables), from the Terraform outputs. They are repository-level because job-level conditions cannot read environment variables: `GCP_PROJECT_ID`, `GCP_WORKLOAD_IDENTITY_PROVIDER` (the full `projects/<number>/locations/global/workloadIdentityPools/github/providers/github`) and `GCP_DEPLOYER_SA`. Optional: `GCP_BILLING_ACCOUNT_ID` enables the PR Terraform plan (below).
+   - `production` environment secrets: `POSTGRES_PASSWORD`, `APP_DATABASE_PASSWORD`, `REVIEW_DATABASE_PASSWORD`, `PRICE_REVIEW_PASSWORD`, `PRICE_SESSION_SECRET` (each a different random value; see [price-suggestions.md](docs/price-suggestions.md) for lengths), `GHCR_PULL_TOKEN` (a classic PAT with `read:packages` from an account that can read the image) and `GRAFANA_ADMIN_PASSWORD`.
+   - `production` environment variable `SMOKE_TEST_URL` (for example `https://aluskarte.lv/api/health`), set once DNS and the certificate work.
+3. **DNS.** Point the `aluskarte.lv` and `www.aluskarte.lv` A records in Cloudflare (DNS only, not proxied) at the `ingress_ip_address` Terraform output. The managed certificate is issued only after both names resolve, which can take up to an hour.
+4. **Deploy.** `deploy.yml` runs after every successful CI run on `main` once `GCP_WORKLOAD_IDENTITY_PROVIDER` is set, and on demand (Actions → Deploy → Run workflow, optionally with an image tag to roll back). After approval it applies the namespace and Secrets, then runs `helm upgrade --install` for `beermap-postgres` and `beermap-app`, rolling back on failure. The backup bucket and service account are derived from `GCP_PROJECT_ID` (`<project>-beermap-backups`, `beermap-backup@<project>.iam.gserviceaccount.com`).
+5. **Observability.** Run Actions → Deploy observability once, and again only when the chart changes. It creates the `beermap-grafana-admin` Secret and installs Prometheus, Grafana, Loki and Alloy into `monitoring`.
+
+Charts: [beermap-app](infrastructure/helm/beermap-app/README.md), [beermap-postgres](infrastructure/helm/beermap-postgres/README.md), [beermap-observability](infrastructure/helm/beermap-observability/README.md). Release tags `v*` also push `beermap-app` and `beermap-postgres` as OCI charts to `oci://ghcr.io/eedvardss/charts` with the tag's version.
+
+Pull requests run `infra.yml`: `terraform fmt`/`validate`, `tflint`, `helm lint`, `helm template` with `kubeconform`, and a Trivy config scan. When `GCP_BILLING_ACCOUNT_ID` is also set, same-repository PRs get a `terraform plan` comment. The plan runs as the deployer service account, which then also needs `roles/viewer` and `roles/iam.securityReviewer` on the project, `roles/billing.viewer` on the billing account and `roles/storage.objectViewer` on the `<project>-tfstate` bucket (the plan uses `-lock=false`).

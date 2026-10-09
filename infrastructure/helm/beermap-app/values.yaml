@@ -1,0 +1,68 @@
+image:
+  repository: ghcr.io/eedvardss/manbesi-beer-map
+  # Required: an immutable tag such as sha-<short>. `latest` is rejected.
+  tag: ""
+
+imagePullSecrets:
+  - name: ghcr-pull
+
+# Existing Secrets created by the deploy job.
+secrets:
+  postgres: beermap-postgres-auth   # POSTGRES_PASSWORD
+  app: beermap-app-secrets          # APP_DATABASE_PASSWORD, REVIEW_DATABASE_PASSWORD, PRICE_REVIEW_PASSWORD, PRICE_SESSION_SECRET
+
+postgres:
+  host: beermap-postgres
+  database: beer_map
+  superuser: beer_map
+  # Must match the beermap-postgres chart's clientLabel and pod labels.
+  clientLabel:
+    key: beermap.io/postgres-client
+    value: "true"
+  podLabels:
+    app.kubernetes.io/name: beermap-postgres
+
+# The public HTTPS origin; price endpoints compare request Origin against it
+# because TLS ends at the load balancer and the pod only sees http.
+priceAllowedOrigin: https://aluskarte.lv
+
+# Autopilot sets limits equal to requests, so they are stated explicitly.
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+    ephemeral-storage: 256Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi
+    ephemeral-storage: 256Mi
+
+migration:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+      ephemeral-storage: 256Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi
+      ephemeral-storage: 256Mi
+
+autoscaling:
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: true
+  staticIpName: beermap-ip
+  hosts:
+    - aluskarte.lv
+    - www.aluskarte.lv
+
+networkPolicy:
+  # Google Front End and health-check source ranges.
+  loadBalancerRanges:
+    - 35.191.0.0/16
+    - 130.211.0.0/22
+  monitoringNamespace: monitoring

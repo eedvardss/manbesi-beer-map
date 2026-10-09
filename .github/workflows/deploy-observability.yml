@@ -1,0 +1,65 @@
+name: Deploy observability
+
+# Manual and separate from Deploy: the monitoring stack changes rarely and its
+# install (CRDs, cluster-wide RBAC) should never ride along with app releases.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-observability
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  HELM_VERSION: v4.3.0
+  CHART: infrastructure/helm/beermap-observability
+  NAMESPACE: monitoring
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: google-github-actions/auth@v3.0.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+      - uses: google-github-actions/get-gke-credentials@v3.0.0
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          cluster_name: beermap
+          location: europe-north1
+      - uses: azure/setup-helm@v5.0.1
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Apply namespace and Grafana admin Secret
+        env:
+          GRAFANA_ADMIN_PASSWORD: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+        run: |
+          if [ -z "$GRAFANA_ADMIN_PASSWORD" ]; then
+            echo "::error::Missing production secret GRAFANA_ADMIN_PASSWORD"; exit 1
+          fi
+          kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n "$NAMESPACE" create secret generic beermap-grafana-admin \
+            --from-literal=admin-user=admin \
+            --from-literal=admin-password="$GRAFANA_ADMIN_PASSWORD" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      # dependency build needs a repo entry for every URL in Chart.lock.
+      - name: Build chart dependencies
+        run: |
+          yq '(.dependencies // [])[].repository' "$CHART/Chart.yaml" | sort -u | while read -r url; do
+            helm repo add "$(echo "$url" | sha1sum | cut -c1-8)" "$url"
+          done
+          helm dependency build "$CHART"
+      # Helm 4 renamed --atomic to --rollback-on-failure (same behaviour; it implies --wait).
+      - run: |
+          helm upgrade --install beermap-observability "$CHART" \
+            --namespace "$NAMESPACE" --rollback-on-failure --wait --timeout 15m

@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: beermap-postgres
+  labels:
+    {{- include "beermap-postgres.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: beermap-postgres
+  selector:
+    matchLabels:
+      {{- include "beermap-postgres.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "beermap-postgres.labels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      # Room for a fast shutdown with its final checkpoint before SIGKILL.
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        {{- include "beermap-postgres.podSecurity" . | nindent 8 }}
+      containers:
+        - name: postgres
+          image: {{ .Values.image }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.user | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.database | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.authSecret }}
+                  key: POSTGRES_PASSWORD
+            # A subdirectory: the volume root holds lost+found, which initdb rejects.
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - name: postgres
+              containerPort: 5432
+          readinessProbe:
+            exec:
+              command: [pg_isready, -h, 127.0.0.1, -U, {{ .Values.user | quote }}, -d, {{ .Values.database | quote }}]
+            periodSeconds: 5
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: [pg_isready, -h, 127.0.0.1, -U, {{ .Values.user | quote }}, -d, {{ .Values.database | quote }}]
+            # The first start runs initdb; do not kill it.
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- include "beermap-postgres.containerSecurity" . | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            # The only paths the read-only root needs writable: socket dir and temp files.
+            - name: run
+              mountPath: /var/run/postgresql
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: run
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.storage.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.storage.size }}

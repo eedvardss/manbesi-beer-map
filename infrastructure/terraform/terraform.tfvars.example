@@ -1,0 +1,4 @@
+project_id         = "my-beermap-project"
+billing_account_id = "000000-000000-000000"
+budget_amount      = 50
+# deletion_protection = false # only when tearing the platform down

@@ -1,0 +1,257 @@
+# Objects in the app namespace that the alerts refer to (the dashboard JSON uses the same names).
+# They must match the names rendered by the beermap-app and beermap-postgres charts.
+beermap:
+  namespace: beermap
+  appDeployment: beermap-app
+  postgresStatefulSet: beermap-postgres
+  backupCronJob: beermap-postgres-backup
+
+# -----------------------------------------------------------------------------
+# kube-prometheus-stack: Prometheus, Alertmanager, Grafana, operator, kube-state-metrics
+# -----------------------------------------------------------------------------
+kube-prometheus-stack:
+  # The release name is long; keep generated object names readable.
+  fullnameOverride: kps
+
+  # GKE Autopilot manages the control plane and forbids host access, so these
+  # targets are unreachable (control plane) or need hostPath/hostNetwork (node-exporter).
+  nodeExporter:
+    enabled: false
+  kubeControllerManager:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeProxy:
+    enabled: false
+  # Both would create Services in kube-system, which Autopilot treats as a managed namespace.
+  coreDns:
+    enabled: false
+  kubeDns:
+    enabled: false
+
+  # Kubelet/cAdvisor metrics (container CPU/memory, PVC usage) are needed.
+  # Keep the operator-managed kubelet Service out of kube-system.
+  kubelet:
+    namespace: monitoring
+
+  defaultRules:
+    rules:
+      etcd: false
+      kubeControllerManager: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
+      kubeProxy: false
+      node: false
+      nodeExporterAlerting: false
+      nodeExporterRecording: false
+      kubePrometheusNodeRecording: false
+      network: false
+
+  prometheusOperator:
+    kubeletService:
+      namespace: monitoring
+    # The admission webhook needs two cert-patch Jobs and cluster-wide webhook
+    # configurations; not worth the extra pods at this scale.
+    admissionWebhooks:
+      enabled: false
+    tls:
+      enabled: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+    prometheusConfigReloader:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+
+  prometheus:
+    prometheusSpec:
+      retention: 7d
+      retentionSize: 8GB
+      resources:
+        requests:
+          cpu: 150m
+          memory: 768Mi
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 10Gi
+
+  alertmanager:
+    alertmanagerSpec:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 64Mi
+    config:
+      route:
+        receiver: "null"
+        group_by: [alertname, namespace]
+        routes:
+          - receiver: "null"
+            matchers:
+              - alertname = "Watchdog"
+      receivers:
+        - name: "null"
+        # Example: set route.receiver to "email" to deliver alerts.
+        # - name: email
+        #   email_configs:
+        #     - to: ops@example.com
+        #       from: alertmanager@example.com
+        #       smarthost: smtp.example.com:587
+        #       auth_username: alertmanager@example.com
+        #       auth_password_file: /etc/alertmanager/secrets/smtp/password
+      templates:
+        - /etc/alertmanager/config/*.tmpl
+
+  grafana:
+    admin:
+      existingSecret: beermap-grafana-admin
+      userKey: admin-user
+      passwordKey: admin-password
+    # Not exposed: access with kubectl port-forward (see README).
+    service:
+      type: ClusterIP
+    # Every dashboard and datasource is provisioned, so no persistence is needed.
+    persistence:
+      enabled: false
+    testFramework:
+      enabled: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 192Mi
+    sidecar:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+
+  kube-state-metrics:
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+
+# -----------------------------------------------------------------------------
+# Loki: monolithic mode, filesystem storage on one PVC.
+# Upgrade path: loki.storage.type=gcs with a bucket and Workload Identity.
+# -----------------------------------------------------------------------------
+loki:
+  fullnameOverride: loki
+  deploymentMode: Monolithic
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    storage:
+      type: filesystem
+    schemaConfig:
+      configs:
+        - from: "2026-01-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: index_
+            period: 24h
+    limits_config:
+      retention_period: 168h
+    compactor:
+      retention_enabled: true
+      delete_request_store: filesystem
+  singleBinary:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    persistence:
+      size: 10Gi
+  # Not needed for a single replica: gateway (nginx), memcached caches,
+  # canary DaemonSet, Helm test pod and rule sidecar.
+  gateway:
+    enabled: false
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+  lokiCanary:
+    enabled: false
+  test:
+    enabled: false
+  sidecar:
+    rules:
+      enabled: false
+  # The chart defaults these SimpleScalable targets to 3 replicas and refuses to
+  # render Monolithic mode unless they are zeroed.
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+  backend:
+    replicas: 0
+
+# -----------------------------------------------------------------------------
+# Alloy: tails pod logs through the Kubernetes API and ships them to Loki.
+# -----------------------------------------------------------------------------
+alloy:
+  # API-based tailing needs no node access, so one replica covers the cluster.
+  controller:
+    type: deployment
+    replicas: 1
+  crds:
+    create: false
+  alloy:
+    enableReporting: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+    configMap:
+      content: |
+        discovery.kubernetes "pods" {
+          role = "pod"
+          namespaces {
+            names = ["beermap", "monitoring"]
+          }
+        }
+
+        discovery.relabel "pods" {
+          targets = discovery.kubernetes.pods.targets
+
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            target_label  = "namespace"
+          }
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            target_label  = "pod"
+          }
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            target_label  = "container"
+          }
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+            target_label  = "app"
+          }
+        }
+
+        loki.source.kubernetes "pods" {
+          targets    = discovery.relabel.pods.output
+          forward_to = [loki.write.default.receiver]
+        }
+
+        loki.write "default" {
+          endpoint {
+            url = "http://loki.monitoring.svc:3100/loki/api/v1/push"
+          }
+        }
