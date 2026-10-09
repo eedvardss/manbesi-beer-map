@@ -86,7 +86,7 @@ jobs:
           driver-opts: image=mirror.gcr.io/moby/buildkit:buildx-stable-1
       - uses: docker/build-push-action@v7.4.0
         with:
-          context: application
+          context: .
           file: infrastructure/Dockerfile
           load: true
           tags: beer-map:ci
@@ -214,7 +214,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
       - uses: docker/build-push-action@v7.4.0
         with:
-          context: application
+          context: .
           file: infrastructure/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}

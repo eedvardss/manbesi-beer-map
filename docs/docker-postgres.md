@@ -16,7 +16,7 @@ filters and selection, and changed coordinates update existing markers.
 ## Run the stack
 
 Install Docker with Compose v2. The Docker files live in `infrastructure/`; the
-image builds from the `../application` context and uses
+image builds from the repository-root context and uses
 `infrastructure/Dockerfile.dockerignore`. Compose reads `.env` from the compose
 file's directory, so the file goes in `infrastructure/.env`. From the repository
 root:

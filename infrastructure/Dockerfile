@@ -1,5 +1,6 @@
 # syntax=mirror.gcr.io/docker/dockerfile:1
-# Build context: ../application (see compose.yaml). Bases are pinned by tag and
+# Build context: the repository root (see compose.yaml); Dockerfile.dockerignore
+# admits only application/. Bases are pinned by tag and
 # digest; bump both together (Renovate/Dependabot can track the digests).
 # mirror.gcr.io is Google's Docker Hub mirror: avoids anonymous Docker Hub rate limits on shared runners.
 ARG NODE_BUILD_IMAGE=mirror.gcr.io/library/node:22.23.3-trixie-slim@sha256:154ba2f4d6fec323d28e4f4bb86bba4677f1223391a1979cf521304e03a98dfa
@@ -9,9 +10,9 @@ ARG NODE_RUNTIME_IMAGE=gcr.io/distroless/nodejs22-debian13:nonroot@sha256:ec2313
 FROM ${NODE_BUILD_IMAGE} AS build
 WORKDIR /app
 ENV NPM_CONFIG_UPDATE_NOTIFIER=false NPM_CONFIG_FUND=false NPM_CONFIG_AUDIT=false
-COPY package.json package-lock.json ./
+COPY application/package.json application/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm,sharing=locked npm ci
-COPY . .
+COPY application/ ./
 # The Docker-target build bundles the server; vinext records the packages it
 # left external (pg, react, react-dom, ipaddr.js) in vinext-externals.json.
 # emitStandaloneOutput copies only those plus vinext's own runtime chain into
