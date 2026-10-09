@@ -1,6 +1,6 @@
 # Beer Map development
 
-This is the working repository for the Rīgas alus website. Web app source is in `application/` (routes and data in `application/app/`); Docker files are in `infrastructure/`, docs in `docs/`, and `playwright/` is reserved for future end-to-end tests. Run npm commands from `application/`. The native iPhone app was removed at the user's request on 9 October 2026; do not recreate it without a new explicit request.
+This is the working repository for the Rīgas alus website. Web app source is in `application/` (routes and data in `application/app/`); Docker files are in `infrastructure/docker/` (Terraform and Helm charts sit beside them in `infrastructure/`), docs in `docs/`, and `playwright/` is reserved for future end-to-end tests. Run npm commands from `application/`. The native iPhone app was removed at the user's request on 9 October 2026; do not recreate it without a new explicit request.
 
 The user requested independent development, thoughtful useful features, competitor research, complementary website improvements and occasional commits. The previous five-hour background continuation was deleted at the user's request; do not recreate it without a new explicit request. Use `docs/DEVELOPMENT.md` for durable progress and priorities. Ask the user only for necessary decisions or concrete blockers.
 

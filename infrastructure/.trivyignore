@@ -1,0 +1,6 @@
+# Trivy config scan exceptions (infra.yml trivy-config job).
+
+# GKE master authorized networks: deploys run on GitHub-hosted runners, whose
+# egress IPs are not fixed. The control plane is protected by IAM via keyless
+# Workload Identity Federation instead.
+GCP-0061

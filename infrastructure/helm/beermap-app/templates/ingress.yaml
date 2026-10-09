@@ -1,0 +1,40 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: beermap-app
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+spec:
+  domains:
+    {{- toYaml .Values.ingress.hosts | nindent 4 }}
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: beermap-app
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+spec:
+  redirectToHttps:
+    enabled: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: beermap-app
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+  annotations:
+    # GKE selects its controller by this annotation, not spec.ingressClassName.
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.ingress.staticIpName }}
+    networking.gke.io/managed-certificates: beermap-app
+    networking.gke.io/v1beta1.FrontendConfig: beermap-app
+spec:
+  defaultBackend:
+    service:
+      name: beermap-app
+      port:
+        number: 80
+{{- end }}

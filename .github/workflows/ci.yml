@@ -87,7 +87,7 @@ jobs:
       - uses: docker/build-push-action@v7.4.0
         with:
           context: .
-          file: infrastructure/Dockerfile
+          file: infrastructure/docker/Dockerfile
           load: true
           tags: beer-map:ci
           cache-from: type=gha
@@ -96,8 +96,8 @@ jobs:
         id: trivyignore
         working-directory: .
         run: |
-          if [ -f infrastructure/.trivyignore ]; then
-            echo "path=infrastructure/.trivyignore" >> "$GITHUB_OUTPUT"
+          if [ -f infrastructure/docker/.trivyignore ]; then
+            echo "path=infrastructure/docker/.trivyignore" >> "$GITHUB_OUTPUT"
           fi
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
@@ -148,10 +148,10 @@ jobs:
           BEER_MAP_TEST_DATABASE_URL: postgresql://beer_map:integration_test_only@localhost:5432/beer_map_prices_test
           APP_DATABASE_PASSWORD: app_integration_test_only_0123456789
           REVIEW_DATABASE_PASSWORD: review_integration_test_only_0123456789
-      - run: docker compose -f ../infrastructure/compose.yaml config --quiet
+      - run: docker compose -f ../infrastructure/docker/compose.yaml config --quiet
         env:
           POSTGRES_PASSWORD: compose_test_only
-      - run: docker compose -f ../infrastructure/compose.yaml up --build --wait --wait-timeout 180
+      - run: docker compose -f ../infrastructure/docker/compose.yaml up --build --wait --wait-timeout 180
         env:
           POSTGRES_PASSWORD: compose_test_only
       - name: Verify container API and conditional requests
@@ -166,17 +166,17 @@ jobs:
       - run: npm run test:browser:suite
       - name: Container logs
         if: failure()
-        run: docker compose -f ../infrastructure/compose.yaml logs
+        run: docker compose -f ../infrastructure/docker/compose.yaml logs
         env:
           POSTGRES_PASSWORD: compose_test_only
       - name: Stop containers
         if: always()
         run: |
-          docker compose -f ../infrastructure/compose.yaml down --volumes
+          docker compose -f ../infrastructure/docker/compose.yaml down --volumes
           # The fixture stops its own stack but keeps the volume for local reruns.
           if [ -f artifacts/playwright.env ]; then
             docker compose --env-file artifacts/playwright.env -p beer-map-playwright \
-              -f ../infrastructure/compose.yaml -f ../infrastructure/compose.prices.yaml \
+              -f ../infrastructure/docker/compose.yaml -f ../infrastructure/docker/compose.prices.yaml \
               -f ../playwright/compose.yaml down --volumes
           fi
         env:
@@ -215,8 +215,27 @@ jobs:
       - uses: docker/build-push-action@v7.4.0
         with:
           context: .
-          file: infrastructure/Dockerfile
+          file: infrastructure/docker/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
+      # Versioned OCI charts on release tags. The chart version equals the
+      # semver image tag above; installs still pass image.tag explicitly.
+      - uses: azure/setup-helm@v5.0.1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          version: v4.3.0
+      - name: Push Helm charts
+        if: startsWith(github.ref, 'refs/tags/v')
+        working-directory: .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          echo "$GITHUB_TOKEN" | helm registry login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          helm package infrastructure/helm/beermap-app --version "$version" --app-version "$version" -d "$RUNNER_TEMP/charts"
+          helm package infrastructure/helm/beermap-postgres --version "$version" -d "$RUNNER_TEMP/charts"
+          for chart in "$RUNNER_TEMP"/charts/*.tgz; do
+            helm push "$chart" oci://ghcr.io/eedvardss/charts
+          done

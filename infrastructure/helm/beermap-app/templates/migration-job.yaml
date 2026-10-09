@@ -1,0 +1,63 @@
+# Runs before every install/upgrade, like compose's db-setup service.
+# The beermap-postgres release must already be installed.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: beermap-app-migrate
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  # Retries cover a postgres pod that is still starting.
+  backoffLimit: 6
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: beermap-app-migrate
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{ .Values.postgres.clientLabel.key }}: {{ .Values.postgres.clientLabel.value | quote }}
+    spec:
+      restartPolicy: Never
+      # The chart's ServiceAccount does not exist yet during pre-install hooks.
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "beermap-app.podSecurity" . | nindent 8 }}
+      containers:
+        - name: migrate
+          image: {{ include "beermap-app.image" . }}
+          imagePullPolicy: IfNotPresent
+          # args, not command: the distroless ENTRYPOINT is node.
+          args: [scripts/setup-database.mjs]
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.postgres }}
+                  key: POSTGRES_PASSWORD
+            - name: APP_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.app }}
+                  key: APP_DATABASE_PASSWORD
+            - name: REVIEW_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.app }}
+                  key: REVIEW_DATABASE_PASSWORD
+            - name: DATABASE_URL
+              value: postgresql://{{ .Values.postgres.superuser }}:$(POSTGRES_PASSWORD)@{{ .Values.postgres.host }}:5432/{{ .Values.postgres.database }}
+            - name: PRICE_SUGGESTIONS_ENABLED
+              value: "true"
+            - name: NODE_ENV
+              value: production
+          resources:
+            {{- toYaml .Values.migration.resources | nindent 12 }}
+          securityContext:
+            {{- include "beermap-app.containerSecurity" . | nindent 12 }}

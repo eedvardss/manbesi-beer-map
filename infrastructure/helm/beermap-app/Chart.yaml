@@ -1,0 +1,7 @@
+apiVersion: v2
+name: beermap-app
+description: Rīgas alus web app (vinext Node server) on GKE, with its database migration Job.
+type: application
+# Packaged as an OCI chart; CI overrides version/appVersion with `helm package --version --app-version`.
+version: 0.1.0
+appVersion: "0.1.0"
