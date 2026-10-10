@@ -86,6 +86,9 @@ function queryEntries(entries: SearchEntry[], query: string, band: PriceBand, so
       for (let i = 1; i < beers.length; i++) {
         if (compareServings(beers[i], best, sort) < 0) best = beers[i];
       }
+      // Only comparable servings belong in the litre view; keep unknown sizes
+      // available in the serving-price and alphabetical views.
+      if (sort === 'litre' && servingPerLitre(best) === null) return [];
       // One retained projection per immutable source venue. Keep UI identity when
       // both the winning quote and every visible menu entry are unchanged.
       const previous = entry.projection;
