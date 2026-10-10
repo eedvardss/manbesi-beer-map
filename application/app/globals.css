@@ -136,7 +136,7 @@ button { cursor: pointer; }
 .empty-mark { width: 28px; height: 28px; object-fit: contain; opacity: .82; }
 .results-mark { width: 17px; height: 17px; object-fit: contain; }
 
-.mobile-results, .mobile-scrim, .mobile-time-dock { display: none; }
+.mobile-results, .mobile-scrim { display: none; }
 
 .maplibregl-marker.marker-node { position: absolute; width: 74px; height: 34px; transition: opacity .24s ease, filter .24s ease; }
 .maplibregl-marker.marker-node.is-closed:not(.is-open) { filter: grayscale(1) saturate(0); }
@@ -207,6 +207,32 @@ button { cursor: pointer; }
 .maplibregl-ctrl-group button:hover { background-color: #222723 !important; }
 .maplibregl-ctrl-icon { filter: invert(.82); opacity: .82; }
 
+.mobile-time-dock {
+  position: fixed;
+  z-index: 1050;
+  bottom: 20px;
+  left: calc(50% + 149px);
+  display: grid;
+  gap: 4px;
+  width: min(320px, calc(100vw - 436px));
+  height: 60px;
+  color: #f5f7f4;
+  transform: translateX(-50%);
+}
+.time-dock-label { position: relative; display: flex; align-items: baseline; justify-content: center; gap: 6px; min-height: 18px; text-shadow: 0 2px 7px rgba(0,0,0,.8); }
+.time-dock-label span { color: rgba(255,255,255,.66); font-size: 10px; font-weight: 700; }
+.time-dock-label strong { color: #fff; font-size: 13px; font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+.time-dock-label button { position: absolute; right: 1px; padding: 3px 7px; border: 1px solid rgba(255,255,255,.1); border-radius: 999px; background: rgba(7,9,8,.72); color: rgba(255,255,255,.82); font-size: 10px; font-weight: 700; }
+.time-slider-wrap { position: relative; height: 38px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; background: rgba(7,9,8,.58); box-shadow: 0 6px 18px rgba(0,0,0,.2); }
+.time-slider-scroller { cursor: grab; user-select: none; position: absolute; z-index: 1; inset: 0; overflow-x: auto; overflow-y: hidden; border-radius: inherit; outline: 0; scrollbar-width: none; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; touch-action: pan-x; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
+.time-slider-scroller::-webkit-scrollbar { display: none; }
+.time-slider-scroller:focus-visible { box-shadow: inset 0 0 0 2px rgba(255,213,31,.32); }
+.time-slider-content { position: relative; height: 100%; pointer-events: none; }
+.time-slider-content i { position: absolute; top: 12px; width: 2px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.26); transform: translateX(-50%); scroll-snap-align: center; }
+.time-slider-content i.is-hour { top: 9px; height: 13px; background: rgba(255,255,255,.5); }
+.time-slider-content i[data-label]::after { content: attr(data-label); position: absolute; top: 14px; left: 50%; color: rgba(255,255,255,.42); font: 700 8px/1 var(--font-app); transform: translateX(-50%); }
+.time-slider-cursor { position: absolute; z-index: 2; top: 5px; bottom: 5px; left: 50%; width: 5px; border-radius: 999px; background: #ffd51f; box-shadow: 0 0 0 1px rgba(255,213,31,.2), 0 1px 8px rgba(255,213,31,.26); transform: translateX(-50%); pointer-events: none; }
+
 @media (max-width: 720px) {
   .sidebar {
     z-index: 1300;
@@ -272,31 +298,7 @@ button { cursor: pointer; }
   .marker-detail { left: 37px; width: min(226px, calc(100vw - 32px)); transform: translateX(-50%); transform-origin: 50% 18px; animation-name: marker-morph-mobile; }
   .marker-node[data-tone='unpriced'] .marker-detail { transform-origin: 50% 18px; animation-name: candidate-morph-mobile; }
 
-  .mobile-time-dock {
-    position: fixed;
-    z-index: 1050;
-    bottom: 10px;
-    left: 50%;
-    display: grid;
-    gap: 4px;
-    width: min(300px, calc(100vw - 88px));
-    height: 60px;
-    color: #f5f7f4;
-    transform: translateX(-50%);
-  }
-  .time-dock-label { position: relative; display: flex; align-items: baseline; justify-content: center; gap: 6px; min-height: 18px; text-shadow: 0 2px 7px rgba(0,0,0,.8); }
-  .time-dock-label span { color: rgba(255,255,255,.66); font-size: 10px; font-weight: 700; }
-  .time-dock-label strong { color: #fff; font-size: 13px; font-variant-numeric: tabular-nums; letter-spacing: .01em; }
-  .time-dock-label button { position: absolute; right: 1px; padding: 3px 7px; border: 1px solid rgba(255,255,255,.1); border-radius: 999px; background: rgba(7,9,8,.72); color: rgba(255,255,255,.82); font-size: 10px; font-weight: 700; }
-  .time-slider-wrap { position: relative; height: 38px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; background: rgba(7,9,8,.58); box-shadow: 0 6px 18px rgba(0,0,0,.2); }
-  .time-slider-scroller { position: absolute; z-index: 1; inset: 0; overflow-x: auto; overflow-y: hidden; border-radius: inherit; outline: 0; scrollbar-width: none; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; touch-action: pan-x; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
-  .time-slider-scroller::-webkit-scrollbar { display: none; }
-  .time-slider-scroller:focus-visible { box-shadow: inset 0 0 0 2px rgba(255,213,31,.32); }
-  .time-slider-content { position: relative; height: 100%; pointer-events: none; }
-  .time-slider-content i { position: absolute; top: 12px; width: 2px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.26); transform: translateX(-50%); scroll-snap-align: center; }
-  .time-slider-content i.is-hour { top: 9px; height: 13px; background: rgba(255,255,255,.5); }
-  .time-slider-content i[data-label]::after { content: attr(data-label); position: absolute; top: 14px; left: 50%; color: rgba(255,255,255,.42); font: 700 8px/1 var(--font-app); transform: translateX(-50%); }
-  .time-slider-cursor { position: absolute; z-index: 2; top: 5px; bottom: 5px; left: 50%; width: 5px; border-radius: 999px; background: #ffd51f; box-shadow: 0 0 0 1px rgba(255,213,31,.2), 0 1px 8px rgba(255,213,31,.26); transform: translateX(-50%); pointer-events: none; }
+  .mobile-time-dock { bottom: 10px; left: 50%; width: min(300px, calc(100vw - 88px)); }
 
   @keyframes marker-morph-mobile {
     from { clip-path: inset(0 calc(50% - 39px) calc(100% - 38px) calc(50% - 39px) round 12px); opacity: .92; }

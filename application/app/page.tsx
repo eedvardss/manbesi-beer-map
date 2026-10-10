@@ -461,6 +461,7 @@ function BeerMap({
   const venueGliderRef = useRef<HTMLDivElement>(null);
   const hoveredVenueIdRef = useRef<string | null>(null);
   const timeScrollerRef = useRef<HTMLDivElement>(null);
+  const timelineDragRef = useRef<{ x: number; scrollLeft: number } | null>(null);
   const ignoreTimelineScrollRef = useRef(false);
   const timelineFrameRef = useRef<number | null>(null);
   const restoredTimelineRef = useRef<number | null>(null);
@@ -1240,6 +1241,17 @@ function BeerMap({
                   aria-valuenow={selectedMinutes}
                   aria-valuetext={`${selectedDayOffset ? 'Rīt' : 'Šodien'} ${formatClockTime(selectedMinuteOfDay)}`}
                   onScroll={setTimelineFromScroll}
+                  onPointerDown={(event) => {
+                    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+                    event.currentTarget.focus();
+                    timelineDragRef.current = { x: event.clientX, scrollLeft: event.currentTarget.scrollLeft };
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                  }}
+                  onPointerMove={(event) => {
+                    const drag = timelineDragRef.current;
+                    if (drag) event.currentTarget.scrollLeft = drag.scrollLeft + drag.x - event.clientX;
+                  }}
+                  onLostPointerCapture={() => { timelineDragRef.current = null; }}
                   onKeyDown={(event) => {
                     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
                       return;
