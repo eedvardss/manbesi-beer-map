@@ -31,9 +31,11 @@ kubectl -n monitoring create secret generic beermap-grafana-admin \
   --from-literal=admin-user=admin \
   --from-literal=admin-password="$(openssl rand -base64 24)"
 
-helm upgrade --install beermap-observability . \
+helm upgrade --install beermap-observability . -f values-autopilot.yaml \
   --namespace monitoring --rollback-on-failure --timeout 10m
 ```
+
+Always pass `-f values-autopilot.yaml`. It removes the Loki chart's default pod anti-affinity, which Autopilot rejects on pods requesting under 500m CPU. Helm ignores that `null` when it sits in this chart's own `values.yaml`.
 
 `--rollback-on-failure` is the Helm 4 name for Helm 3's `--atomic`.
 
@@ -101,8 +103,8 @@ Autopilot bills pod resource requests, not node capacity. The requests in `value
 
 ```sh
 helm dependency build .
-helm lint . --namespace monitoring
-helm template beermap-observability . --namespace monitoring --kube-version 1.34.0 > /tmp/rendered.yaml
+helm lint . --namespace monitoring -f values-autopilot.yaml
+helm template beermap-observability . --namespace monitoring -f values-autopilot.yaml --kube-version 1.34.0 > /tmp/rendered.yaml
 kubeconform -strict -summary -kubernetes-version 1.34.0 \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \

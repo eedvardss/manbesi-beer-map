@@ -61,5 +61,5 @@ jobs:
           helm dependency build "$CHART"
       # Helm 4 renamed --atomic to --rollback-on-failure (same behaviour; it implies --wait).
       - run: |
-          helm upgrade --install beermap-observability "$CHART" \
+          helm upgrade --install beermap-observability "$CHART" -f "$CHART/values-autopilot.yaml" \
             --namespace "$NAMESPACE" --rollback-on-failure --wait --timeout 15m

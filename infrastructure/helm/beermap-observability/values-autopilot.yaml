@@ -1,0 +1,10 @@
+# Pass with -f on every install/upgrade (or --set loki.singleBinary.affinity=null).
+#
+# The Loki chart defaults singleBinary to hard pod anti-affinity. GKE Autopilot
+# rejects anti-affinity on pods requesting under 500m CPU, and it is pointless for
+# one replica. Removing a subchart default needs null, but Helm drops nulls in an
+# umbrella chart's own values.yaml before merging subchart defaults, so the null
+# only takes effect from a user-supplied values file.
+loki:
+  singleBinary:
+    affinity: null
