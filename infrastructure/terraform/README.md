@@ -9,7 +9,7 @@ Creates everything the Helm charts and the GitHub deploy job need in one GCP pro
 | `gke.tf` | GKE Autopilot cluster `beermap` (regional, REGULAR channel, Workload Identity, Dataplane V2) and a minimal node service account |
 | `backups.tf` | Bucket `<project>-beermap-backups` (30-day delete), GSA `beermap-backup` (objectCreator), Workload Identity binding for KSA `beermap/beermap-backup` |
 | `github.tf` | Workload Identity Federation pool/provider `github` (repository `eedvardss/manbesi-beer-map` only), GSA `github-deployer` with `roles/container.developer` |
-| `budget.tf` | Monthly EUR budget with alerts at 50/90/100% |
+| `budget.tf` | Monthly budget (in the billing account's currency) with alerts at 50/90/100% |
 
 State lives in GCS bucket `<project>-tfstate`, prefix `beermap`.
 
@@ -18,8 +18,8 @@ State lives in GCS bucket `<project>-tfstate`, prefix `beermap`.
 | Variable | Default | Notes |
 | --- | --- | --- |
 | `project_id` | none | GCP project ID |
-| `billing_account_id` | none | `XXXXXX-XXXXXX-XXXXXX`; the account currency must be EUR |
-| `budget_amount` | `50` | EUR per month |
+| `billing_account_id` | none | `XXXXXX-XXXXXX-XXXXXX` |
+| `budget_amount` | `50` | Per month, in the billing account's currency (any currency works). 50 suits EUR; use about 550 for SEK |
 | `region` | `europe-north1` | |
 | `deletion_protection` | `true` | Set `false` and apply before `terraform destroy` |
 

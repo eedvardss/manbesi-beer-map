@@ -13,8 +13,8 @@ resource "google_billing_budget" "beermap" {
 
   amount {
     specified_amount {
-      currency_code = "EUR"
-      units         = tostring(var.budget_amount)
+      # currency_code omitted: the billing account's own currency is used.
+      units = tostring(var.budget_amount)
     }
   }
 
