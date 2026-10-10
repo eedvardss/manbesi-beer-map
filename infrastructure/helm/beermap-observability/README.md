@@ -32,8 +32,10 @@ kubectl -n monitoring create secret generic beermap-grafana-admin \
   --from-literal=admin-password="$(openssl rand -base64 24)"
 
 helm upgrade --install beermap-observability . \
-  --namespace monitoring --atomic --timeout 10m
+  --namespace monitoring --rollback-on-failure --timeout 10m
 ```
+
+`--rollback-on-failure` is the Helm 4 name for Helm 3's `--atomic`.
 
 Install this release before or after the app charts; the alerts only refer to objects by name.
 

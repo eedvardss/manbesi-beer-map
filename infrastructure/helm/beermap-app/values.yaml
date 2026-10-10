@@ -22,10 +22,6 @@ postgres:
   podLabels:
     app.kubernetes.io/name: beermap-postgres
 
-# The public HTTPS origin; price endpoints compare request Origin against it
-# because TLS ends at the load balancer and the pod only sees http.
-priceAllowedOrigin: https://aluskarte.lv
-
 # Autopilot sets limits equal to requests, so they are stated explicitly.
 resources:
   requests:
@@ -56,9 +52,11 @@ autoscaling:
 ingress:
   enabled: true
   staticIpName: beermap-ip
-  hosts:
-    - aluskarte.lv
-    - www.aluskarte.lv
+  # Required: the single public hostname, e.g. --set ingress.host=example.com.
+  # It is the ManagedCertificate domain and PRICE_ALLOWED_ORIGIN (https://<host>);
+  # price endpoints compare the request Origin against it because TLS ends at
+  # the load balancer.
+  host: ""
 
 networkPolicy:
   # Google Front End and health-check source ranges.

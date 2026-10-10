@@ -16,6 +16,10 @@ helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 {{ .Values.image.repository }}:{{ $tag }}
 {{- end }}
 
+{{- define "beermap-app.host" -}}
+{{- required "ingress.host is required (the public hostname, e.g. --set ingress.host=example.com)" .Values.ingress.host -}}
+{{- end }}
+
 {{- define "beermap-app.podSecurity" -}}
 runAsNonRoot: true
 runAsUser: 65532

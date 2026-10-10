@@ -1,6 +1,5 @@
-# Trivy config scan exceptions (infra.yml trivy-config job).
+# Trivy config scan exceptions (infra.yml trivy-config job, HIGH/CRITICAL only).
+# MEDIUM/LOW findings accepted in terraform/README.md (GCP-0059, -0029, -0076, -0066, -0078) never fail the job.
 
-# GKE master authorized networks: deploys run on GitHub-hosted runners, whose
-# egress IPs are not fixed. The control plane is protected by IAM via keyless
-# Workload Identity Federation instead.
+# No master authorized networks: GitHub-hosted runners have no fixed IPs; the endpoint requires IAM auth.
 GCP-0061

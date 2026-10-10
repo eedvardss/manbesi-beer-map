@@ -5,7 +5,7 @@ The Rīgas alus web app (`ghcr.io/eedvardss/manbesi-beer-map`) on GKE Autopilot 
 - `pre-install,pre-upgrade` hook Job `beermap-app-migrate`, which runs `scripts/setup-database.mjs`. This is compose's `db-setup`: it applies migrations, seeds an empty database and creates the restricted `beer_map_app` and `beer_map_reviewer` roles. It connects as the superuser.
 - Deployment `beermap-app`, which connects as the restricted roles, with env matching `infrastructure/docker/compose.yaml` and `compose.prices.yaml`. The HPA (CPU 70%, 2–5 replicas) owns the replica count.
 - ClusterIP Service with a NEG annotation for container-native load balancing.
-- Ingress (`gce`, static IP `beermap-ip`), a ManagedCertificate for `aluskarte.lv` and `www.aluskarte.lv`, and a FrontendConfig that redirects HTTP to HTTPS.
+- Ingress (`gce`, static IP `beermap-ip`), a ManagedCertificate for `ingress.host`, and a FrontendConfig that redirects HTTP to HTTPS.
 - PodDisruptionBudget (`minAvailable: 1`).
 - NetworkPolicy, ingress: port 3000 only from the Google LB and health-check ranges and from namespace `monitoring`. Egress: only postgres:5432 and DNS.
 - ServiceAccount `beermap-app` with `automountServiceAccountToken: false`. There is no Role or RoleBinding because nothing in the pod calls the Kubernetes API.
@@ -20,8 +20,10 @@ The Rīgas alus web app (`ghcr.io/eedvardss/manbesi-beer-map`) on GKE Autopilot 
 - Passwords are placed into connection URLs with `$(VAR)` expansion, as in compose, so they must be URL-safe (for example `openssl rand -hex 32`). The app also requires lengths of at least 24 characters for the two database passwords and `PRICE_REVIEW_PASSWORD`, and at least 32 for `PRICE_SESSION_SECRET`. Otherwise price endpoints return 503 or the migration fails.
 
 ```sh
-helm upgrade --install --atomic -n beermap beermap-app infrastructure/helm/beermap-app --set image.tag=sha-<short>
+helm upgrade --install --rollback-on-failure -n beermap beermap-app infrastructure/helm/beermap-app --set image.tag=sha-<short> --set ingress.host=<your-domain>
 ```
+
+`--rollback-on-failure` is the Helm 4 name for Helm 3's `--atomic`.
 
 ## Values
 
@@ -34,11 +36,11 @@ helm upgrade --install --atomic -n beermap beermap-app infrastructure/helm/beerm
 | `postgres.host`, `.database`, `.superuser` | `beermap-postgres`, `beer_map`, `beer_map` | |
 | `postgres.clientLabel` | `beermap.io/postgres-client: "true"` | Must match the postgres chart |
 | `postgres.podLabels` | `app.kubernetes.io/name: beermap-postgres` | Egress target |
-| `priceAllowedOrigin` | `https://aluskarte.lv` | `PRICE_ALLOWED_ORIGIN`; TLS ends at the LB, so the pod cannot infer it |
 | `resources`, `migration.resources` | 250m / 512Mi | Limits equal requests (Autopilot) |
 | `autoscaling.*` | 2 / 5 / 70% | |
 | `ingress.enabled` | `true` | Turns the Ingress, ManagedCertificate and FrontendConfig on or off together |
-| `ingress.staticIpName`, `ingress.hosts` | `beermap-ip`, both domains | |
+| `ingress.staticIpName` | `beermap-ip` | |
+| `ingress.host` | required | The single public hostname (no www): ManagedCertificate domain and `PRICE_ALLOWED_ORIGIN` (`https://<host>`); TLS ends at the LB, so the pod cannot infer the origin |
 | `networkPolicy.loadBalancerRanges` | `35.191.0.0/16`, `130.211.0.0/22` | |
 | `networkPolicy.monitoringNamespace` | `monitoring` | |
 

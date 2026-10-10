@@ -19,7 +19,7 @@ output "region" {
 }
 
 output "ingress_ip_address" {
-  description = "Global static IP beermap-ip; point the aluskarte.lv and www A records here."
+  description = "Global static IP beermap-ip; point the public hostname's A record here."
   value       = google_compute_global_address.ingress.address
 }
 

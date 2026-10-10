@@ -32,9 +32,6 @@ spec:
         - name: app
           image: {{ include "beermap-app.image" . }}
           imagePullPolicy: IfNotPresent
-          # Same env as compose.yaml + compose.prices.yaml. $(VAR) only expands
-          # variables defined earlier in this list, so passwords come first.
-          # Passwords must be URL-safe, as with compose.
           env:
             - name: APP_DATABASE_PASSWORD
               valueFrom:
@@ -63,7 +60,7 @@ spec:
             - name: PRICE_SUGGESTIONS_ENABLED
               value: "true"
             - name: PRICE_ALLOWED_ORIGIN
-              value: {{ .Values.priceAllowedOrigin | quote }}
+              value: {{ printf "https://%s" (include "beermap-app.host" .) | quote }}
             - name: NODE_ENV
               value: production
             - name: PORT
@@ -71,15 +68,14 @@ spec:
           ports:
             - name: http
               containerPort: 3000
-          # GKE derives the load balancer health check from this probe.
+
           readinessProbe:
             httpGet:
               path: /api/health
               port: http
             periodSeconds: 5
             timeoutSeconds: 3
-          # /api/health fails while the database is down; restarting the pod
-          # would not fix that, so liveness only checks the process listens.
+
           livenessProbe:
             tcpSocket:
               port: http

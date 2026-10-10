@@ -62,7 +62,7 @@ The first apply takes about 10 minutes (the cluster).
 
 ## 3. Grant the deployer RBAC rights (once, by a human)
 
-`roles/container.developer` covers Deployments, StatefulSets, Secrets, Services, Ingress and so on, but not creating Roles, RoleBindings, ClusterRoles or ClusterRoleBindings (checked against the GKE IAM role reference: those permissions are only in `roles/container.admin`). The charts create RBAC objects, so bind the deployer in Kubernetes RBAC instead of widening IAM:
+`roles/container.developer` covers Deployments, StatefulSets, Secrets, Services, Ingress and so on, but not creating Roles, RoleBindings, ClusterRoles or ClusterRoleBindings (checked against the GKE IAM role reference: those permissions are only in `roles/container.admin`). The observability chart (its Prometheus, Grafana, Loki and Alloy subcharts) creates RBAC objects, so bind the deployer in Kubernetes RBAC instead of widening IAM:
 
 ```sh
 gcloud container clusters get-credentials beermap --region europe-north1 --project "$PROJECT_ID"
@@ -70,9 +70,9 @@ kubectl create clusterrolebinding github-deployer-admin --clusterrole cluster-ad
   --user "github-deployer@$PROJECT_ID.iam.gserviceaccount.com"
 ```
 
-## 4. GitHub Environment `production`
+## 4. GitHub variables and secrets
 
-Variables (Settings > Environments > production > Variables):
+Repository variables (Settings > Secrets and variables > Actions > Variables). They must be repository-level, not on the `production` environment, because `deploy.yml` and `infra.yml` read them in job-level `if:` conditions, which cannot see environment variables:
 
 | Variable | Value |
 | --- | --- |
@@ -80,14 +80,11 @@ Variables (Settings > Environments > production > Variables):
 | `GCP_WORKLOAD_IDENTITY_PROVIDER` | `terraform output -raw workload_identity_provider` |
 | `GCP_DEPLOYER_SA` | `terraform output -raw deployer_service_account` |
 
-The secrets (`POSTGRES_PASSWORD`, `APP_DATABASE_PASSWORD`, `REVIEW_DATABASE_PASSWORD`, `PRICE_REVIEW_PASSWORD`, `PRICE_SESSION_SECRET`, `GHCR_PULL_TOKEN`) don't come from Terraform. The workflow needs `permissions: id-token: write` for keyless auth.
+The `production` environment (with required reviewers) holds variable `APP_HOST` (the public hostname, the chart's `ingress.host`; see step 5) and the secrets `POSTGRES_PASSWORD`, `APP_DATABASE_PASSWORD`, `REVIEW_DATABASE_PASSWORD`, `PRICE_REVIEW_PASSWORD`, `PRICE_SESSION_SECRET`, `GHCR_PULL_TOKEN` and `GRAFANA_ADMIN_PASSWORD`. None of these come from Terraform. The workflow needs `permissions: id-token: write` for keyless auth. See the root README for the full list, including `SMOKE_TEST_URL`.
 
-## 5. DNS (Cloudflare, manual)
+## 5. DNS (manual)
 
-In the Cloudflare dashboard, set the `A` records for `aluskarte.lv` and `www.aluskarte.lv` to `terraform output -raw ingress_ip_address` with the proxy status **DNS only** (grey cloud). Terraform does not manage Cloudflare.
-
-- The Google `ManagedCertificate` validates over HTTP against the load balancer. With the orange cloud on, validation sees Cloudflare instead and the certificate stays `Provisioning`. It becomes `Active` up to about 60 minutes after the records resolve to the static IP and the Ingress exists.
-- Doing this moves the live site off the Cloudflare Worker `aluskarte` (its routes stop matching once traffic no longer goes through Cloudflare's proxy). That cutover is your decision; switch back by restoring the previous records.
+Create an `A` record for your `APP_HOST` pointing to `terraform output -raw ingress_ip_address`. If the zone is on Cloudflare, set it to **DNS only** (grey cloud) so Google's `ManagedCertificate` can validate against the load balancer; behind the orange cloud it stays `Provisioning`. Provisioning can take 15–60 minutes after the record resolves and the Ingress exists. Terraform does not manage DNS.
 
 ## Teardown
 
@@ -100,12 +97,16 @@ docker run --rm -v "$PWD:/work" -w /work mirror.gcr.io/hashicorp/terraform:1.16.
 docker run --rm -v "$PWD:/work" -w /work mirror.gcr.io/hashicorp/terraform:1.16.5 init -backend=false
 docker run --rm -v "$PWD:/work" -w /work mirror.gcr.io/hashicorp/terraform:1.16.5 validate
 docker run --rm -v "$PWD:/data" -w /data --entrypoint sh ghcr.io/terraform-linters/tflint:v0.64.0 -c "tflint --init && tflint"
-docker run --rm -v "$PWD:/src:ro" mirror.gcr.io/aquasec/trivy:0.70.0 config /src
+# Same scope as CI: all of infrastructure/, without the vendored subcharts.
+docker run --rm -v "$PWD/..:/src:ro" mirror.gcr.io/aquasec/trivy:0.70.0 config --severity HIGH,CRITICAL --exit-code 1 \
+  --ignorefile /src/.trivyignore --skip-dirs /src/helm/beermap-observability/charts /src
 ```
 
 These check syntax, schema and lint rules only; Autopilot-specific API rules are enforced at apply time.
 
 ## Accepted Trivy findings
+
+Only GCP-0061 is HIGH; it is listed in `infrastructure/.trivyignore`. The others are MEDIUM or LOW and do not fail the HIGH/CRITICAL CI scan.
 
 | Check | Why it is accepted |
 | --- | --- |

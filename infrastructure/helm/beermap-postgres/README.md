@@ -10,10 +10,12 @@ PostgreSQL 17 for the beer map in namespace `beermap`. It installs:
 Install it before `beermap-app`, because the app's pre-install migration hook needs the database:
 
 ```sh
-helm upgrade --install --atomic -n beermap beermap-postgres infrastructure/helm/beermap-postgres \
+helm upgrade --install --rollback-on-failure -n beermap beermap-postgres infrastructure/helm/beermap-postgres \
   --set backup.bucket=${PROJECT_ID}-beermap-backups \
   --set backup.gcpServiceAccount=beermap-backup@${PROJECT_ID}.iam.gserviceaccount.com
 ```
+
+`--rollback-on-failure` is the Helm 4 name for Helm 3's `--atomic`.
 
 The deploy job must create Secret `beermap-postgres-auth` (key `POSTGRES_PASSWORD`) beforehand.
 

@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 env:
-  TERRAFORM_VERSION: 1.16.4
+  TERRAFORM_VERSION: 1.16.5
   TFLINT_VERSION: v0.64.0
   HELM_VERSION: v4.3.0
   KUBECONFORM_VERSION: v0.8.0
@@ -58,8 +58,8 @@ jobs:
         include:
           - chart: beermap-app
             namespace: beermap
-            # The chart requires an immutable image tag.
-            set: image.tag=sha-0000000
+            # The chart requires an immutable image tag and a hostname.
+            set: image.tag=sha-0000000,ingress.host=example.com
           - chart: beermap-postgres
             namespace: beermap
             # Backups require a bucket and GSA; the deploy job derives them from GCP_PROJECT_ID.
@@ -91,7 +91,7 @@ jobs:
           done
           helm dependency build "$CHART"
       - run: helm lint "$CHART" --namespace "$NAMESPACE" ${SET:+--set "$SET"}
-      # GKE (ManagedCertificate, BackendConfig) and Prometheus Operator kinds
+      # GKE (ManagedCertificate, FrontendConfig) and Prometheus Operator kinds
       # validate against the community CRD catalog; any other CRD is skipped.
       - name: Render and validate manifests
         run: |

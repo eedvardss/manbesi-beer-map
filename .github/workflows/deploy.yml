@@ -46,6 +46,8 @@ jobs:
       # workflow_run's github.sha is the current main head, not the CI run's commit.
       COMMIT: ${{ github.event.workflow_run.head_sha || github.sha }}
       PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      # Public hostname: the certificate domain and PRICE_ALLOWED_ORIGIN.
+      APP_HOST: ${{ vars.APP_HOST }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -61,6 +63,7 @@ jobs:
           if ! [[ "$tag" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
             echo "::error::Invalid image tag: $tag"; exit 1
           fi
+          if [ -z "$APP_HOST" ]; then echo "::error::Missing variable APP_HOST"; exit 1; fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - uses: google-github-actions/auth@v3.0.0
@@ -116,12 +119,13 @@ jobs:
         run: |
           helm upgrade --install beermap-app infrastructure/helm/beermap-app \
             --namespace "$NAMESPACE" --rollback-on-failure --wait --timeout 10m \
-            --set-string image.tag="$IMAGE_TAG"
+            --set-string image.tag="$IMAGE_TAG" \
+            --set-string ingress.host="$APP_HOST"
 
       # In-cluster health is already proven: --wait requires the readiness probes
       # to pass. This checks the public path (DNS, Ingress, managed certificate),
       # which can take an hour on the first deploy, so it runs only once
-      # SMOKE_TEST_URL is set (e.g. https://aluskarte.lv/api/health).
+      # SMOKE_TEST_URL is set (e.g. https://<APP_HOST>/api/health).
       - name: Smoke test
         if: vars.SMOKE_TEST_URL != ''
         env:
