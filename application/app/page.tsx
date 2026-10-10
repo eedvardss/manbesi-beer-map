@@ -234,6 +234,7 @@ function createMarkerNode(
       `${venue.name}, cenas vēl nav pārbaudītas`,
     );
   }
+  priceButton.dataset.priceLabel = priceButton.getAttribute('aria-label')!;
   root.appendChild(priceButton);
 
   if (!active) return root;
@@ -251,6 +252,10 @@ function createMarkerNode(
   const headingGroup = document.createElement('div');
   headingGroup.appendChild(heading);
   headingGroup.appendChild(address);
+  const openingStatus = document.createElement('span');
+  openingStatus.className = 'marker-opening-status';
+  openingStatus.hidden = true;
+  headingGroup.appendChild(openingStatus);
   header.appendChild(headingGroup);
 
   const list = document.createElement('div');
@@ -809,6 +814,7 @@ function BeerMap({
           nextButton.getAttribute('aria-label')!,
         );
         button.setAttribute('aria-expanded', String(active));
+        button.dataset.priceLabel = nextButton.dataset.priceLabel;
         button.replaceChildren(...Array.from(nextButton.childNodes));
         element.classList.toggle('is-open', active);
         element.dataset.tone = fresh.dataset.tone;
@@ -934,9 +940,20 @@ function BeerMap({
   useEffect(() => {
     if (!mapReady) return;
     markerRefs.current.forEach((marker, venueId) => {
-      marker
-        .getElement()
-        .classList.toggle('is-closed', openStates.get(venueId) === false);
+      const element = marker.getElement();
+      const closed = openStates.get(venueId) === false;
+      element.classList.toggle('is-closed', closed);
+      const button = element.querySelector<HTMLButtonElement>('button');
+      if (button) {
+        const label = button.dataset.priceLabel ?? '';
+        button.setAttribute('aria-label', `${label}${closed ? ', izvēlētajā laikā slēgts' : ''}`);
+        button.title = `${label}${closed ? ' · Pelēks: izvēlētajā laikā slēgts' : ''}`;
+      }
+      const status = element.querySelector<HTMLElement>('.marker-opening-status');
+      if (status) {
+        status.hidden = !closed;
+        status.textContent = closed ? 'Izvēlētajā laikā slēgts' : '';
+      }
     });
   }, [filtered, mapReady, openStates, selectedId]);
 

@@ -441,3 +441,11 @@ Verified locally: 25 unit checks, seven PostgreSQL integration tests including s
 ## Solid litre-price markers — 10 October 2026
 
 Fix transparent unknown-volume markers by giving every price button a background from its marker fill, with a neutral fallback. Closed venues retain grey styling without the previous 8% opacity, preserving readable prices. Docker rebuilt and started healthy; actual desktop/mobile litre views inspected. Computed styles across all 165 markers (nine unknown-volume and three closed venues in this run) report zero transparent fills or faded marker containers. No price data or pipeline changes.
+
+## Local website audit — 10 October 2026
+
+Walked through the Docker preview in Chromium at 1440×900, 390×844 and 320×568. Fixed the missing favicon declaration (the existing SVG now returns 200), the Clerk footer's pale background/low text contrast, and suggestion confirmation wording to reflect administrator approval. Closed markers now explain their grey appearance in hover text and accessible labels; their expanded menu shows “Izvēlētajā laikā slēgts”. Base price labels are retained separately so repeated opening-time updates do not duplicate the status or lose the serving/litre amount.
+
+Verified search/reset/empty results, serving and litre sorting, price filters, venue menus, keyboard focus retention, mobile drawer, timeline, runtime failure recovery, login/registration switching and anonymous review API rejection (401). Simulated a suggestion-session 503 and verified retry recovery; invalid zero price is rejected before submission. The narrow suggestion dialog and admin page scroll to their bottom controls without horizontal overflow. Menu screenshots were checked after morph animations settled. No test reports were submitted to the user's preview database.
+
+Lint and type checks pass (the existing Worker export warning remains); Docker build and bundle budgets pass and the preview starts healthy. The existing map/browser regression suite passes after these changes. Authenticated MFA sign-in and real admin moderation remain outside this anonymous browser audit; use the dedicated enrolled test identity and isolated database for that check. Dense overlapping individual markers and English Clerk authentication text remain usability limitations. No public deployment or pipeline edits.
