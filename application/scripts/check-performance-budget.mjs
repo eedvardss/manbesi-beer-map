@@ -4,7 +4,7 @@ import { gzipSync } from 'node:zlib';
 
 const directory = 'dist/client/_next/static/chunks';
 const pages = readdirSync(directory).filter((file) =>
-  /^(?:page|panel)-.*\.js$/.test(file),
+  /^(?:page|auth)-.*\.js$/.test(file),
 );
 assert.equal(
   pages.length,

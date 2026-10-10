@@ -16,8 +16,6 @@ assert(
   connection && new URL(connection).pathname.endsWith('_prices_e2e'),
   'Set a disposable database ending in _prices_e2e',
 );
-const password = process.env.PRICE_E2E_REVIEW_PASSWORD;
-assert(password, 'Set the private test reviewer password');
 const db = new pg.Client({ connectionString: connection });
 await db.connect();
 const artifacts = 'output/playwright/prices';
@@ -50,7 +48,7 @@ try {
     browser,
     db,
     base: base.replace(/\/$/, ''),
-    password,
+    unauthenticatedStatus: process.env.CLERK_SECRET_KEY && process.env.VITE_CLERK_PUBLISHABLE_KEY ? 401 : 503,
     expect,
     artifacts,
   });
