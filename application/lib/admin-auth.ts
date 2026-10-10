@@ -5,7 +5,7 @@ import { reviewDatabase } from './price-store';
 import { requirePrices } from './price-auth';
 import { PriceError } from './price-input';
 
-export async function requireReviewer(request: Request, recent = false) {
+export async function requireReviewer(request: Request) {
   requirePrices();
   const config = clerkDevelopmentConfig();
   if (!config)
@@ -28,7 +28,7 @@ export async function requireReviewer(request: Request, recent = false) {
   if (!state.isAuthenticated || !auth?.userId || !auth.sessionId) {
     throw new PriceError(401, 'Nepieciešama administratora pieslēgšanās.');
   }
-  requireAdminFactors(auth.sessionClaims, recent);
+  requireAdminFactors(auth.sessionClaims);
   const { rowCount } = await reviewDatabase().query(
     'SELECT 1 FROM beer_map_admins WHERE clerk_user_id=$1 AND active=true',
     [auth.userId],

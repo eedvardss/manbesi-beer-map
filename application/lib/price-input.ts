@@ -59,3 +59,9 @@ export function observedDate(value: unknown) {
   }
   return value;
 }
+
+export function optionalEvidenceUrl(value: unknown) {
+  if (value === undefined || (typeof value === 'string' && value.trim() === ''))
+    return '';
+  return evidenceUrl(value);
+}

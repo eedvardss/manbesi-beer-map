@@ -91,9 +91,9 @@ report publishes the price; rejecting it leaves prices unchanged. History shows
 accepted/rejected reports and allows reverting a currently published override.
 Clerk manages session lifetime and logout. Every admin request verifies the
 Clerk token, active session, account state, enrolled MFA and database allowlist.
-Writes require both authentication factors to be less than ten minutes old;
-otherwise the panel asks for a new sign-in. Expiry and permission failures clear
-the displayed queue. Audit history records the authenticated Clerk user ID.
+Ordinary moderation remains available throughout the active MFA session.
+Actual expiry returns to sign-in; missing admin permission shows an access error
+without logging out. Both clear protected queue data. Audit history records the authenticated Clerk user ID.
 
 The baseline Compose command still works with the feature disabled. The added
 Compose file is opt-in. CI's `integration` job runs the SQL suite and the
@@ -117,9 +117,10 @@ from `application/`.
 - Request IDs deduplicate retries. Serving revision checks and row locks prevent
   competing approvals from overwriting newer prices. A stale submission refreshes
   the form's current quote while retaining the user's input.
-- Approval requires a valid HTTP(S) evidence URL and a nonfuture observation
-  date. The operator must inspect the source; URL validation does not prove its
-  contents. Evidence is displayed per serving, separate from baseline provenance.
+- Approval requires a nonfuture verification date; a web source link is optional
+  for prices verified in person. Supplied links must be valid HTTP(S) URLs.
+  Source-free prices show an administrator approval date without an empty link.
+  Approval and actor remain in the audit trail.
 - PostgreSQL enforces 10 submissions per visitor/hour, 120 globally/hour. Clerk handles
   administrator login protections. Rotating anonymous cookies can evade the
   visitor limit; the global cap still applies. This is a bounded demo policy,

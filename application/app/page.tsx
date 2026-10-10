@@ -283,12 +283,18 @@ function createMarkerNode(
         row.appendChild(beerInfo);
         row.appendChild(price);
         if (beer.priceUpdate) {
-          const source = document.createElement('a');
-          source.href = beer.priceUpdate.sourceUrl;
-          source.target = '_blank';
-          source.rel = 'noreferrer';
+          const source = document.createElement(
+            beer.priceUpdate.sourceUrl ? 'a' : 'span',
+          );
+          if (source instanceof HTMLAnchorElement) {
+            source.href = beer.priceUpdate.sourceUrl;
+            source.target = '_blank';
+            source.rel = 'noreferrer';
+          }
           source.className = 'serving-source';
-          source.textContent = `Pārbaudīts ${beer.priceUpdate.observedOn} ↗`;
+          source.textContent = beer.priceUpdate.sourceUrl
+            ? `Pārbaudīts ${beer.priceUpdate.observedOn} ↗`
+            : `Administrators apstiprināja ${beer.priceUpdate.observedOn}`;
           beerInfo.appendChild(source);
         }
         if (onSuggest && beer.id) {
@@ -1016,7 +1022,9 @@ function BeerMap({
                 <strong>Rīgas alus</strong>
               </div>
               {catalog.priceSuggestionsEnabled && (
-                <Link href="/admin" className="admin-entry">Admin</Link>
+                <Link href="/admin" className="admin-entry">
+                  Admin
+                </Link>
               )}
               <button
                 className="catalog-refresh"

@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parsePrice, evidenceUrl, observedDate } from '../lib/price-input';
+import {
+  parsePrice,
+  evidenceUrl,
+  observedDate,
+  optionalEvidenceUrl,
+} from '../lib/price-input';
 import { servingId } from '../lib/serving-id';
 import { catalog } from '../app/catalog';
 import {
@@ -121,4 +126,21 @@ await test('visitor sessions are signed and writes require the same origin', () 
       if (!(key in previous)) delete process.env[key];
     Object.assign(process.env, previous);
   }
+});
+
+await test('admin approval can omit a source, but a supplied source must remain valid', () => {
+  for (const input of [undefined, '', '   '])
+    assert.equal(optionalEvidenceUrl(input), '');
+  assert.equal(
+    optionalEvidenceUrl('https://example.com/menu'),
+    'https://example.com/menu',
+  );
+  for (const input of [
+    null,
+    false,
+    0,
+    'javascript:alert(1)',
+    'https://user:password@example.com',
+  ])
+    assert.throws(() => optionalEvidenceUrl(input));
 });

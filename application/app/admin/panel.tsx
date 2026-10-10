@@ -88,12 +88,12 @@ const statusLabels = {
 function ReviewCard({
   item,
   onSaved,
-  onExpired,
+  onAuthError,
   disabled,
 }: {
   item: Suggestion;
   onSaved: (action: string) => Promise<void>;
-  onExpired: (message?: string) => void;
+  onAuthError: (status: number, message: string) => void;
   disabled: boolean;
 }) {
   const [source, setSource] = useState(item.evidenceUrl);
@@ -114,7 +114,8 @@ function ReviewCard({
       });
       await onSaved(decision);
     } catch (error) {
-      if ([401, 403].includes((error as ApiError).status ?? 0)) onExpired((error as Error).message);
+      if ([401, 403].includes((error as ApiError).status ?? 0))
+        onAuthError((error as ApiError).status!, (error as Error).message);
       else setError((error as Error).message);
     } finally {
       setBusy(false);
@@ -190,7 +191,9 @@ function ReviewCard({
                 ieteikumu.
               </p>
             )}
-            <label htmlFor={`source-${item.id}`}>Pārbaudītais cenu avots</label>
+            <label htmlFor={`source-${item.id}`}>
+              Cenu avota saite (nav obligāta)
+            </label>
             <input
               id={`source-${item.id}`}
               type="url"
@@ -200,7 +203,7 @@ function ReviewCard({
               disabled={busy || disabled}
               placeholder="https://…"
             />
-            <label htmlFor={`date-${item.id}`}>Avota pārbaudes datums</label>
+            <label htmlFor={`date-${item.id}`}>Cenas pārbaudes datums</label>
             <input
               id={`date-${item.id}`}
               type="date"
@@ -216,9 +219,7 @@ function ReviewCard({
             <div className="admin-decision-actions">
               <button
                 className="price-primary"
-                disabled={
-                  busy || disabled || !item.actionable || !source || !date
-                }
+                disabled={busy || disabled || !item.actionable || !date}
                 onClick={() => void action('approve')}
               >
                 <Check size={16} aria-hidden="true" />
@@ -297,6 +298,16 @@ export default function AdminPanel({
     setMessage('');
     setError(reason);
   };
+  const authError = (status: number, reason: string) => {
+    if (status === 401) expired(reason);
+    else {
+      request.current?.abort();
+      setQueue(null);
+      setBusy(false);
+      setAuth('unavailable');
+      setError(reason);
+    }
+  };
   const load = async (
     nextView = view,
     nextCursor = cursor,
@@ -325,7 +336,8 @@ export default function AdminPanel({
       return true;
     } catch (error) {
       if (!controller.signal.aborted) {
-        if ([401, 403].includes((error as ApiError).status ?? 0)) expired((error as Error).message);
+        if ([401, 403].includes((error as ApiError).status ?? 0))
+          authError((error as ApiError).status!, (error as Error).message);
         else setError((error as Error).message);
       }
       return false;
@@ -516,7 +528,7 @@ export default function AdminPanel({
                     key={`${item.id}:${item.status}:${item.revision}`}
                     item={item}
                     onSaved={saved}
-                    onExpired={expired}
+                    onAuthError={authError}
                     disabled={busy}
                   />
                 ))

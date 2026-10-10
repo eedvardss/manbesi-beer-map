@@ -5,6 +5,7 @@ import {
   uuidPattern,
   parsePrice,
   evidenceUrl,
+  optionalEvidenceUrl,
   observedDate,
 } from './price-input';
 import { reporterKey } from './price-auth';
@@ -84,7 +85,7 @@ export async function reviewPrice(
   await reviewDatabase().query('SELECT beer_map_review_price($1,$2,$3,$4,$5)', [
     id(body.id),
     body.action,
-    body.action === 'approve' ? evidenceUrl(body.evidenceUrl) : '',
+    body.action === 'approve' ? optionalEvidenceUrl(body.evidenceUrl) : '',
     body.action === 'approve' ? observedDate(body.observedOn) : null,
     actor,
   ]);

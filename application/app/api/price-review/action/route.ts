@@ -3,7 +3,7 @@ import { requireReviewer } from '../../../../lib/admin-auth';
 import { reviewPrice } from '../../../../lib/price-store';
 export async function POST(request: Request) {
   try {
-    const actor = await requireReviewer(request, true);
+    const actor = await requireReviewer(request);
     sameOrigin(request);
     await reviewPrice(await readBody(request), actor);
     return Response.json(

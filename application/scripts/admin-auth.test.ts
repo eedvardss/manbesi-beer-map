@@ -18,13 +18,9 @@ await test('pending, missing, partial and malformed MFA claims are rejected', ()
   ])
     assert.throws(() => requireAdminFactors(claims));
   requireAdminFactors({ fva: [0, 0] });
-  requireAdminFactors({ fva: [9, 9] }, true);
-  for (const fva of [
-    [10, 0],
-    [0, 10],
-    [100, 100],
-  ])
-    assert.throws(() => requireAdminFactors({ fva }, true));
+  // Ordinary moderation remains available throughout an active MFA session.
+  requireAdminFactors({ fva: [10, 10] });
+  requireAdminFactors({ fva: [1000, 1000] });
 });
 await test('development config rejects live keys and foreign or non-canonical origins', async () => {
   const previous = { ...process.env };

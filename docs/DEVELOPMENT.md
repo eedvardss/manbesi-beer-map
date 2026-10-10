@@ -431,3 +431,9 @@ Branch `feature/clerk-admin-mfa` replaces shared-password review login with rout
 Verified: 24 unit checks, TypeScript, lint (existing Worker export warning), dependency policy, Docker build/healthy startup, restricted SQL permissions, rejection of anonymous/forged/legacy admin requests, desktop/mobile login rendering, map browser checks and anonymous suggestion persistence/idempotency. Full authenticated MFA approval/rejection/revert verification awaits a pre-enrolled identity; its Playwright scenario is explicitly conditional. No live keys or production resources were provisioned.
 
 Additional SQL verification: all six price PostgreSQL integration tests pass in a separate `beer_map_clerk_prices_test` database. The optional full-MFA Playwright scenario is discovered and skipped explicitly without credentials.
+
+## Admin moderation corrections — 10 October 2026
+
+Allow administrators to approve prices verified in person without a source URL. Migration 006 replaces the review function without changing locks, conflict checks, history or permissions. Public serving provenance displays an admin approval date when no web source exists, and catalog parsing accepts that explicit empty optional source. Remove the unnecessary ten-minute factor freshness gate for ordinary moderation; active Clerk sessions, enrolled MFA and explicit admin grants remain required. Distinguish permission denial from expired authentication instead of sending every 403 back to login.
+
+Verified locally: 25 unit checks, seven PostgreSQL integration tests including source-free publishing and reversal, type checks and lint. Full live signed-in browser verification is still separate from these checks.
