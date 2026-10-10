@@ -16,7 +16,7 @@ Reference material: [infrastructure/terraform/README.md](../infrastructure/terra
 | Backup bucket (dumps deleted after 30 days) | `<PROJECT_ID>-beermap-backups` |
 | Backup service account (create-only on the bucket) | `beermap-backup` |
 | Keyless GitHub auth: Workload Identity pool/provider, deployer service account | `github` / `github`, `github-deployer` |
-| Monthly budget with alerts at 50/90/100% | `beermap monthly` (default 50 EUR) |
+| Monthly budget with alerts at 50/90/100% | `beermap monthly` (default 50, in the billing account's currency) |
 
 **What GitHub Actions installs** with Helm:
 
@@ -34,7 +34,7 @@ Reference material: [infrastructure/terraform/README.md](../infrastructure/terra
 - **Pods.** Autopilot bills the CPU, memory and ephemeral storage that running pods *request*, not whole nodes. Here that is about 1.25 vCPU and 3.3 GiB: the app (2 × 250m/512Mi), PostgreSQL (250m/512Mi) and observability (about 0.5 vCPU/1.8 GiB). Autopilot may raise small requests to its minimums.
 - **Disks.** 10Gi for PostgreSQL plus 20Gi for Prometheus and Loki.
 - **Load balancer.** The external HTTPS load balancer has its own hourly forwarding-rule charge, plus data processing.
-- **Total.** Expect tens of euros per month. That may exceed the default 50 EUR budget, so watch the alert emails during the first week and adjust `budget_amount` if needed. New Google Cloud accounts often get trial credit.
+- **Total.** Expect tens of euros per month. The budget is in your billing account's currency: 50 is reasonable for EUR, but for SEK set about 550 (50 SEK is tiny). Watch the alert emails during the first week and adjust `budget_amount` if needed. New Google Cloud accounts often get trial credit.
 
 Pricing pages: [GKE pricing](https://cloud.google.com/kubernetes-engine/pricing), [Autopilot pod pricing](https://cloud.google.com/kubernetes-engine/pricing#autopilot_mode), [Load balancing pricing](https://cloud.google.com/vpc/network-pricing#lb), [Persistent Disk pricing](https://cloud.google.com/compute/disks-image-pricing#disk), [Pricing calculator](https://cloud.google.com/products/calculator).
 
@@ -43,7 +43,7 @@ Pricing pages: [GKE pricing](https://cloud.google.com/kubernetes-engine/pricing)
 **Accounts and permissions**
 
 - A Google Cloud account with a billing account. Get its ID (`XXXXXX-XXXXXX-XXXXXX`) with `gcloud billing accounts list`, or from Console → Billing.
-- The billing account **currency must be EUR**, because the budget is in EUR. You can't change a billing account's currency, so check it under Console → Billing → Account management.
+- Check the billing account's currency under Console → Billing → Account management. Any currency works: the budget uses it, and `budget_amount` is in that currency (about 550 for SEK, 50 for EUR).
 - **Owner** on the GCP project.
 - **Billing Account Administrator** or **Billing Account Costs Manager** on the billing account, which the budget needs. Linking the project to billing also needs Billing Account User or Administrator.
 - Admin access to the GitHub repository `eedvardss/manbesi-beer-map` (Settings → Environments, Secrets and variables).
@@ -139,7 +139,7 @@ Set the values (the file is git-ignored):
 ```hcl
 project_id         = "<PROJECT_ID>"
 billing_account_id = "<BILLING_ACCOUNT_ID>"
-budget_amount      = 50
+budget_amount      = 50 # in the billing account's currency, e.g. 550 for SEK
 ```
 
 Leave `deletion_protection` commented out. It defaults to `true`.
