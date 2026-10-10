@@ -84,7 +84,7 @@ The `production` environment (with required reviewers) holds variable `APP_HOST`
 
 ## 5. DNS (manual)
 
-Create an `A` record for your `APP_HOST` pointing to `terraform output -raw ingress_ip_address`. If the zone is on Cloudflare, set it to **DNS only** (grey cloud) so Google's `ManagedCertificate` can validate against the load balancer; behind the orange cloud it stays `Provisioning`. Provisioning can take 15–60 minutes after the record resolves and the Ingress exists. Terraform does not manage DNS.
+`APP_HOST` is `alus.chudars.lv`. Create an `A` record `alus` in the `chudars.lv` DNS zone pointing to `terraform output -raw ingress_ip_address`. If the zone is on Cloudflare, set it to **DNS only** (grey cloud) so Google's `ManagedCertificate` can validate against the load balancer; behind the orange cloud it stays `Provisioning`. Provisioning can take 15–60 minutes after the record resolves and the Ingress exists. Terraform does not manage DNS.
 
 ## Teardown
 
