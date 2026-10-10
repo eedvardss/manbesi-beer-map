@@ -437,3 +437,7 @@ Additional SQL verification: all six price PostgreSQL integration tests pass in 
 Allow administrators to approve prices verified in person without a source URL. Migration 006 replaces the review function without changing locks, conflict checks, history or permissions. Public serving provenance displays an admin approval date when no web source exists, and catalog parsing accepts that explicit empty optional source. Remove the unnecessary ten-minute factor freshness gate for ordinary moderation; active Clerk sessions, enrolled MFA and explicit admin grants remain required. Distinguish permission denial from expired authentication instead of sending every 403 back to login.
 
 Verified locally: 25 unit checks, seven PostgreSQL integration tests including source-free publishing and reversal, type checks and lint. Full live signed-in browser verification is still separate from these checks.
+
+## Solid litre-price markers — 10 October 2026
+
+Fix transparent unknown-volume markers by giving every price button a background from its marker fill, with a neutral fallback. Closed venues retain grey styling without the previous 8% opacity, preserving readable prices. Docker rebuilt and started healthy; actual desktop/mobile litre views inspected. Computed styles across all 165 markers (nine unknown-volume and three closed venues in this run) report zero transparent fills or faded marker containers. No price data or pipeline changes.
