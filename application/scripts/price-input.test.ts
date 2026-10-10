@@ -6,10 +6,8 @@ import { catalog } from '../app/catalog';
 import {
   sessionToken,
   sessionCookie,
-  requireReviewer,
   sameOrigin,
   visitor,
-  correctPassword,
   pricesEnabled,
 } from '../lib/price-auth';
 
@@ -61,39 +59,33 @@ await test('serving identity survives price edits and reordering, and distinguis
   const ids = catalog.venues.flatMap((v) => v.beers.map((b) => b.id));
   assert.equal(new Set(ids).size, 2550);
 });
-await test('review sessions cannot be forged; writes require same origin', () => {
+await test('visitor sessions are signed and writes require the same origin', () => {
   const previous = { ...process.env };
   Object.assign(process.env, {
     PRICE_SUGGESTIONS_ENABLED: 'true',
     DATABASE_URL: 'postgresql://test',
     DATABASE_REVIEW_URL: 'postgresql://test',
-    PRICE_REVIEW_PASSWORD: 'p'.repeat(32),
     PRICE_SESSION_SECRET: 's'.repeat(64),
   });
   try {
-    const token = sessionToken('review');
-    const request = new Request('https://example.com/api/price-review/action', {
+    assert(pricesEnabled());
+    const token = sessionToken('visitor', 'visitor-id');
+    const request = new Request('https://example.com/api/prices/suggestions', {
       headers: {
-        cookie: `bm_price_review=${token}`,
+        cookie: 'bm_price_visitor=' + token,
         origin: 'https://example.com',
       },
     });
-    requireReviewer(request);
+    assert.equal(visitor(request), 'visitor-id');
+    assert.equal(
+      visitor(
+        new Request(request.url, {
+          headers: { cookie: 'bm_price_visitor=' + token.slice(0, -2) + 'zz' },
+        }),
+      ),
+      null,
+    );
     sameOrigin(request);
-    assert.throws(() =>
-      requireReviewer(
-        new Request(request.url, {
-          headers: { cookie: `bm_price_review=${token.slice(0, -2)}00` },
-        }),
-      ),
-    );
-    assert.throws(() =>
-      requireReviewer(
-        new Request(request.url, {
-          headers: { cookie: `bm_price_review=${sessionToken('visitor')}` },
-        }),
-      ),
-    );
     assert.throws(() =>
       sameOrigin(
         new Request(request.url, {
@@ -102,14 +94,14 @@ await test('review sessions cannot be forged; writes require same origin', () =>
       ),
     );
     assert(
-      sessionCookie(request, 'bm_price_review', token, 3600).includes(
+      sessionCookie(request, 'bm_price_visitor', token, 3600).includes(
         '; Secure',
       ),
     );
     assert.throws(() =>
       sessionCookie(
         new Request('http://example.com'),
-        'bm_price_review',
+        'bm_price_visitor',
         token,
         3600,
       ),
@@ -117,41 +109,13 @@ await test('review sessions cannot be forged; writes require same origin', () =>
     assert(
       !sessionCookie(
         new Request('http://localhost:3010'),
-        'bm_price_review',
+        'bm_price_visitor',
         token,
         3600,
       ).includes('; Secure'),
     );
-    assert(correctPassword('p'.repeat(32)));
-    assert(!correctPassword('wrong'));
-    process.env.PRICE_REVIEW_PASSWORD = 'admin';
-    delete process.env.PRICE_LOCAL_ADMIN_LOGIN;
+    delete process.env.PRICE_SESSION_SECRET;
     assert(!pricesEnabled());
-    process.env.PRICE_LOCAL_ADMIN_LOGIN = 'true';
-    assert(pricesEnabled());
-    assert(correctPassword('admin'));
-    assert.throws(() => sessionCookie(request, 'bm_price_review', token, 3600));
-    assert.throws(() => requireReviewer(request));
-    const localRequest = new Request(
-      'http://127.0.0.1:3010/api/price-review/action',
-      {
-        headers: {
-          cookie: `bm_price_review=${token}`,
-          origin: 'http://127.0.0.1:3010',
-        },
-      },
-    );
-    requireReviewer(localRequest);
-    sameOrigin(localRequest);
-    const visitorToken = sessionToken('visitor', 'visitor-id');
-    assert.equal(
-      visitor(
-        new Request('http://localhost', {
-          headers: { cookie: `bm_price_visitor=${visitorToken}` },
-        }),
-      ),
-      'visitor-id',
-    );
   } finally {
     for (const key of Object.keys(process.env))
       if (!(key in previous)) delete process.env[key];

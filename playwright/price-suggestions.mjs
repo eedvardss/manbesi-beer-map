@@ -6,7 +6,8 @@ export async function priceSuggestions({
   browser,
   db,
   base,
-  password,
+  signIn,
+  unauthenticatedStatus = 503,
   expect,
   artifacts,
   trace = true,
@@ -119,7 +120,7 @@ export async function priceSuggestions({
       (
         await reviewContext.request.get(`${base}/api/price-review/suggestions`)
       ).status(),
-      401,
+      unauthenticatedStatus,
     );
     for (const decision of ['approve', 'reject', 'revert'])
       assert.equal(
@@ -134,7 +135,7 @@ export async function priceSuggestions({
             },
           })
         ).status(),
-        401,
+        unauthenticatedStatus,
         'A regular visitor cannot administer prices',
       );
     await expect(
@@ -143,16 +144,12 @@ export async function priceSuggestions({
     await reviewer.goto(`${base}/price-review`);
     await expect(reviewer).toHaveURL(`${base}/admin`);
     await reviewer.screenshot({ path: `${artifacts}/admin-login-mobile.png` });
-    await reviewer.getByLabel('Administratora parole').fill('invalid-password');
-    await reviewer
-      .getByRole('button', { name: 'Pieslēgties', exact: true })
-      .click();
-    await expect(reviewer.getByRole('alert')).toContainText('Nepareiza');
-    // Review context is deliberately not traced: it submits a login credential.
-    await reviewer.getByLabel('Administratora parole').fill(password);
-    await reviewer
-      .getByRole('button', { name: 'Pieslēgties', exact: true })
-      .click();
+    if (!signIn) {
+      assert.deepEqual(faults, [], 'Uncaught browser errors');
+      console.log('Anonymous suggestions, persistence, idempotency and denied admin writes pass; Clerk MFA review requires a configured test identity.');
+      return;
+    }
+    await signIn(reviewer);
     const card = reviewer.locator(`[data-suggestion-id="${report.id}"]`);
     await expect(card).toContainText('18,90');
     await expect(card).toContainText('4,50');
@@ -400,18 +397,9 @@ export async function priceSuggestions({
       );
     }
     await reviewContext.clearCookies();
-    await reviewer.getByRole('button', { name: 'Atjaunot ieteikumus' }).click();
-    await expect(
-      reviewer.getByRole('heading', { name: 'Administratora pieslēgšanās' }),
-    ).toBeVisible();
+    await reviewer.reload();
     await expect(reviewer.locator('.admin-report')).toHaveCount(0);
-    await expect(
-      reviewer.getByRole('button', { name: 'Pieslēgties', exact: true }),
-    ).toBeEnabled();
-    await reviewer.getByLabel('Administratora parole').fill(password);
-    await reviewer
-      .getByRole('button', { name: 'Pieslēgties', exact: true })
-      .click();
+    await signIn(reviewer);
     await expect(
       reviewer.getByRole('heading', { name: 'Cenu ieteikumi', exact: true }),
     ).toBeVisible();
@@ -427,7 +415,7 @@ export async function priceSuggestions({
       (
         await reviewContext.request.get(`${base}/api/price-review/suggestions`)
       ).status(),
-      401,
+      unauthenticatedStatus,
     );
     assert.deepEqual(faults, [], 'Uncaught browser errors');
     console.log(

@@ -22,7 +22,7 @@ export const test = base.extend({
     catch (error) {
       if (error.code !== 'ENOENT') throw error;
       text = ['POSTGRES_PASSWORD', 'APP_DATABASE_PASSWORD', 'REVIEW_DATABASE_PASSWORD', 'PRICE_SESSION_SECRET']
-        .map((key) => `${key}=${randomBytes(32).toString('hex')}`).join('\n') + '\nPRICE_REVIEW_PASSWORD=admin\n';
+        .map((key) => `${key}=${randomBytes(32).toString('hex')}`).join('\n') + '\n';
       await writeFile(privateFile, text, { mode: 0o600 });
     }
     const env = Object.fromEntries(text.trim().split(/\r?\n/).map((line) => line.split('=')));
@@ -30,7 +30,7 @@ export const test = base.extend({
     try {
       await run('docker', [...compose, 'up', '--build', '-d', '--wait', '--wait-timeout', '180'],
         { cwd: root, timeout: 300_000, maxBuffer: 8 * 1024 * 1024 });
-      await provide({ base: 'http://127.0.0.1:3011', password: 'admin',
+      await provide({ base: 'http://127.0.0.1:3011', unauthenticatedStatus: process.env.CLERK_SECRET_KEY && process.env.VITE_CLERK_PUBLISHABLE_KEY ? 401 : 503,
         connection: `postgresql://beer_map:${env.POSTGRES_PASSWORD}@127.0.0.1:55434/beer_map_prices_e2e` });
     } finally {
       // Keep the volume and matching private credentials for subsequent UI runs.

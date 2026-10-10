@@ -67,8 +67,10 @@ export async function submitPrice(
   ]);
   return rows[0].result;
 }
-export async function reviewPrice(body: Record<string, unknown>) {
-  const actor = (process.env.PRICE_REVIEWER_NAME ?? 'operator').slice(0, 80);
+export async function reviewPrice(
+  body: Record<string, unknown>,
+  actor: string,
+) {
   if (body.action === 'revert') {
     await reviewDatabase().query('SELECT beer_map_revert_price($1,$2,$3)', [
       id(body.servingId),

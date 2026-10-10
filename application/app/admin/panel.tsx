@@ -7,8 +7,6 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Eye,
-  EyeOff,
   LogOut,
   RefreshCw,
   Search,
@@ -95,7 +93,7 @@ function ReviewCard({
 }: {
   item: Suggestion;
   onSaved: (action: string) => Promise<void>;
-  onExpired: () => void;
+  onExpired: (message?: string) => void;
   disabled: boolean;
 }) {
   const [source, setSource] = useState(item.evidenceUrl);
@@ -116,7 +114,7 @@ function ReviewCard({
       });
       await onSaved(decision);
     } catch (error) {
-      if ((error as ApiError).status === 401) onExpired();
+      if ([401, 403].includes((error as ApiError).status ?? 0)) onExpired((error as Error).message);
       else setError((error as Error).message);
     } finally {
       setBusy(false);
@@ -273,13 +271,15 @@ function ReviewCard({
   );
 }
 
-export default function AdminPanel() {
+export default function AdminPanel({
+  signOut,
+}: {
+  signOut: () => Promise<void>;
+}) {
   const [auth, setAuth] = useState<'checking' | 'out' | 'in' | 'unavailable'>(
     'checking',
   );
   const [queue, setQueue] = useState<Queue | null>(null);
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [view, setView] = useState<View>('pending');
   const [cursor, setCursor] = useState<string | null>(null);
   const [previous, setPrevious] = useState<(string | null)[]>([]);
@@ -289,14 +289,13 @@ export default function AdminPanel() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const request = useRef<AbortController | null>(null);
-  const expired = () => {
+  const expired = (reason = 'Sesija beigusies. Pieslēdzies vēlreiz.') => {
     request.current?.abort();
     setBusy(false);
     setAuth('out');
     setQueue(null);
-    setPassword('');
     setMessage('');
-    setError('Sesija beigusies. Pieslēdzies vēlreiz.');
+    setError(reason);
   };
   const load = async (
     nextView = view,
@@ -326,7 +325,7 @@ export default function AdminPanel() {
       return true;
     } catch (error) {
       if (!controller.signal.aborted) {
-        if ((error as ApiError).status === 401) expired();
+        if ([401, 403].includes((error as ApiError).status ?? 0)) expired((error as Error).message);
         else setError((error as Error).message);
       }
       return false;
@@ -352,42 +351,11 @@ export default function AdminPanel() {
       });
     return () => request.current?.abort();
   }, []);
-  const login = async () => {
-    setBusy(true);
-    setError('');
-    try {
-      await api('session', { password });
-      setPassword('');
-      setShowPassword(false);
-      setAuth('in');
-      setSearch('');
-      setPrevious([]);
-      await load('pending', null, '');
-    } catch (error) {
-      setError((error as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  };
   const logout = async () => {
-    setBusy(true);
-    setError('');
-    try {
-      await api('session', undefined, 'DELETE');
-      request.current?.abort();
-      setAuth('out');
-      setQueue(null);
-      setPassword('');
-      setShowPassword(false);
-      setMessage('');
-      setPrevious([]);
-      setSearch('');
-      setAppliedSearch('');
-    } catch (error) {
-      setError((error as Error).message);
-    } finally {
-      setBusy(false);
-    }
+    request.current?.abort();
+    setQueue(null);
+    setAuth('out');
+    await signOut();
   };
   const saved = async (action: string) => {
     setMessage(
@@ -447,50 +415,11 @@ export default function AdminPanel() {
           </section>
         ) : auth === 'out' ? (
           <section className="admin-login">
-            <div className="admin-login-mark">
-              <ShieldCheck size={28} aria-hidden="true" />
-            </div>
-            <p className="admin-eyebrow">RĪGAS ALUS · ADMIN</p>
-            <h1>Administratora pieslēgšanās</h1>
-            <p>Izskati lietotāju ieteikumus un publicē pārbaudītas cenas.</p>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                void login();
-              }}
-            >
-              <label htmlFor="admin-password">Administratora parole</label>
-              <div className="admin-password-field">
-                <input
-                  id="admin-password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  maxLength={256}
-                  disabled={busy}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((value) => !value)}
-                  aria-label={
-                    showPassword ? 'Paslēpt paroli' : 'Parādīt paroli'
-                  }
-                  aria-pressed={showPassword}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              {error && (
-                <p className="price-error" role="alert">
-                  {error}
-                </p>
-              )}
-              <button className="price-primary" disabled={busy}>
-                {busy ? 'Pieslēdzas…' : 'Pieslēgties'}
-              </button>
-            </form>
+            <h1>Pieslēdzies vēlreiz</h1>
+            <p role="alert">{error}</p>
+            <button className="price-primary" onClick={() => void logout()}>
+              Pieslēgties ar paroli un autentifikatora kodu
+            </button>
           </section>
         ) : (
           <>

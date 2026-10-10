@@ -1,0 +1,17 @@
+{
+  "auth_multi_factor": {
+    "authenticator_app": { "enabled": true },
+    "backup_code": { "enabled": true },
+    "required_for_sign_in": true,
+    "required_for_sign_up": true
+  },
+  "auth_password": {
+    "enabled": true,
+    "required": true,
+    "min_length": 15,
+    "disable_hibp": false,
+    "enforce_hibp_on_sign_in": true
+  },
+  "auth_email": { "sign_in_strategies": [] },
+  "connection_oauth_google": { "enabled": false, "authenticatable": false }
+}

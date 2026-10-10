@@ -24,7 +24,7 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "typecheck": "tsc --noEmit --incremental false",
-    "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts scripts/catalog-client.test.ts scripts/map-retry.test.ts scripts/price-input.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
+    "test": "tsx --test scripts/beer-query.test.ts scripts/catalog.test.ts scripts/catalog-client.test.ts scripts/map-retry.test.ts scripts/price-input.test.ts scripts/admin-auth.test.ts && node scripts/check-expanded-venues.mjs && node scripts/check-popular-venues.mjs && node scripts/check-time-slider.mjs",
     "perf:query": "node --import tsx scripts/benchmark-query.ts",
     "perf:bundle": "node scripts/check-performance-budget.mjs",
     "check": "npm run lint && npm run typecheck && npm test && npm run audit:data",
@@ -36,10 +36,14 @@
     "test:prices:postgres": "tsx --test scripts/prices-postgres.test.ts",
     "test:browser:prices": "node scripts/check-price-interactions.mjs",
     "test:browser:ui": "playwright test --ui",
-    "test:browser:suite": "playwright test"
+    "test:browser:suite": "playwright test",
+    "db:admin": "node --env-file=.env.local --import tsx scripts/db-admin.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
+    "@clerk/backend": "3.23.2",
+    "@clerk/react": "6.17.8",
+    "@clerk/ui": "1.40.0",
     "@emnapi/core": "1.11.3",
     "@emnapi/runtime": "1.11.3",
     "@shadcn/react": "0.3.0",
@@ -64,6 +68,7 @@
     "vinext": "1.0.1"
   },
   "devDependencies": {
+    "@clerk/testing": "2.2.45",
     "@cloudflare/vite-plugin": "1.62.4",
     "@cloudflare/workers-types": "5.20261001.1",
     "@playwright/test": "1.62.1",

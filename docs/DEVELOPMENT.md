@@ -423,3 +423,11 @@ The five-hour continuation was removed at the user's request. Do not recreate it
 Simplified the app port mapping to `${APP_PORT:-3000}:3000` and documented host-interface access. Moved the one-shot migration/seed command into `scripts/setup-database.sh`, included it in the runtime image, and enforced LF shell-script endings for Windows checkouts. Retained the separate setup service so versioned migrations also run on existing volumes; retained CI PostgreSQL for destructive integration tests, isolated from the Compose/browser catalog. Documented both decisions.
 
 Verified the Docker rebuild (including lint, types, 19 tests, audit and snapshot checks), healthy startup, repeat setup preserving the existing catalog, and container/API/Brotli/304 checks for all 165 venues and 2,550 servings. GitHub CI must pass on the review-fix commit before merging. No public deployment performed.
+
+## Clerk Development admin MFA — 10 October 2026
+
+Branch `feature/clerk-admin-mfa` replaces shared-password review login with route-scoped Clerk React components and verified Clerk backend sessions. PostgreSQL migration 005 stores explicit admin grants; restricted reviewer connections can read, but cannot write grants. Price decisions use Clerk user IDs in existing audit history. Required authenticator MFA and backup codes are enabled in the linked Development application. Keys are runtime-only, ignored, and excluded from Docker build context. Public suggestion flow remains anonymous. Pipelines, research and public deployment are unchanged.
+
+Verified: 24 unit checks, TypeScript, lint (existing Worker export warning), dependency policy, Docker build/healthy startup, restricted SQL permissions, rejection of anonymous/forged/legacy admin requests, desktop/mobile login rendering, map browser checks and anonymous suggestion persistence/idempotency. Full authenticated MFA approval/rejection/revert verification awaits a pre-enrolled identity; its Playwright scenario is explicitly conditional. No live keys or production resources were provisioned.
+
+Additional SQL verification: all six price PostgreSQL integration tests pass in a separate `beer_map_clerk_prices_test` database. The optional full-MFA Playwright scenario is discovered and skipped explicitly without credentials.
