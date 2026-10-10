@@ -1,0 +1,72 @@
+{{- $ns := .Values.beermap.namespace }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-beermap
+  namespace: {{ .Release.Namespace }}
+  labels:
+    # Prometheus only loads rules carrying the kube-prometheus-stack release label.
+    release: {{ .Release.Name }}
+spec:
+  groups:
+    - name: beermap
+      rules:
+        - alert: BeermapAppDown
+          expr: |
+            sum(kube_deployment_status_replicas_ready{namespace="{{ $ns }}", deployment="{{ .Values.beermap.appDeployment }}"}) < 1
+            or absent(kube_deployment_status_replicas_ready{namespace="{{ $ns }}", deployment="{{ .Values.beermap.appDeployment }}"})
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: The beermap app has no ready pods.
+            description: Deployment {{ $ns }}/{{ .Values.beermap.appDeployment }} has had 0 ready replicas for 2 minutes.
+        - alert: BeermapHighRestartRate
+          expr: |
+            increase(kube_pod_container_status_restarts_total{namespace="{{ $ns }}"}[30m]) > 3
+          labels:
+            severity: warning
+          annotations:
+            summary: A beermap container is restarting repeatedly.
+            description: '{{"{{"}} $labels.pod {{"}}"}}/{{"{{"}} $labels.container {{"}}"}} restarted {{"{{"}} $value | printf "%.0f" {{"}}"}} times in 30 minutes.'
+        - alert: BeermapPostgresDown
+          expr: |
+            kube_statefulset_status_replicas_ready{namespace="{{ $ns }}", statefulset="{{ .Values.beermap.postgresStatefulSet }}"}
+              < kube_statefulset_replicas{namespace="{{ $ns }}", statefulset="{{ .Values.beermap.postgresStatefulSet }}"}
+            or absent(kube_statefulset_status_replicas_ready{namespace="{{ $ns }}", statefulset="{{ .Values.beermap.postgresStatefulSet }}"})
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: PostgreSQL is not ready.
+            description: StatefulSet {{ $ns }}/{{ .Values.beermap.postgresStatefulSet }} has fewer ready replicas than desired for 2 minutes.
+        - alert: BeermapPVCAlmostFull
+          expr: |
+            kubelet_volume_stats_used_bytes{namespace="{{ $ns }}"}
+              / kubelet_volume_stats_capacity_bytes{namespace="{{ $ns }}"} > 0.85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: A beermap volume is almost full.
+            description: 'PVC {{"{{"}} $labels.persistentvolumeclaim {{"}}"}} is {{"{{"}} $value | humanizePercentage {{"}}"}} full.'
+        - alert: BeermapBackupFailed
+          # kube_job_status_failed is per Job; join it to the CronJob via kube_job_owner and
+          # ignore failed Jobs that are older than the CronJob's last successful run.
+          expr: |
+            (
+              max by (namespace, job_name) (kube_job_status_failed{namespace="{{ $ns }}"} > 0)
+                * on (namespace, job_name) group_left (owner_name)
+              max by (namespace, job_name, owner_name) (kube_job_owner{namespace="{{ $ns }}", owner_kind="CronJob", owner_name="{{ .Values.beermap.backupCronJob }}"})
+            )
+            unless on (namespace, job_name)
+            (
+              kube_job_created{namespace="{{ $ns }}"}
+                < on (namespace) group_left ()
+              max by (namespace) (kube_cronjob_status_last_successful_time{namespace="{{ $ns }}", cronjob="{{ .Values.beermap.backupCronJob }}"})
+            )
+          labels:
+            severity: warning
+          annotations:
+            summary: The nightly PostgreSQL backup failed.
+            description: 'Job {{"{{"}} $labels.job_name {{"}}"}} of CronJob {{"{{"}} $labels.owner_name {{"}}"}} failed and no later run has succeeded.'

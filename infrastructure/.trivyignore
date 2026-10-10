@@ -1,0 +1,5 @@
+# Trivy config scan exceptions (infra.yml trivy-config job, HIGH/CRITICAL only).
+# MEDIUM/LOW findings accepted in terraform/README.md (GCP-0059, -0029, -0076, -0066, -0078) never fail the job.
+
+# No master authorized networks: GitHub-hosted runners have no fixed IPs; the endpoint requires IAM auth.
+GCP-0061

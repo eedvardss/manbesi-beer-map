@@ -15,22 +15,22 @@ filters and selection, and changed coordinates update existing markers.
 
 ## Run the stack
 
-Install Docker with Compose v2. The Docker files live in `infrastructure/`; the
+Install Docker with Compose v2. The Docker files live in `infrastructure/docker/`; the
 image builds from the repository-root context and uses
-`infrastructure/Dockerfile.dockerignore`. Compose reads `.env` from the compose
-file's directory, so the file goes in `infrastructure/.env`. From the repository
+`infrastructure/docker/Dockerfile.dockerignore`. Compose reads `.env` from the compose
+file's directory, so the file goes in `infrastructure/docker/.env`. From the repository
 root:
 
 ```powershell
-Copy-Item application/.env.example infrastructure/.env
-# Edit infrastructure/.env and set POSTGRES_PASSWORD to a long random URL-safe password.
-docker compose -f infrastructure/compose.yaml up --build -d --wait
+Copy-Item application/.env.example infrastructure/docker/.env
+# Edit infrastructure/docker/.env and set POSTGRES_PASSWORD to a long random URL-safe password.
+docker compose -f infrastructure/docker/compose.yaml up --build -d --wait
 ```
 
-The remaining `docker compose` examples assume `-f infrastructure/compose.yaml`
-(or running them from `infrastructure/`).
+The remaining `docker compose` examples assume `-f infrastructure/docker/compose.yaml`
+(or running them from `infrastructure/docker/`).
 
-Open http://localhost:3000. Change `APP_PORT` in `infrastructure/.env` if that port is occupied.
+Open http://localhost:3000. Change `APP_PORT` in `infrastructure/docker/.env` if that port is occupied.
 The app port is published on all host interfaces, allowing access from other
 devices. For local-only access, use `127.0.0.1:${APP_PORT:-3000}:3000` instead.
 Run `npx tsx scripts/check-container.ts` from `application/` on the host (set
@@ -47,7 +47,7 @@ an existing catalog.
 
 ## Image
 
-`infrastructure/Dockerfile` builds on `node:22.x-trixie-slim` and runs on
+`infrastructure/docker/Dockerfile` builds on `node:22.x-trixie-slim` and runs on
 `gcr.io/distroless/nodejs22-debian13:nonroot`, both pinned by digest. The
 runtime has no shell, package manager, npm, corepack or perl. After the Docker
 build, vinext's standalone emitter copies only the packages the server bundle

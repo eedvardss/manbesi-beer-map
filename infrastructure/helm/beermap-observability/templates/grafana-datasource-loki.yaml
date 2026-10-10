@@ -1,0 +1,17 @@
+# Picked up by the Grafana datasource sidecar (label grafana_datasource=1).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-datasource-loki
+  namespace: {{ .Release.Namespace }}
+  labels:
+    grafana_datasource: "1"
+data:
+  loki.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        uid: loki
+        type: loki
+        access: proxy
+        url: http://loki.{{ .Release.Namespace }}.svc:3100

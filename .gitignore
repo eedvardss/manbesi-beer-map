@@ -27,7 +27,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local environment (Compose reads infrastructure/.env)
+# local environment (Compose reads infrastructure/docker/.env)
 .env*
 !.env.example
 

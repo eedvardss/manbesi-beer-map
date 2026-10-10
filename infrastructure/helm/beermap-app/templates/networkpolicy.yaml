@@ -1,0 +1,39 @@
+# Selects the web pods and the migration Job pods (both carry the release instance label).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: beermap-app
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        {{- range .Values.networkPolicy.loadBalancerRanges }}
+        - ipBlock:
+            cidr: {{ . }}
+        {{- end }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.monitoringNamespace }}
+      ports:
+        - port: 3000
+          protocol: TCP
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- toYaml .Values.postgres.podLabels | nindent 14 }}
+      ports:
+        - port: 5432
+          protocol: TCP
+    # DNS to any destination: Autopilot may serve it from NodeLocal DNSCache
+    # rather than kube-dns pods.
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP

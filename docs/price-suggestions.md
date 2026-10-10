@@ -16,7 +16,7 @@ history. Original sourced catalog files and research dates remain intact.
 
 ## Local Docker setup
 
-Run from the repository root. Create an ignored `infrastructure/.env` using
+Run from the repository root. Create an ignored `infrastructure/docker/.env` using
 `application/.env.example` as a starting point. Add **different random values**
 for these variables; use URL-safe hexadecimal strings for database passwords:
 
@@ -38,7 +38,7 @@ For example, generate each value separately in PowerShell:
 Keep the file private; do not commit or paste its contents into a PR.
 
 ```sh
-docker compose --env-file infrastructure/.env -f infrastructure/compose.yaml -f infrastructure/compose.prices.yaml up --build -d --wait
+docker compose --env-file infrastructure/docker/.env -f infrastructure/docker/compose.yaml -f infrastructure/docker/compose.prices.yaml up --build -d --wait
 ```
 
 Setup runs migrations, seeds the serving registry and configures database
