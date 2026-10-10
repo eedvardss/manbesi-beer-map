@@ -10,12 +10,12 @@ variable "region" {
 }
 
 variable "billing_account_id" {
-  description = "Billing account ID (XXXXXX-XXXXXX-XXXXXX) that pays for the project. Its currency must be EUR."
+  description = "Billing account ID (XXXXXX-XXXXXX-XXXXXX) that pays for the project."
   type        = string
 }
 
 variable "budget_amount" {
-  description = "Monthly budget in EUR; alerts fire at 50%, 90% and 100%."
+  description = "Monthly budget in the billing account's currency (e.g. 550 for SEK); alerts fire at 50%, 90% and 100%."
   type        = number
   default     = 50
 }
