@@ -64,16 +64,13 @@ social providers if the target application has them enabled.
 Pass both environment files to Compose (from repository root):
 
 ```sh
-docker compose --env-file infrastructure/docker/.env --env-file application/.env.local -f infrastructure/docker/compose.yaml -f infrastructure/docker/compose.prices.yaml up --build -d --wait
+docker compose --env-file infrastructure/.env --env-file application/.env.local -f infrastructure/compose.yaml -f infrastructure/compose.prices.yaml up --build -d --wait
 ```
 
 Open `http://localhost:3000/admin` (use the exact configured origin), create an
 individual account, enroll an authenticator and save backup codes privately.
 Signing up grants no admin access. With a trusted **database-owner** connection
 in `DATABASE_URL`, run from `application/`:
-
-For local Docker, [step 5 of the run guide](run-the-system.md#5-create-and-authorise-an-admin)
-explains how to expose the database on a loopback-only port and configure that owner connection.
 
 ```sh
 npm run db:admin -- grant user_...
