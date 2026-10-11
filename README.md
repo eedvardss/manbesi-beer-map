@@ -1,75 +1,318 @@
 # Rīgas alus karte
 
-A Riga beer-price map with optional PostgreSQL catalog storage. Research is in `application/app/data/` and the verified venue TypeScript modules; `application/app/venues.ts` assembles published venues. See [Docker and PostgreSQL setup](docs/docker-postgres.md).
+A Riga beer-price map with search, price filters, menus and an opening-time slider.
+Visitors suggest prices. Admins sign in with Clerk and an authenticator to approve,
+reject or reverse changes. PostgreSQL saves suggestions, prices and review history.
 
-The website loads its catalog through `/api/venues`, including opening hours.
-Docker runs the complete frontend → REST API → PostgreSQL flow; refresh updates
-the displayed database data without rebuilding the app.
+**Local demo:** follow steps 1–7. **GKE and monitoring:** continue with step 8.
+Commands use PowerShell. Run them from the repository root unless stated otherwise.
 
-See [competitor research](docs/competitor-research.md) and [current progress](docs/DEVELOPMENT.md).
+## 1. Get the code and tools
 
-## Repository layout
+Install Git, Node.js 22.13 or newer, and Docker Desktop. Start Docker Desktop
+with Linux containers. Use Compose 2.24.4 or newer for the browser tests.
 
-- `application/`: the web app (Vinext source, API routes, database scripts, tests, `package.json`, Wrangler configuration).
-- `infrastructure/docker/`: `Dockerfile`, `Dockerfile.dockerignore`, `compose.yaml` and `compose.prices.yaml`. The Docker build context is the repository root; the dockerignore admits only `application/`.
-- `infrastructure/terraform/`: the GKE platform (cluster, network, static IP, backups, keyless GitHub auth, budget).
-- `infrastructure/helm/`: the `beermap-app`, `beermap-postgres` and `beermap-observability` charts.
-- `playwright/`: reserved for end-to-end tests; empty for now. The current browser test is `application/scripts/check-mobile-interactions.mjs`.
-- `docs/`: design, performance, competitor research, Docker notes and `DEVELOPMENT.md`.
-- `.github/`: workflows. `ci.yml` checks the app and publishes the image (and, on `v*` tags, the Helm charts); `infra.yml` checks Terraform and the charts; `deploy.yml` and `deploy-observability.yml` deploy to GKE.
-
-## Shared catalog
-
-`GET /api/venues` returns the same sourced venues, complete beer servings, and opening-hour evidence used by the website. Schema version 1 includes currency and the original research date. Responses support ETags and conditional requests. No personal data or authentication is needed.
-
-Download time and research time remain separate; this milestone's source evidence was last checked on 4 September 2026.
-
-## Development and verification
-
-Use Node 22.13 or newer. Run all npm commands from `application/`:
-
-```sh
+```powershell
+git clone https://github.com/eedvardss/manbesi-beer-map.git
+cd manbesi-beer-map
 cd application
 npm ci
+cd ..
+docker version
 ```
 
-- `npm run dev`: local map on http://localhost:5173 (Vite default; the Docker stack serves on 3000).
-- `npm run check`: lint, TypeScript, price/filter regression tests, menu checks, timeline helpers, and the complete published-data audit.
-- `npm audit`: dependency security check. The `fflate` override updates the older transitive copy used by Satori; keep it until the upstream pin is updated.
-- `npx playwright install chromium`: one-time setup for browser tests.
-- With the local server running, `npm run test:browser`: real desktop/mobile interactions, keyboard focus, filters, unknown volumes, and timeline alignment. It defaults to http://localhost:3000/ (the Docker stack); set `BEER_MAP_TEST_URL=http://localhost:5173/` for the dev server or another local build.
-- With the local server running, `npm run check:all` runs all checks, including the browser suite.
-- `npm run build`: deployment build; automatically runs the lint, type, unit, and data checks first. Run browser tests before publishing.
+If cloning fails, ask the repository owner for access. If Docker cannot reach
+its server, wait for Docker Desktop to finish starting.
 
-Serving identity and source rules are documented in `application/app/data/README.md`. Never fix a validation conflict by arbitrarily dropping a verified size or choosing a lower price. Preserve package and draught/bottle distinctions.
+## 2. Set your local passwords
 
-MapLibre 6 requires a bundled worker URL. The map uses Vite's `?worker&url` entry so the worker and shared module are emitted together. Verify the production build in the browser after dependency changes, including map tiles, filters, marker focus, mobile details, and the timeline.
+Copy the example once. Keep an existing working settings file instead of overwriting it.
 
-## Hosting
+```powershell
+Copy-Item application/.env.example infrastructure/docker/.env
+```
 
-Source: https://github.com/eedvardss/manbesi-beer-map (private repository).
-Primary domain: https://aluskarte.lv/ (with https://www.aluskarte.lv/ also attached).
+Open `infrastructure/docker/.env` and set:
 
-`npm run deploy` (from `application/`) builds and publishes directly to the dedicated `aluskarte` Cloudflare Worker. The built Wrangler configuration attaches both custom domains. Account-named `workers.dev` and version preview URLs are disabled, and public client source maps are not emitted. Use the existing authorized Wrangler session; authenticate with project-local Wrangler only when needed. There is no ChatGPT Sites deployment dependency.
+```dotenv
+POSTGRES_PASSWORD=YOUR_DATABASE_OWNER_PASSWORD
+APP_DATABASE_PASSWORD=YOUR_DIFFERENT_APP_PASSWORD
+REVIEW_DATABASE_PASSWORD=YOUR_DIFFERENT_REVIEW_PASSWORD
+PRICE_SESSION_SECRET=YOUR_DIFFERENT_SESSION_SECRET
+APP_PORT=3000
+PRICE_ALLOWED_ORIGIN=http://localhost:3000
+```
 
-The legacy manbesi.lv installation remains separate: `manbesi-p2p` routes its map through the private `BEER_MAP` service binding to `manbesi-beer-map`. Do not alter those Workers or the independent protected `/p2p/` and status API routes when deploying Aluskarte. See `docs/DEVELOPMENT.md` for live validation and DNS activation status.
+Replace each `YOUR_...` value with a different random value. Generate one at a time:
 
-GitHub Actions runs build and data checks on pushes and pull requests and publishes the image `ghcr.io/eedvardss/manbesi-beer-map` from `main` (`sha-<7-char commit>` and `main` tags) and from `v*` tags. The Cloudflare Worker is still deployed with `npm run deploy`.
+```powershell
+node -e "process.stdout.write(require('node:crypto').randomBytes(32).toString('hex'))"
+```
 
-## Deploying to GKE
+Each result is 64 hexadecimal characters, which work safely in database URLs.
+Keep passwords and keys in ignored local settings files. The old shared admin
+password is not used by the application.
 
-The Kubernetes deployment is production-only and runs on GKE Autopilot (`beermap`, `europe-north1`). Order for a fresh GCP project:
+## 3. Set up Clerk
 
-1. **Terraform.** Bootstrap the state bucket, then `terraform apply`, as described in [infrastructure/terraform/README.md](infrastructure/terraform/README.md). Then run the one-time `kubectl create clusterrolebinding github-deployer-admin ...` from that README: the deployer's `roles/container.developer` cannot create RBAC objects, and the observability chart's subcharts create Roles, RoleBindings, ClusterRoles and ClusterRoleBindings (the app and postgres charts create none).
-2. **GitHub settings.** Create the `production` environment (Settings → Environments) with required reviewers, and add:
-   - Repository variables (Settings → Secrets and variables → Actions → Variables), from the Terraform outputs. They are repository-level because job-level conditions cannot read environment variables: `GCP_PROJECT_ID`, `GCP_WORKLOAD_IDENTITY_PROVIDER` (the full `projects/<number>/locations/global/workloadIdentityPools/github/providers/github`) and `GCP_DEPLOYER_SA`. Optional: `GCP_BILLING_ACCOUNT_ID` enables the PR Terraform plan (below).
-   - `production` environment secrets: `POSTGRES_PASSWORD`, `APP_DATABASE_PASSWORD`, `REVIEW_DATABASE_PASSWORD`, `PRICE_REVIEW_PASSWORD`, `PRICE_SESSION_SECRET` (each a different random value; see [price-suggestions.md](docs/price-suggestions.md) for lengths), `GHCR_PULL_TOKEN` (a classic PAT with `read:packages` from an account that can read the image) and `GRAFANA_ADMIN_PASSWORD`.
-   - `production` environment variable `APP_HOST`: the public hostname, without www (see DNS below). It becomes the chart's `ingress.host` (the managed certificate domain and `PRICE_ALLOWED_ORIGIN`).
-   - `production` environment variable `SMOKE_TEST_URL` (`https://<APP_HOST>/api/health`), set once DNS and the certificate work.
-3. **DNS.** The GKE deployment is served at `alus.chudars.lv` (set `APP_HOST` to it). Create an A record `alus` in the `chudars.lv` DNS zone pointing to the `ingress_ip_address` Terraform output. If the zone is on Cloudflare, set it to DNS only (grey cloud) so Google's ManagedCertificate can validate. Provisioning can take 15–60 min. aluskarte.lv stays on the Cloudflare Worker.
-4. **Deploy.** `deploy.yml` runs after every successful CI run on `main` once `GCP_WORKLOAD_IDENTITY_PROVIDER` is set, and on demand (Actions → Deploy → Run workflow, optionally with an image tag to roll back). After approval it applies the namespace and Secrets, then runs `helm upgrade --install` for `beermap-postgres` and `beermap-app`, rolling back on failure. The backup bucket and service account are derived from `GCP_PROJECT_ID` (`<project>-beermap-backups`, `beermap-backup@<project>.iam.gserviceaccount.com`).
-5. **Observability.** Run Actions → Deploy observability once, and again only when the chart changes. It creates the `beermap-grafana-admin` Secret and installs Prometheus, Grafana, Loki and Alloy into `monitoring`.
+Create a **Development** application in Clerk. Enable email/password login,
+require authenticator MFA for sign-up and sign-in, and enable backup codes.
+Disable social and passwordless login for this demo. Passwords must meet the
+Clerk policy; the recorded project settings require at least 15 characters.
+See `infrastructure/clerk-development.json` for the intended settings.
 
-Charts: [beermap-app](infrastructure/helm/beermap-app/README.md), [beermap-postgres](infrastructure/helm/beermap-postgres/README.md), [beermap-observability](infrastructure/helm/beermap-observability/README.md). Release tags `v*` also push `beermap-app` and `beermap-postgres` as OCI charts to `oci://ghcr.io/eedvardss/charts` with the tag's version.
+From Clerk's API Keys page, copy the Development keys into `application/.env.local`:
 
-Pull requests run `infra.yml`: `terraform fmt`/`validate`, `tflint`, `helm lint`, `helm template` with `kubeconform`, and a Trivy config scan. When `GCP_BILLING_ACCOUNT_ID` is also set, same-repository PRs get a `terraform plan` comment. The plan runs as the deployer service account, which then also needs `roles/viewer` and `roles/iam.securityReviewer` on the project, `roles/billing.viewer` on the billing account and `roles/storage.objectViewer` on the `<project>-tfstate` bucket (the plan uses `-lock=false`).
+```dotenv
+VITE_CLERK_PUBLISHABLE_KEY=YOUR_PK_TEST_KEY
+CLERK_SECRET_KEY=YOUR_SK_TEST_KEY
+```
+
+Replace the examples with actual `pk_test_...` and `sk_test_...` keys.
+Live keys are intentionally rejected. Clerk holds admin passwords and MFA secrets;
+PostgreSQL holds the admin allowlist.
+
+## 4. Start the complete local stack
+
+Paste this block into PowerShell **from the repository root**. It defines the
+shortcut used below. The inline override opens PostgreSQL only on this computer
+so the owner can grant admin access. No extra configuration file is needed.
+
+```powershell
+$localDatabasePort = @'
+services:
+  db:
+    ports:
+      - '127.0.0.1:55433:5432'
+'@
+function Invoke-BeerMap {
+    $localDatabasePort | docker compose --env-file infrastructure/docker/.env --env-file application/.env.local -f infrastructure/docker/compose.yaml -f infrastructure/docker/compose.prices.yaml -f - @args
+}
+Invoke-BeerMap up --build -d --wait
+```
+
+The first build downloads images and may take several minutes. PostgreSQL starts
+first, the setup task applies migrations and seeds an empty database, then the app starts.
+
+Open **http://localhost:3000/** and **http://localhost:3000/api/health**.
+The health endpoint should succeed and identify `postgres` as the catalog backend.
+Use `localhost` consistently because writes check the exact configured origin.
+
+```powershell
+Invoke-BeerMap ps -a
+```
+
+The app and database should be healthy. `db-setup` exiting with code 0 is normal.
+If you open a new terminal, repeat the shortcut definition before using it.
+
+## 5. Grant your admin account access
+
+1. Open **http://localhost:3000/admin**, create an account and enrol an authenticator.
+2. Save backup codes privately. In Clerk's Users page, copy your account's `user_...` ID.
+3. Add this line to `application/.env.local`, using the exact owner password from step 2:
+
+```dotenv
+DATABASE_URL=postgresql://beer_map:YOUR_DATABASE_OWNER_PASSWORD@127.0.0.1:55433/beer_map
+```
+
+This connection is for the trusted owner command. The Docker app continues to
+use its restricted roles and internal database connection.
+
+```powershell
+cd application
+npm run db:admin -- grant YOUR_CLERK_USER_ID
+cd ..
+```
+
+Replace `YOUR_CLERK_USER_ID` with the actual `user_...` ID. The command checks
+that the account is active and has a password and authenticator. Reload `/admin`.
+Signing up alone does not grant access. To remove access, run
+`npm run db:admin -- revoke YOUR_CLERK_USER_ID` from `application/`.
+
+## 6. Check the user flow and run tests
+
+Try this demo:
+
+1. Search a venue or beer, change the price filter, compare glass/litre prices,
+   open a menu and move the time slider.
+2. Click **Ieteikt cenu** on a serving and submit a different price.
+   The public price should remain unchanged while the suggestion is pending.
+3. In `/admin`, approve it with **Apstiprināt** and a valid verification date.
+   A web source is optional for a price checked in person.
+4. Refresh the map: the new price should appear without rebuilding.
+5. Submit another suggestion and choose **Noraidīt**. The public price should stay
+   unchanged. Check history and try reversing an approved override.
+
+Run automated checks from `application/`:
+
+```powershell
+cd application
+npm run check
+npx playwright install chromium
+npx playwright test --list
+npx playwright test --ui
+```
+
+Press the green play button. To watch a browser window, run
+`npx playwright test --headed --workers=1`. For terminal results, run
+`npm run test:browser:suite`.
+
+Playwright builds an isolated Docker stack on port 3011, with its own database
+on port 55434. It does not reset your demo database. Docker must be running.
+The full admin-MFA test needs a dedicated enrolled account and is skipped without it.
+See [MFA test setup](docs/price-suggestions.md#clerk-mfa-test-coverage) for the test
+variables. Supply that account's keys and credentials in the test process environment.
+
+Return to the repository root with `cd ..`.
+
+## 7. Stop, restart and troubleshoot
+
+From the repository root, using the shortcut from step 4:
+
+```powershell
+Invoke-BeerMap logs --tail=100 db db-setup app
+Invoke-BeerMap down
+```
+
+`down` keeps saved data. Start again with `Invoke-BeerMap up --build -d --wait`.
+Do not add `--volumes` unless you want to delete the demo database.
+
+- **Port 3000 is busy:** change `APP_PORT` and `PRICE_ALLOWED_ORIGIN` together,
+  restart and use the new exact URL.
+- **Port 55433 is busy:** change the inline database port and owner `DATABASE_URL` together.
+- **Admin page unavailable:** check the Development keys, MFA settings and container logs.
+- **Admin access denied:** grant the correct enrolled Clerk user ID in step 5.
+- **Password error after editing `.env`:** an existing database retains its original
+  owner password. Restore the matching settings or rotate the database password explicitly.
+- **No tests in Playwright:** run the command from `application/`.
+
+## 8. Run on GKE
+
+Cloud resources cost money. This needs a billing-enabled GCP project, project
+and billing permissions, GitHub settings access, a domain you control,
+Google Cloud CLI, Terraform 1.16+, kubectl with the GKE auth plugin, and Helm 4.
+The detailed walkthrough is [Deploying to GCP](docs/deploying-to-gcp.md).
+
+### Create the infrastructure
+
+Choose your project, sign in, and bootstrap the Terraform state bucket once:
+
+```powershell
+$projectId = 'YOUR_GCP_PROJECT_ID'
+gcloud auth login
+gcloud config set project $projectId
+gcloud auth application-default login
+gcloud auth application-default set-quota-project $projectId
+gcloud services enable serviceusage.googleapis.com cloudresourcemanager.googleapis.com --project $projectId
+gcloud storage buckets create "gs://$projectId-tfstate" --project $projectId --location europe-north1 --uniform-bucket-level-access --public-access-prevention
+gcloud storage buckets update "gs://$projectId-tfstate" --versioning
+Copy-Item infrastructure/terraform/terraform.tfvars.example infrastructure/terraform/terraform.tfvars
+```
+
+Fill in `project_id`, `billing_account_id` and a budget in your billing currency
+in the ignored `terraform.tfvars`. Review the plan before applying:
+
+```powershell
+cd infrastructure/terraform
+terraform init -backend-config="bucket=$projectId-tfstate"
+terraform plan -out=tfplan
+terraform apply tfplan
+terraform output
+cd ../..
+gcloud container clusters get-credentials beermap --region europe-north1 --project $projectId
+kubectl create clusterrolebinding github-deployer-admin --clusterrole=cluster-admin --user="github-deployer@$projectId.iam.gserviceaccount.com"
+```
+
+The last command grants the deployer RBAC access used by the monitoring chart.
+See [Terraform setup](infrastructure/terraform/README.md) for permissions and teardown.
+Budget alerts are notifications, not a spending cap.
+
+### Configure GitHub and deploy
+
+Create the GitHub environment **production**, with required reviewers. Add:
+
+| Location | Setting | Value |
+| --- | --- | --- |
+| Repository variable | `GCP_PROJECT_ID` | Your project ID |
+| Repository variable | `GCP_WORKLOAD_IDENTITY_PROVIDER` | Terraform output `workload_identity_provider` |
+| Repository variable | `GCP_DEPLOYER_SA` | Terraform output `deployer_service_account` |
+| Production variable | `APP_HOST` | Public hostname, without `https://` |
+| Production secret | `POSTGRES_PASSWORD`, `APP_DATABASE_PASSWORD`, `REVIEW_DATABASE_PASSWORD`, `PRICE_SESSION_SECRET` | Different random values |
+| Production secret | `PRICE_REVIEW_PASSWORD` | Random compatibility value required by the existing workflow; not an admin login |
+| Production secret | `GHCR_PULL_TOKEN` | Token with `read:packages` access to the private image |
+| Production secret | `GRAFANA_ADMIN_PASSWORD` | Separate strong Grafana password |
+
+Point your hostname's DNS A record to Terraform output `ingress_ip_address`.
+If using Cloudflare DNS, use **DNS only** for this GKE hostname.
+
+After this branch is merged and main CI publishes an image, run **Actions → Deploy**
+and approve the environment request. It installs PostgreSQL, runs migrations and
+starts the app. Run **Actions → Deploy observability** separately for monitoring.
+
+### Supply Clerk to the cloud app
+
+The current chart does not inject Clerk keys. For the Development demo, complete
+this manual step after deployment. Create the ignored `application/.env.clerk`
+with **only** these entries, using the same Clerk Development app as your admin:
+
+```dotenv
+CLERK_PUBLISHABLE_KEY=YOUR_PK_TEST_KEY
+CLERK_SECRET_KEY=YOUR_SK_TEST_KEY
+```
+
+Do not put the database-owner URL in this file. From the repository root:
+
+```powershell
+kubectl -n beermap create secret generic beermap-clerk --from-env-file=application/.env.clerk --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n beermap set env deployment/beermap-app --from=secret/beermap-clerk
+kubectl -n beermap rollout status deployment/beermap-app
+```
+
+This uses Kubernetes Secret references. Check and repeat the step after app
+upgrades; it is not yet managed by the chart or deploy workflow. Only Development
+keys are accepted, so this remains a demo authentication setup.
+
+The cloud database has its own admin allowlist. In a separate terminal:
+
+```powershell
+kubectl -n beermap port-forward svc/beermap-postgres 55433:5432
+```
+
+Stop the local stack first if it uses port 55433. Set the owner `DATABASE_URL`
+in `application/.env.local` to the forwarded port with the **cloud** owner password.
+Run the grant command from step 5 for your enrolled account. Restore the local
+owner URL when returning to the local demo. Stop port-forward with Ctrl+C.
+
+### Verify the cloud system
+
+```powershell
+kubectl -n beermap get pods,jobs,ingress,managedcertificate
+kubectl -n monitoring get pods
+kubectl -n beermap get cronjobs
+kubectl -n monitoring port-forward svc/beermap-observability-grafana 3002:80
+```
+
+Open Grafana at **http://localhost:3002**, using `admin` and the configured
+Grafana password. Check the Beer Map dashboard and logs. Stop port-forward with Ctrl+C.
+
+Wait for the managed certificate to become Active. Open `https://YOUR_APP_HOST`
+and its `/api/health` endpoint, then repeat the price-review demo from step 6.
+Set production variable `SMOKE_TEST_URL` to `https://YOUR_APP_HOST/api/health`
+to enable the public health check on later deployments.
+
+Nightly backups go to the GCS backup bucket. Check an actual object and test a
+restore before claiming recovery works. Alert rules exist, but Alertmanager needs
+a real receiver for notifications. See the
+[monitoring chart](infrastructure/helm/beermap-observability/README.md) and
+[database chart](infrastructure/helm/beermap-postgres/README.md) for details.
+
+## Project files
+
+- `application/` — website, API, database scripts and application tests.
+- `infrastructure/` — Docker, Terraform and Helm.
+- `playwright/` — isolated browser tests.
+- `.github/workflows/` — checks, image publishing and deployments.
+- `docs/` — detailed setup, design and performance notes.
+
+The repository also retains a separate Cloudflare Worker deployment path.
+Publishing that Worker alone does not enable the PostgreSQL-backed admin flow.
