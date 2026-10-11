@@ -1,5 +1,9 @@
 # Rīgas alus karte
 
+**Start here:** [Run the system step by step](docs/run-the-system.md).
+The guide covers Docker, PostgreSQL, price suggestions, Clerk admin login and
+MFA, a manual demo, Playwright UI, stopping the stack and troubleshooting.
+
 A Riga beer-price map with optional PostgreSQL catalog storage. Research is in `application/app/data/` and the verified venue TypeScript modules; `application/app/venues.ts` assembles published venues. See [Docker and PostgreSQL setup](docs/docker-postgres.md).
 
 The website loads its catalog through `/api/venues`, including opening hours.
@@ -14,7 +18,7 @@ See [competitor research](docs/competitor-research.md) and [current progress](do
 - `infrastructure/docker/`: `Dockerfile`, `Dockerfile.dockerignore`, `compose.yaml` and `compose.prices.yaml`. The Docker build context is the repository root; the dockerignore admits only `application/`.
 - `infrastructure/terraform/`: the GKE platform (cluster, network, static IP, backups, keyless GitHub auth, budget).
 - `infrastructure/helm/`: the `beermap-app`, `beermap-postgres` and `beermap-observability` charts.
-- `playwright/`: reserved for end-to-end tests; empty for now. The current browser test is `application/scripts/check-mobile-interactions.mjs`.
+- `playwright/`: map, price-suggestion and optional admin-MFA end-to-end tests. Additional browser checks are in `application/scripts/`.
 - `docs/`: design, performance, competitor research, Docker notes and `DEVELOPMENT.md`.
 - `.github/`: workflows. `ci.yml` checks the app and publishes the image (and, on `v*` tags, the Helm charts); `infra.yml` checks Terraform and the charts; `deploy.yml` and `deploy-observability.yml` deploy to GKE.
 

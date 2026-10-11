@@ -1,0 +1,6 @@
+# Optional host access for the database-owner admin grant/revoke command.
+# Keep this out of cloud deployments. Only this computer can connect.
+services:
+  db:
+    ports:
+      - '127.0.0.1:55433:5432'
