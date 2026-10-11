@@ -41,7 +41,7 @@ await test('venue name, address, diacritics, and empty results', () => {
   assert(queryVenues([ala], 'Brengulu')[0].beer.includes('Brenguļu'));
   assert.deepEqual(queryVenues([ala], 'no-such-beer'), []);
 });
-await test('unknown volume is not infinity and known values sort first', () => {
+await test('unknown volumes are excluded only from litre comparison', () => {
   const unknown = {
     ...ala,
     id: 'unknown',
@@ -49,8 +49,17 @@ await test('unknown volume is not infinity and known values sort first', () => {
     beerPrices: [{ name: 'Unknown', volumeMl: null, price: 1 }],
   } as Venue;
   const results = queryVenues([unknown, ala], '', 'all', 'litre');
-  assert.equal(results.at(-1)?.id, 'unknown');
-  assert.equal(pricePerLitre(results.at(-1)!), null);
+  assert.deepEqual(results.map((venue) => venue.id), [ala.id]);
+  assert.equal(queryVenues([unknown, ala], '', 'all', 'price')[0].id, 'unknown');
+  assert.equal(queryVenues([unknown], '', 'all', 'name').length, 1);
+  const mixed = { ...unknown, beerPrices: [
+    ...unknown.beerPrices!, { name: 'Known', volumeMl: 500, price: 5 },
+  ] };
+  const [comparable] = queryVenues([mixed], '', 'all', 'litre');
+  assert.equal(comparable.beer, 'Known');
+  assert.equal(comparable.beerPrices?.length, 2, 'Keep the full menu');
+  assert.deepEqual(queryVenues([mixed], 'Unknown', 'under5', 'litre'), [],
+    'A filtered unknown serving cannot use an unrelated known volume');
   assert.equal(
     servingPerLitre({ name: 'Unknown', volumeMl: null, price: 1 }),
     null,
@@ -84,6 +93,10 @@ await test('every venue litre ranking uses the minimum known unit price', () => 
       .map(servingPerLitre)
       .filter((p): p is number => p !== null);
     const [result] = queryVenues([venue], '', 'all', 'litre');
+    if (!prices.length) {
+      assert.equal(result, undefined, venue.name);
+      continue;
+    }
     assert.equal(
       pricePerLitre(result),
       prices.length ? Math.min(...prices) : null,
@@ -108,6 +121,7 @@ await test('indexed linear selection preserves the original full-menu search and
         );
         if (!beers.length) return [];
         const best = [...beers].sort((a, b) => compareServings(a, b, sort))[0];
+        if (sort === 'litre' && servingPerLitre(best) === null) return [];
         return [{ ...venue, beer: best.name, price: best.price, volumeMl: best.volumeMl, packageCount: best.packageCount, priceIsFrom: best.priceIsFrom, beerPrices: beers }];
       }).sort((a, b) => sort === 'name' ? a.name.localeCompare(b.name, 'lv') : compareServings(a, b, sort) || a.name.localeCompare(b.name, 'lv'));
       assert.deepEqual(indexed(query, band, sort), expected, `${query} / ${band} / ${sort}`);

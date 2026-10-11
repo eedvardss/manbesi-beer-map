@@ -234,6 +234,7 @@ function createMarkerNode(
       `${venue.name}, cenas vēl nav pārbaudītas`,
     );
   }
+  priceButton.dataset.priceLabel = priceButton.getAttribute('aria-label')!;
   root.appendChild(priceButton);
 
   if (!active) return root;
@@ -251,6 +252,10 @@ function createMarkerNode(
   const headingGroup = document.createElement('div');
   headingGroup.appendChild(heading);
   headingGroup.appendChild(address);
+  const openingStatus = document.createElement('span');
+  openingStatus.className = 'marker-opening-status';
+  openingStatus.hidden = true;
+  headingGroup.appendChild(openingStatus);
   header.appendChild(headingGroup);
 
   const list = document.createElement('div');
@@ -283,12 +288,18 @@ function createMarkerNode(
         row.appendChild(beerInfo);
         row.appendChild(price);
         if (beer.priceUpdate) {
-          const source = document.createElement('a');
-          source.href = beer.priceUpdate.sourceUrl;
-          source.target = '_blank';
-          source.rel = 'noreferrer';
+          const source = document.createElement(
+            beer.priceUpdate.sourceUrl ? 'a' : 'span',
+          );
+          if (source instanceof HTMLAnchorElement) {
+            source.href = beer.priceUpdate.sourceUrl;
+            source.target = '_blank';
+            source.rel = 'noreferrer';
+          }
           source.className = 'serving-source';
-          source.textContent = `Pārbaudīts ${beer.priceUpdate.observedOn} ↗`;
+          source.textContent = beer.priceUpdate.sourceUrl
+            ? `Pārbaudīts ${beer.priceUpdate.observedOn} ↗`
+            : `Administrators apstiprināja ${beer.priceUpdate.observedOn}`;
           beerInfo.appendChild(source);
         }
         if (onSuggest && beer.id) {
@@ -450,6 +461,7 @@ function BeerMap({
   const venueGliderRef = useRef<HTMLDivElement>(null);
   const hoveredVenueIdRef = useRef<string | null>(null);
   const timeScrollerRef = useRef<HTMLDivElement>(null);
+  const timelineDragRef = useRef<{ x: number; scrollLeft: number } | null>(null);
   const ignoreTimelineScrollRef = useRef(false);
   const timelineFrameRef = useRef<number | null>(null);
   const restoredTimelineRef = useRef<number | null>(null);
@@ -803,6 +815,7 @@ function BeerMap({
           nextButton.getAttribute('aria-label')!,
         );
         button.setAttribute('aria-expanded', String(active));
+        button.dataset.priceLabel = nextButton.dataset.priceLabel;
         button.replaceChildren(...Array.from(nextButton.childNodes));
         element.classList.toggle('is-open', active);
         element.dataset.tone = fresh.dataset.tone;
@@ -928,9 +941,20 @@ function BeerMap({
   useEffect(() => {
     if (!mapReady) return;
     markerRefs.current.forEach((marker, venueId) => {
-      marker
-        .getElement()
-        .classList.toggle('is-closed', openStates.get(venueId) === false);
+      const element = marker.getElement();
+      const closed = openStates.get(venueId) === false;
+      element.classList.toggle('is-closed', closed);
+      const button = element.querySelector<HTMLButtonElement>('button');
+      if (button) {
+        const label = button.dataset.priceLabel ?? '';
+        button.setAttribute('aria-label', `${label}${closed ? ', izvēlētajā laikā slēgts' : ''}`);
+        button.title = `${label}${closed ? ' · Pelēks: izvēlētajā laikā slēgts' : ''}`;
+      }
+      const status = element.querySelector<HTMLElement>('.marker-opening-status');
+      if (status) {
+        status.hidden = !closed;
+        status.textContent = closed ? 'Izvēlētajā laikā slēgts' : '';
+      }
     });
   }, [filtered, mapReady, openStates, selectedId]);
 
@@ -1016,7 +1040,9 @@ function BeerMap({
                 <strong>Rīgas alus</strong>
               </div>
               {catalog.priceSuggestionsEnabled && (
-                <Link href="/admin" className="admin-entry">Admin</Link>
+                <Link href="/admin" className="admin-entry">
+                  Admin
+                </Link>
               )}
               <button
                 className="catalog-refresh"
@@ -1215,6 +1241,17 @@ function BeerMap({
                   aria-valuenow={selectedMinutes}
                   aria-valuetext={`${selectedDayOffset ? 'Rīt' : 'Šodien'} ${formatClockTime(selectedMinuteOfDay)}`}
                   onScroll={setTimelineFromScroll}
+                  onPointerDown={(event) => {
+                    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+                    event.currentTarget.focus();
+                    timelineDragRef.current = { x: event.clientX, scrollLeft: event.currentTarget.scrollLeft };
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                  }}
+                  onPointerMove={(event) => {
+                    const drag = timelineDragRef.current;
+                    if (drag) event.currentTarget.scrollLeft = drag.scrollLeft + drag.x - event.clientX;
+                  }}
+                  onLostPointerCapture={() => { timelineDragRef.current = null; }}
                   onKeyDown={(event) => {
                     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
                       return;

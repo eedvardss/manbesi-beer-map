@@ -14,4 +14,4 @@ services:
     environment:
       DATABASE_URL: postgresql://beer_map_app:${APP_DATABASE_PASSWORD}@db:5432/beer_map_prices_e2e
       DATABASE_REVIEW_URL: postgresql://beer_map_reviewer:${REVIEW_DATABASE_PASSWORD}@db:5432/beer_map_prices_e2e
-      PRICE_LOCAL_ADMIN_LOGIN: 'true'
+      PRICE_ALLOWED_ORIGIN: http://127.0.0.1:3011

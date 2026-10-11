@@ -4,9 +4,14 @@ import { randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import pg from 'pg';
 import { catalog } from '../app/catalog';
+import { prepareCatalog } from '../app/catalog-client';
 import { database, closeDatabase } from '../lib/database';
 import { readCatalogJson } from '../lib/catalog-store';
-import { reviewList, closeReviewDatabase } from '../lib/price-store';
+import {
+  reviewPrice,
+  reviewList,
+  closeReviewDatabase,
+} from '../lib/price-store';
 
 // This suite deliberately writes and removes data only in a named disposable DB.
 const connection = process.env.BEER_MAP_TEST_DATABASE_URL;
@@ -331,6 +336,61 @@ try {
     await assert.rejects(reviewList('pending', 'not-a-cursor'), {
       status: 400,
     });
+  });
+  await test('approval without a source publishes a price and keeps the admin audit and rollback', async () => {
+    const other = catalog.venues[0].beers[0];
+    const serving = await database().query(
+      'SELECT version FROM beer_map_servings WHERE id=$1',
+      [other.id],
+    );
+    const revision = serving.rows[0].version;
+    const report = await database().query(
+      'SELECT beer_map_submit_price($1,$2,$3,$4,$5,$6,$7) AS result',
+      [
+        other.id,
+        1234,
+        revision,
+        '7'.repeat(64),
+        randomUUID(),
+        'Verified in person',
+        '',
+      ],
+    );
+    const before = await readCatalogJson();
+    await reviewPrice(
+      {
+        action: 'approve',
+        id: report.rows[0].result.id,
+        evidenceUrl: '',
+        observedOn: new Date().toISOString().slice(0, 10),
+      },
+      'user_testadmin',
+    );
+    const raw = await readCatalogJson();
+    const json = JSON.parse(raw);
+    const beer = json.venues
+      .flatMap((v: { beers: (typeof catalog.venues)[0]['beers'] }) => v.beers)
+      .find((b: typeof other) => b.id === other.id);
+    assert.equal(beer.price, 12.34);
+    assert.equal(beer.priceUpdate.sourceUrl, '');
+    prepareCatalog(json); // Blank optional provenance must not break public refresh.
+    const audit = await database().query(
+      'SELECT reviewer FROM beer_map_price_changes WHERE serving_id=$1 ORDER BY version DESC LIMIT 1',
+      [other.id],
+    );
+    assert.equal(audit.rows[0].reviewer, 'user_testadmin');
+    assert.notEqual(raw, before);
+    await reviewPrice(
+      { action: 'revert', servingId: other.id, revision: revision + 1 },
+      'user_testadmin',
+    );
+    const reverted = JSON.parse(await readCatalogJson());
+    assert.equal(
+      reverted.venues
+        .flatMap((v: { beers: (typeof catalog.venues)[0]['beers'] }) => v.beers)
+        .find((b: typeof other) => b.id === other.id).price,
+      other.price,
+    );
   });
 } finally {
   await closeReviewDatabase();

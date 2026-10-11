@@ -52,7 +52,7 @@ function beer(value: unknown): BeerPrice {
     throw new Error('Invalid serving revision');
   if (item.priceUpdate !== undefined) {
     const update = record(item.priceUpdate);
-    sourceUrl(update.sourceUrl);
+    if (update.sourceUrl !== '') sourceUrl(update.sourceUrl);
     text(update.observedOn);
     text(update.publishedAt);
   }

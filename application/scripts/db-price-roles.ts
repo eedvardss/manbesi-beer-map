@@ -38,10 +38,10 @@ try {
       'GRANT EXECUTE ON FUNCTION beer_map_submit_price(UUID,INTEGER,INTEGER,TEXT,UUID,TEXT,TEXT) TO beer_map_app',
     );
     await client.query(
-      'GRANT SELECT ON beer_map_servings,beer_map_price_suggestions,beer_map_current_prices,beer_map_price_changes TO beer_map_reviewer',
+      'GRANT SELECT ON beer_map_servings,beer_map_price_suggestions,beer_map_current_prices,beer_map_price_changes,beer_map_admins TO beer_map_reviewer',
     );
     await client.query(
-      'GRANT EXECUTE ON FUNCTION beer_map_review_price(UUID,TEXT,TEXT,DATE,TEXT),beer_map_revert_price(UUID,INTEGER,TEXT),beer_map_price_login_limit() TO beer_map_reviewer',
+      'GRANT EXECUTE ON FUNCTION beer_map_review_price(UUID,TEXT,TEXT,DATE,TEXT),beer_map_revert_price(UUID,INTEGER,TEXT) TO beer_map_reviewer',
     );
     await client.query('COMMIT');
     console.log('Restricted submission and reviewer database roles configured');

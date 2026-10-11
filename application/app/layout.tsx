@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description: 'Rīgas bāri un restorāni kartē ar publicētām alus cenām, tilpumiem un pārbaudāmiem avotiem.',
   alternates: { canonical: 'https://aluskarte.lv/' },
   referrer: 'no-referrer',
+  icons: { icon: { url: '/favicon.svg', type: 'image/svg+xml' } },
   openGraph: {
     type: 'website',
     locale: 'lv_LV',

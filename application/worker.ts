@@ -1,4 +1,5 @@
 import app from 'vinext/server/fetch-handler';
+import { clerkDevelopmentConfig } from './lib/clerk-config';
 
 // Apply these after rendering so cached pages and API/error responses agree.
 export default {
@@ -26,6 +27,17 @@ export default {
     headers.set('X-Frame-Options', 'DENY');
     headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
     headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://tiles.openfreemap.org; font-src https://tiles.openfreemap.org; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
+    if (new URL(request.url).pathname === '/admin') {
+      headers.set('Cache-Control', 'no-store');
+      const config = clerkDevelopmentConfig();
+      if (config) {
+        const domain = Buffer.from(config.publishableKey.slice('pk_test_'.length), 'base64').toString().replace(/\$$/, '');
+        if (/^[a-z0-9-]+\.clerk\.accounts\.dev$/.test(domain)) {
+          const clerkOrigin = `https://${domain}`;
+          headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'unsafe-inline' ${clerkOrigin} https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://img.clerk.com ${clerkOrigin}; connect-src 'self' ${clerkOrigin} https://challenges.cloudflare.com; font-src 'self'; frame-src ${clerkOrigin} https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'`);
+        }
+      }
+    }
     return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   },
 };

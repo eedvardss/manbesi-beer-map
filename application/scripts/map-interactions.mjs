@@ -53,7 +53,13 @@ export async function mapInteractions(page, base) {
   await search.fill('Swings Golf');
   await priceSlider.focus();
   await page.keyboard.press('Home');
+  await page.getByText('Nekas neatradās', { exact: true }).waitFor();
+  assert.equal(await page.locator('.marker-node').count(), 0, 'Unknown volumes have no litre marker');
+  assert.equal(await page.locator('.venue-card').count(), 0, 'Unknown volumes have no litre result');
+  await page.getByRole('combobox', { name: 'Kārtot vietas' }).click();
+  await page.getByRole('option', { name: 'Lētākā glāze', exact: true }).click();
   await page.getByText('Tilpums nav norādīts', { exact: true }).waitFor();
+  assert.equal(await page.locator('.marker-node').count(), 1, 'Serving view restores the venue');
   assert(!(await page.locator('body').innerText()).includes('∞'));
 
   await search.fill('ALA Pagrabs');
@@ -160,26 +166,26 @@ export async function mapInteractions(page, base) {
   await page.getByRole('alert').waitFor();
   await page.getByRole('slider', { name: 'Izvēlēties laiku' }).press('ArrowRight');
   await page.getByRole('button', { name: '165 vietas', exact: true }).click();
-  await search.fill('Swings Golf');
+  await search.fill('Bon-Vivant');
   await page.getByRole('button', { name: 'zem 5 €', exact: true }).click();
   await page.getByRole('combobox', { name: 'Kārtot vietas' }).click();
   await page.getByRole('option', { name: 'Lētākais litrs', exact: true }).click();
-  await page.getByRole('button', { name: 'Parādīt kartē: Swings Golf Rīga', exact: true }).click();
+  await page.getByRole('button', { name: 'Parādīt kartē: Bon-Vivant', exact: true }).click();
   const retryTime = await slider.getAttribute('aria-valuenow');
   await page.unroute(runtimeRequest);
   await Promise.all([
-    page.waitForURL((url) => url.searchParams.get('venue') === 'swings-golf-riga'),
+    page.waitForURL((url) => url.searchParams.get('venue') === 'bon-vivant'),
     page.getByRole('button', { name: 'Mēģināt vēlreiz', exact: true }).click(),
   ]);
   await page.locator('.marker-detail').waitFor();
   await page.locator('.map-load-state').waitFor({ state: 'detached' });
-  assert.equal(await search.inputValue(), 'Swings Golf');
+  assert.equal(await search.inputValue(), 'Bon-Vivant');
   assert.equal(await page.getByRole('button', { name: 'zem 5 €', exact: true }).getAttribute('aria-pressed'), 'true');
   assert.match(await page.getByRole('combobox', { name: 'Kārtot vietas' }).innerText(), /Lētākais litrs/);
-  assert.equal(await page.locator('.marker-detail-head strong').innerText(), 'Swings Golf Rīga');
+  assert.equal(await page.locator('.marker-detail-head strong').innerText(), 'Bon-Vivant');
   assert.equal(await slider.getAttribute('aria-valuenow'), retryTime);
   assert.equal(await page.locator('.price-marker').count(), 1);
-  assert.equal(await page.locator('.price-marker').innerText(), '— €/l');
+  assert.match(await page.locator('.price-marker').innerText(), /\d+,\d{2} € \/l/);
   assert.equal(await page.evaluate(() => sessionStorage.getItem('beer-map:map-retry')), null);
 
   console.log(

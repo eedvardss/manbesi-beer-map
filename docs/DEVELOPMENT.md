@@ -427,3 +427,37 @@ The five-hour continuation was removed at the user's request. Do not recreate it
 Simplified the app port mapping to `${APP_PORT:-3000}:3000` and documented host-interface access. Moved the one-shot migration/seed command into `scripts/setup-database.sh`, included it in the runtime image, and enforced LF shell-script endings for Windows checkouts. Retained the separate setup service so versioned migrations also run on existing volumes; retained CI PostgreSQL for destructive integration tests, isolated from the Compose/browser catalog. Documented both decisions.
 
 Verified the Docker rebuild (including lint, types, 19 tests, audit and snapshot checks), healthy startup, repeat setup preserving the existing catalog, and container/API/Brotli/304 checks for all 165 venues and 2,550 servings. GitHub CI must pass on the review-fix commit before merging. No public deployment performed.
+
+## Clerk Development admin MFA — 10 October 2026
+
+Branch `feature/clerk-admin-mfa` replaces shared-password review login with route-scoped Clerk React components and verified Clerk backend sessions. PostgreSQL migration 005 stores explicit admin grants; restricted reviewer connections can read, but cannot write grants. Price decisions use Clerk user IDs in existing audit history. Required authenticator MFA and backup codes are enabled in the linked Development application. Keys are runtime-only, ignored, and excluded from Docker build context. Public suggestion flow remains anonymous. Pipelines, research and public deployment are unchanged.
+
+Verified: 24 unit checks, TypeScript, lint (existing Worker export warning), dependency policy, Docker build/healthy startup, restricted SQL permissions, rejection of anonymous/forged/legacy admin requests, desktop/mobile login rendering, map browser checks and anonymous suggestion persistence/idempotency. Full authenticated MFA approval/rejection/revert verification awaits a pre-enrolled identity; its Playwright scenario is explicitly conditional. No live keys or production resources were provisioned.
+
+Additional SQL verification: all six price PostgreSQL integration tests pass in a separate `beer_map_clerk_prices_test` database. The optional full-MFA Playwright scenario is discovered and skipped explicitly without credentials.
+
+## Admin moderation corrections — 10 October 2026
+
+Allow administrators to approve prices verified in person without a source URL. Migration 006 replaces the review function without changing locks, conflict checks, history or permissions. Public serving provenance displays an admin approval date when no web source exists, and catalog parsing accepts that explicit empty optional source. Remove the unnecessary ten-minute factor freshness gate for ordinary moderation; active Clerk sessions, enrolled MFA and explicit admin grants remain required. Distinguish permission denial from expired authentication instead of sending every 403 back to login.
+
+Verified locally: 25 unit checks, seven PostgreSQL integration tests including source-free publishing and reversal, type checks and lint. Full live signed-in browser verification is still separate from these checks.
+
+## Solid litre-price markers — 10 October 2026
+
+Fix transparent unknown-volume markers by giving every price button a background from its marker fill, with a neutral fallback. Closed venues retain grey styling without the previous 8% opacity, preserving readable prices. Docker rebuilt and started healthy; actual desktop/mobile litre views inspected. Computed styles across all 165 markers (nine unknown-volume and three closed venues in this run) report zero transparent fills or faded marker containers. No price data or pipeline changes.
+
+## Local website audit — 10 October 2026
+
+Walked through the Docker preview in Chromium at 1440×900, 390×844 and 320×568. Fixed the missing favicon declaration (the existing SVG now returns 200), the Clerk footer's pale background/low text contrast, and suggestion confirmation wording to reflect administrator approval. Closed markers now explain their grey appearance in hover text and accessible labels; their expanded menu shows “Izvēlētajā laikā slēgts”. Base price labels are retained separately so repeated opening-time updates do not duplicate the status or lose the serving/litre amount.
+
+Verified search/reset/empty results, serving and litre sorting, price filters, venue menus, keyboard focus retention, mobile drawer, timeline, runtime failure recovery, login/registration switching and anonymous review API rejection (401). Simulated a suggestion-session 503 and verified retry recovery; invalid zero price is rejected before submission. The narrow suggestion dialog and admin page scroll to their bottom controls without horizontal overflow. Menu screenshots were checked after morph animations settled. No test reports were submitted to the user's preview database.
+
+Lint and type checks pass (the existing Worker export warning remains); Docker build and bundle budgets pass and the preview starts healthy. The existing map/browser regression suite passes after these changes. Authenticated MFA sign-in and real admin moderation remain outside this anonymous browser audit; use the dedicated enrolled test identity and isolated database for that check. Dense overlapping individual markers and English Clerk authentication text remain usability limitations. No public deployment or pipeline edits.
+
+## Exclude unavailable litre comparisons — 10 October 2026
+
+The litre view now omits venues whose matching servings have no known volume, from both results and map markers. Serving-price and alphabetical views retain them. Mixed menus still retain all servings while ranking by a known-volume serving; search and price filters cannot borrow the volume of an unrelated serving. Browser inspection confirms 156 litre markers with no “— €/l”, and switching back restores all 165 serving-price markers. Updated the existing regression checks for this behavior and used a comparable venue for the litre retry scenario. All 25 unit checks, type checks, lint and map/browser checks pass; Docker build, bundle budgets and healthy preview startup pass. Pipelines and published data are unchanged.
+
+## Desktop time slider — 10 October 2026
+
+Share the existing time-slider styles across desktop and mobile. Desktop placement reserves room for the sidebar and zoom controls; mobile placement is retained. Add mouse dragging with pointer capture while keeping touch scrolling and keyboard navigation. The same selected time updates opening states on both layouts. Verified rendered desktop (1440×900), narrow desktop (760×600) and mobile (390×844) views, mouse drag, arrow-key changes and the “Tagad” reset. Narrow desktop slider and zoom-control bounds do not overlap. Existing map/browser regression checks, type checks and lint pass; Docker rebuild, bundle budgets and healthy startup pass. No pipeline or data changes.

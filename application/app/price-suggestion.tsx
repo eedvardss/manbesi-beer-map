@@ -152,7 +152,7 @@ export default function PriceSuggestion({
             <strong>Ieteikums saglabāts</strong>
           </output>
           <p>
-            Pēc avota pārbaudes jaunā cena parādīsies kartē. Pašreizējā cena
+            Pēc administratora apstiprinājuma jaunā cena parādīsies kartē. Pašreizējā cena
             līdz tam nemainās.
           </p>
           <button className="price-primary" onClick={onClose}>

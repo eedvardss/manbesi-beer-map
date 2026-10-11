@@ -5,6 +5,7 @@ import {
   uuidPattern,
   parsePrice,
   evidenceUrl,
+  optionalEvidenceUrl,
   observedDate,
 } from './price-input';
 import { reporterKey } from './price-auth';
@@ -67,8 +68,10 @@ export async function submitPrice(
   ]);
   return rows[0].result;
 }
-export async function reviewPrice(body: Record<string, unknown>) {
-  const actor = (process.env.PRICE_REVIEWER_NAME ?? 'operator').slice(0, 80);
+export async function reviewPrice(
+  body: Record<string, unknown>,
+  actor: string,
+) {
   if (body.action === 'revert') {
     await reviewDatabase().query('SELECT beer_map_revert_price($1,$2,$3)', [
       id(body.servingId),
@@ -82,7 +85,7 @@ export async function reviewPrice(body: Record<string, unknown>) {
   await reviewDatabase().query('SELECT beer_map_review_price($1,$2,$3,$4,$5)', [
     id(body.id),
     body.action,
-    body.action === 'approve' ? evidenceUrl(body.evidenceUrl) : '',
+    body.action === 'approve' ? optionalEvidenceUrl(body.evidenceUrl) : '',
     body.action === 'approve' ? observedDate(body.observedOn) : null,
     actor,
   ]);

@@ -1,9 +1,10 @@
-import { requireReviewer, priceFailure } from '../../../../lib/price-auth';
+import { priceFailure } from '../../../../lib/price-auth';
+import { requireReviewer } from '../../../../lib/admin-auth';
 import { reviewList } from '../../../../lib/price-store';
 export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   try {
-    requireReviewer(request);
+    await requireReviewer(request);
     const query = new URL(request.url).searchParams;
     return Response.json(
       await reviewList(
