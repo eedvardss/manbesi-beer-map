@@ -1,7 +1,5 @@
 name: Deploy observability
 
-# Manual and separate from Deploy: the monitoring stack changes rarely and its
-# install (CRDs, cluster-wide RBAC) should never ride along with app releases.
 on:
   workflow_dispatch:
 

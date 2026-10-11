@@ -32,8 +32,6 @@ resource "google_service_account" "deployer" {
   depends_on = [google_project_service.this]
 }
 
-# Covers workloads, Secrets, Ingress etc. but not Roles/RoleBindings/ClusterRoles;
-# those come from the one-time ClusterRoleBinding in README.md.
 resource "google_project_iam_member" "deployer_container_developer" {
   project = var.project_id
   role    = "roles/container.developer"

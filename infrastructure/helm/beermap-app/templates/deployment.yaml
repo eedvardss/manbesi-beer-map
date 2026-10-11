@@ -5,7 +5,6 @@ metadata:
   labels:
     {{- include "beermap-app.labels" . | nindent 4 }}
 spec:
-  # No replicas field: the HPA owns the count, so upgrades do not reset it.
   revisionHistoryLimit: 3
   strategy:
     rollingUpdate:

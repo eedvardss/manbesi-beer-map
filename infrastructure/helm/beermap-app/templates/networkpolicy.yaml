@@ -1,4 +1,3 @@
-# Selects the web pods and the migration Job pods (both carry the release instance label).
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -30,8 +29,6 @@ spec:
       ports:
         - port: 5432
           protocol: TCP
-    # DNS to any destination: Autopilot may serve it from NodeLocal DNSCache
-    # rather than kube-dns pods.
     - ports:
         - port: 53
           protocol: UDP

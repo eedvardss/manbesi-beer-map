@@ -1,4 +1,3 @@
-# Needs cloudresourcemanager enabled before the first plan (README bootstrap).
 data "google_project" "this" {
   project_id = var.project_id
 }

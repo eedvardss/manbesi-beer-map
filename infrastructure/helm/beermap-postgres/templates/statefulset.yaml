@@ -16,7 +16,6 @@ spec:
         {{- include "beermap-postgres.labels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: false
-      # Room for a fast shutdown with its final checkpoint before SIGKILL.
       terminationGracePeriodSeconds: 60
       securityContext:
         {{- include "beermap-postgres.podSecurity" . | nindent 8 }}
@@ -47,7 +46,6 @@ spec:
           livenessProbe:
             exec:
               command: [pg_isready, -h, 127.0.0.1, -U, {{ .Values.user | quote }}, -d, {{ .Values.database | quote }}]
-            # The first start runs initdb; do not kill it.
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 5
@@ -59,7 +57,6 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
-            # The only paths the read-only root needs writable: socket dir and temp files.
             - name: run
               mountPath: /var/run/postgresql
             - name: tmp

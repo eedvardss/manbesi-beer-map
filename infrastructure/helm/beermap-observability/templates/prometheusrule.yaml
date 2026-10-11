@@ -51,8 +51,6 @@ spec:
             summary: A beermap volume is almost full.
             description: 'PVC {{"{{"}} $labels.persistentvolumeclaim {{"}}"}} is {{"{{"}} $value | humanizePercentage {{"}}"}} full.'
         - alert: BeermapBackupFailed
-          # kube_job_status_failed is per Job; join it to the CronJob via kube_job_owner and
-          # ignore failed Jobs that are older than the CronJob's last successful run.
           expr: |
             (
               max by (namespace, job_name) (kube_job_status_failed{namespace="{{ $ns }}"} > 0)

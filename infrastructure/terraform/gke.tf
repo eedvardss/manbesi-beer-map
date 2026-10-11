@@ -1,5 +1,3 @@
-# Autopilot owns nodes, node pools, Dataplane V2 (NetworkPolicy enforcement),
-# Workload Identity, Shielded Nodes and autoscaling, so none of that is set here.
 resource "google_container_cluster" "beermap" {
   name     = "beermap"
   location = var.region
@@ -19,7 +17,6 @@ resource "google_container_cluster" "beermap" {
     channel = "REGULAR"
   }
 
-  # Autopilot otherwise runs nodes as the Compute Engine default SA (often Editor).
   cluster_autoscaling {
     auto_provisioning_defaults {
       service_account = google_service_account.nodes.email
@@ -30,10 +27,6 @@ resource "google_container_cluster" "beermap" {
   resource_labels = {
     app = "beermap"
   }
-
-  # Nodes and the control-plane endpoint stay public: private nodes would need
-  # Cloud NAT to pull from GHCR, and GitHub-hosted runners have no fixed IPs
-  # for authorized networks. Access is gated by IAM + Kubernetes RBAC.
 
   depends_on = [
     google_project_service.this,
@@ -48,7 +41,6 @@ resource "google_service_account" "nodes" {
   depends_on = [google_project_service.this]
 }
 
-# Logging, monitoring and metadata writes only; workloads use their own GSAs via Workload Identity.
 resource "google_project_iam_member" "nodes" {
   project = var.project_id
   role    = "roles/container.defaultNodeServiceAccount"
