@@ -1,4 +1,3 @@
-# Each dashboards/*.json becomes a ConfigMap picked up by the Grafana dashboard sidecar.
 {{- range $path, $_ := .Files.Glob "dashboards/*.json" }}
 ---
 apiVersion: v1

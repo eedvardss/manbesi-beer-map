@@ -8,8 +8,6 @@ terraform {
     }
   }
 
-  # Partial configuration: the bucket depends on the project, so pass it at init:
-  #   terraform init -backend-config="bucket=<project_id>-tfstate"
   backend "gcs" {
     prefix = "beermap"
   }

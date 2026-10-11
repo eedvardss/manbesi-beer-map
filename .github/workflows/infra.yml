@@ -1,8 +1,5 @@
 name: Infrastructure
 
-# Separate from ci.yml: these jobs share nothing with the npm/image pipeline
-# (whose defaults run in application/), and they need different permissions.
-# No paths filter, so the checks always report and can be made required.
 on:
   pull_request:
   push:
@@ -43,7 +40,6 @@ jobs:
       - uses: terraform-linters/setup-tflint@v6.3.2
         with:
           tflint_version: ${{ env.TFLINT_VERSION }}
-      # The google ruleset downloads from GitHub; a token avoids anonymous rate limits.
       - run: tflint --init
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -58,15 +54,12 @@ jobs:
         include:
           - chart: beermap-app
             namespace: beermap
-            # The chart requires an immutable image tag and a hostname.
             set: image.tag=sha-0000000,ingress.host=example.com
           - chart: beermap-postgres
             namespace: beermap
-            # Backups require a bucket and GSA; the deploy job derives them from GCP_PROJECT_ID.
             set: backup.bucket=example-beermap-backups,backup.gcpServiceAccount=beermap-backup@example.iam.gserviceaccount.com
           - chart: beermap-observability
             namespace: monitoring
-            # Same as values-autopilot.yaml, which the deploy passes with -f.
             set: loki.singleBinary.affinity=null
     env:
       CHART: infrastructure/helm/${{ matrix.chart }}
@@ -84,7 +77,6 @@ jobs:
           echo "${KUBECONFORM_SHA256}  kubeconform.tar.gz" | sha256sum -c -
           sudo tar -xzf kubeconform.tar.gz -C /usr/local/bin kubeconform
           rm kubeconform.tar.gz
-      # dependency build needs a repo entry for every URL in Chart.lock.
       - name: Build chart dependencies
         run: |
           yq '(.dependencies // [])[].repository' "$CHART/Chart.yaml" | sort -u | while read -r url; do
@@ -92,8 +84,6 @@ jobs:
           done
           helm dependency build "$CHART"
       - run: helm lint "$CHART" --namespace "$NAMESPACE" ${SET:+--set "$SET"}
-      # GKE (ManagedCertificate, FrontendConfig) and Prometheus Operator kinds
-      # validate against the community CRD catalog; any other CRD is skipped.
       - name: Render and validate manifests
         run: |
           helm template "$RELEASE" "$CHART" --namespace "$NAMESPACE" ${SET:+--set "$SET"} \
@@ -115,14 +105,9 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: '1'
           trivyignores: infrastructure/.trivyignore
-          # Vendored upstream subcharts (present only after a local dependency build).
           skip-dirs: infrastructure/helm/beermap-observability/charts
-          # Pinned deliberately: Trivy 0.69.4-0.69.6 were compromised releases.
           version: v0.70.0
 
-  # Posts `terraform plan` to the PR. Opt-in: skipped until both repository
-  # variables are set, and for fork PRs, which get no OIDC token. The deployer
-  # SA then also needs read access to the project, billing account and state.
   terraform-plan:
     needs: terraform
     if: >-

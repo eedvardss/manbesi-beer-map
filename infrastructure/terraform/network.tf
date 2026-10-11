@@ -23,7 +23,6 @@ resource "google_compute_subnetwork" "beermap" {
   }
 }
 
-# Used by the Ingress via `kubernetes.io/ingress.global-static-ip-name: beermap-ip`.
 resource "google_compute_global_address" "ingress" {
   name = "beermap-ip"
 

@@ -1,5 +1,3 @@
-# Runs before every install/upgrade, like compose's db-setup service.
-# The beermap-postgres release must already be installed.
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -10,7 +8,6 @@ metadata:
     helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
-  # Retries cover a postgres pod that is still starting.
   backoffLimit: 6
   activeDeadlineSeconds: 600
   template:
@@ -21,7 +18,6 @@ spec:
         {{ .Values.postgres.clientLabel.key }}: {{ .Values.postgres.clientLabel.value | quote }}
     spec:
       restartPolicy: Never
-      # The chart's ServiceAccount does not exist yet during pre-install hooks.
       automountServiceAccountToken: false
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -33,7 +29,6 @@ spec:
         - name: migrate
           image: {{ include "beermap-app.image" . }}
           imagePullPolicy: IfNotPresent
-          # args, not command: the distroless ENTRYPOINT is node.
           args: [scripts/setup-database.mjs]
           env:
             - name: POSTGRES_PASSWORD

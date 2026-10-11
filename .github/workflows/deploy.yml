@@ -1,8 +1,5 @@
 name: Deploy
 
-# workflow_run keeps ci.yml free of cloud credentials and deploys exactly the
-# commit whose image CI just published; workflow_dispatch redeploys or rolls
-# back to any published tag. Both wait for the production environment's reviewers.
 on:
   workflow_run:
     workflows: [CI]
@@ -15,7 +12,6 @@ on:
         required: false
         type: string
 
-# Never cancel a running Helm upgrade; a newer run waits and replaces older pending ones.
 concurrency:
   group: deploy-production
   cancel-in-progress: false
@@ -32,8 +28,6 @@ env:
 
 jobs:
   deploy:
-    # Automatic deploys only after a successful CI push to main, and only once
-    # the platform is configured (repository variable set).
     if: >-
       github.event_name == 'workflow_dispatch'
       || (vars.GCP_WORKLOAD_IDENTITY_PROVIDER != ''
@@ -43,17 +37,14 @@ jobs:
     timeout-minutes: 30
     environment: production
     env:
-      # workflow_run's github.sha is the current main head, not the CI run's commit.
       COMMIT: ${{ github.event.workflow_run.head_sha || github.sha }}
       PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
-      # Public hostname (alus.chudars.lv): the certificate domain and PRICE_ALLOWED_ORIGIN.
       APP_HOST: ${{ vars.APP_HOST }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ env.COMMIT }}
 
-      # Matches docker/metadata-action `type=sha` in ci.yml (sha- + 7 characters).
       - name: Resolve image tag
         id: image
         env:
@@ -106,7 +97,6 @@ jobs:
           apply docker-registry ghcr-pull --docker-server=ghcr.io \
             --docker-username="$GHCR_USERNAME" --docker-password="$GHCR_PULL_TOKEN"
 
-      # Helm 4 renamed --atomic to --rollback-on-failure (same behaviour; it implies --wait).
       - name: Deploy PostgreSQL
         run: |
           helm upgrade --install beermap-postgres infrastructure/helm/beermap-postgres \
@@ -122,10 +112,6 @@ jobs:
             --set-string image.tag="$IMAGE_TAG" \
             --set-string ingress.host="$APP_HOST"
 
-      # In-cluster health is already proven: --wait requires the readiness probes
-      # to pass. This checks the public path (DNS, Ingress, managed certificate),
-      # which can take an hour on the first deploy, so it runs only once
-      # SMOKE_TEST_URL is set (e.g. https://alus.chudars.lv/api/health).
       - name: Smoke test
         if: vars.SMOKE_TEST_URL != ''
         env:

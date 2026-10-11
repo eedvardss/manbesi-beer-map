@@ -24,7 +24,6 @@ resource "google_service_account" "backup" {
   depends_on = [google_project_service.this]
 }
 
-# Create-only: the CronJob can upload new dumps but cannot read, list, overwrite or delete them.
 resource "google_storage_bucket_iam_member" "backup_writer" {
   bucket = google_storage_bucket.backups.name
   role   = "roles/storage.objectCreator"
