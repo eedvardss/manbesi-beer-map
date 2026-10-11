@@ -1,0 +1,46 @@
+image: mirror.gcr.io/library/postgres:17-bookworm
+
+database: beer_map
+user: beer_map
+# Existing Secret with key POSTGRES_PASSWORD (created by the deploy job).
+authSecret: beermap-postgres-auth
+
+storage:
+  size: 10Gi
+  # Empty uses the cluster default StorageClass (standard-rwo on Autopilot).
+  storageClassName: ""
+
+# Autopilot sets limits equal to requests, so they are stated explicitly.
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+    ephemeral-storage: 1Gi
+  limits:
+    cpu: 250m
+    memory: 512Mi
+    ephemeral-storage: 1Gi
+
+# Only pods with this label may connect to 5432 (app, migration Job, backup Job).
+clientLabel:
+  key: beermap.io/postgres-client
+  value: "true"
+
+backup:
+  enabled: true
+  schedule: "0 2 * * *"
+  timeZone: Europe/Riga
+  # Required when enabled: ${project_id}-beermap-backups
+  bucket: ""
+  # Required when enabled: beermap-backup@${project_id}.iam.gserviceaccount.com
+  gcpServiceAccount: ""
+  uploadImage: mirror.gcr.io/curlimages/curl:8.16.0
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 2Gi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 2Gi

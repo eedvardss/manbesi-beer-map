@@ -1,0 +1,6 @@
+apiVersion: v2
+name: beermap-postgres
+description: In-cluster PostgreSQL 17 for the beer map, with a nightly pg_dump backup to GCS.
+type: application
+version: 0.1.0
+appVersion: "17"

@@ -11,7 +11,7 @@ const run = promisify(execFile);
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const privateFile = new URL('../artifacts/playwright.env', import.meta.url);
 const compose = ['compose', '--env-file', fileURLToPath(privateFile), '-p', 'beer-map-playwright',
-  '-f', 'infrastructure/compose.yaml', '-f', 'infrastructure/compose.prices.yaml',
+  '-f', 'infrastructure/docker/compose.yaml', '-f', 'infrastructure/docker/compose.prices.yaml',
   '-f', 'playwright/compose.yaml'];
 export { expect };
 export const test = base.extend({

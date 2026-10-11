@@ -4,6 +4,10 @@
 
 Keep the web project available for development; Aluskarte is intentionally blank at the user's request. Preserve sourced prices and clear serving comparisons. The user removed the five-hour continuation; it must remain deleted unless explicitly requested again. Earlier automation references below are historical.
 
+## GKE pipeline — 10 October 2026
+
+Moved the Docker files to `infrastructure/docker/` (Compose still builds from the repository root) beside the new `infrastructure/terraform/` and `infrastructure/helm/`. Added `infra.yml` (Terraform/tflint, Helm lint/template/kubeconform, Trivy config scan, PR plan comment once GCP is configured), `deploy.yml` (after successful CI on `main` or manual; `production` environment approval) and `deploy-observability.yml` (manual). Release tags also push OCI charts. Validated locally with actionlint, Compose config, a Docker build and the tools in containers. Not committed; nothing deployed.
+
 ## Administrator panel — 9 October 2026
 
 Made the existing protected reviewer workflow discoverable through the map's

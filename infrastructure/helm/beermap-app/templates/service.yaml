@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beermap-app
+  labels:
+    {{- include "beermap-app.labels" . | nindent 4 }}
+  annotations:
+    # Container-native load balancing: the GCLB targets pod IPs through NEGs.
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "beermap-app.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

@@ -1,0 +1,17 @@
+apiVersion: v2
+name: beermap-observability
+description: Prometheus, Alertmanager, Grafana, Loki and Alloy for the beermap namespace on GKE Autopilot.
+type: application
+version: 0.1.0
+dependencies:
+  - name: kube-prometheus-stack
+    version: 92.2.0
+    repository: https://prometheus-community.github.io/helm-charts
+  # The OSS Loki chart moved from grafana/helm-charts to grafana-community/helm-charts
+  # (grafana/loki 7.x now targets Grafana Enterprise Logs).
+  - name: loki
+    version: 18.15.1
+    repository: https://grafana-community.github.io/helm-charts
+  - name: alloy
+    version: 1.13.1
+    repository: https://grafana.github.io/helm-charts
